@@ -1,0 +1,37 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "lib": [
+            "es5",
+            "es2015.core",
+            "es2015.collection",
+            "es2015.generator",
+            "es2015.iterable",
+            "es2015.promise",
+            "es2015.reflect",
+            "es2015.symbol",
+            "es2015.symbol.wellknown"
+        ],
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "diagnostics": true,
+        "noEmitOnError": false,
+        "preserveConstEnums": true,
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "noImplicitReturns": true,
+        //"noUnusedLocals": true,
+        //"noUnusedParameters": true,
+        "skipLibCheck": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "allowSyntheticDefaultImports": true,
+        "sourceMap": true,
+        "strictNullChecks": true
+    },
+    "compileOnSave": true,
+    "exclude": [
+        "node_modules",
+        "rules"
+    ]
+}

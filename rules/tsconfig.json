@@ -1,0 +1,18 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "noEmitOnError": false,
+        "declaration": false,
+        "noImplicitAny": true,
+        "preserveConstEnums": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "allowSyntheticDefaultImports": true,
+        "allowUnreachableCode": false,
+        "sourceMap": true
+    },
+    "exclude": [
+    ]
+}

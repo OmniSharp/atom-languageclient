@@ -1,0 +1,35 @@
+{
+  "name": "atom-languageclient",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "lint": "npm run lint-rules && tslint 'src/**/*.ts'",
+    "lint-rules": "tsc -p rules/tsconfig.json",
+    "test": "npm run lint",
+    "tsc": "tsc",
+    "tsc:w": "tsc -w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OmniSharp/atom-languageclient.git"
+  },
+  "author": "OmniSharp Team",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/OmniSharp/atom-languageclient/issues"
+  },
+  "homepage": "https://github.com/OmniSharp/atom-languageclient#readme",
+  "dependencies": {
+    "aurelia-dependency-injection": "^1.0.0-rc.1.0.0",
+    "lodash": "^4.13.1",
+    "rxjs": "^5.0.0-beta.10",
+    "ts-disposables": "^2.0.0",
+    "vscode-languageclient": "^2.3.0"
+  },
+  "devDependencies": {
+    "tslint": "^3.13.0",
+    "tslint-microsoft-contrib": "git://github.com/Microsoft/tslint-microsoft-contrib.git#releases",
+    "typescript": "^2.0.0-dev.20160707"
+  }
+}

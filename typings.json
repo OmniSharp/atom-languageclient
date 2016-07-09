@@ -1,0 +1,14 @@
+{
+  "dependencies": {
+    "d3": "registry:npm/d3#3.0.0+20160211003958",
+    "lodash": "github:david-driscoll/lodash-ts"
+  },
+  "globalDependencies": {
+    "atom": "registry:env/atom#1.6.0+20160612063716",
+    "dragula": "registry:dt/dragula#2.1.2+20160317120654",
+    "jquery": "registry:dt/jquery#1.10.0+20160417213236",
+    "node": "registry:env/node#6.0.0+20160622202520",
+    "signalr": "registry:dt/signalr#2.2.0+20160509082439",
+    "zone.js": "registry:dt/zone.js#0.0.0+20160316155526"
+  }
+}
