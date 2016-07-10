@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
-    "lint": "npm run lint-rules && tslint 'src/**/*.ts'",
+    "lint": "npm run lint-rules && tslint 'src/**/*.ts' -e '**/*.d.ts' && tslint 'spec/**/*.ts' -e '**/*.d.ts'",
     "lint-rules": "tsc -p rules/tsconfig.json",
     "test": "npm run lint",
     "tsc": "tsc",

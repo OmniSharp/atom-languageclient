@@ -5,9 +5,9 @@
  */
 import { OmniTextEditorContext } from './OmniTextEditorContext';
 
-export interface IAseTextEditor extends Atom.TextEditor {
+export interface IOmniTextEditor extends Atom.TextEditor {
     omni: OmniTextEditorContext | null;
 }
 
 /* tslint:disable:no-any */
-export function isAseTextEditor(editor: any): editor is IAseTextEditor { return editor && !!(<any>editor).omnisharp; }
+export function isOmniTextEditor(editor: any): editor is IOmniTextEditor { return editor && !!(<any>editor).omni; }

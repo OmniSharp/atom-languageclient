@@ -5,11 +5,12 @@
  */
 /* tslint:disable:no-any */
 import { DisposableBase } from 'ts-disposables';
-import { IAseTextEditor } from './IOmniTextEditor';
+import { className } from '../strings';
+import { IOmniTextEditor } from './IOmniTextEditor';
 import { OmniTextEditorChanges } from './OmniTextEditorChanges';
 
 export class OmniTextEditorContext extends DisposableBase {
-    private _editor: IAseTextEditor;
+    private _editor: IOmniTextEditor;
     private _project: Object;
     private _solution: Object;
     private _loaded = false;
@@ -19,7 +20,7 @@ export class OmniTextEditorContext extends DisposableBase {
 
     constructor(editor: Atom.TextEditor, solution: Object) {
         super();
-        if ((<any>editor).omnisharp) {
+        if ((<any>editor).omni) {
             return;
         }
 
@@ -29,12 +30,12 @@ export class OmniTextEditorContext extends DisposableBase {
         // this._project = new EmptyProjectViewModel(null, solution.path);
 
         const view: HTMLElement = <any>atom.views.getView(editor);
-        view.classList.add('omnisharp-editor');
+        view.classList.add(className);
 
         this._disposable.add(
             () => {
                 this._editor.omni = null;
-                view.classList.remove('omnisharp-editor');
+                view.classList.remove(className);
             }
         );
     }
@@ -51,11 +52,11 @@ export class OmniTextEditorContext extends DisposableBase {
         return this._loaded;
     }
 
-    public get temp() {
+    public get temporary() {
         return this._temporary || false;
     }
 
-    public set temp(value: boolean) {
+    public set temporary(value: boolean) {
         this._temporary = value;
     }
 

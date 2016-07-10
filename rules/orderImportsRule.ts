@@ -182,8 +182,16 @@ function customSortKey(key: string) {
         result = `0${key}`;
     } else if (key.match(/[A-Z]/) && (_.startsWith(key, './') || _.startsWith(key, '../'))) {
         const split = key.split('/');
-        result = `z${_.last(split)}`.toLowerCase();
+        result = _.last(split).toLowerCase();
+        if (result === 'index') {
+            result = _.nth(split, -2);
+        }
+        result = `z${result}`.toLowerCase();
     } else if (_.startsWith(key, './') || _.startsWith(key, '../')) {
+        const split = key.split('/');
+        if (_.last(split) === 'index') {
+            key = _.dropRight(split, 1).join('/');
+        }
         result = `y${_.trimStart(key, './')}`;
     }
 

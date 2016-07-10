@@ -6,5 +6,4 @@
 import './bootstrap';
 import { AtomLanguageClientPackage } from './AtomLanguageClientPackage';
 
-
 module.exports = new AtomLanguageClientPackage();

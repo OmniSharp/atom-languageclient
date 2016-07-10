@@ -38,7 +38,7 @@ export class ProjectTracker {
                 this._updatePaths(paths);
             });
 
-            observer.add(() => disposable.dispose());
+            return () => disposable.dispose();
         })
             .share();
 

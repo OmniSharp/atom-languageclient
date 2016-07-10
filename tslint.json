@@ -4,7 +4,9 @@
         "node_modules/codelyzer",
         "rules"
     ],
+    "extends": "tslint:latest",
     "rules": {
+        "ordered-imports": false,
         /**
          * Security Rules. The following rules should be turned on because they find security issues
          * or are recommended in the Microsoft Secure Development Lifecycle (SDL)
@@ -103,10 +105,10 @@
         "function-name": [
             true,
             {
-                "method-regex": "^[a-z][\\w\\d]+$",
-                "private-method-regex": "^_[a-z][\\w\\d]+$",
-                "static-method-regex": "^[a-z_\\d]+$",
-                "function-regex": "^[a-z][\\w\\d]+$"
+                "method-regex": "^[a-z][\\w\\d\\$]+$",
+                "private-method-regex": "^_[a-z][\\w\\d\\$]+$",
+                "static-method-regex": "^[a-z_\\d\\$]+$",
+                "function-regex": "^[a-z][\\w\\d\\$]+$"
             }
         ],
         "import-name": false, // NOTE: Disabled until https://github.com/Microsoft/tslint-microsoft-contrib/issues/137 allows toggling for special modules like lodash
