@@ -3,7 +3,7 @@
  *  @copyright OmniSharp Team
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
-/* tslint:disable:export-name no-any no-reserved-keywords no-invalid-this */
+/* tslint:disable:export-name no-any no-invalid-this */
 
 import { CompositeDisposable } from 'ts-disposables';
 import { packageName } from '../src/strings';

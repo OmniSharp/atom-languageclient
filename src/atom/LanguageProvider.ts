@@ -11,19 +11,19 @@ import { IResolver } from '../di/Container';
  * Defines the interface for providing a language to be consumed
  * http://flight-manual.atom.io/behind-atom/sections/interacting-with-other-packages-via-services/
  */
-export interface IAtomLanguageProvider {}
+export interface ILanguageProvider {}
 
 /**
  * Takes in all the different languages provided by other packages and configures them.
  */
-export class AtomLanguageProvider extends DisposableBase {
+export class LanguageProvider extends DisposableBase {
     private _resolver: IResolver;
     constructor(resolver: IResolver) {
         super();
         this._resolver = resolver;
     }
 
-    public add(provider: IAtomLanguageProvider): IDisposable {
+    public add(provider: ILanguageProvider): IDisposable {
         return Disposable.empty;
     }
 }

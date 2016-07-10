@@ -12,7 +12,7 @@ import { IResolver } from '../di/Container';
  * Defines the interface for consuming this service
  * http://flight-manual.atom.io/behind-atom/sections/interacting-with-other-packages-via-services/
  */
-export interface IAtomLanguageService {
+export interface ILanguageService {
     activated: Observable<boolean>;
     deactivated: Observable<boolean>;
 }
@@ -20,7 +20,7 @@ export interface IAtomLanguageService {
 /**
  * Defines the common interface that a module can then consume to interact with us.
  */
-export class AtomLanguageService extends DisposableBase implements IAtomLanguageService {
+export class LanguageService extends DisposableBase implements ILanguageService {
     private _activated: Observable<boolean>;
     private _deactivated: Observable<boolean>;
     private _resolver: IResolver;

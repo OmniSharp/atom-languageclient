@@ -22,6 +22,7 @@ export interface IResolver {
 
 export class Container extends DisposableBase implements IResolver {
     private _container: AureliaContainer;
+    private _keysToActivate: any[] = [];
 
     public constructor() {
         super();
@@ -37,7 +38,10 @@ export class Container extends DisposableBase implements IResolver {
             );
     }
 
-    public register(fn: any, key?: string) {
+    public register(fn: any, key?: any) {
+        if (metadata.get('di:activate', fn)) {
+            this._keysToActivate.push(key || fn);
+        }
         this._container.autoRegister(fn, key);
         return this;
     }
@@ -46,7 +50,7 @@ export class Container extends DisposableBase implements IResolver {
         if (key) {
             _.each(fns, fn => this.register(fn, key));
         } else {
-            this._container.autoRegisterAll(fns);
+            _.each(fns, fn => this.register(fn));
         }
         return this;
     }
@@ -59,6 +63,11 @@ export class Container extends DisposableBase implements IResolver {
         return this._container.getAll(key);
     }
 
+    public activate() {
+        _.each(this._keysToActivate, key => this._container.get(key));
+        return true;
+    }
+
     private _registerServices(fromPath: string, files: string[]) {
         const [specialKeys, normalKeys] = _(files)
             .filter(file => _.endsWith(file, '.js'))
@@ -69,10 +78,10 @@ export class Container extends DisposableBase implements IResolver {
             .value();
 
         _.each(specialKeys, fn => {
-            this._container.autoRegister(fn, metadata.get('di:key', fn));
+            this.register(fn, metadata.get('di:key', fn));
         });
 
-        this._container.autoRegisterAll(normalKeys);
+        _.each(normalKeys, fn => this.register(fn));
         return this;
     }
 }

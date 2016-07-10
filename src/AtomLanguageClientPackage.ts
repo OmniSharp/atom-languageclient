@@ -6,28 +6,26 @@
 import * as _ from 'lodash';
 import { Observable, ReplaySubject } from 'rxjs';
 import { CompositeDisposable } from 'ts-disposables';
-import { AtomLanguageClientSettings, IAtomLanguageClientSettings } from './atom/AtomLanguageClientSettings';
-import { AtomLanguageProvider, IAtomLanguageProvider } from './atom/AtomLanguageProvider';
-import { AtomLanguageService } from './atom/AtomLanguageService';
+import { ILanguageClientSettings, ILanguageProvider, LanguageClientSettings, LanguageProvider, LanguageService } from './atom/index';
 import { Container } from './di/Container';
 
-export class AtomLanguageClientPackage implements IAtomPackage<AtomLanguageClientSettings> {
+export class AtomLanguageClientPackage implements IAtomPackage<LanguageClientSettings> {
     private _container: Container;
     private _disposable: CompositeDisposable;
-    private _settings: AtomLanguageClientSettings;
-    private _atomLanguageProvider: AtomLanguageProvider;
-    private _atomLanguageService: AtomLanguageService;
+    private _settings: LanguageClientSettings;
+    private _atomLanguageProvider: LanguageProvider;
+    private _atomLanguageService: LanguageService;
     private _stateChange: ReplaySubject<boolean>;
 
     /* tslint:disable:no-any */
-    public activate(settings: IAtomLanguageClientSettings) {
+    public activate(settings: ILanguageClientSettings) {
         this._container = new Container();
         this._disposable = new CompositeDisposable();
-        this._settings = settings instanceof AtomLanguageClientSettings ? settings : new AtomLanguageClientSettings(settings);
+        this._settings = settings instanceof LanguageClientSettings ? settings : new LanguageClientSettings(settings);
         this._stateChange = new ReplaySubject<boolean>(1);
 
-        this._atomLanguageProvider = new AtomLanguageProvider(this._container);
-        this._atomLanguageService = new AtomLanguageService(this._container, this._stateChange.asObservable());
+        this._atomLanguageProvider = new LanguageProvider(this._container);
+        this._atomLanguageService = new LanguageService(this._container, this._stateChange.asObservable());
 
         this._disposable.add(
             this._container,
@@ -38,7 +36,7 @@ export class AtomLanguageClientPackage implements IAtomPackage<AtomLanguageClien
         Observable.merge(
             this._container.registerFolder(__dirname, 'services')
         )
-            .map(() => true)
+            .map(() => this._container.activate())
             .subscribe({
                 error: e => this._stateChange.error(e),
                 complete: () => this._stateChange.next(true)
@@ -51,13 +49,13 @@ export class AtomLanguageClientPackage implements IAtomPackage<AtomLanguageClien
     }
 
     /* tslint:disable-next-line:function-name */
-    public ['consume-atom-language'](service: IAtomLanguageProvider) {
+    public ['consume-atom-language'](service: ILanguageProvider) {
         return this._atomLanguageProvider.add(service);
     }
 
     /* tslint:disable-next-line:no-any */
-    public static deserialize(state: IAtomLanguageClientSettings) {
-        return new AtomLanguageClientSettings(state);
+    public static deserialize(state: ILanguageClientSettings) {
+        return new LanguageClientSettings(state);
     }
 
     public serialize() {
