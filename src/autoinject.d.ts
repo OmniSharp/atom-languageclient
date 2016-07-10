@@ -1,4 +1,3 @@
-declare const activate: ClassDecorator;
 declare const key: ((key: any) => ClassDecorator);
 declare const inject: ClassDecorator;
 declare const transient: (key?: any) => ClassDecorator;
@@ -9,7 +8,6 @@ declare const singleton: {
 
 declare namespace NodeJS {
     export interface Global {
-        activate: ClassDecorator;
         key: ((key: any) => ClassDecorator);
         inject: ClassDecorator | ((key: any) => ClassDecorator);
         transient: (key?: any) => ClassDecorator;

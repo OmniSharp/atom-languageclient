@@ -5,7 +5,7 @@
  */
 export type AtomTextChange = { oldRange: TextBuffer.Range; newRange: TextBuffer.Range; oldText: string; newText: string; };
 
-export class OmniTextEditorChanges {
+export class LanguageClientTextEditorChanges {
     private _changes: AtomTextChange[] = [];
 
     public push(change: AtomTextChange) {

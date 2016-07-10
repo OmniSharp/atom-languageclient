@@ -6,17 +6,17 @@
 /* tslint:disable:no-any */
 import { DisposableBase } from 'ts-disposables';
 import { className } from '../strings';
-import { IOmniTextEditor } from './IOmniTextEditor';
-import { OmniTextEditorChanges } from './OmniTextEditorChanges';
+import { ILanguageClientTextEditor } from './ILanguageClientTextEditor';
+import { LanguageClientTextEditorChanges } from './LanguageClientTextEditorChanges';
 
-export class OmniTextEditorContext extends DisposableBase {
-    private _editor: IOmniTextEditor;
+export class LanguageClientTextEditorContext extends DisposableBase {
+    private _editor: ILanguageClientTextEditor;
     private _project: Object;
     private _solution: Object;
     private _loaded = false;
     private _temporary: boolean;
     private _metadata: boolean;
-    private _changes = new OmniTextEditorChanges();
+    private _changes = new LanguageClientTextEditorChanges();
 
     constructor(editor: Atom.TextEditor, solution: Object) {
         super();
@@ -25,7 +25,7 @@ export class OmniTextEditorContext extends DisposableBase {
         }
 
         this._editor = <any>editor;
-        this._editor.omni = this;
+        this._editor.languageclient = this;
         // this._solution = solution;
         // this._project = new EmptyProjectViewModel(null, solution.path);
 
@@ -34,7 +34,7 @@ export class OmniTextEditorContext extends DisposableBase {
 
         this._disposable.add(
             () => {
-                this._editor.omni = null;
+                this._editor.languageclient = null;
                 view.classList.remove(className);
             }
         );

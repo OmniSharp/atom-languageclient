@@ -8,17 +8,17 @@ import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 import { CompositeDisposable, DisposableBase, IDisposable } from 'ts-disposables';
 import { cacheEditor, ensureEditor, subscribeAsync } from './helpers';
-import { IOmniTextEditor } from './IOmniTextEditor';
+import { ILanguageClientTextEditor } from './ILanguageClientTextEditor';
 import { TextEditorSource } from './TextEditorSource';
 
 export interface IActiveTextEditorProvider {
-    readonly editor$: Observable<IOmniTextEditor>;
-    switch(callback: (editor: IOmniTextEditor, cd: CompositeDisposable) => void): IDisposable;
+    readonly editor$: Observable<ILanguageClientTextEditor>;
+    switch(callback: (editor: ILanguageClientTextEditor, cd: CompositeDisposable) => void): IDisposable;
 }
 
 @inject
 export class ActiveTextEditorProvider extends DisposableBase implements IActiveTextEditorProvider {
-    private _editor$: Observable<IOmniTextEditor>;
+    private _editor$: Observable<ILanguageClientTextEditor>;
     private _source: TextEditorSource;
 
     constructor(source: TextEditorSource) {
@@ -33,7 +33,7 @@ export class ActiveTextEditorProvider extends DisposableBase implements IActiveT
         return this._editor$;
     }
 
-    public switch(callback: (editor: IOmniTextEditor, cd: CompositeDisposable) => void): IDisposable {
+    public switch(callback: (editor: ILanguageClientTextEditor, cd: CompositeDisposable) => void): IDisposable {
         const outerCd = new CompositeDisposable();
 
         this._disposable.add(outerCd);

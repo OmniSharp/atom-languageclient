@@ -14,11 +14,6 @@ function key(key: any) {
     };
 }
 
-function activate(target: any) {
-    metadata.define('di:activate', true, target);
-}
-
-global.activate = activate;
 global.key = key;
 global.inject = autoinject;
 global.singleton = singleton;

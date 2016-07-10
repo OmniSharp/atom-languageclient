@@ -29,7 +29,6 @@ export class LanguageService extends DisposableBase implements ILanguageService 
         super();
         this._resolver = resolver;
         this._activated = stateChange
-            .do({ next: () => console.log('next') })
             .filter(x => !!x);
         this._deactivated = stateChange
             .skip(1)

@@ -8,18 +8,18 @@ import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 import { CompositeDisposable, DisposableBase, IDisposable } from 'ts-disposables';
 import { ensureEditor, subscribeAsync } from './helpers';
-import { IOmniTextEditor } from './IOmniTextEditor';
+import { ILanguageClientTextEditor } from './ILanguageClientTextEditor';
 import { TextEditorSource } from './TextEditorSource';
 
 export interface ITextEditorProvider {
-    readonly get$: Observable<IOmniTextEditor>;
-    forEach(callback: (editor: IOmniTextEditor, cd: CompositeDisposable) => void): IDisposable;
+    readonly get$: Observable<ILanguageClientTextEditor>;
+    forEach(callback: (editor: ILanguageClientTextEditor, cd: CompositeDisposable) => void): IDisposable;
 }
 
 @inject
 export class TextEditorProvider extends DisposableBase implements ITextEditorProvider {
-    private _editorsSet = new Set<IOmniTextEditor>();
-    private _editors$: Observable<IOmniTextEditor>;
+    private _editorsSet = new Set<ILanguageClientTextEditor>();
+    private _editors$: Observable<ILanguageClientTextEditor>;
     private _textEditorSource: TextEditorSource;
 
     constructor(textEditorSource: TextEditorSource) {
@@ -34,7 +34,7 @@ export class TextEditorProvider extends DisposableBase implements ITextEditorPro
         return this._editors$;
     }
 
-    public forEach(callback: (editor: IOmniTextEditor, cd: CompositeDisposable) => void): IDisposable {
+    public forEach(callback: (editor: ILanguageClientTextEditor, cd: CompositeDisposable) => void): IDisposable {
         const outerCd = new CompositeDisposable();
 
         this._disposable.add(outerCd);
@@ -59,7 +59,7 @@ export class TextEditorProvider extends DisposableBase implements ITextEditorPro
 
     private _createEditor$() {
         const observable$ = Observable.merge(
-            Observable.defer(() => Observable.from<IOmniTextEditor>(<any>this._editorsSet)),
+            Observable.defer(() => Observable.from<ILanguageClientTextEditor>(<any>this._editorsSet)),
             this._textEditorSource.observeTextEditor().share()
         );
 

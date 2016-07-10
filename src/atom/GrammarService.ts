@@ -21,11 +21,11 @@ export class GrammarService extends DisposableBase implements IGrammarService {
             grammar => _.some(
                 this._supportedExtensions,
                 ext => _.some(
-                    (<any>grammar).fileTypes,
+                    grammar.fileTypes,
                     ft => _.trimStart(ext, '.') === ft)));
     }
 
     public isValid(grammar: FirstMate.Grammar) {
-        return _.some(this.grammars, { scopeName: (<any>grammar).scopeName });
+        return _.some(this.grammars, { scopeName: grammar.scopeName });
     }
 }

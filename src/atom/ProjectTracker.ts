@@ -19,7 +19,7 @@ export class ProjectProvider implements IProjectProvider {
     }
 }
 
-@activate
+@inject
 export class ProjectTracker {
     private _projectPaths: string[] = [];
     private _projectsObserver: Subscriber<[string[], string[]]>;

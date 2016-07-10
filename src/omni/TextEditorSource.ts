@@ -8,12 +8,12 @@ import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 import {  DisposableBase } from 'ts-disposables';
 import { observeCallback } from '../helpers/index';
-import { GrammarService } from './GrammarService';
-import { IOmniTextEditor } from './IOmniTextEditor';
+import { GrammarService } from '../atom/GrammarService';
+import { ILanguageClientTextEditor } from './ILanguageClientTextEditor';
 
 export interface ITextEditorSource {
-    observeActiveTextEditor(): Observable<IOmniTextEditor>;
-    observeTextEditor(): Observable<IOmniTextEditor>;
+    observeActiveTextEditor(): Observable<ILanguageClientTextEditor>;
+    observeTextEditor(): Observable<ILanguageClientTextEditor>;
 }
 
 @inject
@@ -30,7 +30,7 @@ export class TextEditorSource extends DisposableBase implements ITextEditorSourc
                 if (pane && pane.getGrammar && pane.getPath && this._grammarService.isValid(pane.getGrammar())) {
                     return this._getServerForEditor(<Atom.TextEditor>pane);
                 }
-                return Observable.empty<IOmniTextEditor>();
+                return Observable.empty<ILanguageClientTextEditor>();
             });
     }
 
@@ -48,7 +48,7 @@ export class TextEditorSource extends DisposableBase implements ITextEditorSourc
             .mergeMap(editor => this._getServerForEditor(editor));
     }
 
-    private _getServerForEditor(textEditor: Atom.TextEditor): Observable<IOmniTextEditor> {
+    private _getServerForEditor(textEditor: Atom.TextEditor): Observable<ILanguageClientTextEditor> {
         return Observable.of(<any>textEditor);
     }
 }
