@@ -15,17 +15,23 @@ export function setup() {
         cd = new CompositeDisposable();
 
         cd.add(
-            () => atom.packages.deactivatePackage(packageName)
+            () => {
+                atom.packages.deactivatePackage(packageName);
+            }
         );
 
         return atom.packages.activatePackage(packageName)
-            .then(pack => (<AtomLanguageClientPackage>pack.mainModule)['provide-atom-language-client']()
-                .activated
-                .take(1)
-                .toPromise()
-            );
+            .then(pack => {
+                return (<AtomLanguageClientPackage>pack.mainModule)['provide-atom-language-client']()
+                    .activated
+                    .do({ next: () => console.log('next') })
+                    .take(1)
+                    .toPromise();
+            });
     });
-    afterEach(() => cd.dispose());
+    afterEach(() => {
+        cd.dispose();
+    });
 }
 
 /*export function setupFeature(features: string[], unitTestMode = true) {

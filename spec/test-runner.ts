@@ -7,6 +7,7 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import { CompositeDisposable } from 'ts-disposables';
+import '../src/bootstrap';
 
 module.exports = (
     {testPaths, buildAtomEnvironment, buildDefaultApplicationDelegate, headless}: {

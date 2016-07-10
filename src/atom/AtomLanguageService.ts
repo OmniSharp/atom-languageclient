@@ -28,8 +28,12 @@ export class AtomLanguageService extends DisposableBase implements IAtomLanguage
     constructor(resolver: IResolver, stateChange: Observable<boolean>) {
         super();
         this._resolver = resolver;
-        this._activated = stateChange.filter(x => !!x).share();
-        this._deactivated = stateChange.skip(1).filter(x => !x).share();
+        this._activated = stateChange
+            .do({ next: () => console.log('next') })
+            .filter(x => !!x);
+        this._deactivated = stateChange
+            .skip(1)
+            .filter(x => !x);
     }
 
     public get activated() { return this._activated; }

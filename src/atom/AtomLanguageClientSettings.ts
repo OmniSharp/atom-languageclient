@@ -4,10 +4,12 @@
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
 export interface IAtomLanguageClientSettings {
-    deserializer: string;
+    deserializer?: string;
 }
 
 export class AtomLanguageClientSettings {
+    public static get empty() { return new AtomLanguageClientSettings({}); }
+
     constructor(state: IAtomLanguageClientSettings) { /* */ }
 
     public serialize(fn: Function): IAtomLanguageClientSettings {

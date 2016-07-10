@@ -7,11 +7,13 @@
 import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 import { Container as AureliaContainer } from 'aurelia-dependency-injection';
-import { readdir } from 'fs';
+import { metadata } from 'aurelia-metadata';
+import { exists, readdir } from 'fs';
 import { join } from 'path';
 import { DisposableBase } from 'ts-disposables';
 
 const $readdir = Observable.bindNodeCallback(readdir);
+const $exists = Observable.bindCallback(exists);
 
 export interface IResolver {
     resolve<T>(key: T): T;
@@ -27,9 +29,12 @@ export class Container extends DisposableBase implements IResolver {
     }
 
     public registerFolder(...paths: string[]) {
-        const path = join(paths);
-        return $readdir(path)
-            .map(files => this._registerServices(path, files));
+        const path = join(...paths);
+        return $exists(path)
+            .filter(x => x)
+            .mergeMap(() => $readdir(path)
+                .map(files => this._registerServices(path, files))
+            );
     }
 
     public register(fn: any, key?: string) {
@@ -37,12 +42,16 @@ export class Container extends DisposableBase implements IResolver {
         return this;
     }
 
-    public registerAll(fns: any[]) {
-        this._container.autoRegisterAll(fns);
+    public registerAll(fns: any[], key?: any) {
+        if (key) {
+            _.each(fns, fn => this.register(fn, key));
+        } else {
+            this._container.autoRegisterAll(fns);
+        }
         return this;
     }
 
-    public resolve<T>(key: T): T {
+    public resolve<T>(key: { new (...args: any[]): T; }): T {
         return this._container.get(key);
     }
 
@@ -51,13 +60,19 @@ export class Container extends DisposableBase implements IResolver {
     }
 
     private _registerServices(fromPath: string, files: string[]) {
-        const classes = _(files)
+        const [specialKeys, normalKeys] = _(files)
+            .filter(file => _.endsWith(file, '.js'))
             .map(file => `${fromPath}/${file}`)
             .map(path => require(path))
             .flatMap(_.values)
+            .partition(fn => !!metadata.get('di:key', fn))
             .value();
 
-        this._container.autoRegisterAll(classes);
+        _.each(specialKeys, fn => {
+            this._container.autoRegister(fn, metadata.get('di:key', fn));
+        });
+
+        this._container.autoRegisterAll(normalKeys);
         return this;
     }
 }
