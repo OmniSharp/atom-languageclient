@@ -2,7 +2,7 @@
   "name": "atom-languageclient",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "lint": "npm run lint-rules && tslint 'src/**/*.ts'",
     "lint-rules": "tsc -p rules/tsconfig.json",
