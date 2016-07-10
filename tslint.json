@@ -1,6 +1,7 @@
 {
     "rulesDirectory": [
         "node_modules/tslint-microsoft-contrib",
+        "node_modules/codelyzer",
         "rules"
     ],
     "rules": {
@@ -134,7 +135,7 @@
         "missing-jsdoc": true,
         "new-parens": true,
         "no-construct": true,
-        "no-constructor-vars": false,
+        "no-constructor-vars": true,
         "no-default-export": true,
         "no-empty-interfaces": true,
         "no-for-in": true,
@@ -243,6 +244,10 @@
         // pick one of the two following type-cast formats and use it consistently
         "prefer-type-cast": true,
         "no-angle-bracket-type-assertion": false,
+        /**
+        * Codelyzer
+        */
+        "import-destructuring-spacing": true,
         /**
          *   Custom Rules
          */

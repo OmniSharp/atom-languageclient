@@ -8,7 +8,10 @@
         "src/**/*.js": {
             "when": "$(basename).ts"
         },
-        "src/**/*.js.map": true
+        "spec/**/*.js": {
+            "when": "$(basename).ts"
+        },
+        "**/*.js.map": true
     },
     "typescript.tsdk": "node_modules/typescript/lib"
 }

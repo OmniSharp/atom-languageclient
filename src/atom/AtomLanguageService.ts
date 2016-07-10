@@ -1,0 +1,37 @@
+/**
+ *  @license   MIT
+ *  @copyright OmniSharp Team
+ *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
+ */
+import _ from 'lodash';
+import { Observable } from 'rxjs';
+import { DisposableBase } from 'ts-disposables';
+import { IResolver } from '../di/Container';
+
+/**
+ * Defines the interface for consuming this service
+ * http://flight-manual.atom.io/behind-atom/sections/interacting-with-other-packages-via-services/
+ */
+export interface IAtomLanguageService {
+    activated: Observable<boolean>;
+    deactivated: Observable<boolean>;
+}
+
+/**
+ * Defines the common interface that a module can then consume to interact with us.
+ */
+export class AtomLanguageService extends DisposableBase implements IAtomLanguageService {
+    private _activated: Observable<boolean>;
+    private _deactivated: Observable<boolean>;
+    private _resolver: IResolver;
+
+    constructor(resolver: IResolver, stateChange: Observable<boolean>) {
+        super();
+        this._resolver = resolver;
+        this._activated = stateChange.filter(x => !!x).share();
+        this._deactivated = stateChange.skip(1).filter(x => !x).share();
+    }
+
+    public get activated() { return this._activated; }
+    public get deactivated() { return this._deactivated; }
+}

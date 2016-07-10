@@ -1,6 +1,6 @@
 {
   "name": "atom-languageclient",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -22,14 +22,32 @@
   "homepage": "https://github.com/OmniSharp/atom-languageclient#readme",
   "dependencies": {
     "aurelia-dependency-injection": "^1.0.0-rc.1.0.0",
+    "chai": "^3.5.0",
+    "codelyzer": "0.0.25",
     "lodash": "^4.13.1",
     "rxjs": "^5.0.0-beta.10",
-    "ts-disposables": "^2.0.0",
+    "ts-disposables": "^2.0.3",
     "vscode-languageclient": "^2.3.0"
   },
   "devDependencies": {
     "tslint": "^3.13.0",
     "tslint-microsoft-contrib": "git://github.com/Microsoft/tslint-microsoft-contrib.git#releases",
     "typescript": "^2.0.0-dev.20160707"
+  },
+  "atomTestRunner": "./spec/test-runner",
+  "providedServices": {
+    "atom-language-client": {
+      "description": "Provides access to the atom-language-client api",
+      "versions": {
+        "1.0.0": "provide-atom-language-client"
+      }
+    }
+  },
+  "consumedServices": {
+    "atom-language": {
+      "versions": {
+        "1.0.0": "consume-atom-language"
+      }
+    }
   }
 }

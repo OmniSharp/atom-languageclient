@@ -3,6 +3,7 @@
         "target": "es5",
         "lib": [
             "es5",
+            "dom",
             "es2015.core",
             "es2015.collection",
             "es2015.generator",
