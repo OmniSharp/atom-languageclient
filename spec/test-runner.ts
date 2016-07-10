@@ -7,7 +7,6 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import { CompositeDisposable } from 'ts-disposables';
-import { packages } from './packages';
 
 module.exports = (
     {testPaths, buildAtomEnvironment, buildDefaultApplicationDelegate, headless}: {
@@ -22,7 +21,7 @@ module.exports = (
         headless: boolean
     }): Promise<number> => {
     console.log(testPaths);
-    const fixtures = testPaths.map(x => join(x, 'fixtures'));
+    // const fixtures = testPaths.map(x => join(x, 'fixtures'));
 
     const applicationDelegate = buildDefaultApplicationDelegate();
 
@@ -68,13 +67,13 @@ module.exports = (
     (<any>mocha).suite.beforeEach(() => {
         cd = new CompositeDisposable();
 
-        process.chdir(fixtures[0]);
-        atom.project.setPaths(<any>fixtures);
+        // process.chdir(fixtures[0]);
+        // atom.project.setPaths(<any>fixtures);
     });
 
     (<any>mocha).suite.afterEach(() => {
         cd.dispose();
-        packages.deactivatePackages();
+        atom.packages.deactivatePackages();
         (<any>atom).reset();
     });
 

@@ -6,33 +6,26 @@
 /* tslint:disable:export-name no-any no-reserved-keywords no-invalid-this */
 
 import { CompositeDisposable } from 'ts-disposables';
-import { packages } from './packages';
 import { packageName } from '../src/strings';
 import { AtomLanguageClientPackage } from '../src/AtomLanguageClientPackage';
 
 export function setup() {
-    return (target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<Function>) => {
-        const originalFn: Function = <Function>descriptor.value;
-        descriptor.value = function (this: any, ...args: any[]) {
-            let cd: CompositeDisposable;
-            beforeEach(() => {
-                cd = new CompositeDisposable();
+    let cd: CompositeDisposable;
+    beforeEach(() => {
+        cd = new CompositeDisposable();
 
-                cd.add(
-                    () => packages.deactivatePackage('omnisharp-atom')
-                );
+        cd.add(
+            () => atom.packages.deactivatePackage(packageName)
+        );
 
-                return packages.activatePackage(packageName)
-                    .then(pack => (<AtomLanguageClientPackage>(<any>pack).mainModule)['provide-atom-language-client']()
-                        .activated
-                        .take(1)
-                        .toPromise()
-                    );
-            });
-            afterEach(() => cd.dispose());
-            originalFn.call(this, args);
-        };
-    };
+        return atom.packages.activatePackage(packageName)
+            .then(pack => (<AtomLanguageClientPackage>pack.mainModule)['provide-atom-language-client']()
+                .activated
+                .take(1)
+                .toPromise()
+            );
+    });
+    afterEach(() => cd.dispose());
 }
 
 /*export function setupFeature(features: string[], unitTestMode = true) {

@@ -4,7 +4,7 @@
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
 /* tslint:disable:no-require-imports no-any */
-import _ from 'lodash';
+import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 import { Container as AureliaContainer } from 'aurelia-dependency-injection';
 import { readdir } from 'fs';

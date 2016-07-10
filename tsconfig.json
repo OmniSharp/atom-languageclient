@@ -28,6 +28,7 @@
         "experimentalDecorators": true,
         "allowSyntheticDefaultImports": true,
         "sourceMap": true,
+        "sourceRoot": "",
         "strictNullChecks": true
     },
     "compileOnSave": true,

@@ -7,7 +7,8 @@ import { expect } from 'chai';
 import { setup } from './helpers';
 
 describe('AtomLanguageClientPackage', () => {
-    it('should activate when started', setup(() => {
+    setup();
+    it('should activate when started', () => {
         expect(1234, 'the application has activated correctly 1234').to.be.eq(1234);
-    }));
+    });
 });
