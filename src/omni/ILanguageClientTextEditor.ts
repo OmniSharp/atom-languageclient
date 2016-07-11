@@ -6,7 +6,7 @@
 import { LanguageClientTextEditorContext } from './LanguageClientTextEditorContext';
 
 export interface ILanguageClientTextEditor extends Atom.TextEditor {
-    languageclient: LanguageClientTextEditorContext | null;
+    languageclient: LanguageClientTextEditorContext;
 }
 
 /* tslint:disable:no-any */

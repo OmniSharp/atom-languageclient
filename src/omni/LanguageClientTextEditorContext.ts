@@ -17,6 +17,7 @@ export class LanguageClientTextEditorContext extends DisposableBase {
     private _temporary: boolean;
     private _metadata: boolean;
     private _changes = new LanguageClientTextEditorChanges();
+    private _version = 0;
 
     constructor(editor: Atom.TextEditor, solution: Object) {
         super();
@@ -26,6 +27,7 @@ export class LanguageClientTextEditorContext extends DisposableBase {
 
         this._editor = <any>editor;
         this._editor.languageclient = this;
+
         // this._solution = solution;
         // this._project = new EmptyProjectViewModel(null, solution.path);
 
@@ -34,9 +36,12 @@ export class LanguageClientTextEditorContext extends DisposableBase {
 
         this._disposable.add(
             () => {
-                this._editor.languageclient = null;
+                delete this._editor.languageclient;
                 view.classList.remove(className);
-            }
+            },
+            this._editor.onDidChange(() => {
+                this._version += 1;
+            })
         );
     }
 
@@ -66,6 +71,9 @@ export class LanguageClientTextEditorContext extends DisposableBase {
     public set metadata(value) {
         this._metadata = value;
     }
+
+    public get version() { return this._version; }
+    public get languageId() { return this._editor.getGrammar().name; }
 
     public get changes() { return this._changes; }
 }

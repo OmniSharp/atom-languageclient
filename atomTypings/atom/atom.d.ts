@@ -12735,20 +12735,20 @@ declare module Atom {
          * in the workspace.
          * @param callback - {Function} to be called with current and future pane items.
          */
-        observePaneItems(callback : Function) : EventKit.Disposable;
+        observePaneItems(callback : (pane: any) => void) : EventKit.Disposable;
 
         /**
          * Invoke the given callback when the active pane item changes.
          * @param callback - {Function} to be called when the active pane item changes.
          */
-        onDidChangeActivePaneItem(callback : Function /* needs to be defined */) : EventKit.Disposable;
+        onDidChangeActivePaneItem(callback : (pane: any) => void /* needs to be defined */) : EventKit.Disposable;
 
         /**
          * Invoke the given callback with the current active pane item and
          * with all future active pane items in the workspace.
          * @param callback - {Function} to be called when the active pane item changes.
          */
-        observeActivePaneItem(callback : Function) : EventKit.Disposable;
+        observeActivePaneItem(callback : (pane: any) => void) : EventKit.Disposable;
 
         /**
          * Invoke the given callback whenever an item is opened. Unlike
@@ -12756,74 +12756,74 @@ declare module Atom {
          * present in the workspace when they are reopened.
          * @param callback - {Function} to be called whenever an item is opened.
          */
-        onDidOpen(callback : Function /* needs to be defined */) : EventKit.Disposable;
+        onDidOpen(callback : (pane: any) => void /* needs to be defined */) : EventKit.Disposable;
 
         /**
          * Invoke the given callback when a pane is added to the workspace.
          * @param callback - {Function} to be called panes are added.
          */
-        onDidAddPane(callback : Function /* needs to be defined */) : EventKit.Disposable;
+        onDidAddPane(callback : (pane: any) => void /* needs to be defined */) : EventKit.Disposable;
 
         /**
          * Invoke the given callback before a pane is destroyed in the
          * workspace.
          * @param callback - {Function} to be called before panes are destroyed.
          */
-        onWillDestroyPane(callback : Function) : EventKit.Disposable;
+        onWillDestroyPane(callback : (pane: any) => void) : EventKit.Disposable;
 
         /**
          * Invoke the given callback when a pane is destroyed in the
          * workspace.
          * @param callback - {Function} to be called panes are destroyed.
          */
-        onDidDestroyPane(callback : Function /* needs to be defined */) : EventKit.Disposable;
+        onDidDestroyPane(callback : (pane: any) => void /* needs to be defined */) : EventKit.Disposable;
 
         /**
          * Invoke the given callback with all current and future panes in the
          * workspace.
          * @param callback - {Function} to be called with current and future panes.
          */
-        observePanes(callback : Function) : EventKit.Disposable;
+        observePanes(callback : (pane: any) => void) : EventKit.Disposable;
 
         /**
          * Invoke the given callback when the active pane changes.
          * @param callback - {Function} to be called when the active pane changes.
          */
-        onDidChangeActivePane(callback : Function /* needs to be defined */) : EventKit.Disposable;
+        onDidChangeActivePane(callback : (pane: any) => void /* needs to be defined */) : EventKit.Disposable;
 
         /**
          * Invoke the given callback with the current active pane and when
          * the active pane changes.
          * @param callback - {Function} to be called with the current and future active# panes.
          */
-        observeActivePane(callback : Function) : EventKit.Disposable;
+        observeActivePane(callback : (pane: any) => void) : EventKit.Disposable;
 
         /**
          * Invoke the given callback when a pane item is added to the
          * workspace.
          * @param callback - {Function} to be called when pane items are added.
          */
-        onDidAddPaneItem(callback : Function /* needs to be defined */) : EventKit.Disposable;
+        onDidAddPaneItem(callback : (pane: any) => void /* needs to be defined */) : EventKit.Disposable;
 
         /**
          * Invoke the given callback when a pane item is about to be
          * destroyed, before the user is prompted to save it.
          * @param callback - {Function} to be called before pane items are destroyed.
          */
-        onWillDestroyPaneItem(callback : Function) : EventKit.Disposable;
+        onWillDestroyPaneItem(callback : (pane: any) => void) : EventKit.Disposable;
 
         /**
          * Invoke the given callback when a pane item is destroyed.
          * @param callback - {Function} to be called when pane items are destroyed.
          */
-        onDidDestroyPaneItem(callback : Function /* needs to be defined */) : EventKit.Disposable;
+        onDidDestroyPaneItem(callback : (pane: any) => void /* needs to be defined */) : EventKit.Disposable;
 
         /**
          * Invoke the given callback when a text editor is added to the
          * workspace.
          * @param callback - {Function} to be called panes are added.
          */
-        onDidAddTextEditor(callback : Function /* needs to be defined */) : EventKit.Disposable;
+        onDidAddTextEditor(callback : (editor: TextEditor) => void /* needs to be defined */) : EventKit.Disposable;
 
         /**
          * Opens the given URI in Atom asynchronously.

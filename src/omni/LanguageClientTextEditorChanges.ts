@@ -14,7 +14,7 @@ export class LanguageClientTextEditorChanges {
 
     public pop() {
         if (!this._changes.length) {
-            return null;
+            return [];
         }
         return this._changes.splice(0, this._changes.length);
     }
