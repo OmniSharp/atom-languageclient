@@ -11,7 +11,7 @@ export interface IGrammarService {
     isValid(grammar: FirstMate.Grammar): boolean;
 }
 
-@inject
+@autoinject
 export class GrammarService extends DisposableBase implements IGrammarService {
     private _supportedExtensions = ['project.json', '.cs', '.csx', /*".cake"*/];
 

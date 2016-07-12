@@ -3,17 +3,17 @@
  *  @copyright OmniSharp Team
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
-@inject
+@autoinject
 export class L1 {
     public a = 1;
 }
 
-@inject
+@autoinject
 export class L2 {
     public a = 1;
 }
 
-@inject
+@autoinject
 export class L3 {
     public a = 1;
 }

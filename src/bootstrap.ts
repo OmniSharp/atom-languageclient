@@ -6,6 +6,7 @@
 /* tslint:disable */
 import { autoinject, singleton, transient } from 'aurelia-dependency-injection';
 import { metadata } from 'aurelia-metadata';
+import { all, factory, inject, lazy, newInstance, optional, parent } from './di/decorators';
 import 'reflect-metadata';
 
 function key(key: any) {
@@ -20,6 +21,12 @@ function activate(target: any) {
 
 global.activate = activate;
 global.key = key;
-global.inject = autoinject;
+global.autoinject = autoinject;
 global.singleton = singleton;
 global.transient = transient;
+global.all = all;
+global.factory = factory;
+global.inject = inject;
+global.lazy = lazy;
+global.newInstance = newInstance;
+global.optional = optional;
