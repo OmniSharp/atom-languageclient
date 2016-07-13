@@ -6,7 +6,7 @@
 /* tslint:disable:export-name no-any no-invalid-this */
 
 import { CompositeDisposable } from 'ts-disposables';
-import { packageName } from '../src/strings';
+import { packageName } from '../src/constants';
 import { AtomLanguageClientPackage } from '../src/AtomLanguageClientPackage';
 
 export function setup() {

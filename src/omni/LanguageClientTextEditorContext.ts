@@ -5,7 +5,7 @@
  */
 /* tslint:disable:no-any */
 import { DisposableBase } from 'ts-disposables';
-import { className } from '../strings';
+import { className } from '../constants';
 import { ILanguageClientTextEditor } from './ILanguageClientTextEditor';
 import { LanguageClientTextEditorChanges } from './LanguageClientTextEditorChanges';
 

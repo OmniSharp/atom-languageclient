@@ -5,7 +5,6 @@
  */
 /* tslint:disable:no-any */
 import * as _ from 'lodash';
-import { Observable } from 'rxjs';
 import { ChildProcess, spawn } from 'child_process';
 
 import {
@@ -30,7 +29,7 @@ import {
     ShutdownRequest, TelemetryEventNotification
 } from './utils/protocol';
 import { ConsoleLogger } from './ConsoleLogger';
-import { IStreamInfo, TransportKind, IExecutable, IExecutableOptions, IForkOptions, INodeModule, ServerOptions } from './ServerOptions';
+import { IExecutable, IExecutableOptions, IForkOptions, INodeModule, IStreamInfo, ServerOptions, TransportKind } from './ServerOptions';
 
 const isDefined = _.negate(_.isUndefined);
 

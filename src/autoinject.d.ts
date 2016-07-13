@@ -5,7 +5,8 @@ declare const singleton: {
     (registerInChild?: boolean): ClassDecorator;
     (key: any, registerInChild?: boolean): ClassDecorator;
 };
-declare const inject: ParameterDecorator;
+declare const capability: ClassDecorator;
+declare const inject: (key?: any) => ParameterDecorator;
 declare const all: ParameterDecorator;
 declare const factory: ParameterDecorator;
 declare const lazy: ParameterDecorator;
@@ -21,12 +22,13 @@ declare namespace NodeJS {
             (registerInChild?: boolean): ClassDecorator;
             (key: any, registerInChild?: boolean): ClassDecorator;
         };
+        capability: ClassDecorator;
 
-        inject: ParameterDecorator;
-        all: ParameterDecorator;
+        inject: (key?: any) => ParameterDecorator;
+        all: (key?: any) => ParameterDecorator;
         factory: ParameterDecorator;
-        lazy: ParameterDecorator;
-        newInstance: ParameterDecorator;
-        optional: ParameterDecorator;
+        lazy: (key?: any) => ParameterDecorator;
+        newInstance: ParameterDecorator | ((asKey?: any) => ParameterDecorator);
+        optional: ParameterDecorator | ((checkParent?: boolean) => ParameterDecorator);
     }
 }

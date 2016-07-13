@@ -36,7 +36,6 @@ export class AtomLanguageClientPackage implements IAtomPackage<LanguageClientSet
         Observable.merge(
             this._container.registerFolder(__dirname, 'services')
         )
-            .map(() => this._container.activate())
             .subscribe({
                 error: e => this._stateChange.error(e),
                 complete: () => this._stateChange.next(true)
@@ -49,7 +48,17 @@ export class AtomLanguageClientPackage implements IAtomPackage<LanguageClientSet
     }
 
     /* tslint:disable-next-line:function-name */
+    public ['provide-atom-autocomplete'](service: ILanguageProvider) {
+        return this._atomLanguageProvider.add(service);
+    }
+
+    /* tslint:disable-next-line:function-name */
     public ['consume-atom-language'](service: ILanguageProvider) {
+        return this._atomLanguageProvider.add(service);
+    }
+
+    /* tslint:disable-next-line:function-name */
+    public ['consume-atom-linter'](service: ILanguageProvider) {
         return this._atomLanguageProvider.add(service);
     }
 

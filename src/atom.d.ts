@@ -36,5 +36,23 @@ declare namespace Autocomplete {
     export type TextSuggestion = { text: string; } & SuggestionBase;
     export type SnippetSuggestion = { snippet: string; } & SuggestionBase;
     export type Suggestion = TextSuggestion | SnippetSuggestion;
+
+    interface RequestOptions {
+        editor: Atom.TextEditor;
+        bufferPosition: TextBuffer.Point; // the position of the cursor
+        prefix: string;
+        scopeDescriptor: { scopes: string[] };
+        activatedManually: boolean;
+    }
 }
 declare type Thenable<T> = Promise<T>;
+declare module 'fuzzaldrin' {
+    export interface FilterOptions {
+        key?: string;
+        maxResults?: number;
+    }
+    export function filter(candidates: string[], query: string, options: FilterOptions): string[];
+
+    export function score(str: string, query: string): number;
+    export function match(str: string, query: string): string[][];
+}

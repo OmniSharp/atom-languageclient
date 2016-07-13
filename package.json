@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/OmniSharp/atom-languageclient#readme",
   "dependencies": {
-    "aurelia-dependency-injection": "^1.0.0-rc.1.0.0",
+    "aurelia-dependency-injection": "^1.0.0-rc.1.0.1",
     "chokidar": "^1.6.0",
     "lodash": "^4.13.1",
     "reflect-metadata": "^0.1.3",
@@ -47,12 +47,23 @@
       "versions": {
         "1.0.0": "provide-atom-language-client"
       }
+    },
+    "autocomplete.provider": {
+      "description": "A C# Roslyn powered autocomplete-plus provider.",
+      "versions": {
+        "2.0.0": "provide-autocomplete"
+      }
     }
   },
   "consumedServices": {
     "atom-language": {
       "versions": {
         "1.0.0": "consume-atom-language"
+      }
+    },
+    "linter-indie": {
+      "versions": {
+        "1.0.0": "consume-atom-linter"
       }
     }
   }
