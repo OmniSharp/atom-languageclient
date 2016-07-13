@@ -16,7 +16,7 @@ export interface ITextEditorProvider {
     forEach(callback: (editor: ILanguageClientTextEditor, cd: CompositeDisposable) => void): IDisposable;
 }
 
-@inject
+@autoinject
 export class TextEditorProvider extends DisposableBase implements ITextEditorProvider {
     private _editorsSet = new Set<ILanguageClientTextEditor>();
     private _editors$: Observable<ILanguageClientTextEditor>;
