@@ -5,13 +5,7 @@
  */
 import * as _ from 'lodash';
 import { Disposable, DisposableBase, IDisposable } from 'ts-disposables';
-import { IResolver } from '../di/Container';
-
-/**
- * Defines the interface for providing a language to be consumed
- * http://flight-manual.atom.io/behind-atom/sections/interacting-with-other-packages-via-services/
- */
-export interface ILanguageProvider {}
+import { ILanguageProvider, IResolver } from '../interfaces';
 
 /**
  * Takes in all the different languages provided by other packages and configures them.
@@ -23,7 +17,7 @@ export class LanguageProvider extends DisposableBase {
         this._resolver = resolver;
     }
 
-    public add(provider: ILanguageProvider): IDisposable {
-        return Disposable.empty;
+    public add(provider: ILanguageProvider): void {
+        /*  */
     }
 }

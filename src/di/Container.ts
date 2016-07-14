@@ -11,15 +11,11 @@ import { metadata } from 'aurelia-metadata';
 import { exists, readdir } from 'fs';
 import { join } from 'path';
 import { CompositeDisposable, DisposableBase, IDisposable } from 'ts-disposables';
+import { IResolver } from '../interfaces';
 import * as symbols from './symbols';
 
 const $readdir = Observable.bindNodeCallback(readdir);
 const $exists = Observable.bindCallback(exists);
-
-export interface IResolver {
-    resolve<T>(key: T): T;
-    resolveAll<T>(key: any): T[];
-}
 
 export interface ICapability {
     item: any;
@@ -41,12 +37,33 @@ export class Container extends DisposableBase implements IResolver {
             .filter(x => x)
             .mergeMap(() => $readdir(path)
                 .map(files => this._registerServices(path, files))
-            );
+            )
+            .toPromise();
     }
 
-    public register(fn: Function): this;
-    public register(key: string | symbol | Object, fn: Function): this;
-    public register(key: any, fn?: Function) {
+    public registerInstance(key: any, instance: any) {
+        this._container.registerInstance(key, instance);
+        return this;
+    }
+
+    public registerSingleton(key: any, fn: Function) {
+        this._container.registerSingleton(key, fn);
+        return this;
+    }
+
+    public registerTransient(key: any, fn: Function) {
+        this._container.registerTransient(key, fn);
+        return this;
+    }
+
+    public registerAlias(originalKey: any, aliasKey: any) {
+        this._container.registerAlias(originalKey, key);
+        return this;
+    }
+
+    public autoRegister(fn: Function): this;
+    public autoRegister(key: string | symbol | Object, fn: Function): this;
+    public autoRegister(key: any, fn?: Function) {
         if (fn === undefined) {
             fn = key;
             key = fn;
@@ -72,11 +89,11 @@ export class Container extends DisposableBase implements IResolver {
         return this;
     }
 
-    public registerAll(fns: any[], key?: any) {
+    public autoRegisterAll(fns: any[], key?: any) {
         if (key) {
-            _.each(fns, fn => this.register(fn, key));
+            _.each(fns, fn => this.autoRegister(fn, key));
         } else {
-            _.each(fns, fn => this.register(fn));
+            _.each(fns, fn => this.autoRegister(fn));
         }
         return this;
     }
@@ -98,13 +115,6 @@ export class Container extends DisposableBase implements IResolver {
         const child = this._container.createChild();
 
         const resolver: any = child.registerInstance(key, instance);
-        const flow = _.flow(
-            // register the instance
-            _.bind(child.registerTransient, child),
-            // resolve the instance
-            _.bind(child.get, child)
-        );
-
         const cd = new CompositeDisposable(
             ..._.map(capabilities, capability => {
                 child.registerTransient(capability);
@@ -135,10 +145,10 @@ export class Container extends DisposableBase implements IResolver {
             .value();
 
         _.each(specialKeys, fn => {
-            this.register(metadata.get(symbols.key, fn), fn);
+            this.autoRegister(metadata.get(symbols.key, fn), fn);
         });
 
-        _.each(normalKeys, fn => this.register(fn));
+        _.each(normalKeys, fn => this.autoRegister(fn));
         return this;
     }
 }

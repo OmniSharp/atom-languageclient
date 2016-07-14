@@ -5,7 +5,7 @@ interface IAtomPackage<TSettings> {
     deactivate(): void;
 }
 declare namespace Linter {
-    interface MessageBase {
+    export interface MessageBase {
         type: string;
         name?: string;
         range: TextBuffer.Range;
@@ -15,15 +15,26 @@ declare namespace Linter {
         selected?: ((message: Message) => void);
         code?: string | number;
     }
-    export type TextMessage = { text: string; } & MessageBase;
-    export type HtmlMessage = { html: string; } & MessageBase;
+    export interface TextMessage extends MessageBase { text: string; }
+    export interface HtmlMessage extends MessageBase { html: string; }
     export type Message = TextMessage | HtmlMessage;
+
+    export interface IndieRegistry {
+        register(options: { name: string; }): IndieLinter;
+    }
+
+    export interface IndieLinter {
+        setMessages(messages: Message[]);
+        deleteMessages(): void;
+        dispose(): void;
+    }
 }
 declare namespace Autocomplete {
-    interface SuggestionBase {
+    export type SuggestionType = 'attribute' | 'builtin' | 'class' | 'constant' | 'function' | 'import' | 'keyword' | 'method' | 'module' | 'mixin' | 'package' | 'property' | 'require' | 'snippet' | 'tag' | 'type' | 'value' | 'variable' | 'selector' | 'pseudo-selector' | 'interface' | 'enum';
+    export interface SuggestionBase {
         displayText?: string;
         replacementPrefix?: string;
-        type: 'attribute' | 'builtin' | 'class' | 'constant' | 'function' | 'import' | 'keyword' | 'method' | 'module' | 'mixin' | 'package' | 'property' | 'require' | 'snippet' | 'tag' | 'type' | 'value' | 'variable' | 'selector' | 'pseudo-selector';
+        type: SuggestionType;
         leftLabel?: string;
         leftLabelHTML?: string;
         rightLabel?: string;
@@ -33,11 +44,11 @@ declare namespace Autocomplete {
         descriptionMoreURL?: string;
         className?: string;
     }
-    export type TextSuggestion = { text: string; } & SuggestionBase;
-    export type SnippetSuggestion = { snippet: string; } & SuggestionBase;
+    export interface TextSuggestion extends SuggestionBase { text: string; }
+    export interface SnippetSuggestion extends SuggestionBase { snippet: string; }
     export type Suggestion = TextSuggestion | SnippetSuggestion;
 
-    interface RequestOptions {
+    export interface RequestOptions {
         editor: Atom.TextEditor;
         bufferPosition: TextBuffer.Point; // the position of the cursor
         prefix: string;
@@ -46,12 +57,12 @@ declare namespace Autocomplete {
     }
 }
 declare type Thenable<T> = Promise<T>;
-declare module 'fuzzaldrin' {
+declare module 'fuzzaldrin-plus' {
     export interface FilterOptions {
         key?: string;
         maxResults?: number;
     }
-    export function filter(candidates: string[], query: string, options: FilterOptions): string[];
+    export function filter<T>(candidates: T[], query: string, options: FilterOptions): T[];
 
     export function score(str: string, query: string): number;
     export function match(str: string, query: string): string[][];

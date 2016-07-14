@@ -91,9 +91,9 @@ describe(Container.name, () => {
 
         it('should register and resolve each capability based on the correct key', () => {
             const container = new Container();
-            container.register(CapabilityA);
-            container.register(CapabilityB);
-            container.register(CapabilityC);
+            container.autoRegister(CapabilityA);
+            container.autoRegister(CapabilityB);
+            container.autoRegister(CapabilityC);
 
             const result = <any>container.resolveCapabilities(constants.languageprotocol, { dispose() { /* */ } });
             const items = _.toArray(result._disposables);

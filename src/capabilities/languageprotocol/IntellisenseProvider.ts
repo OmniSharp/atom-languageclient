@@ -9,7 +9,7 @@ import { IConnection } from '../../protocol/Connection';
 @capability
 export class IntelliseSenseProvider {
     private _connection: IConnection;
-    constructor( @inject(languageprotocol) connection: IConnection) {
+    constructor( @inject(languageprotocol) connection: IConnection, ) {
         this._connection = connection;
     }
 }

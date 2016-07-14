@@ -1,0 +1,55 @@
+{
+  "name": "atom-language-json",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "scripts": {
+    "lint": "npm run lint-rules && tslint \"src/**/*.ts\" \"spec/**/*.ts\" -e \"**/*.d.ts\" -t verbose",
+    "lint-rules": "tsc -p rules/tsconfig.json",
+    "test": "npm run lint",
+    "tsc": "tsc",
+    "tsc:w": "tsc -w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OmniSharp/atom-languageclient.git"
+  },
+  "author": "OmniSharp Team",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/OmniSharp/atom-languageclient/issues"
+  },
+  "homepage": "https://github.com/OmniSharp/atom-languageclient#readme",
+  "dependencies": {
+    "lodash": "^4.13.1",
+    "rxjs": "^5.0.0-beta.10",
+    "ts-disposables": "^2.0.3",
+    "vscode-jsonrpc": "^2.2.0",
+    "vscode-languageserver-types": "^1.0.1"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "codelyzer": "0.0.25",
+    "globby": "^5.0.0",
+    "mocha": "^2.5.3",
+    "tslint": "^3.13.0",
+    "tslint-microsoft-contrib": "git://github.com/Microsoft/tslint-microsoft-contrib.git#releases",
+    "typescript": "^2.0.0-dev.20160707"
+  },
+  "atomTestRunner": "./spec/test-runner",
+  "providedServices": {
+    "atom-language": {
+      "versions": {
+        "1.0.0": "consume-atom-language"
+      }
+    }
+  },
+  "consumedServices": {
+    "atom-language-client": {
+      "description": "Provides access to the atom-language-client api",
+      "versions": {
+        "1.0.0": "provide-atom-language-client"
+      }
+    }
+  }
+}
