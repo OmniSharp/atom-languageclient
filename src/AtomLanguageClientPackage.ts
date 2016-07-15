@@ -38,7 +38,7 @@ export class AtomLanguageClientPackage implements IAtomPackage<LanguageClientSet
 
         this._container.registerInstance(constants.languageProvider, this._atomLanguageProvider);
         this._container.registerInstance(constants.languageService, this._atomLanguageService);
-        this._container.registerInstance(constants.autocompleteService, this._atomAutocompleteProvider);
+        this._container.registerInstance(constants.capability_completion, this._atomAutocompleteProvider);
         this._container.registerInstance(constants.linterService, this._atomLinterProvider);
 
         this._disposable.add(
@@ -72,9 +72,9 @@ export class AtomLanguageClientPackage implements IAtomPackage<LanguageClientSet
                         if (instance['provide-atom-language']) {
                             this['consume-atom-language'](instance['provide-atom-language']());
                         }
-                    })
+                    });
 
-            })
+            });
     }
 
     /* tslint:disable-next-line:function-name */

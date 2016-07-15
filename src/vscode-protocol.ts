@@ -32,7 +32,7 @@ import {
     ServerCapabilities, ShowMessageParams, ShowMessageRequestParams,
     SignatureHelpOptions, TextDocumentPositionParams, TextDocumentSyncKind,
     WorkspaceSymbolParams
-} from '../../vscode-languageserver-types';
+} from './vscode-languageserver-types';
 
 export {
     ClientCapabilities, CodeActionParams, CodeLensOptions,
@@ -47,7 +47,7 @@ export {
     ServerCapabilities, ShowMessageParams, ShowMessageRequestParams,
     SignatureHelpOptions, TextDocumentPositionParams, TextDocumentSyncKind,
     WorkspaceSymbolParams
-} from '../../vscode-languageserver-types';
+} from './vscode-languageserver-types';
 
 
 //---- Initialize Method ----

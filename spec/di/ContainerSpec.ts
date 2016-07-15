@@ -67,7 +67,7 @@ describe(Container.name, () => {
 
         @capability
         class CapabilityA {
-            constructor( @inject(constants.languageprotocol) value: any) {
+            constructor( @inject(constants.languageprotocolclient) value: any) {
 
             }
             public a = 1;
@@ -75,7 +75,7 @@ describe(Container.name, () => {
 
         @capability
         class CapabilityB {
-            constructor( @inject(constants.languageprotocol) value: any) {
+            constructor( @inject(constants.languageprotocolclient) value: any) {
 
             }
             public a = 1;
@@ -95,7 +95,7 @@ describe(Container.name, () => {
             container.autoRegister(CapabilityB);
             container.autoRegister(CapabilityC);
 
-            const result = <any>container.resolveCapabilities(constants.languageprotocol, { dispose() { /* */ } });
+            const result = <any>container.resolveCapabilities(constants.languageprotocolclient, { dispose() { /* */ } });
             const items = _.toArray(result._disposables);
 
             expect(_.find(items, item => item instanceof CapabilityA)).to.be.instanceOf(CapabilityA);

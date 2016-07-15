@@ -1486,7 +1486,7 @@ export interface ServerCapabilities {
     /**
      * The server provides rename support.
      */
-    renameProvider?: boolean
+    renameProvider?: boolean;
 }
 /**
  * The initialize parameters

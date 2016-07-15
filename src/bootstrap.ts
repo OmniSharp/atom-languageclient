@@ -8,7 +8,7 @@ import { autoinject, singleton, transient } from 'aurelia-dependency-injection';
 import { all, capability, factory, inject, key, lazy, newInstance, optional, parent } from './di/decorators';
 import 'reflect-metadata';
 
-global.autoinject = autoinject;
+global.injectable = autoinject;
 global.capability = capability;
 global.key = key;
 global.singleton = singleton;

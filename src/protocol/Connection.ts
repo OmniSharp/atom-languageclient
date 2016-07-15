@@ -16,6 +16,7 @@ import {
 } from 'vscode-jsonrpc';
 
 import { fork } from './utils/electron';
+/* tslint:disable */
 import {
     DidChangeConfigurationNotification,
     DidChangeConfigurationParams, DidChangeTextDocumentNotification, DidChangeTextDocumentParams,
@@ -27,7 +28,9 @@ import {
     PublishDiagnosticsNotification, PublishDiagnosticsParams,
     ShowMessageNotification, ShowMessageParams,
     ShutdownRequest, TelemetryEventNotification
-} from './utils/protocol';
+} from '../vscode-protocol';
+/* tslint:enable */
+/* tslint:disable:no-any */
 import { ConsoleLogger } from './ConsoleLogger';
 import { IExecutable, IExecutableOptions, IForkOptions, INodeModule, IStreamInfo, ServerOptions, TransportKind } from './ServerOptions';
 
@@ -43,6 +46,8 @@ export interface IConnection {
     onRequest<P, R, E>(type: RequestType<P, R, E>, handler: RequestHandler<P, R, E>): void;
     trace(value: Trace, tracer: Tracer): void;
 
+    settings: InitializeResult;
+
     initialize(params: InitializeParams): Promise<InitializeResult>;
     shutdown(): Promise<void>;
     exit(): void;
@@ -51,14 +56,14 @@ export interface IConnection {
     onShowMessage(handler: NotificationHandler<ShowMessageParams>): void;
     onTelemetry(handler: NotificationHandler<any>): void;
 
-    didChangeConfiguration(params: DidChangeConfigurationParams): void;
-    didChangeWatchedFiles(params: DidChangeWatchedFilesParams): void;
+    // didChangeConfiguration(params: DidChangeConfigurationParams): void;
+    // didChangeWatchedFiles(params: DidChangeWatchedFilesParams): void;
 
-    didOpenTextDocument(params: DidOpenTextDocumentParams): void;
-    didChangeTextDocument(params: DidChangeTextDocumentParams): void;
-    didCloseTextDocument(params: DidCloseTextDocumentParams): void;
-    didSaveTextDocument(params: DidSaveTextDocumentParams): void;
-    onDiagnostics(handler: NotificationHandler<PublishDiagnosticsParams>): void;
+    // didOpenTextDocument(params: DidOpenTextDocumentParams): void;
+    // didChangeTextDocument(params: DidChangeTextDocumentParams): void;
+    // didCloseTextDocument(params: DidCloseTextDocumentParams): void;
+    // didSaveTextDocument(params: DidSaveTextDocumentParams): void;
+    // onDiagnostics(handler: NotificationHandler<PublishDiagnosticsParams>): void;
 
     dispose(): void;
 }
@@ -222,6 +227,9 @@ export class Connection implements IConnection {
         this._connection = connection;
     }
 
+    private _settings: InitializeResult;
+    public get settings() { return this._settings; }
+
     public connection() {
         return this._connection;
     }
@@ -251,7 +259,8 @@ export class Connection implements IConnection {
     }
 
     public initialize(params: InitializeParams) {
-        return this._connection.sendRequest(InitializeRequest.type, params);
+        return this._connection.sendRequest(InitializeRequest.type, params)
+            .then(x => this._settings = x);
     }
 
     public shutdown() {
@@ -274,33 +283,33 @@ export class Connection implements IConnection {
         this._connection.onNotification(TelemetryEventNotification.type, handler);
     }
 
-    public didChangeConfiguration(params: DidChangeConfigurationParams) {
-        this._connection.sendNotification(DidChangeConfigurationNotification.type, params);
-    }
+    // public didChangeConfiguration(params: DidChangeConfigurationParams) {
+    //     this._connection.sendNotification(DidChangeConfigurationNotification.type, params);
+    // }
 
-    public didChangeWatchedFiles(params: DidChangeWatchedFilesParams) {
-        this._connection.sendNotification(DidChangeWatchedFilesNotification.type, params);
-    }
+    // public didChangeWatchedFiles(params: DidChangeWatchedFilesParams) {
+    //     this._connection.sendNotification(DidChangeWatchedFilesNotification.type, params);
+    // }
 
-    public didOpenTextDocument(params: DidOpenTextDocumentParams) {
-        this._connection.sendNotification(DidOpenTextDocumentNotification.type, params);
-    }
+    // public didOpenTextDocument(params: DidOpenTextDocumentParams) {
+    //     this._connection.sendNotification(DidOpenTextDocumentNotification.type, params);
+    // }
 
-    public didChangeTextDocument(params: DidChangeTextDocumentParams | DidChangeTextDocumentParams[] | undefined) {
-        this._connection.sendNotification(DidChangeTextDocumentNotification.type, params);
-    }
+    // public didChangeTextDocument(params: DidChangeTextDocumentParams | DidChangeTextDocumentParams[] | undefined) {
+    //     this._connection.sendNotification(DidChangeTextDocumentNotification.type, params);
+    // }
 
-    public didCloseTextDocument(params: DidCloseTextDocumentParams) {
-        this._connection.sendNotification(DidCloseTextDocumentNotification.type, params);
-    }
+    // public didCloseTextDocument(params: DidCloseTextDocumentParams) {
+    //     this._connection.sendNotification(DidCloseTextDocumentNotification.type, params);
+    // }
 
-    public didSaveTextDocument(params: DidSaveTextDocumentParams) {
-        this._connection.sendNotification(DidSaveTextDocumentNotification.type, params);
-    }
+    // public didSaveTextDocument(params: DidSaveTextDocumentParams) {
+    //     this._connection.sendNotification(DidSaveTextDocumentNotification.type, params);
+    // }
 
-    public onDiagnostics(handler: NotificationHandler<PublishDiagnosticsParams>) {
-        this._connection.onNotification(PublishDiagnosticsNotification.type, handler);
-    }
+    // public onDiagnostics(handler: NotificationHandler<PublishDiagnosticsParams>) {
+    //     this._connection.onNotification(PublishDiagnosticsNotification.type, handler);
+    // }
 
     public dispose() {
         this._connection.dispose();

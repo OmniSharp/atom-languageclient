@@ -6,13 +6,7 @@
         "**/.DS_Store": true,
         "**/node_modules": true,
         "**/*ypings*": true,
-        "src/**/*.js": {
-            "when": "$(basename).ts"
-        },
-        "spec/**/*.js": {
-            "when": "$(basename).ts"
-        },
-        "rules/**/*.js": {
+        "*/**/*.js": {
             "when": "$(basename).ts"
         },
         "**/*.js.map": true

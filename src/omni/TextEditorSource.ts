@@ -16,7 +16,7 @@ export interface ITextEditorSource {
     observeTextEditor(): Observable<ILanguageClientTextEditor>;
 }
 
-@autoinject
+@injectable
 export class TextEditorSource extends DisposableBase implements ITextEditorSource {
     private _grammarService: GrammarService;
 

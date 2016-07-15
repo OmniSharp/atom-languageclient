@@ -16,7 +16,7 @@ export interface IActiveTextEditorProvider {
     switch(callback: (editor: ILanguageClientTextEditor, cd: CompositeDisposable) => void): IDisposable;
 }
 
-@autoinject
+@injectable
 export class ActiveTextEditorProvider extends DisposableBase implements IActiveTextEditorProvider {
     private _editor$: Observable<ILanguageClientTextEditor>;
     private _source: TextEditorSource;

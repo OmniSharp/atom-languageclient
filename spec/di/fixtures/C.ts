@@ -6,7 +6,7 @@
 import { A } from './A';
 import { B } from './B';
 
-@autoinject
+@injectable
 export class C {
     private _a: A;
     private _b: B;

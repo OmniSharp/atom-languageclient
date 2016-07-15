@@ -15,7 +15,7 @@ export interface IOmniService {
     readonly grammar: IGrammarService;
 }
 
-@autoinject
+@injectable
 export class OmniService extends DisposableBase implements IOmniService {
     private _activeEditorsProvider: ActiveTextEditorProvider;
     private _editorsProvider: TextEditorProvider;

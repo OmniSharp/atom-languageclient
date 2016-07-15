@@ -5,21 +5,9 @@
  */
 import * as _ from 'lodash';
 import { Observable, Subscriber } from 'rxjs';
-import { IDisposable } from 'ts-disposables';
+import { ProjectProvider } from './ProjectProvider';
 
-export interface IProjectProvider {
-    getPaths: typeof atom.project.getPaths;
-    onDidChangePaths: (callback: (paths: string[]) => void) => IDisposable;
-}
-
-export class ProjectProvider implements IProjectProvider {
-    public getPaths() { return atom.project.getPaths(); }
-    public onDidChangePaths(callback: (paths: string[]) => void) {
-        return atom.project.onDidChangePaths(callback);
-    }
-}
-
-@autoinject
+@injectable
 export class ProjectTracker {
     private _projectPaths: string[] = [];
     private _projectsObserver: Subscriber<[string[], string[]]>;

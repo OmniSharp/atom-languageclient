@@ -131,7 +131,7 @@ export class Container extends DisposableBase implements IResolver {
                 (<any>child).parent = null;
                 (<any>child).root = null;
             }
-        )
+        );
         return cd;
     }
 

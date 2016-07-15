@@ -5,7 +5,7 @@
  */
 import { A } from './A';
 
-@autoinject
+@injectable
 export class B {
     private _a: A;
     constructor(a: A) {

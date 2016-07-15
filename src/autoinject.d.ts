@@ -1,5 +1,5 @@
 declare const key: ((key: any) => ClassDecorator);
-declare const autoinject: ClassDecorator;
+declare const injectable: ClassDecorator;
 declare const transient: (key?: any) => ClassDecorator;
 declare const singleton: {
     (registerInChild?: boolean): ClassDecorator;
@@ -16,7 +16,7 @@ declare const optional: ParameterDecorator;
 declare namespace NodeJS {
     export interface Global {
         key: ((key: any) => ClassDecorator);
-        autoinject: ClassDecorator | ((key: any) => ClassDecorator);
+        injectable: ClassDecorator | ((key: any) => ClassDecorator);
         transient: (key?: any) => ClassDecorator;
         singleton: {
             (registerInChild?: boolean): ClassDecorator;
