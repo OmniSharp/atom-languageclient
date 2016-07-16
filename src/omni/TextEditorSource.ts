@@ -8,6 +8,7 @@ import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 import {  DisposableBase } from 'ts-disposables';
 import { observeCallback } from '../helpers/index';
+import { injectable } from '../services/_decorators';
 import { GrammarService } from '../atom/GrammarService';
 import { ILanguageClientTextEditor } from './ILanguageClientTextEditor';
 

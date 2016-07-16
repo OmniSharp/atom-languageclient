@@ -5,6 +5,7 @@
  */
 import * as _ from 'lodash';
 import { Observable, Subscriber } from 'rxjs';
+import { injectable } from '../services/_decorators';
 import { ProjectProvider } from './ProjectProvider';
 
 @injectable

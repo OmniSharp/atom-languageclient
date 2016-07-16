@@ -4,6 +4,7 @@
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
 import { All, Factory, Lazy, NewInstance, Optional, Parent } from 'aurelia-dependency-injection';
+export { autoinject as injectable } from 'aurelia-dependency-injection';
 import { metadata } from 'aurelia-metadata';
 import * as symbols from './symbols';
 /* tslint:disable:no-any */

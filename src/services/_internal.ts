@@ -3,9 +3,6 @@
  *  @copyright OmniSharp Team
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
-import { injectable } from '../../../src/di/decorators';
-
-@injectable
-export class A {
-    public a1() { return 'a'; }
-}
+export * from './ILanguageProvider';
+export * from './ILanguageService';
+export * from './IResolver';

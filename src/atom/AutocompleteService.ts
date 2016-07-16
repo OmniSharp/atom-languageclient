@@ -9,7 +9,7 @@ import { filter } from 'fuzzaldrin-plus';
 import { Disposable, DisposableBase } from 'ts-disposables';
 
 import { className, packageName } from '../constants';
-import { IAutocompleteProvider, IAutocompleteService } from '../interfaces';
+import { IAutocompleteProvider, IAutocompleteService } from '../services/_public';
 import { CompletionItem, CompletionItemKind, CompletionList, Position, TextDocumentIdentifier, TextDocumentPositionParams } from '../vscode-languageserver-types';
 
 function isCompletionList(item: any): item is CompletionList {

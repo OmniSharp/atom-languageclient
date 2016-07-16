@@ -8,6 +8,7 @@ import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 import { CompositeDisposable, DisposableBase, IDisposable } from 'ts-disposables';
 import { ensureEditor, subscribeAsync } from './helpers';
+import { injectable } from '../services/_decorators';
 import { ILanguageClientTextEditor } from './ILanguageClientTextEditor';
 import { TextEditorSource } from './TextEditorSource';
 

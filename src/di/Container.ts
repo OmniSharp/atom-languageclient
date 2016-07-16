@@ -11,9 +11,10 @@ import { metadata } from 'aurelia-metadata';
 import { exists, readdir } from 'fs';
 import { join } from 'path';
 import { CompositeDisposable, DisposableBase, IDisposable } from 'ts-disposables';
-import { IResolver } from '../interfaces';
+import { IResolver } from '../services/_internal';
 import * as symbols from './symbols';
 
+const interfaceRegex = /^I((?:[A-Z^I]))/;
 const $readdir = Observable.bindNodeCallback(readdir);
 const $exists = Observable.bindCallback(exists);
 
@@ -25,6 +26,8 @@ export interface ICapability {
 export class Container extends DisposableBase implements IResolver {
     private _container: AureliaContainer;
     private _capabilities: ICapability[] = [];
+    private _classNames = new Map<string, any>();
+    private _interfaceSymbols = new Map<string, symbol>();
 
     public constructor(container?: AureliaContainer) {
         super();
@@ -76,7 +79,7 @@ export class Container extends DisposableBase implements IResolver {
     }
 
     public registerAlias(originalKey: any, aliasKey: any) {
-        this._container.registerAlias(originalKey, key);
+        this._container.registerAlias(originalKey, aliasKey);
         return this;
     }
 
@@ -117,6 +120,8 @@ export class Container extends DisposableBase implements IResolver {
         return this;
     }
 
+    public resolve<T>(key: { new (...args: any[]): T; }): T;
+    public resolve<T>(key: any): T;
     public resolve<T>(key: { new (...args: any[]): T; }): T {
         return this._container.get(key);
     }
@@ -148,14 +153,37 @@ export class Container extends DisposableBase implements IResolver {
         return capabilities;
     }
 
+    public registerInterfaces() {
+        this._classNames.forEach((value, key) => {
+            if (this._interfaceSymbols.has(key)) {
+                this.registerAlias(value, this._interfaceSymbols.get(key));
+            }
+        });
+    }
+
     private _registerServices(fromPath: string, files: string[]) {
-        const [specialKeys, normalKeys] = _(files)
+        const services = _.chain(files)
             .filter(file => _.endsWith(file, '.js'))
+            .filter(file => !_.startsWith(file, '_'))
             .map(file => `${fromPath}/${file}`)
             .map(path => require(path))
-            .flatMap(_.values)
+            .flatMap(obj => _.map(obj, (value: any, key: string) => ({ key, value })))
+            .commit();
+
+        const [specialKeys, normalKeys] = services
+            .filter(x => !x.key.match(interfaceRegex))
+            .map(x => x.value)
+            .each(fn => {
+                if (fn.name) {
+                    this._classNames.set(fn.name, fn);
+                }
+            })
             .partition(fn => !!metadata.get(symbols.key, fn))
             .value();
+
+        for (const x of services.filter(x => !!x.key.match(interfaceRegex)).value()) {
+            this._interfaceSymbols.set(x.key.replace(interfaceRegex, '$1'), x.value);
+        }
 
         _.each(specialKeys, fn => {
             this.autoRegister(metadata.get(symbols.key, fn), fn);

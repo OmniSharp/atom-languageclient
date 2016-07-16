@@ -7,7 +7,7 @@ import * as _ from 'lodash';
 import { Observable, ReplaySubject } from 'rxjs';
 import { CompositeDisposable } from 'ts-disposables';
 import * as constants from '../../src/constants';
-import { ILanguageProvider, ILanguageService } from '../../src/interfaces';
+import { ILanguageProvider, ILanguageService } from '../../src/services/_internal';
 import { AtomLanguageJsonSettings, IAtomLanguageJsonSettings } from './atom/AtomLanguageJsonSettings';
 
 export class AtomLanguageJsonPackage implements IAtomPackage<IAtomLanguageJsonSettings> {
@@ -32,7 +32,7 @@ export class AtomLanguageJsonPackage implements IAtomPackage<IAtomLanguageJsonSe
     public ['provide-atom-language'](): ILanguageProvider {
         return {
             dispose() { },
-            options: {
+            clientOptions: {
 
             }
         };

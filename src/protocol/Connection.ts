@@ -15,7 +15,7 @@ import {
     createClientMessageConnection
 } from 'vscode-jsonrpc';
 
-import { IExecutable, IExecutableOptions, IForkOptions, INodeModule, IStreamInfo, ServerOptions, TransportKind } from '../interfaces';
+import { IExecutable, IExecutableOptions, IForkOptions, ILanguageProtocolServerOptions, INodeModule, IStreamInfo, TransportKind } from '../services/_public';
 import { fork } from './utils/electron';
 /* tslint:disable */
 import {
@@ -36,6 +36,8 @@ import { ConsoleLogger } from './ConsoleLogger';
 
 const isDefined = _.negate(_.isUndefined);
 
+/* tslint:disable-next-line:variable-name */
+export const IConnection = Symbol.for('IConnection');
 export interface IConnection {
 
     listen(): void;
@@ -111,7 +113,7 @@ function getEnvironment(env: any): any {
 }
 
 export class Connection implements IConnection {
-    public static create(server: ServerOptions, opts: IConnectionCreateOptions, debug: boolean = false): Promise<Connection> {
+    public static create(server: ILanguageProtocolServerOptions, opts: IConnectionCreateOptions, debug: boolean = false): Promise<Connection> {
         // We got a function.
         if (_.isFunction(server)) {
             return server().then((result: any) => {

@@ -7,15 +7,13 @@ import * as _ from 'lodash';
 import { Observable, Observer, Subject } from 'rxjs';
 import { Disposable, DisposableBase } from 'ts-disposables';
 import { CancellationToken, ErrorCodes, NotificationHandler, NotificationType, RequestHandler, RequestType, ResponseError } from 'vscode-jsonrpc';
-import { ClientState, ILanguageProtocolClient, ILanguageProtocolClientOptions, ISyncExpression } from '../interfaces';
+import { inject } from '../services/_decorators';
+import { ClientState, ILanguageProtocolClient, ILanguageProtocolClientOptions, ISyncExpression } from '../services/_public';
 import { InitializeError, InitializeParams, InitializeResult, ServerCapabilities, TextDocumentSyncKind } from '../vscode-languageserver-types';
 import { ShowMessageRequest } from '../vscode-protocol';
 import { IConnection } from './Connection';
 import { createObservable } from '../helpers/createObservable';
 import { ProjectProvider } from '../atom/ProjectProvider';
-
-export const symbolLanguageClientOptions = Symbol.for('languageclient-ILanguageProtocolClientOptions');
-export const symbolConnection = Symbol.for('languageclient-IConnection');
 
 export class Delayer extends DisposableBase {
     private _observer: Observer<() => void>;
@@ -57,9 +55,9 @@ export class LanguageProtocolClient extends DisposableBase implements ILanguageP
 
     constructor(
         projectProvider: ProjectProvider,
-        @inject(symbolConnection) connection: IConnection,
-        @inject(symbolLanguageClientOptions) options: ILanguageProtocolClientOptions,
-        syncExpression: ISyncExpression) {
+        @inject(IConnection) connection: IConnection,
+        @inject(ILanguageProtocolClientOptions) options: ILanguageProtocolClientOptions,
+        @inject(ISyncExpression) syncExpression: ISyncExpression) {
         super();
         this._projectProvider = projectProvider;
         this._connection = connection;

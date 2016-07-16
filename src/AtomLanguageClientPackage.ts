@@ -9,9 +9,9 @@ import { exists, readdir } from 'fs';
 import { join, resolve } from 'path';
 import { CompositeDisposable, isDisposable } from 'ts-disposables';
 import { AutocompleteService, ILanguageClientSettings, LanguageClientSettings, LinterService } from './atom/index';
-import * as constants from './constants';
-import { ILanguageProvider } from './interfaces';
 import { LanguageProvider, LanguageService } from './language/index';
+import { ILanguageProvider, ILanguageService } from './services/_internal';
+import { IAutocompleteService, ILinterService } from './services/_public';
 import { Container } from './di/Container';
 
 const $readdir = Observable.bindNodeCallback(readdir);
@@ -38,10 +38,10 @@ export class AtomLanguageClientPackage implements IAtomPackage<LanguageClientSet
         this._atomAutocompleteProvider = new AutocompleteService();
         this._atomLinterProvider = new LinterService();
 
-        this._container.registerInstance(constants.languageProvider, this._atomLanguageProvider);
-        this._container.registerInstance(constants.languageService, this._atomLanguageService);
-        this._container.registerInstance(constants.service_autocomplete, this._atomAutocompleteProvider);
-        this._container.registerInstance(constants.service_linter, this._atomLinterProvider);
+        this._container.registerInstance(ILanguageProvider, this._atomLanguageProvider);
+        this._container.registerInstance(ILanguageService, this._atomLanguageService);
+        this._container.registerInstance(IAutocompleteService, this._atomAutocompleteProvider);
+        this._container.registerInstance(ILinterService, this._atomLinterProvider);
 
         this._disposable.add(
             this._container,
@@ -51,7 +51,10 @@ export class AtomLanguageClientPackage implements IAtomPackage<LanguageClientSet
 
         const activateServices = Observable.merge(
             this._container.registerFolder(__dirname, 'services')
-        ).toPromise();
+        ).toPromise()
+        .then(() => {
+            this._container.registerInterfaces();
+        });
 
         this.activated = activateServices;
 

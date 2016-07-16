@@ -5,8 +5,9 @@
  */
 import * as _ from 'lodash';
 import { expect } from 'chai';
-import {CompositeDisposable} from 'ts-disposables';
-import * as constants from '../../src/constants';
+import * as I from './fixtures/interfaces';
+import { capability, inject } from '../../src/di/decorators';
+import { ILanguageProtocolClient, IOmniClient } from '../../src/services/_public';
 import { A } from './fixtures/A';
 import { B } from './fixtures/B';
 import { C } from './fixtures/C';
@@ -45,6 +46,18 @@ describe(Container.name, () => {
             });
     });
 
+    it('should register an interface symbol', () => {
+        const container = new Container();
+        return container.registerFolder(__dirname, 'fixtures')
+            .then(() => {
+                container.registerInterfaces();
+                const l3 = container.resolve(L.L3);
+                const il3 = container.resolve<L.L3>(I.IL3);
+
+                expect(l3).to.eql(il3);
+            });
+    });
+
     it('should register a list given a specific key', () => {
         const container = new Container();
         return container.registerFolder(__dirname, 'fixtures')
@@ -64,25 +77,19 @@ describe(Container.name, () => {
 
         @capability
         class CapabilityA {
-            constructor( @inject(constants.languageprotocolclient) value: any) {
-
-            }
+            constructor( @inject(ILanguageProtocolClient) value: any) { /* */ }
             public a = 1;
         }
 
         @capability
         class CapabilityB {
-            constructor( @inject(constants.languageprotocolclient) value: any) {
-
-            }
+            constructor( @inject(ILanguageProtocolClient) value: any) { /* */ }
             public a = 1;
         }
 
         @capability
         class CapabilityC {
-            constructor( @inject(constants.omniclient) value: any) {
-
-            }
+            constructor( @inject(IOmniClient) value: any) { /* */ }
             public a = 1;
         }
 
@@ -93,7 +100,7 @@ describe(Container.name, () => {
             container.autoRegister(CapabilityC);
 
             const child = container.createChild();
-            const capabilities = child.registerCapabilities(constants.languageprotocolclient);
+            const capabilities = child.registerCapabilities(ILanguageProtocolClient);
             const items = child.resolveEach(capabilities);
 
             expect(_.find(items, item => item instanceof CapabilityA)).to.be.instanceOf(CapabilityA);

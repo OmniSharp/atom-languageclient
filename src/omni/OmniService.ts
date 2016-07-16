@@ -5,6 +5,7 @@
  */
 /* tslint:disable:no-any */
 import { DisposableBase } from 'ts-disposables';
+import { injectable } from '../services/_decorators';
 import { ActiveTextEditorProvider, IActiveTextEditorProvider } from './ActiveTextEditorProvider';
 import { GrammarService, IGrammarService } from '../atom/GrammarService';
 import { ITextEditorProvider, TextEditorProvider } from './TextEditorProvider';

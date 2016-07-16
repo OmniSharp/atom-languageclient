@@ -6,14 +6,12 @@
 import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 import { DisposableBase } from 'ts-disposables';
-import { ILanguageService, IResolver } from '../interfaces';
+import { ILanguageService, IResolver } from '../services/_internal';
 
 /**
  * Defines the common interface that a module can then consume to interact with us.
  */
 export class LanguageService extends DisposableBase implements ILanguageService {
-    private _activated: Observable<boolean>;
-    private _deactivated: Observable<boolean>;
     private _resolver: IResolver;
 
     constructor(resolver: IResolver) {
