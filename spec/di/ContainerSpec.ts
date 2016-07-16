@@ -17,7 +17,7 @@ describe(Container.name, () => {
     it('should register a given folder', () => {
         const container = new Container();
         return container.registerFolder(__dirname, 'fixtures')
-            .do(() => {
+            .then(() => {
                 const a = container.resolve(A);
                 const b = container.resolve(B);
                 const c = container.resolve(C);
@@ -28,14 +28,13 @@ describe(Container.name, () => {
                 expect(c.a1()).to.eq('a');
                 expect(c.b1()).to.eq('b');
                 expect(c.c1()).to.eq('c');
-            })
-            .toPromise();
+            });
     });
 
     it('should register a set of exported classes from a single file', () => {
         const container = new Container();
         return container.registerFolder(__dirname, 'fixtures')
-            .do(() => {
+            .then(() => {
                 const l1 = container.resolve(L.L1);
                 const l2 = container.resolve(L.L2);
                 const l3 = container.resolve(L.L3);
@@ -43,22 +42,20 @@ describe(Container.name, () => {
                 expect(l1.a).to.be.eq(1);
                 expect(l2.a).to.be.eq(1);
                 expect(l3.a).to.be.eq(1);
-            })
-            .toPromise();
+            });
     });
 
     it('should register a list given a specific key', () => {
         const container = new Container();
         return container.registerFolder(__dirname, 'fixtures')
-            .do(() => {
+            .then(() => {
                 const listOfAs = container.resolveAll<{ a: number }[]>('list');
 
                 expect(listOfAs.length).to.be.eq(3);
                 expect(_.find(listOfAs, { a: 1 })).to.be.deep.eq({ a: 1 });
                 expect(_.find(listOfAs, { a: 2 })).to.be.deep.eq({ a: 2 });
                 expect(_.find(listOfAs, { a: 3 })).to.be.deep.eq({ a: 3 });
-            })
-            .toPromise();
+            });
     });
 
     describe('capabilities', () => {
@@ -95,8 +92,9 @@ describe(Container.name, () => {
             container.autoRegister(CapabilityB);
             container.autoRegister(CapabilityC);
 
-            const result = <any>container.resolveCapabilities(constants.languageprotocolclient, { dispose() { /* */ } });
-            const items = _.toArray(result._disposables);
+            const child = container.createChild();
+            const capabilities = child.registerCapabilities(constants.languageprotocolclient);
+            const items = child.resolveEach(capabilities);
 
             expect(_.find(items, item => item instanceof CapabilityA)).to.be.instanceOf(CapabilityA);
             expect(_.find(items, item => item instanceof CapabilityB)).to.be.instanceOf(CapabilityB);

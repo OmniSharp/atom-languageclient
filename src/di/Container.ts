@@ -26,9 +26,24 @@ export class Container extends DisposableBase implements IResolver {
     private _container: AureliaContainer;
     private _capabilities: ICapability[] = [];
 
-    public constructor() {
+    public constructor(container?: AureliaContainer) {
         super();
-        this._container = new AureliaContainer();
+        this._container = container || new AureliaContainer();
+
+        this._disposable.add(() => {
+            (<any>this._container)._resolvers.clear();
+            (<any>this._container)._resolvers = null;
+            (<any>this._container)._configuration = null;
+            (<any>this._container).parent = null;
+            (<any>this._container).root = null;
+        });
+    }
+
+    private static _child(container: Container) {
+        const childAureliaContainer = container._container.createChild();
+        const childContainer = new Container(childAureliaContainer);
+        childContainer._capabilities = container._capabilities;
+        return childContainer;
     }
 
     public registerFolder(...paths: string[]) {
@@ -46,12 +61,16 @@ export class Container extends DisposableBase implements IResolver {
         return this;
     }
 
-    public registerSingleton(key: any, fn: Function) {
+    public registerSingleton(fn: Function): this;
+    public registerSingleton(key: any, fn: Function): this;
+    public registerSingleton(key: any, fn?: Function) {
         this._container.registerSingleton(key, fn);
         return this;
     }
 
-    public registerTransient(key: any, fn: Function) {
+    public registerTransient(fn: Function): this;
+    public registerTransient(key: any, fn: Function): this;
+    public registerTransient(key: any, fn?: Function) {
         this._container.registerTransient(key, fn);
         return this;
     }
@@ -106,33 +125,27 @@ export class Container extends DisposableBase implements IResolver {
         return this._container.getAll(key);
     }
 
-    public resolveCapabilities(key: any, instance: IDisposable): IDisposable {
+    public resolveEach(items: any[]): any[] {
+        return _.map(items, item => {
+            return this.resolve(item);
+        });
+    }
+
+    public createChild() {
+        return Container._child(this);
+    }
+
+    public registerCapabilities(key: any): any[] {
         const capabilities = _(this._capabilities)
             .filter(x => _.includes(x.params, key))
             .map(x => x.item)
             .value();
 
-        const child = this._container.createChild();
+        _.each(capabilities, capability => {
+            this.registerTransient(capability);
+        });
 
-        const resolver: any = child.registerInstance(key, instance);
-        const cd = new CompositeDisposable(
-            ..._.map(capabilities, capability => {
-                child.registerTransient(capability);
-                return child.get(capability);
-            }));
-
-        cd.add(
-            () => {
-                // Try our best to clean up after the child container
-                resolver.state = null;
-                (<any>child)._resolvers.clear();
-                (<any>child)._resolvers = null;
-                (<any>child)._configuration = null;
-                (<any>child).parent = null;
-                (<any>child).root = null;
-            }
-        );
-        return cd;
+        return capabilities;
     }
 
     private _registerServices(fromPath: string, files: string[]) {

@@ -2,8 +2,10 @@
  *
  *
  */
+import { ChildProcess } from 'child_process';
 import { FSWatcher } from 'fs';
 import { IDisposable } from 'ts-disposables';
+import { Message } from 'vscode-jsonrpc';
 import { CompletionItem, CompletionList, ServerCapabilities, TextDocumentPositionParams } from './vscode-languageserver-types';
 // import { ServerCapabilities} from './vscode-protocol';
 /* tslint:disable:no-any */
@@ -11,7 +13,7 @@ import { CompletionItem, CompletionList, ServerCapabilities, TextDocumentPositio
  * A generic interface for resolving instaneces from the DI container
  */
 export interface IResolver {
-    resolve<T>(key: T): T;
+    resolve<T>(key: { new (...args: any[]): T; }): T;
     resolve<T>(key: any): T;
     resolveAll<T>(key: any): T[];
     registerFolder(...paths: string[]): Promise<this>;
@@ -44,8 +46,9 @@ export interface IProjectProvider {
  * Defines the interface for providing a language to be consumed
  * http://flight-manual.atom.io/behind-atom/sections/interacting-with-other-packages-via-services/
  */
-export interface ILanguageProvider extends IDisposable {
-    onDidDispose(cb: () => void): IDisposable;
+export interface ILanguageProvider {
+    options: ILanguageProtocolClientOptions;
+    dispose?: () => void;
 }
 
 export interface ILanguageProtocolClient {
@@ -73,12 +76,13 @@ export enum ClientState {
 export interface ISynchronizeOptions {
     configurationSection?: string | string[];
     fileEvents?: FSWatcher | FSWatcher[];
-    textDocumentFilter?: (textDocument: TextDocument) => boolean;
+    textDocumentFilter?: (textDocument: Atom.TextEditor) => boolean;
+    extensionSelector?: string | string[];
+    grammarScopeSelector?: string | string[];
 }
 
-export interface ILanguageClientOptions {
+export interface ILanguageProtocolClientOptions {
     documentSelector?: string | string[];
-    grammarName?: string | string[];
     synchronize?: ISynchronizeOptions;
     diagnosticCollectionName?: string;
     outputChannelName?: string;
@@ -114,7 +118,6 @@ export enum CloseAction {
     Restart = 2,
 }
 
-
 /**
  * A pluggable error handler that is invoked when the connection is either
  * producing errors or got closed.
@@ -134,4 +137,48 @@ export interface IErrorHandler {
      * The connection to the server got closed.
      */
     closed(): CloseAction;
+}
+
+export interface IStreamInfo {
+    writer: NodeJS.WritableStream;
+    reader: NodeJS.ReadableStream;
+}
+
+export interface IExecutableOptions {
+    cwd?: string;
+    stdio?: string | string[];
+    env?: any;
+    detached?: boolean;
+}
+
+export interface IExecutable {
+    command: string;
+    args?: string[];
+    options?: IExecutableOptions;
+}
+
+export interface IForkOptions {
+    cwd?: string;
+    env?: any;
+    encoding?: string;
+    execArgv?: string[];
+}
+
+export enum TransportKind {
+    stdio,
+    ipc
+}
+
+export interface INodeModule {
+    module: string;
+    transport?: TransportKind;
+    args?: string[];
+    runtime?: string;
+    options?: IForkOptions;
+}
+
+export type ServerOptions = IExecutable | { run: IExecutable; debug: IExecutable; } |  { run: INodeModule; debug: INodeModule } | INodeModule | (() => Promise<ChildProcess | IStreamInfo>);
+
+export interface ISyncExpression {
+    evaluate(editor: Atom.TextEditor): boolean;
 }

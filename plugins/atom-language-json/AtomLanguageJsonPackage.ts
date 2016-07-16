@@ -24,13 +24,18 @@ export class AtomLanguageJsonPackage implements IAtomPackage<IAtomLanguageJsonSe
     }
 
     /* tslint:disable-next-line:function-name */
-    public ['consume-atom-language-client'](service: ILanguageService)  {
+    public ['consume-atom-language-client'](service: ILanguageService) {
         this._languageService = service;
     }
 
     /* tslint:disable-next-line:function-name */
-    public ['provide-atom-language'](): ILanguageProvider | ILanguageProvider[] {
-        return <any>{};
+    public ['provide-atom-language'](): ILanguageProvider {
+        return {
+            dispose() { },
+            options: {
+
+            }
+        };
     }
 
     /* tslint:disable-next-line:no-any */

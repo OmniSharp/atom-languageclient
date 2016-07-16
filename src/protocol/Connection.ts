@@ -15,6 +15,7 @@ import {
     createClientMessageConnection
 } from 'vscode-jsonrpc';
 
+import { IExecutable, IExecutableOptions, IForkOptions, INodeModule, IStreamInfo, ServerOptions, TransportKind } from '../interfaces';
 import { fork } from './utils/electron';
 /* tslint:disable */
 import {
@@ -32,7 +33,6 @@ import {
 /* tslint:enable */
 /* tslint:disable:no-any */
 import { ConsoleLogger } from './ConsoleLogger';
-import { IExecutable, IExecutableOptions, IForkOptions, INodeModule, IStreamInfo, ServerOptions, TransportKind } from './ServerOptions';
 
 const isDefined = _.negate(_.isUndefined);
 
@@ -114,7 +114,7 @@ export class Connection implements IConnection {
     public static create(server: ServerOptions, opts: IConnectionCreateOptions, debug: boolean = false): Promise<Connection> {
         // We got a function.
         if (_.isFunction(server)) {
-            return server().then((result) => {
+            return server().then((result: any) => {
                 const info = <IStreamInfo>result;
                 if (info.writer && info.reader) {
                     return new Connection(_.assign({}, opts, { input: info.reader, output: info.writer }));
@@ -142,11 +142,11 @@ export class Connection implements IConnection {
                 const args: string[] = [];
                 const options: IForkOptions = node.options || Object.create(null);
                 if (options.execArgv) {
-                    options.execArgv.forEach(element => args.push(element));
+                    options.execArgv.forEach((element: any) => args.push(element));
                 }
                 args.push(node.module);
                 if (node.args) {
-                    node.args.forEach(element => args.push(element));
+                    node.args.forEach((element: any) => args.push(element));
                 }
                 const execOptions: IExecutableOptions = Object.create(null);
                 execOptions.cwd = options.cwd || atom.project.getPaths()[0];

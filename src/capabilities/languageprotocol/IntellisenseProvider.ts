@@ -4,7 +4,7 @@
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
 import { DisposableBase } from 'ts-disposables';
-import { autocomplete_service, languageprotocolclient } from '../../constants';
+import { service_autocomplete, languageprotocolclient } from '../../constants';
 import { IAutocompleteProvider, IAutocompleteService, ICapability, ILanguageProtocolClient } from '../../interfaces';
 import { CompletionOptions, Methods, TextDocumentPositionParams } from '../../vscode-languageserver-types';
 
@@ -14,7 +14,7 @@ export class IntelliseSenseProvider implements ICapability {
     private _autocompleteService: IAutocompleteService;
     constructor(
         @inject(languageprotocolclient) client: ILanguageProtocolClient,
-        @inject(autocomplete_service) autocompleteService: IAutocompleteService
+        @inject(service_autocomplete) autocompleteService: IAutocompleteService
     ) {
         this._client = client;
         this._autocompleteService = autocompleteService;

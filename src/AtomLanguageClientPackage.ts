@@ -7,10 +7,11 @@ import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 import { exists, readdir } from 'fs';
 import { join, resolve } from 'path';
-import { CompositeDisposable } from 'ts-disposables';
-import { AutocompleteService, ILanguageClientSettings, LanguageClientSettings, LanguageProvider, LanguageService, LinterService } from './atom/index';
+import { CompositeDisposable, isDisposable } from 'ts-disposables';
+import { AutocompleteService, ILanguageClientSettings, LanguageClientSettings, LinterService } from './atom/index';
 import * as constants from './constants';
 import { ILanguageProvider } from './interfaces';
+import { LanguageProvider, LanguageService } from './language/index';
 import { Container } from './di/Container';
 
 const $readdir = Observable.bindNodeCallback(readdir);
@@ -24,6 +25,7 @@ export class AtomLanguageClientPackage implements IAtomPackage<LanguageClientSet
     private _atomLanguageService: LanguageService;
     private _atomAutocompleteProvider: AutocompleteService;
     private _atomLinterProvider: LinterService;
+    public activated: Promise<void>;
 
     /* tslint:disable:no-any */
     public activate(settings: ILanguageClientSettings) {
@@ -38,8 +40,8 @@ export class AtomLanguageClientPackage implements IAtomPackage<LanguageClientSet
 
         this._container.registerInstance(constants.languageProvider, this._atomLanguageProvider);
         this._container.registerInstance(constants.languageService, this._atomLanguageService);
-        this._container.registerInstance(constants.capability_completion, this._atomAutocompleteProvider);
-        this._container.registerInstance(constants.linterService, this._atomLinterProvider);
+        this._container.registerInstance(constants.service_autocomplete, this._atomAutocompleteProvider);
+        this._container.registerInstance(constants.service_linter, this._atomLinterProvider);
 
         this._disposable.add(
             this._container,
@@ -47,9 +49,11 @@ export class AtomLanguageClientPackage implements IAtomPackage<LanguageClientSet
             this._atomLanguageService
         );
 
-        Observable.merge(
+        const activateServices = Observable.merge(
             this._container.registerFolder(__dirname, 'services')
-        ).subscribe();
+        ).toPromise();
+
+        this.activated = activateServices;
 
         /* We're going to pretend to load these packages, as if they were real */
         const pathToPlugins = resolve(__dirname, '../', 'plugins');
@@ -92,17 +96,15 @@ export class AtomLanguageClientPackage implements IAtomPackage<LanguageClientSet
         if (_.isArray(services)) {
             _.each(services, service => {
                 this._atomLanguageProvider.add(service);
-                this._disposable.add(
-                    service,
-                    service.onDidDispose(() => this._disposable.remove(service))
-                );
+                if (isDisposable(service)) {
+                    this._disposable.add(service);
+                }
             });
         } else {
             this._atomLanguageProvider.add(services);
-            this._disposable.add(
-                services,
-                services.onDidDispose(() => this._disposable.remove(<ILanguageProvider>services))
-            );
+            if (isDisposable(services)) {
+                this._disposable.add(services);
+            }
         }
     }
 

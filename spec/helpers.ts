@@ -22,11 +22,8 @@ export function setup() {
 
         return atom.packages.activatePackage(packageName)
             .then(pack => {
-                return (<AtomLanguageClientPackage>pack.mainModule)['provide-atom-language-client']()
-                    .activated
-                    .do({ next: () => console.log('next') })
-                    .take(1)
-                    .toPromise();
+                return (<AtomLanguageClientPackage>pack.mainModule)
+                    .activated;
             });
     });
     afterEach(() => {

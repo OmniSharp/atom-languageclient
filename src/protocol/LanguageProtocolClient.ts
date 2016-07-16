@@ -7,14 +7,14 @@ import * as _ from 'lodash';
 import { Observable, Observer, Subject } from 'rxjs';
 import { Disposable, DisposableBase } from 'ts-disposables';
 import { CancellationToken, ErrorCodes, NotificationHandler, NotificationType, RequestHandler, RequestType, ResponseError } from 'vscode-jsonrpc';
-import { ClientState, ILanguageClientOptions, ILanguageProtocolClient } from '../interfaces';
+import { ClientState, ILanguageProtocolClient, ILanguageProtocolClientOptions, ISyncExpression } from '../interfaces';
 import { InitializeError, InitializeParams, InitializeResult, ServerCapabilities, TextDocumentSyncKind } from '../vscode-languageserver-types';
 import { ShowMessageRequest } from '../vscode-protocol';
 import { IConnection } from './Connection';
 import { createObservable } from '../helpers/createObservable';
 import { ProjectProvider } from '../atom/ProjectProvider';
 
-export const symbolLanguageClientOptions = Symbol.for('languageclient-ILanguageClientOptions');
+export const symbolLanguageClientOptions = Symbol.for('languageclient-ILanguageProtocolClientOptions');
 export const symbolConnection = Symbol.for('languageclient-IConnection');
 
 export class Delayer extends DisposableBase {
@@ -49,8 +49,8 @@ export class LanguageProtocolClient extends DisposableBase implements ILanguageP
     private _connection: IConnection;
     private _projectProvider: ProjectProvider;
     private _state: ClientState;
-    private _options: ILanguageClientOptions;
-    private _delayer: Delayer;
+    private _options: ILanguageProtocolClientOptions;
+    private _documentDelayer: Delayer;
 
     public get state() { return this._state; }
     public get capabilities() { return this._capabilities; }
@@ -58,16 +58,17 @@ export class LanguageProtocolClient extends DisposableBase implements ILanguageP
     constructor(
         projectProvider: ProjectProvider,
         @inject(symbolConnection) connection: IConnection,
-        @inject(symbolLanguageClientOptions) options: ILanguageClientOptions) {
+        @inject(symbolLanguageClientOptions) options: ILanguageProtocolClientOptions,
+        syncExpression: ISyncExpression) {
         super();
         this._projectProvider = projectProvider;
         this._connection = connection;
         this._options = options;
         this._state = ClientState.Initial;
-        this._delayer = new Delayer();
+        this._documentDelayer = new Delayer();
 
         this._disposable.add(
-            this._delayer,
+            this._documentDelayer,
             Disposable.create(() => {
                 this.stop();
             })
@@ -195,7 +196,7 @@ export class LanguageProtocolClient extends DisposableBase implements ILanguageP
 
     private doSendRequest<P, R, E>(connection: IConnection, type: RequestType<P, R, E>, params: P, token?: CancellationToken): Thenable<R> {
         if (this._isConnectionActive) {
-            this.forceDocumentSync();
+            this._documentDelayer.force();
             return connection.sendRequest(type, params, token);
         } else {
             return Promise.reject<R>(new ResponseError(ErrorCodes.InternalError, 'Connection is closed.'));
@@ -204,7 +205,7 @@ export class LanguageProtocolClient extends DisposableBase implements ILanguageP
 
     public sendNotification<P>(type: NotificationType<P>, params?: P): void {
         if (this._isConnectionActive) {
-            this.forceDocumentSync();
+            this._documentDelayer.force();
             this._connection.sendNotification(type, params);
         }
     }
@@ -217,7 +218,7 @@ export class LanguageProtocolClient extends DisposableBase implements ILanguageP
         this._connection.onRequest(type, handler);
     }
 
-    public get onTelemetry(): Event<any> {
-        return this._telemetryEmitter.event;
-    }
+    // public get onTelemetry(): Event<any> {
+    //     return this._telemetryEmitter.event;
+    // }
 }

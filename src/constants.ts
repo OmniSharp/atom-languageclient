@@ -9,5 +9,5 @@ export const languageprotocolclient = Symbol.for('languageclient-languageprotoco
 export const omniclient = Symbol.for('languageclient-omniclient-client');
 export const languageProvider = Symbol.for('languageclient-language-provider');
 export const languageService = Symbol.for('languageclient-language-service');
-export const autocomplete_service = Symbol.for('languageclient-autocomplete-service');
-export const linterService = Symbol.for('languageclient-linter-service');
+export const service_autocomplete = Symbol.for('languageclient-autocomplete-service');
+export const service_linter = Symbol.for('languageclient-linter-service');
