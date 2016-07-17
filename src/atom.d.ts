@@ -67,3 +67,7 @@ declare module 'fuzzaldrin-plus' {
     export function score(str: string, query: string): number;
     export function match(str: string, query: string): string[][];
 }
+declare module 'file-url' {
+    var method: (str: string) => string;
+    export = method;
+}

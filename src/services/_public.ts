@@ -3,8 +3,10 @@
  *  @copyright OmniSharp Team
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
+export * from './IAtomTextEditorSource';
+export * from './IAtomViewFinder';
 export * from './IAutoCompleteService';
-export * from './ICapability';
+export * from './IDelayer';
 export * from './ILanguageProtocolClient';
 export * from './ILanguageProtocolClientOptions';
 export * from './ILanguageProtocolServerOptions';

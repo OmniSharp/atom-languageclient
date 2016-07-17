@@ -100,7 +100,7 @@ export interface IStdioConnection extends IConnectionOptionsBase {
 export type ConnectionOptions = IIpcConnection | IStdioConnection;
 
 function isStdioConnection(options: any): options is IStdioConnection {
-    return options.process;
+    return options.input && options.output;
 }
 
 function getEnvironment(env: any): any {
@@ -224,9 +224,9 @@ export class Connection implements IConnection {
 
         const logger = new ConsoleLogger();
         const connection = createClientMessageConnection(input, output, logger);
+        this._connection = connection;
         connection.onError((data) => { errorHandler(data[0], data[1], data[2]); });
         connection.onClose(closeHandler);
-        this._connection = connection;
     }
 
     private _settings: InitializeResult;

@@ -49,39 +49,47 @@ export class AtomLanguageClientPackage implements IAtomPackage<LanguageClientSet
             this._atomLanguageService
         );
 
-        const activateServices = Observable.merge(
-            this._container.registerFolder(__dirname, 'services')
-        ).toPromise()
-        .then(() => {
-            this._container.registerInterfaces();
-        });
+        const activateServices =
+            Observable.merge(
+                this._container.registerFolder(__dirname, 'atom'),
+                this._container.registerFolder(__dirname, 'capabilities', 'languageprotocol'),
+                this._container.registerFolder(__dirname, 'capabilities', 'omniclient'),
+                this._container.registerFolder(__dirname, 'services')
+            )
+                .toPromise()
+                .then(() => {
+                    this._container.registerInterfaces();
+                });
 
         this.activated = activateServices;
 
         /* We're going to pretend to load these packages, as if they were real */
         const pathToPlugins = resolve(__dirname, '../', 'plugins');
-        $readdir(pathToPlugins)
-            .mergeMap(folders => {
-                return Observable.from(folders)
-                    .mergeMap(folder => $readdir(join(pathToPlugins, folder))
-                        .mergeMap(files => files)
-                        .filter(x => _.endsWith(x, 'Package.ts'))
-                        .map(x => join(pathToPlugins, folder, _.trimEnd(x, '.ts'))))
-                    .map(path => require(path))
-                    .map(module => {
-                        const cls: { new (): any } = _.find(module, _.isFunction);
-                        return new cls();
-                    })
-                    .map(instance => {
-                        if (instance['consume-atom-language-client']) {
-                            instance['consume-atom-language-client'](this._atomLanguageService);
-                        }
-                        if (instance['provide-atom-language']) {
-                            this['consume-atom-language'](instance['provide-atom-language']());
-                        }
-                    });
+        this.activated.then(() => {
+            $readdir(pathToPlugins)
+                .mergeMap(folders => {
+                    return Observable.from(folders)
+                        .mergeMap(folder => $readdir(join(pathToPlugins, folder))
+                            .mergeMap(files => files)
+                            .filter(x => _.endsWith(x, 'Package.ts'))
+                            .map(x => join(pathToPlugins, folder, _.trimEnd(x, '.ts'))))
+                        .map(path => require(path))
+                        .map(module => {
+                            const cls: { new (): any } = _.find(module, _.isFunction);
+                            return new cls();
+                        })
+                        .map(instance => {
+                            if (instance['consume-atom-language-client']) {
+                                instance['consume-atom-language-client'](this._atomLanguageService);
+                            }
+                            if (instance['provide-atom-language']) {
+                                this['consume-atom-language'](instance['provide-atom-language']());
+                            }
+                        });
 
-            });
+                })
+                .subscribe();
+        });
     }
 
     /* tslint:disable-next-line:function-name */

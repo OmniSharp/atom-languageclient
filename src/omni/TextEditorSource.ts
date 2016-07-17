@@ -9,7 +9,6 @@ import { Observable } from 'rxjs';
 import {  DisposableBase } from 'ts-disposables';
 import { observeCallback } from '../helpers/index';
 import { injectable } from '../services/_decorators';
-import { GrammarService } from '../atom/GrammarService';
 import { ILanguageClientTextEditor } from './ILanguageClientTextEditor';
 
 export interface ITextEditorSource {
@@ -19,16 +18,14 @@ export interface ITextEditorSource {
 
 @injectable
 export class TextEditorSource extends DisposableBase implements ITextEditorSource {
-    private _grammarService: GrammarService;
-
-    constructor(grammarService: GrammarService) {
+    constructor() {
         super();
     }
 
     public observeActiveTextEditor() {
         return observeCallback(atom.workspace.observeActivePaneItem, atom.workspace)
             .mergeMap((pane: any) => {
-                if (pane && pane.getGrammar && pane.getPath && this._grammarService.isValid(pane.getGrammar())) {
+                if (pane && pane.getGrammar && pane.getPath) {
                     return this._getServerForEditor(<Atom.TextEditor>pane);
                 }
                 return Observable.empty<ILanguageClientTextEditor>();

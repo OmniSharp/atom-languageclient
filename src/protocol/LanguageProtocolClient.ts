@@ -3,67 +3,39 @@
  *  @copyright OmniSharp Team
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
+/* tslint:disable:no-any */
 import * as _ from 'lodash';
-import { Observable, Observer, Subject } from 'rxjs';
 import { Disposable, DisposableBase } from 'ts-disposables';
 import { CancellationToken, ErrorCodes, NotificationHandler, NotificationType, RequestHandler, RequestType, ResponseError } from 'vscode-jsonrpc';
 import { inject } from '../services/_decorators';
-import { ClientState, ILanguageProtocolClient, ILanguageProtocolClientOptions, ISyncExpression } from '../services/_public';
+import { ClientState, IDocumentDelayer, ILanguageProtocolClient, ILanguageProtocolClientOptions, IProjectProvider, ISyncExpression } from '../services/_public';
 import { InitializeError, InitializeParams, InitializeResult, ServerCapabilities, TextDocumentSyncKind } from '../vscode-languageserver-types';
 import { ShowMessageRequest } from '../vscode-protocol';
 import { IConnection } from './Connection';
-import { createObservable } from '../helpers/createObservable';
-import { ProjectProvider } from '../atom/ProjectProvider';
-
-export class Delayer extends DisposableBase {
-    private _observer: Observer<() => void>;
-    private _force: Observer<void>;
-    constructor() {
-        super();
-        const observable = createObservable<() => void>(observer => {
-            this._observer = observer;
-        }).publish();
-        const force = this._force = new Subject<void>();
-        observable.connect();
-        this._disposable.add(
-            observable.bufferToggle(
-                observable.throttleTime(100),
-                () => Observable.merge(Observable.timer(100), force).take(1)
-            ).subscribe(fns => {
-                _.each(fns, fn => fn());
-            })
-        );
-    }
-    public queue(func: () => void) {
-        this._observer.next(func);
-    }
-    public force() {
-        this._force.next(undefined);
-    }
-}
 
 export class LanguageProtocolClient extends DisposableBase implements ILanguageProtocolClient {
     private _capabilities: ServerCapabilities;
     private _connection: IConnection;
-    private _projectProvider: ProjectProvider;
+    private _projectProvider: IProjectProvider;
     private _state: ClientState;
     private _options: ILanguageProtocolClientOptions;
-    private _documentDelayer: Delayer;
+    private _documentDelayer: IDocumentDelayer;
 
     public get state() { return this._state; }
     public get capabilities() { return this._capabilities; }
 
     constructor(
-        projectProvider: ProjectProvider,
+        @inject(IProjectProvider) projectProvider: IProjectProvider,
         @inject(IConnection) connection: IConnection,
         @inject(ILanguageProtocolClientOptions) options: ILanguageProtocolClientOptions,
-        @inject(ISyncExpression) syncExpression: ISyncExpression) {
+        @inject(ISyncExpression) syncExpression: ISyncExpression,
+        @inject(IDocumentDelayer) documentDelayer: IDocumentDelayer) {
         super();
         this._projectProvider = projectProvider;
         this._connection = connection;
         this._options = options;
         this._state = ClientState.Initial;
-        this._documentDelayer = new Delayer();
+        this._documentDelayer = documentDelayer;
 
         this._disposable.add(
             this._documentDelayer,
@@ -76,6 +48,7 @@ export class LanguageProtocolClient extends DisposableBase implements ILanguageP
     public start() {
         this._state = ClientState.Starting;
         this._connection.onLogMessage((message) => {
+            console.warn(message);
             /*
             switch (message.type) {
                 case MessageType.Error:
@@ -146,6 +119,7 @@ export class LanguageProtocolClient extends DisposableBase implements ILanguageP
                 return result;
             },
             (error: ResponseError<InitializeError>) => {
+                console.error(error);
                 if (error.data.retry) {
                     // Window.showErrorMessage(error.message, { title: 'Retry', id: 'retry' })
                     //     .then(item => {
@@ -189,13 +163,13 @@ export class LanguageProtocolClient extends DisposableBase implements ILanguageP
     }
 
     public sendRequest<P, R, E>(type: RequestType<P, R, E>, params: P, token?: CancellationToken): Thenable<R> {
-        return this.doSendRequest(this._connection, type, params, token);
+        return this._doSendRequest(this._connection, type, params, token);
     }
 
-    private doSendRequest<P, R, E>(connection: IConnection, type: RequestType<P, R, E>, params: P, token?: CancellationToken): Thenable<R> {
+    private _doSendRequest<P, R>(connection: IConnection, type: { method: string; }, params: P, token?: CancellationToken): Thenable<R> {
         if (this._isConnectionActive) {
             this._documentDelayer.force();
-            return connection.sendRequest(type, params, token);
+            return connection.sendRequest(<any>type, params, token);
         } else {
             return Promise.reject<R>(new ResponseError(ErrorCodes.InternalError, 'Connection is closed.'));
         }
@@ -203,17 +177,17 @@ export class LanguageProtocolClient extends DisposableBase implements ILanguageP
 
     public sendNotification<P>(type: NotificationType<P>, params?: P): void {
         if (this._isConnectionActive) {
-            this._documentDelayer.force();
-            this._connection.sendNotification(type, params);
+            // this._documentDelayer.force();
+            this._connection.sendNotification(<any>type, params);
         }
     }
 
     public onNotification<P>(type: NotificationType<P>, handler: NotificationHandler<P>): void {
-        this._connection.onNotification(type, handler);
+        this._connection.onNotification(<any>type, handler);
     }
 
     public onRequest<P, R, E>(type: RequestType<P, R, E>, handler: RequestHandler<P, R, E>): void {
-        this._connection.onRequest(type, handler);
+        this._connection.onRequest(<any>type, handler);
     }
 
     // public get onTelemetry(): Event<any> {

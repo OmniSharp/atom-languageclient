@@ -18,7 +18,12 @@ export interface IAutocompleteService {
     registerProvider(provider: IAutocompleteProvider): IDisposable;
 }
 
+export type AutocompleteSuggestion = Autocomplete.Suggestion & {
+     filterText: string;
+     completionItem?: CompletionItem;
+}
+
 export interface IAutocompleteProvider extends IDisposable {
-    request(params: TextDocumentPositionParams): Promise<CompletionItem[] | CompletionList>;
+    request(params: Autocomplete.RequestOptions): Promise<AutocompleteSuggestion[]> | null;
     dispose(): void;
 }

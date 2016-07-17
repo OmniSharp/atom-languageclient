@@ -32,6 +32,8 @@
     "compileOnSave": true,
     "exclude": [
         "node_modules",
-        "rules"
+        "rules",
+        "plugins/atom-language-csharp/node_modules",
+        "plugins/atom-language-json/node_modules"
     ]
 }

@@ -4,10 +4,11 @@
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
 import * as _ from 'lodash';
-import { Observable, ReplaySubject } from 'rxjs';
+import { ReplaySubject } from 'rxjs';
+import { join } from 'path';
 import { CompositeDisposable } from 'ts-disposables';
-import * as constants from '../../src/constants';
 import { ILanguageProvider, ILanguageService } from '../../src/services/_internal';
+import { ILanguageProtocolServerOptions, TransportKind } from '../../src/services/_public';
 import { AtomLanguageJsonSettings, IAtomLanguageJsonSettings } from './atom/AtomLanguageJsonSettings';
 
 export class AtomLanguageJsonPackage implements IAtomPackage<IAtomLanguageJsonSettings> {
@@ -30,11 +31,22 @@ export class AtomLanguageJsonPackage implements IAtomPackage<IAtomLanguageJsonSe
 
     /* tslint:disable-next-line:function-name */
     public ['provide-atom-language'](): ILanguageProvider {
-        return {
-            dispose() { },
-            clientOptions: {
+        const serverModule = join(__dirname, 'server.js');
+        const serverOptions: ILanguageProtocolServerOptions = {
+            run: { module: serverModule, transport: TransportKind.ipc },
+            debug: { module: serverModule, transport: TransportKind.ipc }
+        };
 
-            }
+        return <ILanguageProvider>{
+            clientOptions: {
+                diagnosticCollectionName: 'json',
+                documentSelector: 'json',
+                errorHandler: undefined,
+                outputChannelName: '',
+                initializationOptions: undefined
+            },
+            serverOptions,
+            dispose() { /* */ }
         };
     }
 

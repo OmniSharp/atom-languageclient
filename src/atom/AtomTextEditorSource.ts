@@ -5,27 +5,17 @@
  */
 /* tslint:disable:no-any */
 import * as _ from 'lodash';
-import { Observable } from 'rxjs';
-import { DisposableBase } from 'ts-disposables';
+import { Observable, Subject } from 'rxjs';
+import { CompositeDisposable, DisposableBase } from 'ts-disposables';
 import { observeCallback } from '../helpers/index';
 import { injectable } from '../services/_decorators';
-
-export interface IAtomTextEditorSource {
-    observeActiveTextEditor: Observable<Atom.TextEditor | null>;
-    observeTextEditors: Observable<Atom.TextEditor>;
-}
-
-const activeEditorCallback = (pane: any) => {
-    if (pane && pane.getGrammar && pane.getPath) {
-        return <Atom.TextEditor>pane;
-    }
-    return null;
-};
+import { IAtomTextEditorSource } from '../services/_public';
 
 @injectable
 export class AtomTextEditorSource extends DisposableBase implements IAtomTextEditorSource {
     private _observeActiveTextEditor: Observable<Atom.TextEditor | null>;
     private _observeTextEditors: Observable<Atom.TextEditor>;
+    private _subject = new  Subject<Atom.TextEditor>();
 
     constructor() {
         super();
@@ -38,20 +28,33 @@ export class AtomTextEditorSource extends DisposableBase implements IAtomTextEdi
                 Observable.defer(() => Observable.of(activeEditorCallback(atom.workspace.getActivePaneItem())))
             );
 
+        const editorAdded = observeCallback(atom.workspace.onDidAddTextEditor, atom.workspace)
+            .mergeMap(editor => {
+                if (!editor.getPath()) {
+                    return observeCallback(editor.onDidChangePath, editor)
+                        .map(() => editor)
+                        .filter(x => !!x)
+                        .take(1);
+                }
+
+                return Observable.of(editor);
+            })
+            .do((editor) => {
+                const cd = new CompositeDisposable();
+                const next = _.bind(this._subject.next, this._subject, editor);
+                cd.add(
+                    editor.onDidChangeGrammar(next),
+                    editor.onDidChangePath(next)
+                );
+                editor.onDidDestroy(() => {
+                    cd.dispose();
+                });
+            })
+            .share();
+
         this._observeTextEditors =
             Observable.merge(
-                observeCallback(
-                    atom.workspace.onDidAddTextEditor, atom.workspace)
-                    .mergeMap(editor => {
-                        if (!editor.getPath()) {
-                            return observeCallback(editor.onDidChange, editor)
-                                .filter(x => !!x)
-                                .take(1);
-                        }
-
-                        return Observable.of(editor);
-                    })
-                    .share(),
+                editorAdded,
                 Observable.defer(() => Observable.from(atom.workspace.getTextEditors()))
             );
     }
@@ -59,3 +62,10 @@ export class AtomTextEditorSource extends DisposableBase implements IAtomTextEdi
     public get observeActiveTextEditor() { return this._observeActiveTextEditor; }
     public get observeTextEditors() { return this._observeTextEditors; }
 }
+
+const activeEditorCallback = (pane: any) => {
+    if (pane && pane.getGrammar && pane.getPath) {
+        return <Atom.TextEditor>pane;
+    }
+    return null;
+};

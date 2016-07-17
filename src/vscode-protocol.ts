@@ -59,7 +59,7 @@ export {
  * resolves to such.
  */
 export namespace InitializeRequest {
-    export const type: RequestType<InitializeParams, InitializeResult, InitializeError> = { get method() { return Methods.ShutdownRequest; } };
+    export const type: RequestType<InitializeParams, InitializeResult, InitializeError> = { get method() { return Methods.InitializeRequest; } };
 }
 
 //---- Shutdown Method ----

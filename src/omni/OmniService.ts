@@ -7,34 +7,27 @@
 import { DisposableBase } from 'ts-disposables';
 import { injectable } from '../services/_decorators';
 import { ActiveTextEditorProvider, IActiveTextEditorProvider } from './ActiveTextEditorProvider';
-import { GrammarService, IGrammarService } from '../atom/GrammarService';
 import { ITextEditorProvider, TextEditorProvider } from './TextEditorProvider';
 
 export interface IOmniService {
     readonly active: IActiveTextEditorProvider;
     readonly editors: ITextEditorProvider;
-    readonly grammar: IGrammarService;
 }
 
 @injectable
 export class OmniService extends DisposableBase implements IOmniService {
     private _activeEditorsProvider: ActiveTextEditorProvider;
     private _editorsProvider: TextEditorProvider;
-    private _grammarValidator: GrammarService;
 
     constructor(
         activeEditorProvider: ActiveTextEditorProvider,
-        editorsProvider: TextEditorProvider,
-        grammarValidator: GrammarService,
-
+        editorsProvider: TextEditorProvider
     ) {
         super();
         this._activeEditorsProvider = activeEditorProvider;
         this._editorsProvider = editorsProvider;
-        this._grammarValidator = grammarValidator;
     }
 
     public get active() { return this._activeEditorsProvider; }
     public get editors() { return this._editorsProvider; }
-    public get grammar() { return this._grammarValidator; }
 }
