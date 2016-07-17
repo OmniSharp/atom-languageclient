@@ -50,7 +50,7 @@ export class AutocompleteService extends DisposableBase implements IAutocomplete
 
     public selector = `.source`;
     // public disableForSelector = `.${className} .comment`;
-    public inclusionPriority = 1;
+    public inclusionPriority = 10;
     public suggestionPriority = 10;
     public excludeLowerPriority = false;
 

@@ -78,7 +78,7 @@ export class IntellisesenseService extends DisposableBase implements IAutocomple
         // TODO: Icon html
         return <AutocompleteSuggestion>{
             completionItem,
-            text: completionItem.insertText,
+            text: completionItem.insertText || completionItem.label,
             displayText: completionItem.label,
             filterText: completionItem.filterText || completionItem.label,
             type: this._getTypeFromKind(<CompletionItemKind>completionItem.kind),

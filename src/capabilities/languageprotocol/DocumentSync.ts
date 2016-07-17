@@ -57,9 +57,9 @@ export class EditorSync extends DisposableBase {
         editor.onDidDestroy(_.bind(this._close, this));
         editor.onDidDestroy(_.bind(this._save, this));
         if (this._fullText) {
-            editor.onDidChange(_.bind(this._fullTextChange, this));
+            editor.buffer.onDidChange(_.bind(this._fullTextChange, this));
         } else {
-            editor.onDidChange(_.bind(this._incrementalChange, this));
+            editor.buffer.onDidChange(_.bind(this._incrementalChange, this));
         }
     }
 
