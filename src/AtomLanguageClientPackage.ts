@@ -8,7 +8,8 @@ import { Observable } from 'rxjs';
 import { exists, readdir } from 'fs';
 import { join, resolve } from 'path';
 import { CompositeDisposable, isDisposable } from 'ts-disposables';
-import { AutocompleteService, ILanguageClientSettings, LanguageClientSettings, LinterService } from './atom/index';
+import { AutocompleteService, LinterService } from './atom/index';
+import {  IAtomLanguageClientSettings, AtomLanguageClientSettings } from './AtomLanguageClientSettings';
 import { LanguageProvider, LanguageService } from './language/index';
 import { ILanguageProvider, ILanguageService } from './services/_internal';
 import { IAutocompleteService, ILinterService } from './services/_public';
@@ -17,10 +18,10 @@ import { Container } from './di/Container';
 const $readdir = Observable.bindNodeCallback(readdir);
 const $exists = Observable.bindCallback(exists);
 
-export class AtomLanguageClientPackage implements IAtomPackage<LanguageClientSettings> {
+export class AtomLanguageClientPackage implements IAtomPackage<AtomLanguageClientSettings> {
     private _container: Container;
     private _disposable: CompositeDisposable;
-    private _settings: LanguageClientSettings;
+    private _settings: AtomLanguageClientSettings;
     private _atomLanguageProvider: LanguageProvider;
     private _atomLanguageService: LanguageService;
     private _atomAutocompleteProvider: AutocompleteService;
@@ -28,20 +29,24 @@ export class AtomLanguageClientPackage implements IAtomPackage<LanguageClientSet
     public activated: Promise<void>;
 
     /* tslint:disable:no-any */
-    public activate(settings: ILanguageClientSettings) {
+    public activate(settings: IAtomLanguageClientSettings) {
         this._container = new Container();
         this._disposable = new CompositeDisposable();
-        this._settings = settings instanceof LanguageClientSettings ? settings : new LanguageClientSettings(settings);
+        this._settings = settings instanceof AtomLanguageClientSettings ? settings : new AtomLanguageClientSettings(settings);
 
         this._atomLanguageProvider = new LanguageProvider(this._container);
         this._atomLanguageService = new LanguageService(this._container);
         this._atomAutocompleteProvider = new AutocompleteService();
         this._atomLinterProvider = new LinterService();
 
-        this._container.registerInstance(ILanguageProvider, this._atomLanguageProvider);
-        this._container.registerInstance(ILanguageService, this._atomLanguageService);
-        this._container.registerInstance(IAutocompleteService, this._atomAutocompleteProvider);
-        this._container.registerInstance(ILinterService, this._atomLinterProvider);
+        this._container.registerInstance(LanguageProvider, this._atomLanguageProvider);
+        this._container.registerAlias(LanguageProvider, ILanguageProvider);
+        this._container.registerInstance(LanguageService, this._atomLanguageService);
+        this._container.registerAlias(LanguageService, ILanguageService);
+        this._container.registerInstance(AutocompleteService, this._atomAutocompleteProvider);
+        this._container.registerAlias(AutocompleteService, IAutocompleteService);
+        this._container.registerInstance(LinterService, this._atomLinterProvider);
+        this._container.registerAlias(LinterService, ILinterService);
 
         this._disposable.add(
             this._container,
@@ -125,8 +130,8 @@ export class AtomLanguageClientPackage implements IAtomPackage<LanguageClientSet
     }
 
     /* tslint:disable-next-line:no-any */
-    public static deserialize(state: ILanguageClientSettings) {
-        return new LanguageClientSettings(state);
+    public static deserialize(state: IAtomLanguageClientSettings) {
+        return new AtomLanguageClientSettings(state);
     }
 
     public serialize() {

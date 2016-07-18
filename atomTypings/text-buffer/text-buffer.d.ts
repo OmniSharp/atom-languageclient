@@ -2034,5 +2034,8 @@ declare module TextBuffer {
 
 }
 declare module "text-buffer" {
-    export = TextBuffer.TextBuffer;
+    const Range = TextBuffer.Range;
+    const Point = TextBuffer.Point;
+    export {Range, Point};
+    export default TextBuffer.TextBuffer;
 }

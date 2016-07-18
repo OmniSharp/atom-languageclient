@@ -5,8 +5,9 @@
  */
 /* tslint:disable:no-any */
 import * as _ from 'lodash';
+import { Point, Range } from 'atom';
 import * as toUri from 'file-url';
-import { Position, Range, TextDocumentIdentifier } from 'vscode-languageserver-types';
+import { Position, Range as LsRange, TextDocumentIdentifier } from 'vscode-languageserver-types';
 
 export function getUri(editor: Atom.TextEditor) {
     return toUri(editor.getURI());
@@ -20,8 +21,16 @@ export function toPosition(value: TextBuffer.Point): Position {
     return Position.create(value.row, value.column);
 }
 
-export function toRange(value: TextBuffer.Range): Range {
-    return Range.create(toPosition(value.start), toPosition(value.end));
+export function fromPosition(value: Position): TextBuffer.Point {
+    return new Point(value.line, value.character);
+}
+
+export function toRange(value: TextBuffer.Range): LsRange {
+    return LsRange.create(toPosition(value.start), toPosition(value.end));
+}
+
+export function fromRange(value: LsRange): TextBuffer.Range {
+    return new Range(fromPosition(value.start), fromPosition(value.end));
 }
 
 export function toTextDocumentIdentifier(editor: Atom.TextEditor): TextDocumentIdentifier {

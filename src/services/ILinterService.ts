@@ -9,3 +9,6 @@
  * Symbol for the internal Linter Service
  */
 export const ILinterService = Symbol.for('ILinterService');
+export interface ILinterService {
+    getLinter(name: string): Linter.IndieLinter;
+}

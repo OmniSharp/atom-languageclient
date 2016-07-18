@@ -19,15 +19,14 @@ export interface IDocumentDelayer extends IDelayer { }
 
 
 export class Delayer<T> extends DisposableBase {
-    public defaultDelay: number;
+    public defaultDelay: number = 100;
     private timeout: NodeJS.Timer | null;
     private completionPromise: Promise<T> | null;
     private onSuccess: (value?: void | Thenable<void>) => void;
     private task: (() => void);
 
-    constructor(defaultDelay: number) {
+    constructor() {
         super();
-        this.defaultDelay = defaultDelay;
         this._disposable.add(() => this.cancel());
     }
 

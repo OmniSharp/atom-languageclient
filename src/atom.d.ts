@@ -7,11 +7,11 @@ interface IAtomPackage<TSettings> {
 declare namespace Linter {
     export interface MessageBase {
         type: string;
-        name?: string;
+        filePath: string;
         range: TextBuffer.Range;
+        name?: string;
         trace?: Array<Message>;
         severity: 'error' | 'warning' | 'info';
-        filePath?: string;
         selected?: ((message: Message) => void);
         code?: string | number;
     }
@@ -70,4 +70,23 @@ declare module 'fuzzaldrin-plus' {
 declare module 'file-url' {
     var method: (str: string) => string;
     export = method;
+}
+
+declare interface HTMLElement {
+    scrollBottom: number;
+    readonly isHidden: boolean;
+    readonly isVisible: boolean;
+    readonly isDisabled: boolean;
+    readonly hasFocus: boolean;
+    scrollDown(): void;
+    scrollUp(this: HTMLElement): void;
+    scrollToTop(this: HTMLElement): void;
+    scrollToBottom(this: HTMLElement): void;
+    pageUp(this: HTMLElement): void;
+    pageDown(this: HTMLElement): void;
+    enable(): void;
+    disable(): void;
+    show(): void;
+    hide(): void;
+    empty(): void;
 }

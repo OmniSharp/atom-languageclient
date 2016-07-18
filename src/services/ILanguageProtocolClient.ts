@@ -5,7 +5,7 @@
  */
 import { CancellationToken, NotificationHandler, NotificationType, RequestHandler, RequestType } from 'vscode-jsonrpc';
 import { ServerCapabilities } from '../vscode-languageserver-types';
-import { ClientState } from './ILanguageProtocolClientOptions';
+import { ClientState, ILanguageProtocolClientOptions } from './ILanguageProtocolClientOptions';
 /* tslint:disable:variable-name no-any */
 
 /**
@@ -15,6 +15,8 @@ export const ILanguageProtocolClient = Symbol.for('ILanguageProtocolClient');
 export interface ILanguageProtocolClient {
     readonly capabilities: ServerCapabilities;
     readonly state: ClientState;
+    readonly options: ILanguageProtocolClientOptions;
+    readonly name: string;
 
     sendRequest<P, R, E>(type: RequestType<P, R, E>, params: P, token?: CancellationToken): Promise<R>;
     sendNotification<P>(type: NotificationType<P>): void;

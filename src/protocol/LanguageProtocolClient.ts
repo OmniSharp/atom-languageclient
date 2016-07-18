@@ -23,6 +23,8 @@ export class LanguageProtocolClient extends DisposableBase implements ILanguageP
 
     public get state() { return this._state; }
     public get capabilities() { return this._capabilities; }
+    public get options() { return this._options; }
+    public get name() { return this._options.diagnosticCollectionName || this._options.outputChannelName || 'languageprotocol'; }
 
     constructor(
         @inject(IProjectProvider) projectProvider: IProjectProvider,

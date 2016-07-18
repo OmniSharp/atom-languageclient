@@ -8,7 +8,7 @@ import * as _ from 'lodash';
 import { filter } from 'fuzzaldrin-plus';
 import { Disposable, DisposableBase } from 'ts-disposables';
 import { className, packageName } from '../constants';
-import { IAutocompleteProvider, IAutocompleteService, AutocompleteSuggestion } from '../services/_public';
+import { AutocompleteKind, AutocompleteSuggestion, IAutocompleteProvider, IAutocompleteService } from '../services/_public';
 
 export class AutocompleteService extends DisposableBase implements IAutocompleteService {
     private _providers: Set<IAutocompleteProvider> = new Set<IAutocompleteProvider>();
@@ -17,10 +17,6 @@ export class AutocompleteService extends DisposableBase implements IAutocomplete
         super();
 
         this._disposable.add(
-            // TODO: Dispose of these when not needed
-            atom.config.observe(`${packageName}.useIcons`, (value) => {
-                this._useIcons = value;
-            }),
             Disposable.create(() => {
                 this._providers.forEach(x => x.dispose());
                 this._providers.clear();
@@ -45,8 +41,6 @@ export class AutocompleteService extends DisposableBase implements IAutocomplete
             this._computeInvoke();
         });
     }
-
-    private _useIcons: boolean;
 
     public selector = `.source`;
     // public disableForSelector = `.${className} .comment`;
@@ -78,12 +72,72 @@ export class AutocompleteService extends DisposableBase implements IAutocomplete
 
         return Promise.all(this._invoke(options))
             .then(items => {
-                let results = _.flatMap(items, _.identity);
+                let results = _.flatMap<Autocomplete.Suggestion[], Autocomplete.Suggestion>(items, item => {
+                    if (item.length > 0) {
+                        if (item[0].iconHTML) {
+                            return item;
+                        }
+                        if (item[0].type) {
+                            _.each(item, i => {
+                                if (i.type && !i.iconHTML) {
+                                    i.iconHTML = this._renderIcon(i);
+                                }
+                                return;
+                            });
+                        }
+                    }
+                });
                 if (search) {
                     results = filter(results, search, { key: 'filterText' });
                 }
                 return results;
             });
+    }
+
+    private _renderIcon(completionItem: Autocomplete.Suggestion) {
+        return `<img height="16px" width="16px" src="atom://${packageName}/styles/icons/${this._getIconFromKind(completionItem.type!)}.svg" />`;
+    }
+
+    private _getIconFromKind(kind: Autocomplete.SuggestionType): string {
+        switch (kind) {
+            case 'class':
+            case 'type':
+                return AutocompleteKind.Class;
+            case 'mixin':
+                return 'union';
+            case 'constant':
+                return 'constant';
+            case 'import':
+                return 'reference';
+            case 'keyword':
+                return 'keyword';
+            case 'function':
+            case 'method':
+                return AutocompleteKind.Method;
+            case 'module':
+            case 'require':
+            case 'package':
+                return AutocompleteKind.Module;
+            case 'property':
+                return AutocompleteKind.Property;
+            case 'snippet':
+                return 'snippet';
+            case 'tag':
+                return AutocompleteKind.Class;
+            case 'selector':
+            case 'pseudo-selector':
+            case 'variable':
+                return AutocompleteKind.Field;
+            case 'interface':
+                return AutocompleteKind.Interface;
+            case 'enum':
+                return AutocompleteKind.Enum;
+            case 'value':
+            case 'attribute':
+            case 'builtin':
+            default:
+                return 'valuetype';
+        }
     }
 
     public onDidInsertSuggestion(editor: Atom.TextEditor, triggerPosition: TextBuffer.Point, suggestion: AutocompleteSuggestion) {

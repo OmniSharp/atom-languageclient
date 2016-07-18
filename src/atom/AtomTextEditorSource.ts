@@ -29,15 +29,15 @@ export class AtomTextEditorSource extends DisposableBase implements IAtomTextEdi
             );
 
         const editorAdded = observeCallback(atom.workspace.onDidAddTextEditor, atom.workspace)
-            .mergeMap(editor => {
-                if (!editor.getPath()) {
-                    return observeCallback(editor.onDidChangePath, editor)
-                        .map(() => editor)
+            .mergeMap(({textEditor}) => {
+                if (!textEditor.getPath()) {
+                    return observeCallback(textEditor.onDidChangePath, textEditor)
+                        .map(() => textEditor)
                         .filter(x => !!x)
                         .take(1);
                 }
 
-                return Observable.of(editor);
+                return Observable.of(textEditor);
             })
             .do((editor) => {
                 const cd = new CompositeDisposable();
