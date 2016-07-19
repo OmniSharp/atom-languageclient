@@ -2,15 +2,15 @@
  *
  */
 import * as _ from 'lodash';
-import { filter } from 'fuzzaldrin-plus';
 
-atom.themes.requireStylesheet(require.resolve('../styles/select-list.less'));
+atom.themes.requireStylesheet(require.resolve('../../../styles/select-list.less'));
 
-export abstract class SelectListView<T> extends HTMLDivElement {
-    private _items: T[] = [];
+export interface SelectListView<T> extends HTMLDivElement { }
+export abstract class SelectListView<T> {
+    protected _items: T[] = [];
     private _set = new WeakMap<HTMLElement, T>();
     private _maxItems: number = Infinity;
-    private _filterEditorView: Atom.TextEditorComponent;
+    protected _filterEditorView: Atom.TextEditorComponent;
     private _error: HTMLDivElement;
     private _loadingArea: HTMLDivElement;
     private _loading: HTMLSpanElement;
@@ -22,11 +22,7 @@ export abstract class SelectListView<T> extends HTMLDivElement {
     private _inputThrottle: number = 100;
 
     public constructor() {
-        super();
         this._buildHtml();
-        this._filterEditorView.editor.buffer.onDidChange(() => {
-            this._schedulePopulateList();
-        });
         this._filterEditorView.addEventListener('blur', () => {
             if (!document.hasFocus() && !this._cancelling) {
                 this.cancel();
@@ -83,14 +79,13 @@ export abstract class SelectListView<T> extends HTMLDivElement {
 
     }
 
-    public abstract viewForItem(item: T): HTMLElement;
+    public abstract viewForItem(item: T): HTMLLIElement;
     public abstract confirmed(item: T): void;
     public abstract cancelled(): void;
-    public abstract filterKey: string;
 
     public setItems(items: T[]) {
         this._items = items != null ? items : [];
-        this._populateList();
+        this.populateList();
         return this.setLoading();
     }
 
@@ -106,24 +101,19 @@ export abstract class SelectListView<T> extends HTMLDivElement {
         this._maxItems = maxItems;
     }
 
-    private _populateList() {
-        if (this._items == null) {
+    protected populateList() {
+        this.populateItems(this._items);
+    }
+
+    protected populateItems(items: T[]) {
+        if (items == null) {
             return;
         }
-        const filterQuery = this.getFilterQuery();
-        let filteredItems: T[];
-        if (filterQuery.length) {
-            filteredItems = filter(this._items, filterQuery, {
-                key: this.filterKey
-            });
-        } else {
-            filteredItems = this._items;
-        }
         this._list.empty();
-        if (filteredItems.length) {
+        if (items.length) {
             this.setError(undefined);
 
-            for (const item of _.take(this._items, _.min([this._items.length, this._maxItems]))) {
+            for (const item of _.take(items, _.min([items.length, this._maxItems]))) {
                 const view = this.viewForItem(item);
                 this._set.set(view, item);
                 this._list.appendChild(view);
@@ -131,7 +121,7 @@ export abstract class SelectListView<T> extends HTMLDivElement {
 
             return this._selectItem(this._list.firstElementChild);
         } else {
-            return this.setError(this.getEmptyMessage(this._items.length, filteredItems.length));
+            return this.setError(this.getEmptyMessage(this._items.length, items.length));
         }
     }
 
@@ -254,11 +244,11 @@ export abstract class SelectListView<T> extends HTMLDivElement {
         }
     }
 
-    private _schedulePopulateList() {
+    protected schedulePopulateList() {
         clearTimeout(this._scheduleTimeout);
         const populateCallback = () => {
             if (document.body.contains(this)) {
-                return this._populateList();
+                return this.populateList();
             }
         };
         this._scheduleTimeout = setTimeout(populateCallback, this._inputThrottle);
@@ -286,3 +276,5 @@ export abstract class SelectListView<T> extends HTMLDivElement {
         this.appendChild(listGroup);
     }
 }
+
+_.defaults(SelectListView.prototype, Object.create(HTMLDivElement.prototype));

@@ -8,11 +8,11 @@ import { Observable } from 'rxjs';
 import { exists, readdir } from 'fs';
 import { join, resolve } from 'path';
 import { CompositeDisposable, isDisposable } from 'ts-disposables';
-import { AutocompleteService, LinterService } from './atom/index';
-import {  IAtomLanguageClientSettings, AtomLanguageClientSettings } from './AtomLanguageClientSettings';
+import { AutocompleteService, FinderService, LinterService } from './atom/index';
 import { LanguageProvider, LanguageService } from './language/index';
 import { ILanguageProvider, ILanguageService } from './services/_internal';
-import { IAutocompleteService, ILinterService } from './services/_public';
+import { IAutocompleteService, IFinderService, ILinterService,  } from './services/_public';
+import { AtomLanguageClientSettings, IAtomLanguageClientSettings } from './AtomLanguageClientSettings';
 import { Container } from './di/Container';
 
 const $readdir = Observable.bindNodeCallback(readdir);
@@ -47,6 +47,8 @@ export class AtomLanguageClientPackage implements IAtomPackage<AtomLanguageClien
         this._container.registerAlias(AutocompleteService, IAutocompleteService);
         this._container.registerInstance(LinterService, this._atomLinterProvider);
         this._container.registerAlias(LinterService, ILinterService);
+        this._container.autoRegister(FinderService);
+        this._container.registerAlias(FinderService, IFinderService);
 
         this._disposable.add(
             this._container,

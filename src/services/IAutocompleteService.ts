@@ -25,28 +25,26 @@ export type AutocompleteSuggestion = Autocomplete.Suggestion & {
 
 export interface IAutocompleteProvider extends IDisposable {
     request(params: Autocomplete.RequestOptions): Promise<AutocompleteSuggestion[]> | null;
-    dispose(): void;
 }
 
 export namespace AutocompleteKind {
     export const Alias = 'alias';
-    export const ArrayType = 'arrayType';
+    export const ArrayType = 'arraytype';
     export const Assembly = 'assembly';
-    export const DynamicType = 'dynamicType';
-    export const ErrorType = 'errorType';
+    export const DynamicType = 'dynamictype';
+    export const ErrorType = 'errortype';
     export const Event = 'event';
     export const Field = 'field';
     export const Label = 'label';
     export const Local = 'local';
     export const Method = 'method';
-    export const NetModule = 'netModule';
-    export const NamedType = 'namedType';
+    export const NetModule = 'netmodule';
+    export const NamedType = 'namedtype';
     export const Namespace = 'namespace';
     export const Parameter = 'parameter';
-    export const PointerType = 'pointerType';
+    export const PointerType = 'pointertype';
     export const Property = 'property';
-    export const RangeVariable = 'rangeVariable';
-    export const TypeParameter = 'typeParameter';
+    export const RangeVariable = 'rangevariable';
     export const Preprocessing = 'preprocessing';
     export const Unknown = 'unknown';
     export const Array = 'array';
@@ -60,6 +58,6 @@ export namespace AutocompleteKind {
     export const Pointer = 'pointer';
     export const Struct = 'struct';
     export const Structure = 'structure';
-    export const TypeParameter = 'typeParameter';
+    export const TypeParameter = 'typeparameter';
     export const Submission = 'submission';
 }

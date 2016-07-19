@@ -12833,7 +12833,7 @@ declare module Atom {
          * @param uri? - A {String} containing a URI.
          * @param options? - {Object}
          */
-        open(uri?: string, options?: Promise<TextEditor>): Promise<TextEditor>;
+        open(uri?: string, options?: { initialLine: number; initialColumn: number; }): Promise<TextEditor>;
 
         /**
          * Open Atom"s license in the active pane.

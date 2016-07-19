@@ -56,6 +56,18 @@ declare namespace Autocomplete {
         activatedManually: boolean;
     }
 }
+declare namespace Finder {
+    export interface Symbol {
+        name: string;
+        containerName?: string;
+        type: Autocomplete.SuggestionType;
+        filePath: string;
+        iconHTML?: string;
+        location?: TextBuffer.Point;
+        filterText: string;
+        className?: string;
+    }
+}
 declare type Thenable<T> = Promise<T>;
 declare module 'fuzzaldrin-plus' {
     export interface FilterOptions {

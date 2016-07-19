@@ -86,6 +86,7 @@ export class AutocompleteService extends DisposableBase implements IAutocomplete
                             });
                         }
                     }
+                    return item;
                 });
                 if (search) {
                     results = filter(results, search, { key: 'filterText' });
