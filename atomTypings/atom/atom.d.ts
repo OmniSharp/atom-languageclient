@@ -6688,7 +6688,7 @@ declare module Atom {
          * and the relative path from that project directory to the given path.
          * @param fullPath? - {String} An absolute path.
          */
-        relativizePath(fullPath?: string): string;
+        relativizePath(fullPath?: string): [string, string];
 
         /**
          * Determines whether the given path (real or symbolic) is inside the
@@ -7717,7 +7717,7 @@ declare module Atom {
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        editor: Atom.TextEditor;
+        getModel(): Atom.TextEditor;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.

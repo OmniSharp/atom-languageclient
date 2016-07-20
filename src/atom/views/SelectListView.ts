@@ -2,15 +2,16 @@
  *
  */
 import * as _ from 'lodash';
+import { View } from './View';
 
 atom.themes.requireStylesheet(require.resolve('../../../styles/select-list.less'));
 
-export interface SelectListView<T> extends HTMLDivElement { }
-export abstract class SelectListView<T> {
+export abstract class SelectListView<T> extends View<HTMLDivElement> {
     protected _items: T[] = [];
-    private _set = new WeakMap<HTMLElement, T>();
+    private _weakMap = new WeakMap<HTMLElement, T>();
     private _maxItems: number = Infinity;
     protected _filterEditorView: Atom.TextEditorComponent;
+    protected _filterEditor: Atom.TextEditor;
     private _error: HTMLDivElement;
     private _loadingArea: HTMLDivElement;
     private _loading: HTMLSpanElement;
@@ -22,14 +23,16 @@ export abstract class SelectListView<T> {
     private _inputThrottle: number = 100;
 
     public constructor() {
+        super(document.createElement('div'));
         this._buildHtml();
+        this._filterEditor = this._filterEditorView.getModel();
         this._filterEditorView.addEventListener('blur', () => {
             if (!document.hasFocus() && !this._cancelling) {
                 this.cancel();
             }
         });
 
-        atom.commands.add(this, {
+        atom.commands.add(this.root, {
             'core:move-up': (event) => {
                 this.selectPreviousItem();
                 event.stopPropagation();
@@ -40,14 +43,22 @@ export abstract class SelectListView<T> {
             },
             'core:move-to-top': (event) => {
                 this.selectFirstItem();
-                this._list.scrollToTop();
+                this.scrollToTop(this._list);
                 event.stopPropagation();
             },
             'core:move-to-bottom': (event) => {
                 this.selectLastItem();
-                this._list.scrollToBottom();
+                this.scrollToBottom(this._list);
                 event.stopPropagation();
             },
+            'core:confirm': (event) => {
+                this._confirmSelection();
+                event.stopPropagation();
+            },
+            'core:cancel': (event) => {
+                this.cancel();
+                event.stopPropagation();
+            }
         });
 
         this._list.addEventListener('mousedown', (e) => {
@@ -76,10 +87,9 @@ export abstract class SelectListView<T> {
             }
             return;
         });
-
     }
 
-    public abstract viewForItem(item: T): HTMLLIElement;
+    public abstract viewForItem(item: fuse.Result<T>): HTMLLIElement;
     public abstract confirmed(item: T): void;
     public abstract cancelled(): void;
 
@@ -90,11 +100,11 @@ export abstract class SelectListView<T> {
     }
 
     public get selected() {
-        return this._set.get(this._getSelectedItem());
+        return this._weakMap.get(this._getSelectedItem());
     }
 
     public getFilterQuery() {
-        return this._filterEditorView.editor.getText();
+        return this._filterEditor.getText();
     }
 
     public setMaxItems(maxItems: number) {
@@ -102,20 +112,20 @@ export abstract class SelectListView<T> {
     }
 
     protected populateList() {
-        this.populateItems(this._items);
+        this.populateItems(_.map(this._items, item => ({ item })));
     }
 
-    protected populateItems(items: T[]) {
+    protected populateItems(items: fuse.Result<T>[]) {
         if (items == null) {
             return;
         }
-        this._list.empty();
+        this._list.innerHTML = '';
         if (items.length) {
             this.setError(undefined);
 
             for (const item of _.take(items, _.min([items.length, this._maxItems]))) {
                 const view = this.viewForItem(item);
-                this._set.set(view, item);
+                this._weakMap.set(view, item.item);
                 this._list.appendChild(view);
             }
 
@@ -131,11 +141,11 @@ export abstract class SelectListView<T> {
         }
         if (message.length === 0) {
             this._error.innerText = '';
-            this._error.hide();
+            this.hide(this._error);
         } else {
             this.setLoading();
             this._error.innerText = message;
-            this._error.show();
+            this.show(this._error);
         }
     }
 
@@ -146,11 +156,11 @@ export abstract class SelectListView<T> {
         if (message.length === 0) {
             this._loading.innerText = '';
             this._loadingBadge.innerText = '';
-            return this._loadingArea.hide();
+            return this.hide(this._loadingArea);
         } else {
             this.setError();
             this._loading.innerText = message;
-            return this._loadingArea.show();
+            return this.show(this._loadingArea);
         }
     }
 
@@ -163,12 +173,12 @@ export abstract class SelectListView<T> {
      */
 
     public cancel() {
-        this._list.empty();
+        this.empty(this._list);
         this._cancelling = true;
 
-        const filterEditorViewFocused = this._filterEditorView.hasFocus;
+        const filterEditorViewFocused = this.hasFocus(this._filterEditorView);
         this.cancelled();
-        this._filterEditorView.editor.setText('');
+        this._filterEditor.setText('');
         if (filterEditorViewFocused) {
             this._restoreFocus();
         }
@@ -209,7 +219,10 @@ export abstract class SelectListView<T> {
     }
 
     private _selectItem(view: Element) {
-        this._list.querySelector('.selected').classList.remove('selected');
+        const selected = this._list.querySelector('.selected');
+        if (selected) {
+            selected.classList.remove('selected');
+        }
         view.classList.add('selected');
         return this._scrollToItem(view);
     }
@@ -220,8 +233,8 @@ export abstract class SelectListView<T> {
         const desiredBottom = desiredTop + view.clientHeight;
         if (desiredTop < scrollTop) {
             this._list.scrollTop = desiredTop;
-        } else if (desiredBottom > this._list.scrollBottom) {
-            this._list.scrollBottom = desiredBottom;
+        } else if (desiredBottom > this.scrollBottom(this._list)) {
+            this.scrollBottom(this._list, desiredBottom)
         }
     }
 
@@ -247,7 +260,7 @@ export abstract class SelectListView<T> {
     protected schedulePopulateList() {
         clearTimeout(this._scheduleTimeout);
         const populateCallback = () => {
-            if (document.body.contains(this)) {
+            if (document.body.contains(this.root)) {
                 return this.populateList();
             }
         };
@@ -255,7 +268,7 @@ export abstract class SelectListView<T> {
     }
 
     private _buildHtml() {
-        this.classList.add('select-list');
+        this.root.classList.add('select-list');
         const editor: Atom.TextEditorComponent = this._filterEditorView = <any>document.createElement('atom-text-editor');
         const errorMessage = this._error = document.createElement('div');
         errorMessage.classList.add('error-message');
@@ -268,13 +281,11 @@ export abstract class SelectListView<T> {
         const listGroup = this._list = document.createElement('ol');
         listGroup.classList.add('list-group');
 
-        this.appendChild(editor);
-        this.appendChild(errorMessage);
-        this.appendChild(loading);
+        this.root.appendChild(editor);
+        this.root.appendChild(errorMessage);
+        this.root.appendChild(loading);
         loading.appendChild(loadingMessage);
         loading.appendChild(loadingBadge);
-        this.appendChild(listGroup);
+        this.root.appendChild(listGroup);
     }
 }
-
-_.defaults(SelectListView.prototype, Object.create(HTMLDivElement.prototype));

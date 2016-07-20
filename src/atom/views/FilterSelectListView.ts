@@ -2,31 +2,46 @@
  *
  */
 import * as _ from 'lodash';
-import { filter } from 'fuzzaldrin-plus';
+import Fuse = require('fuse.js');
 import { SelectListView } from './SelectListView';
 
 export abstract class FilterSelectListView<T> extends SelectListView<T> {
+    private _fuse: Fuse<T>;
     public constructor() {
         super();
-        this._filterEditorView.editor.buffer.onDidChange(() => {
-            this.schedulePopulateList();
+        // this._filterEditor.buffer.onDidChange(() => {
+        //     this.schedulePopulateList();
+        // });
+        this._fuse = new Fuse<T>([], {
+            caseSensitive: false,
+            // distance: 200,
+            // threshold: 0.6,
+            // tokenize: true,
+            shouldSort: true,
+            keys: this.filterKeys,
+            include: ['matches', 'score']
         });
     }
 
-    public abstract filterKey: string;
+    public abstract filterKeys: string[];
 
-    protected populateList() {
+    public setFilterItems(items: T[], filter: string) {
+        this._items = items != null ? items : [];
+        this.populateList(filter);
+        return this.setLoading();
+    }
+
+    protected populateList(filter?: string) {
         if (this._items == null) {
             return;
         }
-        const filterQuery = this.getFilterQuery();
-        let filteredItems: T[];
+        const filterQuery = filter || this.getFilterQuery();
+        let filteredItems: fuse.Result<T>[];
         if (filterQuery.length) {
-            filteredItems = filter(this._items, filterQuery, {
-                key: this.filterKey
-            });
+            this._fuse.set(this._items);
+            filteredItems = this._fuse.search(filterQuery);
         } else {
-            filteredItems = this._items;
+            filteredItems = _.map(this._items, item => ({ item }));
         }
         this.populateItems(filteredItems);
     }

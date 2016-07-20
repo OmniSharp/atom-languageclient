@@ -5,7 +5,7 @@
  */
 /* tslint:disable:no-any */
 import * as _ from 'lodash';
-import { filter } from 'fuzzaldrin-plus';
+import Fuse = require('fuse.js');
 import { Disposable, DisposableBase } from 'ts-disposables';
 import { className, packageName } from '../constants';
 import { AutocompleteKind, AutocompleteSuggestion, IAutocompleteProvider, IAutocompleteService } from '../services/_public';
@@ -47,6 +47,13 @@ export class AutocompleteService extends DisposableBase implements IAutocomplete
     public inclusionPriority = 10;
     public suggestionPriority = 10;
     public excludeLowerPriority = false;
+    private _fuse = new Fuse<Autocomplete.Suggestion>([], {
+        caseSensitive: false,
+        distance: 200,
+        threshold: 0.7,
+        tokenize: true,
+        shouldSort: true
+    });
 
     public getSuggestions(options: Autocomplete.RequestOptions): Promise<Autocomplete.Suggestion[]> | null {
         if (!this._providers.size) {
@@ -89,7 +96,8 @@ export class AutocompleteService extends DisposableBase implements IAutocomplete
                     return item;
                 });
                 if (search) {
-                    results = filter(results, search, { key: 'filterText' });
+                    this._fuse.set(results);
+                    results = this._fuse.search<Autocomplete.Suggestion>(search);
                 }
                 return results;
             });

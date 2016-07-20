@@ -1,30 +1,38 @@
 /**
  *
  */
+import * as _ from 'lodash';
 import { Observable, Subscription } from 'rxjs';
 import { NextObserver } from 'rxjs/Observer';
-import { filter } from 'fuzzaldrin-plus';
 import { packageName } from '../../constants';
 import { AutocompleteKind } from '../../services/_public';
 import { AtomNavigation } from '../AtomNavigation';
-import { SelectListView } from './SelectListView';
+import { FilterSelectListView } from './FilterSelectListView';
 
-export class FinderView extends SelectListView<Finder.Symbol> {
+export class FinderView extends FilterSelectListView<Finder.Symbol> {
     private _navigation: AtomNavigation;
     private _subscription: Subscription;
-    constructor(navigation: AtomNavigation, results: Observable<Finder.Symbol[]>, filter$: NextObserver<string>) {
+    private _panel: Atom.Panel;
+    constructor(navigation: AtomNavigation, results: Observable<{ filter: string; results: Finder.Symbol[]}>, filter$: NextObserver<string>) {
         super();
         this._navigation = navigation;
         this._subscription = results.subscribe(items => {
-            this.setItems(items);
+            this.setFilterItems(items.results, items.filter);
         });
-        this._filterEditorView.editor.buffer.onDidChange(() => {
-            filter$.next(this._filterEditorView.editor.getText());
+        this._filterEditorView.getModel().buffer.onDidChange(() => {
+            filter$.next(this._filterEditorView.getModel().getText());
         });
+
+        this.storeFocusedElement();
+        this._panel = atom.workspace.addModalPanel({ item: this.root });
+        this.focusFilterEditor();
     }
+
+    public get filterKeys() { return ['filterText', 'name']; }
 
     public cancelled() {
         this._subscription.unsubscribe();
+        this._panel.destroy();
     }
 
     public confirmed(item: Finder.Symbol) {
@@ -32,19 +40,42 @@ export class FinderView extends SelectListView<Finder.Symbol> {
         this._navigation.navigateTo(item);
     }
 
-    public viewForItem(item: Finder.Symbol) {
+    public viewForItem(result: fuse.Result<Finder.Symbol>) {
+        const {item, score, matches} = result;
         const li = document.createElement('li');
         let filename = atom.project.relativizePath(item.filePath)[1];
         if (item.location) {
             filename += ': ' + item.location.row;
         }
+
+        let filenameContent = filename;
+        let nameContent = item.name;
+
+        // const pathMatches = _.find(matches!, { key: 'filePath' });
+        // if (pathMatches) {
+        //     filenameContent = this._getMatchString(filenameContent, pathMatches);
+        // }
+        const nameMatches = _.find(matches!, { key: 'name' });
+        if (nameMatches) {
+            nameContent = this._getMatchString(nameContent, nameMatches);
+        }
         /* tslint:disable-next-line:no-inner-html */
         li.innerHTML = `
-            <span>${item.iconHTML || this._renderIcon(item)}<span>${item.name}</span></span><br/>
-            <span class="filename">${filename}</span>
+            <span>${item.iconHTML || this._renderIcon(item)}<span>${nameContent}</span></span><br/>
+            <span class="filename">${filenameContent}</span>
             `;
 
         return li;
+    }
+
+    private _getMatchString(text: string, match: fuse.Match) {
+        _.each(_.reverse(match.indices), ([start, end]) => {
+            const endStr = text.substr(end + 1);
+            const replace = `<span class="character-match">${text.substr(start, end - start + 1)}</span>`;
+            const startStr = text.substr(0, start);
+            text = `${startStr}${replace}${endStr}`;
+        });
+        return text;
     }
 
     private _renderIcon(completionItem: { type?: Autocomplete.SuggestionType; }) {
@@ -93,5 +124,3 @@ export class FinderView extends SelectListView<Finder.Symbol> {
         }
     }
 }
-
-document.registerElement();

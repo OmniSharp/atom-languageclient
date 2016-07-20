@@ -16,7 +16,7 @@ import { FinderView } from './views/FinderView';
 @injectable
 export class FinderService extends DisposableBase implements IFinderService {
     private _providers = new Set<IFinderProvider>();
-    private _results: Observable<Finder.Symbol[]>;
+    private _results: Observable<{ filter: string; results: Finder.Symbol[] }>;
     private _resultsObserver: Observer<Set<IFinderProvider>>;
     private _filter: Observable<string>;
     private _filterObserver: NextObserver<string>;
@@ -32,9 +32,10 @@ export class FinderService extends DisposableBase implements IFinderService {
         const filter$ = this._filterObserver = new Subject<string>();
         this._filter = filter$.asObservable();
 
-        this._results = results$
-            .switchMap((providers) => {
-                return Observable.from<IFinderProvider>(<any>providers)
+        const providers = results$
+            .startWith(this._providers)
+            .switchMap(selectedProviders => {
+                return Observable.from<IFinderProvider>(<any>selectedProviders)
                     .mergeMap(x => x.results, (provider, results) => ({ provider, results }))
                     .scan<Map<IFinderProvider, Finder.Symbol[]>>(
                     (acc, { provider, results }) => {
@@ -42,7 +43,22 @@ export class FinderService extends DisposableBase implements IFinderService {
                         return acc;
                     },
                     new Map<IFinderProvider, Finder.Symbol[]>())
-                    .map(map => _.flatten(_.toArray(map.values())));
+            });
+
+        this._results = Observable.combineLatest(providers, filter$)
+            .map(([map, filter]) => {
+                // atom.project.relativizePath(item.filePath)
+                const iterator = map.values();
+                let result = iterator.next();
+                const results: Finder.Symbol[] = [];
+                while (!result.done) {
+                    results.push(..._.map(result.value, value => {
+                        value.filePath = atom.project.relativizePath(value.filePath)[1];
+                        return value;
+                    }));
+                    result = iterator.next();
+                }
+                return { filter, results };
             });
 
         this._commands.add(CommandType.Workspace, 'finder', () => this.open());
@@ -57,6 +73,5 @@ export class FinderService extends DisposableBase implements IFinderService {
 
     public open() {
         const view = new FinderView(this._navigation, this._results, this._filterObserver);
-        document.body.appendChild(view);
     }
 }

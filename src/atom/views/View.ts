@@ -2,67 +2,107 @@
  *
  */
 import * as _ from 'lodash';
+import { DisposableBase } from 'ts-disposables';
 /* tslint:disable:no-invalid-this */
 
-_.assign(HTMLElement.prototype, {
-    get scrollBottom(this: HTMLElement) { return this.scrollTop + this.clientHeight; },
-    set scrollBottom(this: HTMLElement, value: number) { this.scrollTop = value - this.clientHeight; },
+export abstract class View<TElement extends Node> extends DisposableBase {
+    private _root: TElement;
+    public get root() { return this._root; }
+    constructor(root: TElement) {
+        super();
+        this._root = root;
+    }
 
-    scrollDown(this: HTMLElement) {
-        this.scrollTop = this.scrollTop + (window.innerHeight / 20);
-    },
+    public appendTo(node: Node) {
+        node.appendChild(this.root);
+    }
 
-    scrollUp(this: HTMLElement) {
-        this.scrollTop = this.scrollTop - (window.innerHeight / 20);
-    },
+    public scrollBottom(element: HTMLElement): number;
+    public scrollBottom(element: HTMLElement, value: number): void;
+    public scrollBottom(element: HTMLElement, value?: number) {
+        if (value) {
+            element.scrollTop = value - element.clientHeight;
+            return;
+        } else {
+            return element.scrollTop + element.clientHeight;
+        }
+    }
 
-    scrollToTop(this: HTMLElement) {
-        this.scrollTop = 0;
-    },
+    public scrollDown(element: HTMLElement) {
+        element.scrollTop = element.scrollTop + (window.innerHeight / 20);
+        return;
+    }
 
-    scrollToBottom(this: HTMLElement) {
-        this.scrollTop = this.scrollHeight;
-    },
+    public scrollUp(element: HTMLElement) {
+        element.scrollTop = element.scrollTop - (window.innerHeight / 20);
+        return;
+    }
 
-    pageUp(this: HTMLElement) {
-        this.scrollTop = this.scrollTop - this.clientHeight;
-    },
+    public scrollToTop(element: HTMLElement) {
+        element.scrollTop = 0;
+        return;
+    }
 
-    pageDown(this: HTMLElement) {
-        this.scrollTop = this.scrollTop + this.clientHeight;
-    },
+    public scrollToBottom(element: HTMLElement) {
+        element.scrollTop = element.scrollHeight;
+        return;
+    }
 
-    get isVisible(this: HTMLElement) { return !this.isHidden; },
-    get isHidden(this: HTMLElement) {
-        const style = this.style;
+    public pageUp(element: HTMLElement) {
+        element.scrollTop = element.scrollTop + element.clientHeight;
+        return;
+    }
 
-        if (style.display === 'none' || document.body.contains(this)) {
+    public pageDown(element: HTMLElement) {
+        element.scrollTop = element.scrollTop + element.clientHeight;
+        return;
+    }
+
+    public isVisible(element: HTMLElement) {
+        return !this.isHidden(element);
+    }
+
+    public isHidden(element: HTMLElement) {
+        const style = element.style;
+
+        if (style.display === 'none' || document.body.contains(element)) {
             return true;
         } else if (style.display) {
             return false;
         } else {
-            return getComputedStyle(this).display === 'none';
+            return getComputedStyle(element).display === 'none';
         }
-    },
-
-    isDisabled(this: HTMLElement) { return !!this.getAttribute('disabled'); },
-    enable(this: HTMLElement) { this.removeAttribute('disabled'); },
-    disable(this: HTMLElement) { this.setAttribute('disabled', 'disabled'); },
-    get hasFocus(this: HTMLElement) { return document.activeElement === this; },
-
-    show(this: HTMLElement) {
-        if (this.style.display === 'none') {
-            this.style.display = '';
-        }
-    },
-    hide(this: HTMLElement) {
-        if (this.style.display === '') {
-            this.style.display = 'none';
-        }
-    },
-    empty(this: HTMLElement) {
-        _.each(this.children, (item) => {
-            item.remove();
-        });
     }
-});
+
+    public isDisabled(element: HTMLElement) {
+        return !!element.getAttribute('disabled');
+    }
+
+    public enable(element: HTMLElement) {
+        return element.removeAttribute('disabled');
+    }
+
+    public disable(element: HTMLElement) {
+        return element.setAttribute('disabled', 'disabled');
+    }
+
+    public hasFocus(element: HTMLElement) {
+        return document.activeElement === element;
+    }
+
+    public show(element: HTMLElement) {
+        if (element.style.display === 'none') {
+            element.style.display = '';
+        }
+    }
+
+    public hide(element: HTMLElement) {
+        if (element.style.display === '') {
+            element.style.display = 'none';
+        }
+    }
+
+    public empty(element: HTMLElement) {
+        element.innerHTML = '';
+    }
+}

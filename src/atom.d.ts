@@ -69,36 +69,7 @@ declare namespace Finder {
     }
 }
 declare type Thenable<T> = Promise<T>;
-declare module 'fuzzaldrin-plus' {
-    export interface FilterOptions {
-        key?: string;
-        maxResults?: number;
-    }
-    export function filter<T>(candidates: T[], query: string, options: FilterOptions): T[];
-
-    export function score(str: string, query: string): number;
-    export function match(str: string, query: string): string[][];
-}
 declare module 'file-url' {
     var method: (str: string) => string;
     export = method;
-}
-
-declare interface HTMLElement {
-    scrollBottom: number;
-    readonly isHidden: boolean;
-    readonly isVisible: boolean;
-    readonly isDisabled: boolean;
-    readonly hasFocus: boolean;
-    scrollDown(): void;
-    scrollUp(this: HTMLElement): void;
-    scrollToTop(this: HTMLElement): void;
-    scrollToBottom(this: HTMLElement): void;
-    pageUp(this: HTMLElement): void;
-    pageDown(this: HTMLElement): void;
-    enable(): void;
-    disable(): void;
-    show(): void;
-    hide(): void;
-    empty(): void;
 }
