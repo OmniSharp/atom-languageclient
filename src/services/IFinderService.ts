@@ -13,6 +13,7 @@ export interface IFinderService {
 }
 
 export interface IFinderProvider extends IDisposable {
+    name: 'workspace' | 'document';
     results: Observable<Finder.Symbol[]>;
     filter: NextObserver<string>;
 }

@@ -17,7 +17,7 @@ function isCompletionList(item: any): item is CompletionList {
 }
 
 @capability
-export class LanguageProtocolAutocomplete {
+export class LanguageProtocolAutocomplete extends DisposableBase {
     private _client: ILanguageProtocolClient;
     private _autocompleteService: IAutocompleteService;
     private _syncExpression: ISyncExpression;
@@ -26,6 +26,7 @@ export class LanguageProtocolAutocomplete {
         @inject(ISyncExpression) syncExpression: ISyncExpression,
         @inject(IAutocompleteService) autocompleteService: IAutocompleteService
     ) {
+        super();
         this._client = client;
         this._autocompleteService = autocompleteService;
         this._syncExpression = syncExpression;
@@ -34,7 +35,9 @@ export class LanguageProtocolAutocomplete {
         }
 
         // TODO: Handle trigger characters
-        this._autocompleteService.registerProvider(new AutocompleteService(client, this._syncExpression, client.capabilities.completionProvider));
+        const service = new AutocompleteService(client, this._syncExpression, client.capabilities.completionProvider);
+        this._disposable.add(service);
+        this._autocompleteService.registerProvider(service);
     }
 }
 

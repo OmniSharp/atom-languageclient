@@ -15,11 +15,11 @@ import { FinderView } from './views/FinderView';
 
 @injectable
 export class FinderService extends DisposableBase implements IFinderService {
-    private _providers = new Set<IFinderProvider>();
-    private _results: Observable<{ filter: string; results: Finder.Symbol[] }>;
-    private _resultsObserver: Observer<Set<IFinderProvider>>;
-    private _filter: Observable<string>;
-    private _filterObserver: NextObserver<string>;
+    private _finders = new Map<string, {
+        filter$: Subject<string>;
+        providers$: Observer<IFinderProvider>;
+        results$: Observable<{ filter: string; results: Finder.Symbol[] }>;
+    }>();
     private _navigation: AtomNavigation;
     private _commands: AtomCommands;
 
@@ -27,15 +27,25 @@ export class FinderService extends DisposableBase implements IFinderService {
         super();
         this._navigation = navigation;
         this._commands = commands;
+    }
 
-        const results$ = this._resultsObserver = new Subject<Set<IFinderProvider>>();
-        const filter$ = this._filterObserver = new Subject<string>();
-        this._filter = filter$.asObservable();
+    public static get() {
+        const providers$ = new Subject<IFinderProvider>();
+        const filter$ = new Subject<string>();
 
-        const providers = results$
-            .startWith(this._providers)
+        const providers = providers$
+            .scan<IFinderProvider[]>(
+            (acc, value) => {
+                if (_.indexOf(acc, value) > -1) {
+                    _.pull(acc, value);
+                } else {
+                    acc.push(value);
+                }
+                return acc;
+            },
+            [])
             .switchMap(selectedProviders => {
-                return Observable.from<IFinderProvider>(<any>selectedProviders)
+                return Observable.from<IFinderProvider>(selectedProviders)
                     .mergeMap(x => x.results, (provider, results) => ({ provider, results }))
                     .scan<Map<IFinderProvider, Finder.Symbol[]>>(
                     (acc, { provider, results }) => {
@@ -45,7 +55,7 @@ export class FinderService extends DisposableBase implements IFinderService {
                     new Map<IFinderProvider, Finder.Symbol[]>())
             });
 
-        this._results = Observable.combineLatest(providers, filter$)
+        const results$ = Observable.combineLatest(providers, filter$)
             .map(([map, filter]) => {
                 // atom.project.relativizePath(item.filePath)
                 const iterator = map.values();
@@ -60,18 +70,23 @@ export class FinderService extends DisposableBase implements IFinderService {
                 }
                 return { filter, results };
             });
-
-        this._commands.add(CommandType.Workspace, 'finder', () => this.open());
+        return { filter$: filter$, providers$, results$ };
     }
 
     public registerProvider(provider: IFinderProvider) {
-        this._providers.add(provider);
+        if (!this._finders.has(provider.name)) {
+            this._finders.set(provider.name, FinderService.get());
+            this._commands.add(CommandType.Workspace, `finder-${provider.name}`, () => this.open(provider.name));
+        }
+
+        const context = this._finders.get(provider.name) !;
+        context.filter$.subscribe(provider.filter);
+        context.providers$.next(provider);
         this._disposable.add(provider);
-        this._resultsObserver.next(this._providers);
-        this._filter.subscribe(provider.filter);
     }
 
-    public open() {
-        const view = new FinderView(this._navigation, this._results, this._filterObserver);
+    public open(name: string) {
+        const context = this._finders.get(name) !;
+        const view = new FinderView(this._navigation, context.results$, context.filter$);
     }
 }

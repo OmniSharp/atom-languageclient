@@ -10,5 +10,5 @@
  */
 export const ISyncExpression = Symbol.for('ISyncExpression');
 export interface ISyncExpression {
-    evaluate(editor: Atom.TextEditor): boolean;
+    evaluate(editor: Atom.TextEditor | null | undefined): boolean;
 }

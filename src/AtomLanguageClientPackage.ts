@@ -11,7 +11,7 @@ import { CompositeDisposable, isDisposable } from 'ts-disposables';
 import { AutocompleteService, FinderService, LinterService } from './atom/index';
 import { LanguageProvider, LanguageService } from './language/index';
 import { ILanguageProvider, ILanguageService } from './services/_internal';
-import { IAutocompleteService, IFinderService, ILinterService,  } from './services/_public';
+import { IAutocompleteService, IFinderService, ILinterService } from './services/_public';
 import { AtomLanguageClientSettings, IAtomLanguageClientSettings } from './AtomLanguageClientSettings';
 import { Container } from './di/Container';
 
@@ -47,8 +47,8 @@ export class AtomLanguageClientPackage implements IAtomPackage<AtomLanguageClien
         this._container.registerAlias(AutocompleteService, IAutocompleteService);
         this._container.registerInstance(LinterService, this._atomLinterProvider);
         this._container.registerAlias(LinterService, ILinterService);
-        this._container.autoRegister(FinderService);
-        this._container.registerAlias(FinderService, IFinderService);
+        // this._container.autoRegister(FinderService);
+        // this._container.registerAlias(FinderService, IFinderService);
 
         this._disposable.add(
             this._container,

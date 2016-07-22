@@ -73,11 +73,11 @@ export abstract class SyncExpression implements ISyncExpression {
 
         return new CompositeSyncExpression(syncExpressions);
     }
-    public abstract evaluate(editor: Atom.TextEditor): boolean;
+    public abstract evaluate(editor: Atom.TextEditor | null | undefined): boolean;
 }
 
 class FalseSyncExpression extends SyncExpression {
-    public evaluate(editor: Atom.TextEditor): boolean {
+    public evaluate(editor: Atom.TextEditor | null | undefined): boolean {
         return false;
     }
 }
@@ -89,7 +89,10 @@ class GrammarNameExpression extends SyncExpression {
         this._id = new RegExp(`^${id}$`, 'i');
     }
 
-    public evaluate(editor: Atom.TextEditor): boolean {
+    public evaluate(editor: Atom.TextEditor | null | undefined): boolean {
+        if (!editor) {
+            return false;
+        }
         const grammar = editor.getGrammar();
         return !!grammar.name.match(this._id);
     }
@@ -104,7 +107,10 @@ class GrammarFileTypeExpression extends SyncExpression {
         this._id = new RegExp(`^${_.trimStart(id, '.')}$`, 'i');
     }
 
-    public evaluate(editor: Atom.TextEditor): boolean {
+    public evaluate(editor: Atom.TextEditor | null | undefined): boolean {
+        if (!editor) {
+            return false;
+        }
         const grammar = editor.getGrammar();
         return _.some(grammar.fileTypes, ft => ft.match(this._id));
     }
@@ -119,7 +125,10 @@ class GrammarScopeNameExpression extends SyncExpression {
         this._id = id;
     }
 
-    public evaluate(editor: Atom.TextEditor): boolean {
+    public evaluate(editor: Atom.TextEditor | null | undefined): boolean {
+        if (!editor) {
+            return false;
+        }
         const grammar = editor.getGrammar();
         let regexps = GrammarScopeNameExpression._regexpCache.get(grammar.name);
         if (!regexps) {
@@ -137,7 +146,10 @@ class TextEditorSyncExpression extends SyncExpression {
         super();
         this._func = func;
     }
-    public evaluate(editor: Atom.TextEditor): boolean {
+    public evaluate(editor: Atom.TextEditor | null | undefined): boolean {
+        if (!editor) {
+            return false;
+        }
         return this._func(editor);
     }
 }
@@ -148,7 +160,7 @@ class CompositeSyncExpression extends SyncExpression {
         super();
         this._expression = values;
     }
-    public evaluate(editor: Atom.TextEditor): boolean {
+    public evaluate(editor: Atom.TextEditor | null | undefined): boolean {
         return this._expression.some(exp => exp.evaluate(editor));
     }
 }
