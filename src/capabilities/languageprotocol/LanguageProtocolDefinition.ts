@@ -15,6 +15,7 @@ import { fromRange } from './utils/convert';
 import { Position, TextDocumentIdentifier, TextDocumentPositionParams } from '../../vscode-languageserver-types';
 import { DefinitionRequest } from '../../vscode-protocol';
 import { AtomTextEditorSource } from '../../atom/AtomTextEditorSource';
+import { uriToFilePath } from './utils/uriToFilePath';
 
 @capability
 export class LanguageProtocolDefinition extends DisposableBase {
@@ -67,7 +68,7 @@ export class LanguageProtocolDefinitionProvider extends DisposableBase implement
                             throw new Error('goto definition needs to support multiple arrays');
                         } else {
                             return {
-                                filePath: editor!.getURI(),
+                                filePath: uriToFilePath(response.uri),
                                 range: fromRange(response.range)
                             };
                         }

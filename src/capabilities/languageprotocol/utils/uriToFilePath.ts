@@ -5,10 +5,10 @@
  */
 import { normalize } from 'path';
 import { parse } from 'url';
-export function uriToFilePath(uri: string) {
+export function uriToFilePath(uri: string): string {
     const parsed = parse(uri);
     if (parsed.protocol !== 'file:' || !parsed.path) {
-        return null;
+        return '';
     }
     const segments = parsed.path.split('/');
     for (let i = 0; i < segments.length; i++) {

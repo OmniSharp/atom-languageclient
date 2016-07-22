@@ -9,7 +9,7 @@ var net = require('net'),
     stream = require('stream'),
     util = require('util');
 
-var ENABLE_LOGGING = true;
+var ENABLE_LOGGING = false;
 
 var log = (function() {
     if (!ENABLE_LOGGING) {
