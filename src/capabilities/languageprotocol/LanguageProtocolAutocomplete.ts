@@ -43,7 +43,7 @@ export class LanguageProtocolAutocomplete extends DisposableBase {
     }
 }
 
-export class AutocompleteService extends DisposableBase implements IAutocompleteProvider {
+class AutocompleteService extends DisposableBase implements IAutocompleteProvider {
     private _client: ILanguageProtocolClient;
     private _options: CompletionOptions;
     private _syncExpression: ISyncExpression;
@@ -117,10 +117,10 @@ export class AutocompleteService extends DisposableBase implements IAutocomplete
                 if (value) {
                     return `\${1:${value}}`;
                 } else {
-                    return `\${1: }`;
+                    return `\$1`;
                 }
             });
-            snippet += '${2: }';
+            snippet += '$2';
             return _.assign(base, {
                 completionItem,
                 replacementPrefix,

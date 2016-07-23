@@ -41,7 +41,7 @@ export class LanguageProtocolDefinition extends DisposableBase {
     }
 }
 
-export class LanguageProtocolDefinitionProvider extends DisposableBase implements IDefinitionProvider {
+class LanguageProtocolDefinitionProvider extends DisposableBase implements IDefinitionProvider {
     private _client: ILanguageProtocolClient;
     private _syncExpression: ISyncExpression;
     constructor(

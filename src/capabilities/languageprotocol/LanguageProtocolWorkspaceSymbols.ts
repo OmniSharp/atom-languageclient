@@ -9,7 +9,7 @@ import * as toUri from 'file-url';
 import { DisposableBase } from 'ts-disposables';
 import { packageName } from '../../constants';
 import { capability, inject } from '../../services/_decorators';
-import { AutocompleteKind, IFinderProvider, IFinderService, ILanguageProtocolClient } from '../../services/_public';
+import { AutocompleteKind, ILanguageProtocolClient, IWorkspaceFinderProvider, IWorkspaceFinderService } from '../../services/_public';
 import { fromPosition } from './utils/convert';
 import { SymbolInformation, SymbolKind } from '../../vscode-languageserver-types';
 import { WorkspaceSymbolRequest } from '../../vscode-protocol';
@@ -18,10 +18,10 @@ import { uriToFilePath } from './utils/uriToFilePath';
 @capability
 export class LanguageProtocolWorkspaceSymbols extends DisposableBase {
     private _client: ILanguageProtocolClient;
-    private _finderService: IFinderService;
+    private _finderService: IWorkspaceFinderService;
     constructor(
         @inject(ILanguageProtocolClient) client: ILanguageProtocolClient,
-        @inject(IFinderService) finderService: IFinderService
+        @inject(IWorkspaceFinderService) finderService: IWorkspaceFinderService
     ) {
         super();
         this._client = client;
@@ -37,7 +37,7 @@ export class LanguageProtocolWorkspaceSymbols extends DisposableBase {
     }
 }
 
-export class WorkspaceFinderService extends DisposableBase implements IFinderProvider {
+class WorkspaceFinderService extends DisposableBase implements IWorkspaceFinderProvider {
     private _client: ILanguageProtocolClient;
     public constructor(client: ILanguageProtocolClient) {
         super();
@@ -55,9 +55,9 @@ export class WorkspaceFinderService extends DisposableBase implements IFinderPro
             });
     }
 
-    public name: 'workspace' = 'workspace';
     public results: Observable<Finder.Symbol[]>;
     public filter: Observer<string>;
+
 
     private _makeSymbol(symbol: SymbolInformation): Finder.Symbol {
         // TODO: Icon html

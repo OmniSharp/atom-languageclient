@@ -8,10 +8,10 @@ import { Observable } from 'rxjs';
 import { exists, readdir } from 'fs';
 import { join, resolve } from 'path';
 import { CompositeDisposable, isDisposable } from 'ts-disposables';
-import { AutocompleteService, FinderService, LinterService } from './atom/index';
+import { AutocompleteService, LinterService } from './atom/index';
 import { LanguageProvider, LanguageService } from './language/index';
 import { ILanguageProvider, ILanguageService } from './services/_internal';
-import { IAutocompleteService, IFinderService, ILinterService } from './services/_public';
+import { IAutocompleteService, ILinterService } from './services/_public';
 import { AtomLanguageClientSettings, IAtomLanguageClientSettings } from './AtomLanguageClientSettings';
 import { Container } from './di/Container';
 

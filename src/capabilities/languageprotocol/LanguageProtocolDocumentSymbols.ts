@@ -9,24 +9,23 @@ import * as toUri from 'file-url';
 import { DisposableBase } from 'ts-disposables';
 import { packageName } from '../../constants';
 import { capability, inject } from '../../services/_decorators';
-import { AutocompleteKind, IFinderProvider, IFinderService, ILanguageProtocolClient, ISyncExpression } from '../../services/_public';
+import { AutocompleteKind, IAtomTextEditorSource, IDocumentFinderProvider, IDocumentFinderService, ILanguageProtocolClient, ISyncExpression } from '../../services/_public';
 import { fromPosition } from './utils/convert';
 import { SymbolInformation, SymbolKind, TextDocumentIdentifier } from '../../vscode-languageserver-types';
 import { DocumentSymbolRequest } from '../../vscode-protocol';
-import { AtomTextEditorSource } from '../../atom/AtomTextEditorSource';
 import { uriToFilePath } from './utils/uriToFilePath';
 
 @capability
 export class LanguageProtocolDocumentSymbols extends DisposableBase {
     private _client: ILanguageProtocolClient;
-    private _atomTextEditorSource: AtomTextEditorSource;
+    private _atomTextEditorSource: IAtomTextEditorSource;
     private _syncExpression: ISyncExpression;
-    private _finderService: IFinderService;
+    private _finderService: IDocumentFinderService;
     constructor(
         @inject(ILanguageProtocolClient) client: ILanguageProtocolClient,
-        @inject(IFinderService) finderService: IFinderService,
+        @inject(IDocumentFinderService) finderService: IDocumentFinderService,
         @inject(ISyncExpression) syncExpression: ISyncExpression,
-        atomTextEditorSource: AtomTextEditorSource
+        @inject(IAtomTextEditorSource) atomTextEditorSource: IAtomTextEditorSource
     ) {
         super();
         this._client = client;
@@ -44,40 +43,34 @@ export class LanguageProtocolDocumentSymbols extends DisposableBase {
     }
 }
 
-export class DocumentFinderService extends DisposableBase implements IFinderProvider {
+class DocumentFinderService extends DisposableBase implements IDocumentFinderProvider {
     private _client: ILanguageProtocolClient;
-    private _atomTextEditorSource: AtomTextEditorSource;
+    private _atomTextEditorSource: IAtomTextEditorSource;
     private _syncExpression: ISyncExpression;
     public constructor(
         client: ILanguageProtocolClient,
         syncExpression: ISyncExpression,
-        atomTextEditorSource: AtomTextEditorSource) {
+        atomTextEditorSource: IAtomTextEditorSource) {
         super();
         this._client = client;
         this._syncExpression = syncExpression;
         this._atomTextEditorSource = atomTextEditorSource;
 
-        const filter = this.filter = new Subject<string>();
-
         this.results = atomTextEditorSource.observeActiveTextEditor
-            .filter(editor => this._syncExpression.evaluate(editor))
+            .filter(editor => {
+                return this._syncExpression.evaluate(editor);
+            })
             .switchMap(editor => {
-                return filter
-                    .asObservable()
-                    .switchMap(query => {
-                        return this._client.sendRequest(DocumentSymbolRequest.type, {
-                            textDocument: TextDocumentIdentifier.create(toUri(editor!.getURI()))
-                        });
-                    })
-                    .map(results => {
-                        return _.map(results, symbol => this._makeSymbol(symbol));
-                    });
+                return this._client.sendRequest(DocumentSymbolRequest.type, {
+                    textDocument: TextDocumentIdentifier.create(toUri(editor!.getURI()))
+                });
+            })
+            .map(results => {
+                return _.map(results, symbol => this._makeSymbol(symbol));
             });
     }
 
-    public name: 'document' = 'document';
     public results: Observable<Finder.Symbol[]>;
-    public filter: Observer<string>;
 
     private _makeSymbol(symbol: SymbolInformation): Finder.Symbol {
         // TODO: Icon html

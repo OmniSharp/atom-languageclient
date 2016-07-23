@@ -7,13 +7,12 @@ import { Observable } from 'rxjs';
 import { NextObserver } from 'rxjs/Observer';
 import { IDisposable } from 'ts-disposables';
 /* tslint:disable:variable-name */
-export const IFinderService = Symbol.for('IFinderService');
-export interface IFinderService {
-    registerProvider(provider: IFinderProvider): void;
+export const IWorkspaceFinderService = Symbol.for('IWorkspaceFinderService');
+export interface IWorkspaceFinderService {
+    registerProvider(provider: IWorkspaceFinderProvider): void;
 }
 
-export interface IFinderProvider extends IDisposable {
-    name: 'workspace' | 'document';
+export interface IWorkspaceFinderProvider extends IDisposable {
     results: Observable<Finder.Symbol[]>;
     filter: NextObserver<string>;
 }

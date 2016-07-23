@@ -41,7 +41,7 @@ export class LanguageProtocolReferences extends DisposableBase {
     }
 }
 
-export class LanguageProtocolReferencesProvider extends DisposableBase implements IReferencesProvider {
+class LanguageProtocolReferencesProvider extends DisposableBase implements IReferencesProvider {
     private _client: ILanguageProtocolClient;
     private _syncExpression: ISyncExpression;
     constructor(

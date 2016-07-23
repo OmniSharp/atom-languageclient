@@ -9,18 +9,18 @@ import { AutocompleteKind } from '../../services/_public';
 import { AtomNavigation } from '../AtomNavigation';
 import { FilterSelectListView } from './FilterSelectListView';
 
-export class FinderView extends FilterSelectListView<Finder.Symbol> {
+export class DocumentFinderView extends FilterSelectListView<Finder.Symbol> {
     private _navigation: AtomNavigation;
     private _subscription: Subscription;
     private _panel: Atom.Panel;
-    constructor(navigation: AtomNavigation, results: Observable<{ filter: string; results: Finder.Symbol[] }>, filter$: NextObserver<string>) {
+    constructor(navigation: AtomNavigation, results: Observable<Finder.Symbol[]>) {
         super();
         this._navigation = navigation;
         this._subscription = results.subscribe(items => {
-            this.setFilterItems(items.results, items.filter);
+            this.setFilterItems(items);
         });
         this._filterEditorView.getModel().buffer.onDidChange(() => {
-            filter$.next(this._filterEditorView.getModel().getText());
+            this.populateList(this._filterEditorView.getModel().getText());
         });
 
         this.storeFocusedElement();

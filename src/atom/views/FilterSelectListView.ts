@@ -25,7 +25,7 @@ export abstract class FilterSelectListView<T> extends SelectListView<T> {
 
     public abstract filterKeys: fuse.WeightedKey[];
 
-    public setFilterItems(items: T[], filter: string | undefined) {
+    public setFilterItems(items: T[], filter?: string | undefined) {
         this._items = items != null ? items : [];
         this.populateList(filter);
         return this.setLoading();
