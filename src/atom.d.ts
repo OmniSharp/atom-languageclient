@@ -43,7 +43,7 @@ declare namespace Autocomplete {
         description?: string;
         descriptionMoreURL?: string;
         className?: string;
-        onDidInsertSuggestion: (context: { editor: Atom.TextEditor, suggestion: Suggestion, triggerPosition: TextBuffer.Point; }) => void;
+        onDidInsertSuggestion?: (context: { editor: Atom.TextEditor, suggestion: Suggestion, triggerPosition: TextBuffer.Point; }) => void;
     }
     export interface TextSuggestion extends SuggestionBase { text: string; }
     export interface SnippetSuggestion extends SuggestionBase { snippet: string; }

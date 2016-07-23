@@ -117,10 +117,10 @@ export class AutocompleteService extends DisposableBase implements IAutocomplete
                 if (value) {
                     return `\${1:${value}}`;
                 } else {
-                    return `\${1:}`;
+                    return `\${1: }`;
                 }
             });
-            snippet += '$2';
+            snippet += '${2: }';
             return _.assign(base, {
                 completionItem,
                 replacementPrefix,
