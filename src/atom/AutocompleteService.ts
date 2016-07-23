@@ -49,10 +49,15 @@ export class AutocompleteService extends DisposableBase implements IAutocomplete
     public excludeLowerPriority = false;
     private _fuse = new Fuse<Autocomplete.Suggestion>([], {
         caseSensitive: false,
-        distance: 200,
         threshold: 0.7,
         tokenize: true,
-        shouldSort: true
+        tokenSeparator: /(?:(?=[A-Z])|\s+)/,
+        shouldSort: true,
+        keys: [
+            { name: 'displayText', weight: 0.8 },
+            { name: 'description', weight: 0.15 },
+            { name: 'descriptionMoreURL', weight: 0.05 }
+        ]
     });
 
     public getSuggestions(options: Autocomplete.RequestOptions): Promise<Autocomplete.Suggestion[]> | null {
@@ -60,15 +65,6 @@ export class AutocompleteService extends DisposableBase implements IAutocomplete
             return null;
         }
         if (!atom.views.getView(options.editor).classList.contains(className)) {
-            return null;
-        }
-
-        const buffer = options.editor.getBuffer();
-        const end = options.bufferPosition.column;
-        const data = buffer.getLines()[options.bufferPosition.row].substring(0, end + 1);
-        const lastCharacterTyped = data[end - 1];
-
-        if (!/[A-Z_0-9.]+/i.test(lastCharacterTyped)) {
             return null;
         }
 

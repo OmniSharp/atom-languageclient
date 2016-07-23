@@ -7,6 +7,7 @@ import { SelectListView } from './SelectListView';
 
 export abstract class FilterSelectListView<T> extends SelectListView<T> {
     private _fuse: Fuse<T>;
+    private _filter: string;
     public constructor() {
         super();
         // this._filterEditor.buffer.onDidChange(() => {
@@ -14,18 +15,17 @@ export abstract class FilterSelectListView<T> extends SelectListView<T> {
         // });
         this._fuse = new Fuse<T>([], {
             caseSensitive: false,
-            // distance: 200,
-            // threshold: 0.6,
-            // tokenize: true,
+            tokenize: true,
+            tokenSeparator: /(?:(?=[A-Z])|\s+)/,
             shouldSort: true,
             keys: this.filterKeys,
             include: ['matches', 'score']
         });
     }
 
-    public abstract filterKeys: string[];
+    public abstract filterKeys: fuse.WeightedKey[];
 
-    public setFilterItems(items: T[], filter: string) {
+    public setFilterItems(items: T[], filter: string | undefined) {
         this._items = items != null ? items : [];
         this.populateList(filter);
         return this.setLoading();
@@ -35,6 +35,11 @@ export abstract class FilterSelectListView<T> extends SelectListView<T> {
         if (this._items == null) {
             return;
         }
+        if (filter) {
+            this._filter = filter;
+        }
+        filter = filter || this._filter;
+
         const filterQuery = filter || this.getFilterQuery();
         let filteredItems: fuse.Result<T>[];
         if (filterQuery.length) {

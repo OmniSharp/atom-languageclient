@@ -8,27 +8,28 @@ import { Observable, Subscription } from 'rxjs';
 import { readFile } from 'fs';
 import { DisposableBase } from 'ts-disposables';
 import { injectable } from '../di/decorators';
-import { IDefinitionProvider, IDefinitionService, navigationHasRange } from '../services/_public';
+import { IReferencesProvider, IReferencesService, navigationHasLocation, navigationHasRange } from '../services/_public';
 import { AtomCommands, CommandType } from './AtomCommands';
 import { AtomNavigation } from './AtomNavigation';
 import { ReferenceView } from './views/ReferenceView';
 
 const readFile$ = Observable.bindNodeCallback(readFile);
+
 @injectable
-export class DefinitionService extends DisposableBase implements IDefinitionService {
+export class ReferencesService extends DisposableBase implements IReferencesService {
     private _navigation: AtomNavigation;
     private _commands: AtomCommands;
-    private _providers = new Set<IDefinitionProvider>();
+    private _providers = new Set<IReferencesProvider>();
 
     constructor(navigation: AtomNavigation, commands: AtomCommands) {
         super();
         this._navigation = navigation;
         this._commands = commands;
 
-        this._commands.add(CommandType.TextEditor, 'definition', () => this.open());
+        this._commands.add(CommandType.TextEditor, 'references', () => this.open());
     }
 
-    public registerProvider(provider: IDefinitionProvider) {
+    public registerProvider(provider: IReferencesProvider) {
         this._providers.add(provider);
         this._disposable.add(provider);
     }

@@ -9594,7 +9594,7 @@ declare module Atom {
          * Get the text in the given {Range}.
          * This field or method was marked private by atomdoc. Use with caution.
          */
-        getTextInRange(range?: Range): Range;
+        getTextInRange(range?: Range | [[number, number], [number, number]]): string;
 
         /**
          * {Delegates to: TextBuffer.isRowBlank}

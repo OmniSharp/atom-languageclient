@@ -47,8 +47,6 @@ export class AtomLanguageClientPackage implements IAtomPackage<AtomLanguageClien
         this._container.registerAlias(AutocompleteService, IAutocompleteService);
         this._container.registerInstance(LinterService, this._atomLinterProvider);
         this._container.registerAlias(LinterService, ILinterService);
-        // this._container.autoRegister(FinderService);
-        // this._container.registerAlias(FinderService, IFinderService);
 
         this._disposable.add(
             this._container,
@@ -65,7 +63,7 @@ export class AtomLanguageClientPackage implements IAtomPackage<AtomLanguageClien
             )
                 .toPromise()
                 .then(() => {
-                    this._container.registerInterfaces();
+                    this._container.registerInterfaceSymbols();
                 });
 
         this.activated = activateServices;

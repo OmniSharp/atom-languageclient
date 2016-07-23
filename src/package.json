@@ -50,7 +50,7 @@
       }
     },
     "autocomplete.provider": {
-      "description": "A C# Roslyn powered autocomplete-plus provider.",
+      "description": "Language Protocol powered autocomplete.",
       "versions": {
         "2.0.0": "provide-autocomplete"
       }

@@ -43,6 +43,7 @@ declare namespace Autocomplete {
         description?: string;
         descriptionMoreURL?: string;
         className?: string;
+        onDidInsertSuggestion: (context: { editor: Atom.TextEditor, suggestion: Suggestion, triggerPosition: TextBuffer.Point; }) => void;
     }
     export interface TextSuggestion extends SuggestionBase { text: string; }
     export interface SnippetSuggestion extends SuggestionBase { snippet: string; }
@@ -56,6 +57,10 @@ declare namespace Autocomplete {
         activatedManually: boolean;
     }
 }
+
+/* tslint:disable:variable-name */
+declare type AtomNavigationLocation = ({ filePath: string; } | { filePath: string; range: TextBuffer.Range; } | { filePath: string; location: TextBuffer.Point; });
+
 declare namespace Finder {
     export interface Symbol {
         name: string;
@@ -66,6 +71,13 @@ declare namespace Finder {
         location?: TextBuffer.Point;
         filterText: string;
         className?: string;
+    }
+}
+declare namespace Reference {
+    export interface Symbol {
+        lines: string[];
+        filePath: string;
+        range: TextBuffer.Range;
     }
 }
 declare type Thenable<T> = Promise<T>;

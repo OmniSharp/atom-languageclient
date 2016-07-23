@@ -8,6 +8,11 @@ declare module fuse {
         score?: number;
         matches?: Match[];
     }
+
+    export interface WeightedKey {
+        name: string;
+        weight: number;
+    }
 }
 
 declare module 'fuse.js' {
@@ -26,12 +31,13 @@ declare module 'fuse.js' {
         include?: ('score' | 'matches')[];
         sortFn?: (a: { score: number }, b: { score: number }) => number;
         getFn?: (obj: any, path: string) => any;
-        keys?: string[] | { name: string; weight: number }[];
+        keys?: string[] | fuse.WeightedKey[];
         verbose?: boolean;
     }
 
     interface ISearchOptions {
         tokenize?: boolean;
+        tokenSeparator?: RegExp;
         location?: number;
         distance?: number;
         threshold?: number;

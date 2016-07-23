@@ -16,4 +16,5 @@ export * from './ILanguageProtocolServerOptions';
 export * from './ILinterService';
 export * from './IOmniClient';
 export * from './IProjectProvider';
+export * from './IReferencesService';
 export * from './ISyncExpression';

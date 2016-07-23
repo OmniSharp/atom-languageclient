@@ -67,7 +67,16 @@ export class LanguageProvider extends DisposableBase {
                     return client.start().then(() => client);
                 }).then(client => {
                     const disposables = container.resolveEach(capabilities);
-                    cd.add(...disposables);
+                    for (const item of disposables) {
+                        if (item instanceof Error) {
+                            console.error(item, item.innerError);
+                        } else if (item.dipose) {
+                            cd.add(item);
+                        }
+                    }
+                    if (provider.onConnected) {
+                        provider.onConnected(client);
+                    }
                 });
             });
     }

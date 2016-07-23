@@ -7,8 +7,9 @@ import * as _ from 'lodash';
 import { ReplaySubject } from 'rxjs';
 import { join } from 'path';
 import { CompositeDisposable } from 'ts-disposables';
+import { Message } from 'vscode-jsonrpc';
 import { ILanguageProvider, ILanguageService } from '../../src/services/_internal';
-import { ILanguageProtocolServerOptions, TransportKind } from '../../src/services/_public';
+import { CloseAction, ErrorAction, ILanguageProtocolClient, ILanguageProtocolServerOptions, TransportKind } from '../../src/services/_public';
 import { AtomLanguageJsonSettings, IAtomLanguageJsonSettings } from './atom/AtomLanguageJsonSettings';
 
 export class AtomLanguageJsonPackage implements IAtomPackage<IAtomLanguageJsonSettings> {
@@ -16,6 +17,8 @@ export class AtomLanguageJsonPackage implements IAtomPackage<IAtomLanguageJsonSe
     private _settings: AtomLanguageJsonSettings;
     private _stateChange: ReplaySubject<boolean>;
     private _languageService: ILanguageService;
+    private _client: ILanguageProtocolClient;
+    private _associations: Json.SchemaAssociations = {};
 
     /* tslint:disable:no-any */
     public activate(settings: IAtomLanguageJsonSettings) {
@@ -30,8 +33,34 @@ export class AtomLanguageJsonPackage implements IAtomPackage<IAtomLanguageJsonSe
     }
 
     /* tslint:disable-next-line:function-name */
+    public ['consume-json-validation'](validations: Json.Validation | Json.Validation[]) {
+        if (!_.isArray(validations)) {
+            validations = [validations];
+        }
+        _.each(validations, validation => {
+            let {fileMatch, url} = validation;
+            if (fileMatch && url) {
+                if (fileMatch.charAt(0) !== '/' && !fileMatch.match(/\w+:\/\//)) {
+                    fileMatch = '/' + fileMatch;
+                }
+                let association = this._associations[fileMatch];
+                if (!association) {
+                    association = [];
+                    this._associations[fileMatch] = association;
+                }
+                association.push(url);
+            }
+        });
+
+        if (this._client) {
+            this._client.sendNotification({ method: 'json/schemaAssociations' }, this._associations);
+        }
+    }
+
+    /* tslint:disable-next-line:function-name */
     public ['provide-atom-language'](): ILanguageProvider {
-        const serverModule = join(__dirname, 'server.js');
+        // The server is implemented in node
+        const serverModule = join(__dirname, 'server/server.js');
         const serverOptions: ILanguageProtocolServerOptions = {
             run: { module: serverModule, transport: TransportKind.ipc },
             debug: { module: serverModule, transport: TransportKind.ipc }
@@ -41,11 +70,35 @@ export class AtomLanguageJsonPackage implements IAtomPackage<IAtomLanguageJsonSe
             clientOptions: {
                 diagnosticCollectionName: 'json',
                 documentSelector: 'json',
-                errorHandler: undefined,
-                outputChannelName: '',
-                initializationOptions: undefined
+                errorHandler: {
+                    error: (error: Error, message: Message, count: number) => {
+                        console.error(error, message, count);
+                        return ErrorAction.Continue;
+                    },
+                    closed() {
+                        console.error('closed');
+                        return CloseAction.Restart;
+                    }
+                },
+                outputChannelName: 'json',
+                initializationOptions: {},
+                synchronize: {
+                    extensionSelector: [
+                        '.json',
+                        '.bowerrc',
+                        '.jshintrc',
+                        '.jscsrc',
+                        '.eslintrc',
+                        '.babelrc',
+                        '.webmanifest'
+                    ]
+                }
             },
             serverOptions,
+            onConnected: (client) => {
+                this._client = client;
+                this._client.sendNotification({ method: 'json/schemaAssociations' }, this._associations);
+            },
             dispose() { /* */ }
         };
     }

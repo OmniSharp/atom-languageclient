@@ -10,38 +10,38 @@ import * as toUri from 'file-url';
 import { DisposableBase } from 'ts-disposables';
 import { packageName } from '../../constants';
 import { capability, inject } from '../../services/_decorators';
-import { IDefinitionProvider, IDefinitionService, ILanguageProtocolClient, ISyncExpression } from '../../services/_public';
+import { ILanguageProtocolClient, IReferencesProvider, IReferencesService, ISyncExpression } from '../../services/_public';
 import { fromRange } from './utils/convert';
-import { Position, TextDocumentIdentifier, TextDocumentPositionParams } from '../../vscode-languageserver-types';
-import { DefinitionRequest } from '../../vscode-protocol';
+import { Position, TextDocumentIdentifier, ReferenceParams } from '../../vscode-languageserver-types';
+import { ReferencesRequest } from '../../vscode-protocol';
 import { AtomTextEditorSource } from '../../atom/AtomTextEditorSource';
 import { uriToFilePath } from './utils/uriToFilePath';
 
 @capability
-export class LanguageProtocolDefinition extends DisposableBase {
+export class LanguageProtocolReferences extends DisposableBase {
     private _client: ILanguageProtocolClient;
     private _syncExpression: ISyncExpression;
-    private _definitionService: IDefinitionService;
+    private _referencesService: IReferencesService;
     constructor(
         @inject(ILanguageProtocolClient) client: ILanguageProtocolClient,
-        @inject(IDefinitionService) definitionService: IDefinitionService,
+        @inject(IReferencesService) referencesService: IReferencesService,
         @inject(ISyncExpression) syncExpression: ISyncExpression
     ) {
         super();
         this._client = client;
         this._syncExpression = syncExpression;
-        this._definitionService = definitionService;
-        if (!client.capabilities.definitionProvider) {
+        this._referencesService = referencesService;
+        if (!client.capabilities.referencesProvider) {
             return;
         }
 
-        const service = new LanguageProtocolDefinitionProvider(this._client, this._syncExpression);
+        const service = new LanguageProtocolReferencesProvider(this._client, this._syncExpression);
         this._disposable.add(service);
-        this._definitionService.registerProvider(service);
+        this._referencesService.registerProvider(service);
     }
 }
 
-export class LanguageProtocolDefinitionProvider extends DisposableBase implements IDefinitionProvider {
+export class LanguageProtocolReferencesProvider extends DisposableBase implements IReferencesProvider {
     private _client: ILanguageProtocolClient;
     private _syncExpression: ISyncExpression;
     constructor(
@@ -57,25 +57,21 @@ export class LanguageProtocolDefinitionProvider extends DisposableBase implement
             .switchMap(editor => {
                 const marker = editor!.getCursorBufferPosition();
 
-                const params: TextDocumentPositionParams = {
+                const params: ReferenceParams = {
+                    context: {
+                        includeDeclaration: true
+                    },
                     textDocument: TextDocumentIdentifier.create(toUri(editor!.getURI())),
                     position: Position.create(marker.row, marker.column)
                 };
-                return this._client.sendRequest(DefinitionRequest.type, params)
+                return this._client.sendRequest(ReferencesRequest.type, params)
                     .then(response => {
-                        if (_.isArray(response)) {
-                            return _.map(response, location => {
-                                return {
-                                    filePath: uriToFilePath(location.uri),
-                                    range: fromRange(location.range)
-                                };
-                            });
-                        } else {
-                            return [{
-                                filePath: uriToFilePath(response.uri),
-                                range: fromRange(response.range)
-                            }];
-                        }
+                        return _.map(response, location => {
+                            return {
+                                filePath: uriToFilePath(location.uri),
+                                range: fromRange(location.range)
+                            };
+                        });
                     });
             });
     }

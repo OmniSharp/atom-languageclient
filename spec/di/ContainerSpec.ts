@@ -50,7 +50,7 @@ describe(Container.name, () => {
         const container = new Container();
         return container.registerFolder(__dirname, 'fixtures')
             .then(() => {
-                container.registerInterfaces();
+                container.registerInterfaceSymbols();
                 const l3 = container.resolve(L.L3);
                 const il3 = container.resolve<L.L3>(I.IL3);
 

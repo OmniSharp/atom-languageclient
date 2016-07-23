@@ -8,6 +8,7 @@ import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 import { Container as AureliaContainer } from 'aurelia-dependency-injection';
 import { metadata } from 'aurelia-metadata';
+import { AggregateError } from 'aurelia-pal';
 import { exists, readdir } from 'fs';
 import { join } from 'path';
 import { CompositeDisposable, DisposableBase, IDisposable } from 'ts-disposables';
@@ -132,7 +133,11 @@ export class Container extends DisposableBase implements IResolver {
 
     public resolveEach(items: any[]): any[] {
         return _.map(items, item => {
-            return this.resolve(item);
+            try {
+                return this.resolve(item);
+            } catch (e) {
+                return AggregateError(`Could not resolve ${item.name ? item.name : item}`, e);
+            }
         });
     }
 
@@ -153,7 +158,7 @@ export class Container extends DisposableBase implements IResolver {
         return capabilities;
     }
 
-    public registerInterfaces() {
+    public registerInterfaceSymbols() {
         this._classNames.forEach((value, key) => {
             if (this._interfaceSymbols.has(key)) {
                 this.registerAlias(value, this._interfaceSymbols.get(key));

@@ -8,12 +8,12 @@ import { NextObserver } from 'rxjs/Observer';
 import { IDisposable } from 'ts-disposables';
 
 /* tslint:disable:variable-name */
-export const IDefinitionService = Symbol.for('IDefinitionService');
-export interface IDefinitionService {
-    registerProvider(provider: IDefinitionProvider): void;
+export const IReferencesService = Symbol.for('IReferencesService');
+export interface IReferencesService {
+    registerProvider(provider: IReferencesProvider): void;
 }
 
-export interface IDefinitionProvider extends IDisposable {
+export interface IReferencesProvider extends IDisposable {
     locate: NextObserver<Atom.TextEditor>;
     response: Observable<AtomNavigationLocation[]>;
 }

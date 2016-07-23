@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 import { NextObserver } from 'rxjs/Observer';
 import { IDisposable } from 'ts-disposables';
 /* tslint:disable:variable-name */
-export const IFinderService = Symbol.for('IAtomFinderService');
+export const IFinderService = Symbol.for('IFinderService');
 export interface IFinderService {
     registerProvider(provider: IFinderProvider): void;
 }

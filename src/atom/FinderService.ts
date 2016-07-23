@@ -5,7 +5,6 @@
  */
 import * as _ from 'lodash';
 import { Observable, Observer, Subject } from 'rxjs';
-import { NextObserver } from 'rxjs/Observer';
 import { DisposableBase } from 'ts-disposables';
 import { injectable } from '../di/decorators';
 import { IFinderProvider, IFinderService } from '../services/_public';

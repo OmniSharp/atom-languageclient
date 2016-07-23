@@ -4,7 +4,7 @@
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
 import { injectable } from '../di/decorators';
-import { AtomNavigationLocation, IAtomNavigation, navigationHasLocation, navigationHasRange } from '../services/_public';
+import { IAtomNavigation, navigationHasLocation, navigationHasRange } from '../services/_public';
 
 @injectable
 export class AtomNavigation implements IAtomNavigation {

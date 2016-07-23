@@ -9,18 +9,15 @@ import { AutocompleteKind } from '../../services/_public';
 import { AtomNavigation } from '../AtomNavigation';
 import { FilterSelectListView } from './FilterSelectListView';
 
-export class FinderView extends FilterSelectListView<Finder.Symbol> {
+export class ReferenceView extends FilterSelectListView<Reference.Symbol> {
     private _navigation: AtomNavigation;
-    private _subscription: Subscription;
     private _panel: Atom.Panel;
-    constructor(navigation: AtomNavigation, results: Observable<{ filter: string; results: Finder.Symbol[] }>, filter$: NextObserver<string>) {
+    constructor(navigation: AtomNavigation, results: Reference.Symbol[]) {
         super();
         this._navigation = navigation;
-        this._subscription = results.subscribe(items => {
-            this.setFilterItems(items.results, items.filter);
-        });
+        this.setFilterItems(results, this._filterEditorView.getModel().getText());
         this._filterEditorView.getModel().buffer.onDidChange(() => {
-            filter$.next(this._filterEditorView.getModel().getText());
+            this.populateList(this._filterEditorView.getModel().getText());
         });
 
         this.storeFocusedElement();
@@ -30,47 +27,64 @@ export class FinderView extends FilterSelectListView<Finder.Symbol> {
 
     public get filterKeys() {
         return [
-            { name: 'filterText', weight: 0.4 },
-            { name: 'name', weight: 0.6 }
+            { name: 'filterText', weight: 0.3 },
+            { name: 'filePath', weight: 0.2 },
+            { name: 'name', weight: 0.5 }
         ];
     }
 
     public cancelled() {
-        this._subscription.unsubscribe();
         this._panel.destroy();
     }
 
-    public confirmed(item: Finder.Symbol) {
-        this._subscription.unsubscribe();
+    public confirmed(item: Reference.Symbol) {
         this._navigation.navigateTo(item);
     }
 
-    public viewForItem(result: fuse.Result<Finder.Symbol>) {
+    public viewForItem(result: fuse.Result<Reference.Symbol>) {
         const {item, matches} = result;
+        const {lines, range} = item;
         const li = document.createElement('li');
         let filename = atom.project.relativizePath(item.filePath)[1];
-        if (item.location) {
-            filename += ': ' + item.location.row;
-        }
+        filename += `: ${item.range.start.column}@${item.range.start.row}`;
 
         let filenameContent = filename;
-        let nameContent = item.name;
 
-        // const pathMatches = _.find(matches!, { key: 'filePath' });
-        // if (pathMatches) {
-        //     filenameContent = this._getMatchString(filenameContent, pathMatches);
-        // }
-        const nameMatches = _.find(matches!, { key: 'name' });
-        if (nameMatches) {
-            nameContent = this._getMatchString(nameContent, nameMatches);
+        const pathMatches = _.find(matches!, { key: 'filePath' });
+        if (pathMatches) {
+            filenameContent = this._getMatchString(filenameContent, pathMatches);
         }
+
         /* tslint:disable-next-line:no-inner-html */
         li.innerHTML = `
-            <span>${item.iconHTML || this._renderIcon(item)}<span>${nameContent}</span></span><br/>
+            ${this._getSymbolString(lines, range)}
             <span class="filename">${filenameContent}</span>
             `;
 
         return li;
+    }
+
+    private _getSymbolString(lines: string[], range: TextBuffer.Range) {
+        const first = _.first(lines);
+        const last = _.last(lines);
+        if (first === last) {
+            const text = first;
+            const end = range.end.column;
+            const start = range.start.column;
+            const endStr = text.substr(end + 1);
+            const replace = `<span class="character-match">${text.substr(start, end - start + 1)}</span>`;
+            const startStr = text.substr(0, start);
+            return `${startStr}${replace}${endStr}<br/>`;
+        }
+
+        const middle = _.map(lines.slice(1, -1), line => `<span class="character-match">${line}</span><br/>`);
+        const start = range.start.column;
+        let startStr = first.substr(0, start);
+        startStr = `${startStr}<span class="character-match">${first.substr(start)}</span><br/>`;
+        const end = range.end.column;
+        let endStr = last.substr(end + 1);
+        endStr = `<span class="character-match">${last.substr(0, start)}</span>${endStr}<br/>`;
+        return [startStr, ...middle, endStr].join('');
     }
 
     private _getMatchString(text: string, match: fuse.Match) {

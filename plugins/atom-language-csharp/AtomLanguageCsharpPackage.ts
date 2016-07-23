@@ -40,7 +40,7 @@ export class AtomLanguageCsharpPackage implements IAtomPackage<IAtomLanguageCsha
 
         return <ILanguageProvider>{
             clientOptions: {
-                diagnosticCollectionName: 'csharp',
+                diagnosticCollectionName: 'c#',
                 documentSelector: 'c#',
                 errorHandler: {
                     error: (error: Error, message: Message, count: number) => {
@@ -52,7 +52,7 @@ export class AtomLanguageCsharpPackage implements IAtomPackage<IAtomLanguageCsha
                         return CloseAction.Restart;
                     }
                 },
-                outputChannelName: 'abcd',
+                outputChannelName: 'c#',
                 initializationOptions: {},
                 synchronize: {
                     extensionSelector: ['.cs']

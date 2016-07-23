@@ -3,6 +3,7 @@
  *  @copyright OmniSharp Team
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
+import { ILanguageProtocolClient } from './ILanguageProtocolClient';
 import { ILanguageProtocolClientOptions } from './ILanguageProtocolClientOptions';
 import { ILanguageProtocolServerOptions } from './ILanguageProtocolServerOptions';
 /* tslint:disable:variable-name no-any */
@@ -18,5 +19,6 @@ export const ILanguageProvider = Symbol.for('ILanguageProvider');
 export interface ILanguageProvider {
     clientOptions: ILanguageProtocolClientOptions;
     serverOptions: ILanguageProtocolServerOptions;
+    onConnected?: (connection: ILanguageProtocolClient) => void;
     dispose?: () => void;
 }
