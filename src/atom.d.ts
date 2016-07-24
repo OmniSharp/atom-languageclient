@@ -80,6 +80,17 @@ declare namespace Reference {
         range: TextBuffer.Range;
     }
 }
+declare namespace Hover {
+    export interface Symbol {
+        text: string;
+        description?: string;
+    }
+
+    export interface RequestOptions {
+        editor: Atom.TextEditor;
+        location: TextBuffer.Point;
+    }
+}
 declare type Thenable<T> = Promise<T>;
 declare module 'file-url' {
     var method: (str: string) => string;

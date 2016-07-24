@@ -11,7 +11,7 @@ import { metadata } from 'aurelia-metadata';
 import { AggregateError } from 'aurelia-pal';
 import { exists, readdir } from 'fs';
 import { join } from 'path';
-import { CompositeDisposable, DisposableBase, IDisposable } from 'ts-disposables';
+import { DisposableBase } from 'ts-disposables';
 import { IResolver } from '../services/_internal';
 import * as symbols from './symbols';
 
@@ -80,6 +80,11 @@ export class Container extends DisposableBase implements IResolver {
     }
 
     public registerAlias(originalKey: any, aliasKey: any) {
+        if (originalKey.name && this._interfaceSymbols.has(originalKey.name)) {
+            if (this._interfaceSymbols.get(originalKey.name) !== aliasKey) {
+                this._interfaceSymbols.delete(originalKey.name);
+            }
+        }
         this._container.registerAlias(originalKey, aliasKey);
         return this;
     }
@@ -102,13 +107,21 @@ export class Container extends DisposableBase implements IResolver {
             return this;
         }
 
+        const aliasKey = metadata.get(symbols.alias, fn!);
         const decoKey = metadata.get(symbols.key, fn!);
         if (decoKey) {
             this._container.autoRegister(decoKey, fn);
+            if (aliasKey) {
+                this.registerAlias(decoKey, aliasKey);
+            }
+
             return this;
         }
 
         this._container.autoRegister(key, fn);
+        if (aliasKey) {
+            this.registerAlias(key, aliasKey);
+        }
         return this;
     }
 

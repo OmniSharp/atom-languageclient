@@ -24,7 +24,7 @@ export type AutocompleteSuggestion = Autocomplete.Suggestion & {
 }
 
 export interface IAutocompleteProvider extends IDisposable {
-    request(params: Autocomplete.RequestOptions): Promise<AutocompleteSuggestion[]> | null;
+    request(params: Autocomplete.RequestOptions): Promise<AutocompleteSuggestion[]> | undefined;
 }
 
 export namespace AutocompleteKind {

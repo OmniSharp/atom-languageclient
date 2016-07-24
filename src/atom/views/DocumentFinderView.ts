@@ -3,9 +3,8 @@
  */
 import * as _ from 'lodash';
 import { Observable, Subscription } from 'rxjs';
-import { NextObserver } from 'rxjs/Observer';
-import { packageName } from '../../constants';
 import { AutocompleteKind } from '../../services/_public';
+import { packageName } from '../../constants';
 import { AtomNavigation } from '../AtomNavigation';
 import { FilterSelectListView } from './FilterSelectListView';
 

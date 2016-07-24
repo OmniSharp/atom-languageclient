@@ -6,16 +6,18 @@
 import * as _ from 'lodash';
 import { Observable, Subscription } from 'rxjs';
 import { readFile } from 'fs';
-import { DisposableBase } from 'ts-disposables';
-import { injectable } from '../di/decorators';
-import { IReferencesProvider, IReferencesService, navigationHasLocation, navigationHasRange } from '../services/_public';
-import { AtomCommands, CommandType } from './AtomCommands';
+import { Disposable, DisposableBase } from 'ts-disposables';
+import { alias, injectable } from '../services/_decorators';
+import { ATOM_COMMANDS, ATOM_NAVIGATION, IReferencesProvider, IReferencesService } from '../services/_public';
+import { AtomCommands } from './AtomCommands';
 import { AtomNavigation } from './AtomNavigation';
 import { ReferenceView } from './views/ReferenceView';
+const {navigationHasRange} = ATOM_NAVIGATION;
 
 const readFile$ = Observable.bindNodeCallback(readFile);
 
 @injectable
+@alias(IReferencesService)
 export class ReferencesService extends DisposableBase implements IReferencesService {
     private _navigation: AtomNavigation;
     private _commands: AtomCommands;
@@ -26,12 +28,22 @@ export class ReferencesService extends DisposableBase implements IReferencesServ
         this._navigation = navigation;
         this._commands = commands;
 
-        this._commands.add(CommandType.TextEditor, 'references', () => this.open());
+        this._commands.add(ATOM_COMMANDS.CommandType.TextEditor, 'references', () => this.open());
+
+        this._disposable.add(
+            Disposable.create(() => {
+                this._providers.forEach(x => x.dispose());
+                this._providers.clear();
+            })
+        );
     }
 
     public registerProvider(provider: IReferencesProvider) {
         this._providers.add(provider);
-        this._disposable.add(provider);
+
+        return Disposable.create(() => {
+            this._providers.delete(provider);
+        });
     }
 
     public open() {

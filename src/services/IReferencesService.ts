@@ -10,7 +10,7 @@ import { IDisposable } from 'ts-disposables';
 /* tslint:disable:variable-name */
 export const IReferencesService = Symbol.for('IReferencesService');
 export interface IReferencesService {
-    registerProvider(provider: IReferencesProvider): void;
+    registerProvider(provider: IReferencesProvider): IDisposable;
 }
 
 export interface IReferencesProvider extends IDisposable {

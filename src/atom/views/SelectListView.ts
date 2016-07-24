@@ -10,7 +10,7 @@ export abstract class SelectListView<T> extends View<HTMLDivElement> {
     protected _items: T[] = [];
     private _weakMap = new WeakMap<HTMLElement, T>();
     private _maxItems: number = Infinity;
-    protected _filterEditorView: Atom.TextEditorComponent;
+    protected _filterEditorView: Atom.TextEditorPresenter;
     protected _filterEditor: Atom.TextEditor;
     private _error: HTMLDivElement;
     private _loadingArea: HTMLDivElement;
@@ -269,7 +269,8 @@ export abstract class SelectListView<T> extends View<HTMLDivElement> {
 
     private _buildHtml() {
         this.root.classList.add('select-list');
-        const editor: Atom.TextEditorComponent = this._filterEditorView = <any>document.createElement('atom-text-editor');
+        const editor: Atom.TextEditorPresenter = this._filterEditorView = <any>document.createElement('atom-text-editor');
+        editor.setAttribute('mini', <any>true);
         const errorMessage = this._error = document.createElement('div');
         errorMessage.classList.add('error-message');
         const loading = this._loadingArea = document.createElement('div');

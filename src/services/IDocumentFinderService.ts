@@ -8,9 +8,9 @@ import { IDisposable } from 'ts-disposables';
 /* tslint:disable:variable-name */
 export const IDocumentFinderService = Symbol.for('IDocumentFinderService');
 export interface IDocumentFinderService {
-    registerProvider(provider: IDocumentFinderProvider): void;
+    registerProvider(provider: IDocumentFinderProvider): IDisposable;
 }
 
 export interface IDocumentFinderProvider extends IDisposable {
-    results: Observable<Finder.Symbol[]>;
+    request(editor: Atom.TextEditor): Observable<Finder.Symbol[]> | undefined;
 }

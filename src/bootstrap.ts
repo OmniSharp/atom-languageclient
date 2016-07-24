@@ -6,3 +6,4 @@
 /* tslint:disable */
 import { autoinject, singleton, transient } from 'aurelia-dependency-injection';
 import 'reflect-metadata';
+import './rxjs/index';

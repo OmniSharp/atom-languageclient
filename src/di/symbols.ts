@@ -7,3 +7,5 @@ export const key = 'languageclient:key';
 export const keySymbol = Symbol.for(key);
 export const capability = 'languageclient:capability';
 export const capabilitySymbol = Symbol.for(capability);
+export const alias = 'languageclient:alias';
+export const aliasSymbol = Symbol.for(capability);

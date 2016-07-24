@@ -7,12 +7,12 @@
 import * as _ from 'lodash';
 import Fuse = require('fuse.js');
 import { Disposable, DisposableBase } from 'ts-disposables';
-import { className, packageName } from '../constants';
 import { AutocompleteKind, AutocompleteSuggestion, IAutocompleteProvider, IAutocompleteService } from '../services/_public';
+import { className, packageName } from '../constants';
 
 export class AutocompleteService extends DisposableBase implements IAutocompleteService {
     private _providers: Set<IAutocompleteProvider> = new Set<IAutocompleteProvider>();
-    private _invoke: (options: Autocomplete.RequestOptions) => (Promise<Autocomplete.Suggestion[]>)[];
+    private _invoke: (options: Autocomplete.RequestOptions) => (Promise<AutocompleteSuggestion[]>)[];
     constructor() {
         super();
 
@@ -28,9 +28,9 @@ export class AutocompleteService extends DisposableBase implements IAutocomplete
         const callbacks = _.map(_.toArray(this._providers), provider => {
             return (options: Autocomplete.RequestOptions) => provider.request(options);
         });
-        this._invoke = (options) => {
-            return _.compact(_.over<any>(callbacks)(options));
-        };
+        this._invoke = <any>((options: Autocomplete.RequestOptions) => {
+            return _.compact(_.over(callbacks)(options));
+        });
     }
 
     public registerProvider(provider: IAutocompleteProvider) {
@@ -145,7 +145,5 @@ export class AutocompleteService extends DisposableBase implements IAutocomplete
         }
     }
 
-    public onDidInsertSuggestion(editor: Atom.TextEditor, triggerPosition: TextBuffer.Point, suggestion: AutocompleteSuggestion) {
-
-    }
+    public onDidInsertSuggestion(editor: Atom.TextEditor, triggerPosition: TextBuffer.Point, suggestion: AutocompleteSuggestion) { /* */ }
 }

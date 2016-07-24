@@ -180,19 +180,19 @@ function customSortKey(key: string) {
         result = `0${key}`;
     } else if (_.startsWith(key, `rxjs`)) {
         result = `0${key}`;
-    } else if (key.match(/[A-Z]/) && (_.startsWith(key, './') || _.startsWith(key, '../'))) {
+    } else if (_.startsWith(key, './') || _.startsWith(key, '../')) {
         const split = key.split('/');
-        result = _.last(split).toLowerCase();
+        let prefix: string;
+        result = _.last(split)
         if (result === 'index') {
             result = _.nth(split, -2);
         }
-        result = `z${result}`.toLowerCase();
-    } else if (_.startsWith(key, './') || _.startsWith(key, '../')) {
-        const split = key.split('/');
-        if (_.last(split) === 'index') {
-            key = _.dropRight(split, 1).join('/');
+        if (result.match(/^[A-Z]/)) {
+            prefix = 'z';
+        } else {
+            prefix = 'y';
         }
-        result = `y${_.trimStart(key, './')}`;
+        result = `${prefix}${result}`.toLowerCase();
     }
 
     return result.replace(/\//g, '');

@@ -4,19 +4,23 @@
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
 import * as _ from 'lodash';
-import { Observable, Observer, Subject } from 'rxjs';
-import { DisposableBase } from 'ts-disposables';
-import { injectable } from '../di/decorators';
-import { IWorkspaceFinderProvider, IWorkspaceFinderService } from '../services/_public';
-import { AtomCommands, CommandType } from './AtomCommands';
+import { Observable, Subject } from 'rxjs';
+import { Disposable, DisposableBase } from 'ts-disposables';
+import { alias, injectable } from '../services/_decorators';
+import { ATOM_COMMANDS, IWorkspaceFinderProvider, IWorkspaceFinderService } from '../services/_public';
+import { AtomCommands } from './AtomCommands';
 import { AtomNavigation } from './AtomNavigation';
 import { WorkspaceFinderView } from './views/WorkspaceFinderView';
 
+const MAX_ITEMS = 100;
+
 @injectable
+@alias(IWorkspaceFinderService)
 export class WorkspaceFinderService extends DisposableBase implements IWorkspaceFinderService {
     private _navigation: AtomNavigation;
     private _commands: AtomCommands;
     private _filter$ = new Subject<string>();
+    private _filterObservable$ = this._filter$.asObservable().lodashThrottle(300, { leading: true, trailing: true });
     private _providers = new Set<IWorkspaceFinderProvider>();
     private _results$: Observable<{ filter: string; results: Finder.Symbol[] }>;
 
@@ -25,6 +29,13 @@ export class WorkspaceFinderService extends DisposableBase implements IWorkspace
         this._navigation = navigation;
         this._commands = commands;
         this._results$ = this._getResults();
+
+        this._disposable.add(
+            Disposable.create(() => {
+                this._providers.forEach(x => x.dispose());
+                this._providers.clear();
+            })
+        );
     }
 
     private _getResults() {
@@ -36,7 +47,7 @@ export class WorkspaceFinderService extends DisposableBase implements IWorkspace
                     acc.set(provider, results);
                     return acc;
                 },
-                new Map<IWorkspaceFinderProvider, Finder.Symbol[]>())
+                new Map<IWorkspaceFinderProvider, Finder.Symbol[]>());
         });
 
         return Observable.combineLatest(providers, this._filter$)
@@ -46,7 +57,7 @@ export class WorkspaceFinderService extends DisposableBase implements IWorkspace
                 let result = iterator.next();
                 const results: Finder.Symbol[] = [];
                 while (!result.done) {
-                    results.push(..._.map(result.value, value => {
+                    results.push(..._.map(_.take(result.value, MAX_ITEMS), value => {
                         value.filePath = atom.project.relativizePath(value.filePath)[1];
                         return value;
                     }));
@@ -57,13 +68,20 @@ export class WorkspaceFinderService extends DisposableBase implements IWorkspace
     }
 
     public registerProvider(provider: IWorkspaceFinderProvider) {
-        this._commands.add(CommandType.Workspace, `finder-workspace`, () => this.open());
-        this._filter$.subscribe(provider.filter);
+        this._disposable.add(
+            this._commands.add(ATOM_COMMANDS.CommandType.Workspace, `finder-workspace`, () => this.open())
+        );
+        const sub = this._filterObservable$.subscribe(provider.filter);
         this._providers.add(provider);
-        this._disposable.add(provider, () => this._providers.delete(provider));
+
+        return Disposable.create(() => {
+            sub.unsubscribe();
+            this._providers.delete(provider);
+        });
     }
 
     public open() {
         const view = new WorkspaceFinderView(this._navigation, this._results$, this._filter$);
+        view.setMaxItems(MAX_ITEMS);
     }
 }

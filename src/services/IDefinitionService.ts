@@ -10,7 +10,7 @@ import { IDisposable } from 'ts-disposables';
 /* tslint:disable:variable-name */
 export const IDefinitionService = Symbol.for('IDefinitionService');
 export interface IDefinitionService {
-    registerProvider(provider: IDefinitionProvider): void;
+    registerProvider(provider: IDefinitionProvider): IDisposable;
 }
 
 export interface IDefinitionProvider extends IDisposable {

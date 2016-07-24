@@ -54,9 +54,9 @@ class AutocompleteService extends DisposableBase implements IAutocompleteProvide
         this._syncExpression = syncExpression;
     }
 
-    public request(options: Autocomplete.RequestOptions): Promise<AutocompleteSuggestion[]> | null {
+    public request(options: Autocomplete.RequestOptions) {
         if (!this._syncExpression.evaluate(options.editor)) {
-            return null;
+            return;
         }
         const {editor, bufferPosition} = options;
 

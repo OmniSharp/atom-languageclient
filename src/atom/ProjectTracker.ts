@@ -5,10 +5,18 @@
  */
 import * as _ from 'lodash';
 import { Observable, Subscriber } from 'rxjs';
-import { injectable } from '../services/_decorators';
+import { alias, injectable } from '../services/_decorators';
 import { ProjectProvider } from './ProjectProvider';
 
+/* tslint:disable-next-line:variable-name */
+export const IProjectTracker = Symbol.for('IProjectTracker');
+export interface IProjectTracker {
+    readonly added: Observable<string>;
+    readonly removed: Observable<string>;
+}
+
 @injectable
+@alias(IProjectTracker)
 export class ProjectTracker {
     private _projectPaths: string[] = [];
     private _projectsObserver: Subscriber<[string[], string[]]>;

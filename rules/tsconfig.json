@@ -19,6 +19,7 @@
         "declaration": false,
         "noImplicitAny": true,
         "preserveConstEnums": true,
+        "skipLibCheck": true,
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "allowSyntheticDefaultImports": true,

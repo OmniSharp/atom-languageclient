@@ -7,11 +7,12 @@
 import * as _ from 'lodash';
 import { Observable, Subject } from 'rxjs';
 import { CompositeDisposable, DisposableBase } from 'ts-disposables';
-import { observeCallback } from '../helpers/index';
-import { injectable } from '../services/_decorators';
+import { alias, injectable } from '../services/_decorators';
 import { IAtomTextEditorSource } from '../services/_public';
+import { observeCallback } from '../helpers/index';
 
 @injectable
+@alias(IAtomTextEditorSource)
 export class AtomTextEditorSource extends DisposableBase implements IAtomTextEditorSource {
     private _observeActiveTextEditor: Observable<Atom.TextEditor | null>;
     private _observeTextEditors: Observable<Atom.TextEditor>;

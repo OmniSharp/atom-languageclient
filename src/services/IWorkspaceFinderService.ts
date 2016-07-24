@@ -9,7 +9,7 @@ import { IDisposable } from 'ts-disposables';
 /* tslint:disable:variable-name */
 export const IWorkspaceFinderService = Symbol.for('IWorkspaceFinderService');
 export interface IWorkspaceFinderService {
-    registerProvider(provider: IWorkspaceFinderProvider): void;
+    registerProvider(provider: IWorkspaceFinderProvider): IDisposable;
 }
 
 export interface IWorkspaceFinderProvider extends IDisposable {

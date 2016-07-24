@@ -27,6 +27,7 @@ export class WorkspaceFinderView extends FilterSelectListView<Finder.Symbol> {
         this.storeFocusedElement();
         this._panel = atom.workspace.addModalPanel({ item: this.root });
         this.focusFilterEditor();
+        this.setMaxItems(50);
     }
 
     public get filterKeys() {

@@ -7713,7 +7713,7 @@ declare module Atom {
      * TextEditorComponent
      * This class was not documented by atomdoc, assume it is private. Use with caution.
      */
-    export class TextEditorComponent extends HTMLElement {
+    export class TextEditorComponent {
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
@@ -8281,7 +8281,10 @@ declare module Atom {
      * TextEditorPresenter
      * This class was not documented by atomdoc, assume it is private. Use with caution.
      */
-    export class TextEditorPresenter {
+    export class TextEditorPresenter extends HTMLElement {
+        component: TextEditorComponent;
+        getModel(): TextEditor;
+        rootElement: HTMLElement;
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
@@ -11240,12 +11243,12 @@ declare module Atom {
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        pixelPositionForBufferPosition(bufferPosition?: { top: number; left: number; }): { top: number; left: number; };
+        pixelPositionForBufferPosition(bufferPosition?: { top: number; left: number; } | [number, number]): { top: number; left: number; };
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        pixelPositionForScreenPosition(screenPosition?: { top: number; left: number; }): { top: number; left: number; };
+        pixelPositionForScreenPosition(screenPosition?: { top: number; left: number; } | [number, number]): { top: number; left: number; };
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.

@@ -37,6 +37,15 @@ export function capability(target: any) {
 }
 
 /**
+ * Decorator: Specifies the key to register this instance with in the container
+ */
+export function alias(alias: symbol) {
+    return (target: any) => {
+        metadata.define(symbols.alias, true, target);
+    };
+}
+
+/**
  * Decorator: Specifies the dependency should be lazy loaded
  */
 export function lazy(keyValue: any) {

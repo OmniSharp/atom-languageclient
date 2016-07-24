@@ -4,73 +4,66 @@
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
 import * as _ from 'lodash';
-import { Observable, Observer, Subject } from 'rxjs';
+import { Observable } from 'rxjs';
 import * as toUri from 'file-url';
 import { DisposableBase } from 'ts-disposables';
-import { packageName } from '../../constants';
 import { capability, inject } from '../../services/_decorators';
-import { AutocompleteKind, IAtomTextEditorSource, IDocumentFinderProvider, IDocumentFinderService, ILanguageProtocolClient, ISyncExpression } from '../../services/_public';
+import { AutocompleteKind, IDocumentFinderProvider, IDocumentFinderService, ILanguageProtocolClient, ISyncExpression } from '../../services/_public';
+import { packageName } from '../../constants';
 import { fromPosition } from './utils/convert';
+import { uriToFilePath } from './utils/uriToFilePath';
 import { SymbolInformation, SymbolKind, TextDocumentIdentifier } from '../../vscode-languageserver-types';
 import { DocumentSymbolRequest } from '../../vscode-protocol';
-import { uriToFilePath } from './utils/uriToFilePath';
 
 @capability
 export class LanguageProtocolDocumentSymbols extends DisposableBase {
     private _client: ILanguageProtocolClient;
-    private _atomTextEditorSource: IAtomTextEditorSource;
     private _syncExpression: ISyncExpression;
     private _finderService: IDocumentFinderService;
     constructor(
         @inject(ILanguageProtocolClient) client: ILanguageProtocolClient,
         @inject(IDocumentFinderService) finderService: IDocumentFinderService,
-        @inject(ISyncExpression) syncExpression: ISyncExpression,
-        @inject(IAtomTextEditorSource) atomTextEditorSource: IAtomTextEditorSource
+        @inject(ISyncExpression) syncExpression: ISyncExpression
     ) {
         super();
         this._client = client;
         this._finderService = finderService;
         this._syncExpression = syncExpression;
-        this._atomTextEditorSource = atomTextEditorSource;
         if (!client.capabilities.documentSymbolProvider) {
             return;
         }
 
         // TODO: Handle trigger characters
-        const service = new DocumentFinderService(client, syncExpression, atomTextEditorSource);
+        const service = new DocumentFinderProvider(client, syncExpression);
         this._disposable.add(service);
         this._finderService.registerProvider(service);
     }
 }
 
-class DocumentFinderService extends DisposableBase implements IDocumentFinderProvider {
+class DocumentFinderProvider extends DisposableBase implements IDocumentFinderProvider {
     private _client: ILanguageProtocolClient;
-    private _atomTextEditorSource: IAtomTextEditorSource;
     private _syncExpression: ISyncExpression;
     public constructor(
         client: ILanguageProtocolClient,
-        syncExpression: ISyncExpression,
-        atomTextEditorSource: IAtomTextEditorSource) {
+        syncExpression: ISyncExpression) {
         super();
         this._client = client;
         this._syncExpression = syncExpression;
-        this._atomTextEditorSource = atomTextEditorSource;
-
-        this.results = atomTextEditorSource.observeActiveTextEditor
-            .filter(editor => {
-                return this._syncExpression.evaluate(editor);
-            })
-            .switchMap(editor => {
-                return this._client.sendRequest(DocumentSymbolRequest.type, {
-                    textDocument: TextDocumentIdentifier.create(toUri(editor!.getURI()))
-                });
-            })
-            .map(results => {
-                return _.map(results, symbol => this._makeSymbol(symbol));
-            });
     }
 
-    public results: Observable<Finder.Symbol[]>;
+    public request(editor: Atom.TextEditor) {
+        if (!this._syncExpression.evaluate(editor)) {
+            return;
+        }
+
+        return Observable.fromPromise(
+            this._client.sendRequest(DocumentSymbolRequest.type, {
+                textDocument: TextDocumentIdentifier.create(toUri(editor!.getURI()))
+            })
+        ).map(results => {
+            return _.map(results, result => this._makeSymbol(result));
+        });
+    }
 
     private _makeSymbol(symbol: SymbolInformation): Finder.Symbol {
         // TODO: Icon html

@@ -4,21 +4,17 @@
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
 import * as _ from 'lodash';
-import { Observable } from 'rxjs';
 import { CompositeDisposable, DisposableBase, IDisposable } from 'ts-disposables';
+import { alias, injectable } from '../services/_decorators';
+import { ATOM_COMMANDS, IAtomCommands } from '../services/_public';
 import { packageName } from '../constants';
-import { injectable } from '../di/decorators';
-
-export type EventCallback = (event: Event) => void;
-export type CommandObject = { [commandName: string]: EventCallback; };
-
-export enum CommandType {
-    Workspace,
-    TextEditor
-}
+type CommandType = ATOM_COMMANDS.CommandType;
+type CommandObject = ATOM_COMMANDS.CommandObject;
+type EventCallback = ATOM_COMMANDS.EventCallback;
 
 @injectable
-export class AtomCommands extends DisposableBase {
+@alias(IAtomCommands)
+export class AtomCommands extends DisposableBase implements IAtomCommands {
     constructor() {
         super();
     }
@@ -45,9 +41,9 @@ export class AtomCommands extends DisposableBase {
     private _getCommandType(command: string | CommandType | Node) {
         if (typeof command === 'number') {
             switch (command) {
-                case CommandType.TextEditor:
+                case ATOM_COMMANDS.CommandType.TextEditor:
                     return 'atom-text-editor';
-                case CommandType.Workspace:
+                case ATOM_COMMANDS.CommandType.Workspace:
                 default:
                     return 'atom-workspace';
             }

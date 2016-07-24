@@ -4,11 +4,10 @@
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
 /* tslint:disable:no-any */
-import * as _ from 'lodash';
 import { Observable } from 'rxjs';
-import {  DisposableBase } from 'ts-disposables';
-import { observeCallback } from '../helpers/index';
+import { DisposableBase } from 'ts-disposables';
 import { injectable } from '../services/_decorators';
+import { observeCallback } from '../helpers/index';
 import { ILanguageClientTextEditor } from './ILanguageClientTextEditor';
 
 export interface ITextEditorSource {
