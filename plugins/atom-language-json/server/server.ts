@@ -12,11 +12,10 @@ import * as URL from 'url';
 import { JSONDocument, JSONSchema, LanguageSettings, getLanguageService } from 'vscode-json-languageservice';
 import { IConnection, IPCMessageReader, IPCMessageWriter, InitializeParams, InitializeResult, NotificationType, TextDocument, TextDocuments, createConnection } from 'vscode-languageserver';
 import { getDefaults } from './default-validations';
-import Strings from './utils/strings';
-import URI from './utils/uri';
 import { GlobPatternContribution } from './jsoncontributions/globPatternContribution';
 import { getLanguageModelCache } from './languageModelCache';
 import { ProjectJSONContribution } from './jsoncontributions/projectJSONContribution';
+import URI from './utils/uri';
 
 namespace SchemaAssociationNotification {
     export const type: NotificationType<Json.SchemaAssociations> = { get method() { return 'json/schemaAssociations'; } };
