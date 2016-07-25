@@ -14,6 +14,5 @@ export interface IReferencesService {
 }
 
 export interface IReferencesProvider extends IDisposable {
-    locate: NextObserver<Atom.TextEditor>;
-    response: Observable<AtomNavigationLocation[]>;
+    request(editor: Atom.TextEditor): Observable<AtomNavigationLocation[]>;
 }

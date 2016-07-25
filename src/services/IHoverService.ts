@@ -13,5 +13,5 @@ export interface IHoverService {
 }
 
 export interface IHoverProvider extends IDisposable {
-    request(editor: Hover.RequestOptions): Observable<Hover.Symbol> | undefined;
+    request(editor: Hover.RequestOptions): Observable<Hover.Symbol>;
 }

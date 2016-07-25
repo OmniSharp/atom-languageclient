@@ -4,18 +4,15 @@
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
 import * as _ from 'lodash';
-import { Observable, Observer, Subject } from 'rxjs';
-import { NextObserver } from 'rxjs/Observer';
+import { Observable } from 'rxjs';
 import * as toUri from 'file-url';
 import { DisposableBase } from 'ts-disposables';
-import { packageName } from '../../constants';
 import { capability, inject } from '../../services/_decorators';
 import { IDefinitionProvider, IDefinitionService, ILanguageProtocolClient, ISyncExpression } from '../../services/_public';
 import { fromRange } from './utils/convert';
+import { uriToFilePath } from './utils/uriToFilePath';
 import { Position, TextDocumentIdentifier, TextDocumentPositionParams } from '../../vscode-languageserver-types';
 import { DefinitionRequest } from '../../vscode-protocol';
-import { AtomTextEditorSource } from '../../atom/AtomTextEditorSource';
-import { uriToFilePath } from './utils/uriToFilePath';
 
 @capability
 export class LanguageProtocolDefinition extends DisposableBase {
@@ -50,36 +47,34 @@ class LanguageProtocolDefinitionProvider extends DisposableBase implements IDefi
         super();
         this._client = client;
         this._syncExpression = syncExpression;
-
-        const locate = this.locate = new Subject<Atom.TextEditor>();
-        this.response = locate
-            .filter(editor => syncExpression.evaluate(editor))
-            .switchMap(editor => {
-                const marker = editor!.getCursorBufferPosition();
-
-                const params: TextDocumentPositionParams = {
-                    textDocument: TextDocumentIdentifier.create(toUri(editor!.getURI())),
-                    position: Position.create(marker.row, marker.column)
-                };
-                return this._client.sendRequest(DefinitionRequest.type, params)
-                    .then(response => {
-                        if (_.isArray(response)) {
-                            return _.map(response, location => {
-                                return {
-                                    filePath: uriToFilePath(location.uri),
-                                    range: fromRange(location.range)
-                                };
-                            });
-                        } else {
-                            return [{
-                                filePath: uriToFilePath(response.uri),
-                                range: fromRange(response.range)
-                            }];
-                        }
-                    });
-            });
     }
 
-    public locate: NextObserver<Atom.TextEditor>;
-    public response: Observable<AtomNavigationLocation[]>;
+    public request(editor: Atom.TextEditor) {
+        if (!this._syncExpression.evaluate(editor)) {
+            return Observable.empty<any>();
+        }
+
+        const marker = editor!.getCursorBufferPosition();
+
+        const params: TextDocumentPositionParams = {
+            textDocument: TextDocumentIdentifier.create(toUri(editor!.getURI())),
+            position: Position.create(marker.row, marker.column)
+        };
+        return Observable.fromPromise(this._client.sendRequest(DefinitionRequest.type, params))
+            .map(response => {
+                if (_.isArray(response)) {
+                    return _.map(response, location => {
+                        return {
+                            filePath: uriToFilePath(location.uri),
+                            range: fromRange(location.range)
+                        };
+                    });
+                } else {
+                    return [{
+                        filePath: uriToFilePath(response.uri),
+                        range: fromRange(response.range)
+                    }];
+                }
+            });
+    }
 }

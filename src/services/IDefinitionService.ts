@@ -14,6 +14,5 @@ export interface IDefinitionService {
 }
 
 export interface IDefinitionProvider extends IDisposable {
-    locate: NextObserver<Atom.TextEditor>;
-    response: Observable<AtomNavigationLocation[]>;
+    request(editor: Atom.TextEditor): Observable<AtomNavigationLocation[]>;
 }

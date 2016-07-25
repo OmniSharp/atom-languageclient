@@ -7,7 +7,7 @@
 import * as _ from 'lodash';
 import { Point, Range } from 'atom';
 import * as toUri from 'file-url';
-import { Position, Range as LsRange, TextDocumentIdentifier } from 'vscode-languageserver-types';
+import { Position, Range as LsRange, TextDocumentIdentifier, TextEdit } from 'vscode-languageserver-types';
 
 export function getUri(editor: Atom.TextEditor) {
     return toUri(editor.getURI());
@@ -31,6 +31,17 @@ export function toRange(value: TextBuffer.Range): LsRange {
 
 export function fromRange(value: LsRange): TextBuffer.Range {
     return new Range(fromPosition(value.start), fromPosition(value.end));
+}
+
+export function fromTextEdit(value: TextEdit): Text.FileChange {
+    return {
+        range: fromRange(value.range),
+        text: value.newText
+    };
+}
+
+export function fromTextEdits(values: TextEdit[]): Text.FileChange[] {
+    return _.map(values, fromTextEdit);
 }
 
 export function toTextDocumentIdentifier(editor: Atom.TextEditor): TextDocumentIdentifier {

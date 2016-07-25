@@ -7,6 +7,7 @@ import * as _ from 'lodash';
 import { Observable, Subscription } from 'rxjs';
 import { CompositeDisposable, Disposable, DisposableBase, IDisposable } from 'ts-disposables';
 import { alias, injectable } from '../services/_decorators';
+import { ProviderServiceBase } from './_ProviderServiceBase';
 import { ATOM_COMMANDS, IHoverProvider, IHoverService } from '../services/_public';
 import { AtomCommands } from './AtomCommands';
 import { AtomTextEditorSource } from './AtomTextEditorSource';
@@ -15,10 +16,10 @@ import { HoverView, IHoverPosition } from './views/HoverView';
 
 @injectable()
 @alias(IHoverService)
-export class HoverService extends DisposableBase implements IHoverService {
+export class HoverService
+    extends ProviderServiceBase<IHoverProvider, Hover.RequestOptions, Observable<Hover.Symbol>, Observable<Hover.Symbol[]>>
+    implements IHoverService {
     private _commands: AtomCommands;
-    private _providers: Set<IHoverProvider> = new Set<IHoverProvider>();
-    private _invoke: (options: Hover.RequestOptions) => Observable<Hover.Symbol[]>;
     private _textEditorSource: AtomTextEditorSource;
     private _viewFinder: AtomViewFinder;
 
@@ -40,17 +41,18 @@ export class HoverService extends DisposableBase implements IHoverService {
         this._view = new HoverView();
 
         this._disposable.add(
-            Disposable.create(() => {
-                this._providers.forEach(x => x.dispose());
-                this._providers.clear();
-            }),
-            this._commands.add(ATOM_COMMANDS.CommandType.TextEditor, `hover`, () => this.showOnCommand())
-        );
-
-        this._disposable.add(
+            this._commands.add(ATOM_COMMANDS.CommandType.TextEditor, `hover`, () => this.showOnCommand()),
             this._textEditorSource.observeActiveTextEditor
                 .subscribe(_.bind(this._setupView, this))
         );
+    }
+
+    protected createInvoke(callbacks: ((options: Hover.RequestOptions) => Observable<Hover.Symbol>)[]) {
+        return (options: Hover.RequestOptions) => {
+            return Observable.from(_.over(callbacks)(options))
+                .mergeMap(_.identity)
+                .scan((acc, results) => _.compact(acc.concat(results)), []);
+        };
     }
 
     private _setupView(editor: Atom.TextEditor) {
@@ -161,20 +163,9 @@ export class HoverService extends DisposableBase implements IHoverService {
         }
     }
 
-    private _computeInvoke() {
-        const callbacks = _.map(_.toArray(this._providers), provider => {
-            return (options: Hover.RequestOptions) => provider.request(options);
-        });
-        this._invoke = (options) => {
-            return Observable.from(_.compact(_.over(callbacks)(options)))
-                .mergeMap(_.identity)
-                .scan((acc, results) => _.compact(acc.concat(results)), []);
-        };
-    }
-
     private _showToolTip(bufferPt: TextBuffer.Point, rect: IHoverPosition) {
         this._view.updatePosition(rect, this._editorView);
-        this._invoke({ editor: this._editor, location: bufferPt })
+        this.invoke({ editor: this._editor, location: bufferPt })
             .scan((acc, result) => acc.concat(result), [])
             .subscribe(rows => {
                 const lines = _.map(rows, row => {
@@ -213,17 +204,6 @@ export class HoverService extends DisposableBase implements IHoverService {
         const left = clientX - linesClientRect.left + this._editor.getScrollLeft();
         return { top, left };
     }
-
-    public registerProvider(provider: IHoverProvider) {
-        this._providers.add(provider);
-        this._computeInvoke();
-
-        return Disposable.create(() => {
-            this._providers.delete(provider);
-            this._computeInvoke();
-        });
-    }
-
 }
 
 // class EditorTooltipProvider

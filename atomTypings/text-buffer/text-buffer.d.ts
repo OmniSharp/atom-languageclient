@@ -203,7 +203,7 @@ declare module TextBuffer {
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        getRange(id? : any) : Atom.Range;
+        getRange(id? : any) : TextBuffer.Range;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
@@ -317,7 +317,7 @@ declare module TextBuffer {
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        markRange(range? : Atom.Range, options? : any) : Marker;
+        markRange(range? : TextBuffer.Range, options? : any) : Marker;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
@@ -363,7 +363,7 @@ declare module TextBuffer {
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        getMarkerRange(id? : any) : Atom.Range;
+        getMarkerRange(id? : any) : TextBuffer.Range;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
@@ -378,7 +378,7 @@ declare module TextBuffer {
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        setMarkerRange(id? : any, range? : Atom.Range) : Atom.Range;
+        setMarkerRange(id? : any, range? : TextBuffer.Range) : TextBuffer.Range;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
@@ -388,13 +388,13 @@ declare module TextBuffer {
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        createMarker(range? : Atom.Range, params? : any) : Atom.Marker;
+        createMarker(range? : TextBuffer.Range, params? : any) : Atom.Marker;
 
         /**
          * Private
          * This field or method was marked private by atomdoc. Use with caution.
          */
-        addMarker(id? : any, range? : Atom.Range, params? : any) : Atom.Marker;
+        addMarker(id? : any, range? : TextBuffer.Range, params? : any) : Atom.Marker;
 
     }
 
@@ -423,7 +423,7 @@ declare module TextBuffer {
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        constructor(id? : any, store? : any, range? : Atom.Range, params? : any);
+        constructor(id? : any, store? : any, range? : TextBuffer.Range, params? : any);
 
         /**
          * Invoke the given callback when the marker is destroyed.
@@ -437,14 +437,14 @@ declare module TextBuffer {
          */
         onDidChange(callback : Function /* needs to be defined */) : EventKit.Disposable;
 
-        getRange() : Atom.Range;
+        getRange() : TextBuffer.Range;
 
         /**
          * Sets the range of the marker.
          * @param range? - A {Range} or range-compatible {Array}. The range will be clipped before it is assigned.
          * @param properties? - {Object} properties to associate with the marker.
          */
-        setRange(range? : Atom.Range, properties? : any) : Atom.Range;
+        setRange(range? : TextBuffer.Range, properties? : any) : TextBuffer.Range;
 
         getHeadPosition() : Point;
 
@@ -560,12 +560,12 @@ declare module TextBuffer {
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        update(oldRange? : Atom.Range, options? : (range? : Atom.Range,reversed? : any,tailed? : any,valid? : any,properties? : any) => any, textChanged? : any) : void;
+        update(oldRange? : TextBuffer.Range, options? : (range? : TextBuffer.Range,reversed? : any,tailed? : any,valid? : any,properties? : any) => any, textChanged? : any) : void;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        getSnapshot(range? : Atom.Range) : any;
+        getSnapshot(range? : TextBuffer.Range) : any;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
@@ -576,7 +576,7 @@ declare module TextBuffer {
          * Private
          * This field or method was marked private by atomdoc. Use with caution.
          */
-        emitChangeEvent(currentRange? : Atom.Range, textChanged? : string, propertiesChanged? : any) : void;
+        emitChangeEvent(currentRange? : TextBuffer.Range, textChanged? : string, propertiesChanged? : any) : void;
 
     }
 
@@ -1084,7 +1084,7 @@ declare module TextBuffer {
          */
         freeze() : Range;
 
-        union(otherRange? : Atom.Range) : any;
+        union(otherRange? : TextBuffer.Range) : any;
 
         /**
          * Build and return a new range by translating this range"s start and
@@ -1122,15 +1122,15 @@ declare module TextBuffer {
          * @param otherRange? - A {Range} or range-compatible {Array}
          * @param exclusive? - {Boolean} indicating whether to exclude endpoints   when testing for intersection. Defaults to `false`.
          */
-        intersectsWith(otherRange? : Atom.Range, exclusive? : boolean) : boolean;
+        intersectsWith(otherRange? : TextBuffer.Range, exclusive? : boolean) : boolean;
 
-        containsRange(otherRange? : Atom.Range, exclusive? : any) : Atom.Range;
+        containsRange(otherRange? : TextBuffer.Range, exclusive? : any) : TextBuffer.Range;
 
         containsPoint(point? : Point, exclusive? : any) : Point;
 
         intersectsRow(row? : number) : number;
 
-        intersectsRowRange(startRow? : number, endRow? : number) : Atom.Range;
+        intersectsRowRange(startRow? : number, endRow? : number) : TextBuffer.Range;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
@@ -1224,7 +1224,7 @@ declare module TextBuffer {
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        static Range: Atom.Range;
+        static Range: TextBuffer.Range;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
@@ -1526,7 +1526,7 @@ declare module TextBuffer {
          * Get the text in a range.
          * @param range? - A {Range}
          */
-        getTextInRange(range? : Atom.Range) : Atom.Range;
+        getTextInRange(range? : TextBuffer.Range) : TextBuffer.Range;
 
         /**
          * Get the text of all lines in the buffer, without their line endings.
@@ -1594,7 +1594,7 @@ declare module TextBuffer {
          * @param range? - A {Range}
          * @param options? - {Object}
          */
-        setTextInRange(range? : Atom.Range, newText? : string, options? : any) : Atom.Range;
+        setTextInRange(range? : TextBuffer.Range, newText? : string, options? : any): void;
 
         /**
          * Insert text at the given position.
@@ -1622,7 +1622,7 @@ declare module TextBuffer {
          * Delete the text in the given range.
          * @param range? - A {Range} in which to delete. The range is clipped before deleting.
          */
-        delete(range? : Atom.Range) : void;
+        delete(range? : TextBuffer.Range) : void;
 
         /**
          * Delete the line associated with a specified row.
@@ -1648,7 +1648,7 @@ declare module TextBuffer {
          * @param range? - A {Range} or range-compatible {Array}
          * @param properties? - A hash of key-value pairs to associate with the marker. There are also reserved property names that have marker-specific meaning.
          */
-        markRange(range? : Atom.Range, properties? : any) : Marker;
+        markRange(range? : TextBuffer.Range, properties? : any) : Marker;
 
         /**
          * Create a marker at the given position with no tail.
@@ -1771,7 +1771,7 @@ declare module TextBuffer {
          * @param range? - A {Range} in which to search.
          * @param iterator? - A {Function} that"s called on each match with an {Object} containing the following keys:
          */
-        scanInRange(regex? : RegExp, range? : Atom.Range, iterator? : Function, reverse? : any) : Atom.Range;
+        scanInRange(regex? : RegExp, range? : TextBuffer.Range, iterator? : Function, reverse? : any) : TextBuffer.Range;
 
         /**
          * Scan regular expression matches in a given range in reverse order,
@@ -1780,7 +1780,7 @@ declare module TextBuffer {
          * @param range? - A {Range} in which to search.
          * @param iterator? - A {Function} that"s called on each match with an {Object} containing the following keys:
          */
-        backwardsScanInRange(regex? : RegExp, range? : Atom.Range, iterator? : Function) : Atom.Range;
+        backwardsScanInRange(regex? : RegExp, range? : TextBuffer.Range, iterator? : Function) : TextBuffer.Range;
 
         /**
          * Replace all regular expression matches in the entire buffer.
@@ -1793,7 +1793,7 @@ declare module TextBuffer {
         /**
          * Get the range spanning from `[0, 0]` to {::getEndPosition}.
          */
-        getRange() : Atom.Range;
+        getRange() : TextBuffer.Range;
 
         /**
          * Get the number of lines in the buffer.
@@ -1854,7 +1854,7 @@ declare module TextBuffer {
          * only 10 characters long, and it would be clipped to `(1, 10)`.
          * @param range? - A {Range} or range-compatible {Array} to clip.
          */
-        clipRange(range? : Atom.Range) : Atom.Range;
+        clipRange(range? : TextBuffer.Range) : TextBuffer.Range;
 
         /**
          * Clip the given point so it is at a valid position in the buffer.

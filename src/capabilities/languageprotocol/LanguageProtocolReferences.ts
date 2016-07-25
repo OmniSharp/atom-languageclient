@@ -4,18 +4,15 @@
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
 import * as _ from 'lodash';
-import { Observable, Observer, Subject } from 'rxjs';
-import { NextObserver } from 'rxjs/Observer';
+import { Observable } from 'rxjs';
 import * as toUri from 'file-url';
 import { DisposableBase } from 'ts-disposables';
-import { packageName } from '../../constants';
 import { capability, inject } from '../../services/_decorators';
 import { ILanguageProtocolClient, IReferencesProvider, IReferencesService, ISyncExpression } from '../../services/_public';
 import { fromRange } from './utils/convert';
-import { Position, TextDocumentIdentifier, ReferenceParams } from '../../vscode-languageserver-types';
-import { ReferencesRequest } from '../../vscode-protocol';
-import { AtomTextEditorSource } from '../../atom/AtomTextEditorSource';
 import { uriToFilePath } from './utils/uriToFilePath';
+import { Position, ReferenceParams, TextDocumentIdentifier } from '../../vscode-languageserver-types';
+import { ReferencesRequest } from '../../vscode-protocol';
 
 @capability
 export class LanguageProtocolReferences extends DisposableBase {
@@ -50,32 +47,30 @@ class LanguageProtocolReferencesProvider extends DisposableBase implements IRefe
         super();
         this._client = client;
         this._syncExpression = syncExpression;
+        }
 
-        const locate = this.locate = new Subject<Atom.TextEditor>();
-        this.response = locate
-            .filter(editor => syncExpression.evaluate(editor))
-            .switchMap(editor => {
-                const marker = editor!.getCursorBufferPosition();
+    public request(editor: Atom.TextEditor) {
+        if (!this._syncExpression.evaluate(editor)) {
+            return Observable.empty<any>();
+        }
 
-                const params: ReferenceParams = {
-                    context: {
-                        includeDeclaration: true
-                    },
-                    textDocument: TextDocumentIdentifier.create(toUri(editor!.getURI())),
-                    position: Position.create(marker.row, marker.column)
-                };
-                return this._client.sendRequest(ReferencesRequest.type, params)
-                    .then(response => {
-                        return _.map(response, location => {
-                            return {
-                                filePath: uriToFilePath(location.uri),
-                                range: fromRange(location.range)
-                            };
-                        });
-                    });
+        const marker = editor!.getCursorBufferPosition();
+
+        const params: ReferenceParams = {
+            context: {
+                includeDeclaration: true
+            },
+            textDocument: TextDocumentIdentifier.create(toUri(editor!.getURI())),
+            position: Position.create(marker.row, marker.column)
+        };
+        return Observable.fromPromise(this._client.sendRequest(ReferencesRequest.type, params))
+            .map(response => {
+                return _.map(response, location => {
+                    return {
+                        filePath: uriToFilePath(location.uri),
+                        range: fromRange(location.range)
+                    };
+                });
             });
     }
-
-    public locate: NextObserver<Atom.TextEditor>;
-    public response: Observable<AtomNavigationLocation[]>;
 }

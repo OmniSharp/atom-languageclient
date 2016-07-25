@@ -53,7 +53,7 @@ class DocumentFinderProvider extends DisposableBase implements IDocumentFinderPr
 
     public request(editor: Atom.TextEditor) {
         if (!this._syncExpression.evaluate(editor)) {
-            return;
+            return Observable.empty<Finder.Symbol[]>();
         }
 
         return Observable.fromPromise(

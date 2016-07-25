@@ -8,6 +8,7 @@ import { Observable, Subscription } from 'rxjs';
 import { readFile } from 'fs';
 import { Disposable, DisposableBase } from 'ts-disposables';
 import { alias, injectable } from '../services/_decorators';
+import { ProviderServiceBase } from './_ProviderServiceBase';
 import { ATOM_COMMANDS, ATOM_NAVIGATION, IDefinitionProvider, IDefinitionService } from '../services/_public';
 import { AtomCommands } from './AtomCommands';
 import { AtomNavigation } from './AtomNavigation';
@@ -17,10 +18,11 @@ const { navigationHasRange } = ATOM_NAVIGATION;
 const readFile$ = Observable.bindNodeCallback(readFile);
 @injectable
 @alias(IDefinitionService)
-export class DefinitionService extends DisposableBase implements IDefinitionService {
+export class DefinitionService
+    extends ProviderServiceBase<IDefinitionProvider, Atom.TextEditor, Observable<AtomNavigationLocation[]>, Observable<AtomNavigationLocation[]>>
+    implements IDefinitionService {
     private _navigation: AtomNavigation;
     private _commands: AtomCommands;
-    private _providers = new Set<IDefinitionProvider>();
 
     constructor(navigation: AtomNavigation, commands: AtomCommands) {
         super();
@@ -28,33 +30,22 @@ export class DefinitionService extends DisposableBase implements IDefinitionServ
         this._commands = commands;
 
         this._commands.add(ATOM_COMMANDS.CommandType.TextEditor, 'definition', () => this.open());
-
-        this._disposable.add(
-            Disposable.create(() => {
-                this._providers.forEach(x => x.dispose());
-                this._providers.clear();
-            })
-        );
     }
 
-    public registerProvider(provider: IDefinitionProvider) {
-        this._providers.add(provider);
-
-        return Disposable.create(() => {
-            this._providers.delete(provider);
+    protected createInvoke(callbacks: ((options: Atom.TextEditor) => Observable<AtomNavigationLocation[]>)[]) {
+        return ((options: Atom.TextEditor) => {
+            const requests = _.over(callbacks)(options);
+            return Observable.from(requests)
+                .mergeMap(_.identity)
+                .scan((acc, value) => { acc.push(...value); return acc; }, [])
+                .debounceTime(200);
         });
     }
 
     public open() {
         let view: ReferenceView;
         let subscription: Subscription;
-        const providers = _.toArray(this._providers);
-        subscription = Observable.from(providers)
-            .mergeMap(provider => {
-                return provider.response.take(1);
-            })
-            .scan((acc, value) => { acc.push(...value); return acc; }, [])
-            .debounceTime(200)
+        subscription = this.invoke(atom.workspace.getActiveTextEditor())
             .do(results => {
                 if (results.length === 1) {
                     this._navigation.navigateTo(results[0]);
@@ -98,7 +89,5 @@ export class DefinitionService extends DisposableBase implements IDefinitionServ
                     view.setItems(items);
                 }
             });
-
-        _.each(providers, provider => provider.locate.next(atom.workspace.getActiveTextEditor()));
     }
 }

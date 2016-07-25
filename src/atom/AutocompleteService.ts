@@ -6,39 +6,41 @@
 /* tslint:disable:no-any */
 import * as _ from 'lodash';
 import Fuse = require('fuse.js');
-import { Disposable, DisposableBase } from 'ts-disposables';
+import { ProviderServiceBase } from './_ProviderServiceBase';
 import { AutocompleteKind, AutocompleteSuggestion, IAutocompleteProvider, IAutocompleteService } from '../services/_public';
 import { className, packageName } from '../constants';
 
-export class AutocompleteService extends DisposableBase implements IAutocompleteService {
-    private _providers: Set<IAutocompleteProvider> = new Set<IAutocompleteProvider>();
-    private _invoke: (options: Autocomplete.RequestOptions) => (Promise<AutocompleteSuggestion[]>)[];
+export class AutocompleteService
+    extends ProviderServiceBase<IAutocompleteProvider, Autocomplete.RequestOptions, Promise<AutocompleteSuggestion[]> | undefined, Promise<AutocompleteSuggestion[]>>
+    implements IAutocompleteService {
     constructor() {
         super();
-
-        this._disposable.add(
-            Disposable.create(() => {
-                this._providers.forEach(x => x.dispose());
-                this._providers.clear();
-            })
-        );
     }
 
-    private _computeInvoke() {
-        const callbacks = _.map(_.toArray(this._providers), provider => {
-            return (options: Autocomplete.RequestOptions) => provider.request(options);
-        });
-        this._invoke = <any>((options: Autocomplete.RequestOptions) => {
-            return _.compact(_.over(callbacks)(options));
+    protected createInvoke(callbacks: ((options: Autocomplete.RequestOptions) => Promise<AutocompleteSuggestion[]> | undefined)[]) {
+        return ((options: Autocomplete.RequestOptions) => {
+            const requests = _.compact(_.over(callbacks)(options));
+            return Promise.all<AutocompleteSuggestion[]>(<any>requests)
+                .then(_.bind(this._reduceItems, this));
         });
     }
 
-    public registerProvider(provider: IAutocompleteProvider) {
-        this._providers.add(provider);
-        this._computeInvoke();
-        return Disposable.create(() => {
-            this._providers.delete(provider);
-            this._computeInvoke();
+    private _reduceItems(results: AutocompleteSuggestion[][]) {
+        return _.flatMap<AutocompleteSuggestion[], AutocompleteSuggestion>(results, item => {
+            if (item.length > 0) {
+                if (item[0].iconHTML) {
+                    return item;
+                }
+                if (item[0].type) {
+                    _.each(item, i => {
+                        if (i.type && !i.iconHTML) {
+                            i.iconHTML = this._renderIcon(i);
+                        }
+                        return;
+                    });
+                }
+            }
+            return item;
         });
     }
 
@@ -60,8 +62,8 @@ export class AutocompleteService extends DisposableBase implements IAutocomplete
         ]
     });
 
-    public getSuggestions(options: Autocomplete.RequestOptions): Promise<Autocomplete.Suggestion[]> | null {
-        if (!this._providers.size) {
+    public getSuggestions(options: Autocomplete.RequestOptions): Promise<AutocompleteSuggestion[]> | null {
+        if (!this.hasProviders) {
             return null;
         }
         if (!atom.views.getView(options.editor).classList.contains(className)) {
@@ -73,27 +75,11 @@ export class AutocompleteService extends DisposableBase implements IAutocomplete
         }
         const search = options.prefix;
 
-        return Promise.all(this._invoke(options))
-            .then(items => {
-                let results = _.flatMap<Autocomplete.Suggestion[], Autocomplete.Suggestion>(items, item => {
-                    if (item.length > 0) {
-                        if (item[0].iconHTML) {
-                            return item;
-                        }
-                        if (item[0].type) {
-                            _.each(item, i => {
-                                if (i.type && !i.iconHTML) {
-                                    i.iconHTML = this._renderIcon(i);
-                                }
-                                return;
-                            });
-                        }
-                    }
-                    return item;
-                });
+        return this.invoke(options)
+            .then(results => {
                 if (search) {
                     this._fuse.set(results);
-                    results = this._fuse.search<Autocomplete.Suggestion>(search);
+                    results = this._fuse.search<AutocompleteSuggestion>(search);
                 }
                 return results;
             });

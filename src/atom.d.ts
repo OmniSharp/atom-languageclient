@@ -91,6 +91,31 @@ declare namespace Hover {
         location: TextBuffer.Point;
     }
 }
+declare namespace Format {
+    export interface Base {
+        insertSpaces: boolean;
+        tabSize: number;
+    }
+    export interface DocumentOptions extends Base {
+        editor: Atom.TextEditor;
+    }
+    export interface RangeOptions extends Base {
+        editor: Atom.TextEditor;
+        range: TextBuffer.Range;
+    }
+    export type FormatOptions  = DocumentType | RangeOptions;
+}
+declare namespace Text {
+    export interface FileChange {
+        range: TextBuffer.Range;
+        text: string;
+    }
+    export interface WorkspaceChange {
+        filePath: string;
+        range: TextBuffer.Range;
+        text: string;
+    }
+}
 declare type Thenable<T> = Promise<T>;
 declare module 'file-url' {
     var method: (str: string) => string;

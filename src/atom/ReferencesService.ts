@@ -8,6 +8,7 @@ import { Observable, Subscription } from 'rxjs';
 import { readFile } from 'fs';
 import { Disposable, DisposableBase } from 'ts-disposables';
 import { alias, injectable } from '../services/_decorators';
+import { ProviderServiceBase } from './_ProviderServiceBase';
 import { ATOM_COMMANDS, ATOM_NAVIGATION, IReferencesProvider, IReferencesService } from '../services/_public';
 import { AtomCommands } from './AtomCommands';
 import { AtomNavigation } from './AtomNavigation';
@@ -18,10 +19,11 @@ const readFile$ = Observable.bindNodeCallback(readFile);
 
 @injectable
 @alias(IReferencesService)
-export class ReferencesService extends DisposableBase implements IReferencesService {
+export class ReferencesService
+    extends ProviderServiceBase<IReferencesProvider, Atom.TextEditor, Observable<AtomNavigationLocation[]>, Observable<AtomNavigationLocation[]>>
+    implements IReferencesService {
     private _navigation: AtomNavigation;
     private _commands: AtomCommands;
-    private _providers = new Set<IReferencesProvider>();
 
     constructor(navigation: AtomNavigation, commands: AtomCommands) {
         super();
@@ -29,41 +31,22 @@ export class ReferencesService extends DisposableBase implements IReferencesServ
         this._commands = commands;
 
         this._commands.add(ATOM_COMMANDS.CommandType.TextEditor, 'references', () => this.open());
-
-        this._disposable.add(
-            Disposable.create(() => {
-                this._providers.forEach(x => x.dispose());
-                this._providers.clear();
-            })
-        );
     }
 
-    public registerProvider(provider: IReferencesProvider) {
-        this._providers.add(provider);
-
-        return Disposable.create(() => {
-            this._providers.delete(provider);
+    protected createInvoke(callbacks: ((options: Atom.TextEditor) => Observable<AtomNavigationLocation[]>)[]) {
+        return ((options: Atom.TextEditor) => {
+            const requests = _.over(callbacks)(options);
+            return Observable.from(requests)
+                .mergeMap(_.identity)
+                .scan((acc, value) => { acc.push(...value); return acc; }, [])
+                .debounceTime(200);
         });
     }
 
     public open() {
         let view: ReferenceView;
-        let subscription: Subscription;
-        const providers = _.toArray(this._providers);
-        subscription = Observable.from(providers)
-            .mergeMap(provider => {
-                return provider.response.take(1);
-            })
-            .scan((acc, value) => { acc.push(...value); return acc; }, [])
-            .debounceTime(200)
-            .do(results => {
-                if (results.length === 1) {
-                    this._navigation.navigateTo(results[0]);
-                    subscription.unsubscribe();
-                }
-            })
-            .filter(results => results.length > 1)
-            .mergeMap(
+        this.invoke(atom.workspace.getActiveTextEditor())
+            .switchMap(
             results => {
                 const files = _(results)
                     .map(result => result.filePath)
@@ -99,7 +82,5 @@ export class ReferencesService extends DisposableBase implements IReferencesServ
                     view.setItems(items);
                 }
             });
-
-        _.each(providers, provider => provider.locate.next(atom.workspace.getActiveTextEditor()));
     }
 }

@@ -50,7 +50,7 @@ class HoverProvider extends DisposableBase implements IHoverProvider {
 
     public request(options: Hover.RequestOptions) {
         if (!this._syncExpression.evaluate(options.editor)) {
-            return;
+            return Observable.empty<Hover.Symbol>();
         }
 
         return Observable.fromPromise(

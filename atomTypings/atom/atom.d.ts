@@ -9839,7 +9839,8 @@ declare module Atom {
          * @param groupingInterval? - The {Number} of milliseconds for which this transaction should be considered "groupable" after it begins. If a transaction with a positive `groupingInterval` is committed while the previous transaction is still "groupable", the two transactions are merged with respect to undo and redo.
          * @param fn? - A {Function} to call inside the transaction.
          */
-        transact(groupingInterval?: number, fn?: Function): any;
+        transact(fn: () => void): any;
+        transact(groupingInterval: number, fn: () => void): any;
 
         /**
          * Start an open-ended transaction.
@@ -10351,7 +10352,7 @@ declare module Atom {
          *
          * The ranges are sorted by when the selections were added. Most recent at the end.
          */
-        getSelectedScreenRanges(): Range[];
+        getSelectedScreenRanges(): TextBuffer.Range[];
 
         /**
          * Set the selected range in screen coordinates. If there are multiple
