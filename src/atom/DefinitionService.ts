@@ -11,6 +11,7 @@ import { ProviderServiceBase } from './_ProviderServiceBase';
 import { ATOM_COMMANDS, ATOM_NAVIGATION, IDefinitionProvider, IDefinitionService } from '../services/_public';
 import { AtomCommands } from './AtomCommands';
 import { AtomNavigation } from './AtomNavigation';
+import { AtomTextEditorSource } from './AtomTextEditorSource';
 import { ReferenceView } from './views/ReferenceView';
 const { navigationHasRange } = ATOM_NAVIGATION;
 
@@ -22,11 +23,13 @@ export class DefinitionService
     implements IDefinitionService {
     private _navigation: AtomNavigation;
     private _commands: AtomCommands;
+    private _source: AtomTextEditorSource;
 
-    constructor(navigation: AtomNavigation, commands: AtomCommands) {
+    constructor(navigation: AtomNavigation, commands: AtomCommands, source: AtomTextEditorSource) {
         super();
         this._navigation = navigation;
         this._commands = commands;
+        this._source = source;
 
         this._commands.add(ATOM_COMMANDS.CommandType.TextEditor, 'definition', () => this.open());
     }
@@ -44,7 +47,7 @@ export class DefinitionService
     public open() {
         let view: ReferenceView;
         let subscription: Subscription;
-        const editor = atom.workspace.getActiveTextEditor();
+        const editor = this._source.activeTextEditor;
         if (editor) {
             subscription = this.invoke({
                 editor: editor,

@@ -11,6 +11,7 @@ import { ProviderServiceBase } from './_ProviderServiceBase';
 import { ATOM_COMMANDS, IFormatProvider, IFormatService } from '../services/_public';
 import { AtomChanges } from './AtomChanges';
 import { AtomCommands } from './AtomCommands';
+import { AtomTextEditorSource } from './AtomTextEditorSource';
 
 @injectable()
 @alias(IFormatService)
@@ -19,15 +20,17 @@ export class FormatService
     implements IFormatService {
     private _changes: AtomChanges;
     private _commands: AtomCommands;
+    private _source: AtomTextEditorSource;
 
-    public constructor(changes: AtomChanges, commands: AtomCommands) {
+    public constructor(changes: AtomChanges, commands: AtomCommands, source: AtomTextEditorSource) {
         super();
         this._changes = changes;
         this._commands = commands;
+        this._source = source;
 
         this._disposable.add(
-            this._commands.add(ATOM_COMMANDS.CommandType.TextEditor, `format-document`, () => this.formatDocument(atom.workspace.getActiveTextEditor())),
-            this._commands.add(ATOM_COMMANDS.CommandType.TextEditor, `format-range`, () => this.formatRange(atom.workspace.getActiveTextEditor()))
+            this._commands.add(ATOM_COMMANDS.CommandType.TextEditor, `format-document`, () => this.formatDocument(source.activeTextEditor)),
+            this._commands.add(ATOM_COMMANDS.CommandType.TextEditor, `format-range`, () => this.formatRange(source.activeTextEditor))
         );
     }
 

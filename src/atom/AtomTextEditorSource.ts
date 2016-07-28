@@ -67,6 +67,14 @@ export class AtomTextEditorSource extends DisposableBase implements IAtomTextEdi
             );
     }
 
+    public get activeTextEditor() {
+        return atom.workspace.getActiveTextEditor();
+    }
+
+    public get textEditors() {
+        return atom.workspace.getTextEditors();
+    }
+
     public get observeActiveTextEditor() { return this._observeActiveTextEditor; }
     public get observeTextEditors() { return this._observeTextEditors; }
 }

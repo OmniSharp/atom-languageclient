@@ -11,6 +11,7 @@ import { ATOM_COMMANDS, IRenameProvider, IRenameService } from '../services/_pub
 import { AtomChanges } from './AtomChanges';
 import { AtomCommands } from './AtomCommands';
 import { AtomNavigation } from './AtomNavigation';
+import { AtomTextEditorSource } from './AtomTextEditorSource';
 import { RenameView } from './views/RenameView';
 
 @injectable
@@ -21,12 +22,14 @@ export class RenameService
     private _navigation: AtomNavigation;
     private _commands: AtomCommands;
     private _changes: AtomChanges;
+    private _source: AtomTextEditorSource;
 
-    constructor(changes: AtomChanges, navigation: AtomNavigation, commands: AtomCommands) {
+    constructor(changes: AtomChanges, navigation: AtomNavigation, commands: AtomCommands, source: AtomTextEditorSource) {
         super();
         this._changes = changes;
         this._commands = commands;
         this._navigation = navigation;
+        this._source = source;
 
         this._disposable.add(
             this._commands.add(ATOM_COMMANDS.CommandType.TextEditor, 'rename', () => {
@@ -48,7 +51,7 @@ export class RenameService
     }
 
     public open() {
-        const editor = atom.workspace.getActiveTextEditor();
+        const editor = this._source.activeTextEditor;
         if (editor) {
             let word = editor.getWordUnderCursor();
             word = _.trim(word, '()[]{}');

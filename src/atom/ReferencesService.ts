@@ -11,6 +11,7 @@ import { ProviderServiceBase } from './_ProviderServiceBase';
 import { ATOM_COMMANDS, ATOM_NAVIGATION, IReferencesProvider, IReferencesService } from '../services/_public';
 import { AtomCommands } from './AtomCommands';
 import { AtomNavigation } from './AtomNavigation';
+import { AtomTextEditorSource } from './AtomTextEditorSource';
 import { ReferenceView } from './views/ReferenceView';
 const {navigationHasRange} = ATOM_NAVIGATION;
 
@@ -23,11 +24,13 @@ export class ReferencesService
     implements IReferencesService {
     private _navigation: AtomNavigation;
     private _commands: AtomCommands;
+    private _source: AtomTextEditorSource;
 
-    constructor(navigation: AtomNavigation, commands: AtomCommands) {
+    constructor(navigation: AtomNavigation, commands: AtomCommands, source: AtomTextEditorSource) {
         super();
         this._navigation = navigation;
         this._commands = commands;
+        this._source = source;
 
         this._commands.add(ATOM_COMMANDS.CommandType.TextEditor, 'references', () => this.open());
     }
@@ -44,7 +47,7 @@ export class ReferencesService
 
     public open() {
         let view: ReferenceView;
-        this.invoke(atom.workspace.getActiveTextEditor())
+        this.invoke(this._source.activeTextEditor)
             .switchMap(
             results => {
                 const files = _(results)

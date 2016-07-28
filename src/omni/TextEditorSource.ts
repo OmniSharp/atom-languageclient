@@ -11,6 +11,8 @@ import { observeCallback } from '../helpers/index';
 import { ILanguageClientTextEditor } from './ILanguageClientTextEditor';
 
 export interface ITextEditorSource {
+    readonly activeTextEditor: Atom.TextEditor;
+    readonly textEditors: Atom.TextEditor[];
     observeActiveTextEditor(): Observable<ILanguageClientTextEditor>;
     observeTextEditor(): Observable<ILanguageClientTextEditor>;
 }
@@ -19,6 +21,14 @@ export interface ITextEditorSource {
 export class TextEditorSource extends DisposableBase implements ITextEditorSource {
     constructor() {
         super();
+    }
+
+    public get activeTextEditor() {
+        return atom.workspace.getActiveTextEditor();
+    }
+
+    public get textEditors() {
+        return atom.workspace.getTextEditors();
     }
 
     public observeActiveTextEditor() {

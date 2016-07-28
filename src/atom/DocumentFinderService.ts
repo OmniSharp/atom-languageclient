@@ -10,6 +10,7 @@ import { ProviderServiceBase } from './_ProviderServiceBase';
 import { IDocumentFinderProvider, IDocumentFinderService } from '../services/_public';
 import { AtomCommands } from './AtomCommands';
 import { AtomNavigation } from './AtomNavigation';
+import { AtomTextEditorSource } from './AtomTextEditorSource';
 import { DocumentFinderView } from './views/DocumentFinderView';
 
 @injectable
@@ -19,11 +20,13 @@ export class DocumentFinderService
     implements IDocumentFinderService {
     private _navigation: AtomNavigation;
     private _commands: AtomCommands;
+    private _source: AtomTextEditorSource;
 
-    constructor(navigation: AtomNavigation, commands: AtomCommands) {
+    constructor(navigation: AtomNavigation, commands: AtomCommands, source: AtomTextEditorSource) {
         super();
         this._navigation = navigation;
         this._commands = commands;
+        this._source = source;
     }
 
     protected createInvoke(callbacks: ((options: Atom.TextEditor) => Observable<Finder.Symbol[]>)[]) {
@@ -42,7 +45,7 @@ export class DocumentFinderService
     }
 
     public open() {
-        const activeEditor = atom.workspace.getActiveTextEditor();
+        const activeEditor = this._source.activeTextEditor;
         if (activeEditor) {
             this._disposable.add(new DocumentFinderView(this._commands, this._navigation, this.invoke(activeEditor)));
         }
