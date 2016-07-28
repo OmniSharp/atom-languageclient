@@ -24,6 +24,7 @@ export class LanguageProtocolClient extends DisposableBase implements ILanguageP
     public get capabilities() { return this._capabilities; }
     public get options() { return this._options; }
     public get name() { return this._options.diagnosticCollectionName || this._options.outputChannelName || 'languageprotocol'; }
+    public get rootPath() { return this._projectProvider.getPaths()[0] || process.cwd(); }
 
     constructor(
         @inject(IProjectProvider) projectProvider: IProjectProvider,
@@ -108,7 +109,7 @@ export class LanguageProtocolClient extends DisposableBase implements ILanguageP
     private _initialize(): Promise<InitializeResult> {
         const initParams: InitializeParams = {
             processId: process.pid,
-            rootPath: this._projectProvider.getPaths()[0] || process.cwd(),
+            rootPath: this.rootPath,
             capabilities: {},
             initializationOptions: this._options.initializationOptions
         };

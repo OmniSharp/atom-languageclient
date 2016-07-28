@@ -3,6 +3,8 @@
  *  @copyright OmniSharp Team
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
+import * as _ from 'lodash';
+import { Observable } from 'rxjs';
 import { CompositeDisposable, DisposableBase } from 'ts-disposables';
 import { Message } from 'vscode-jsonrpc';
 import { ILanguageProvider } from '../services/_internal';
@@ -19,6 +21,8 @@ import { SyncExpression } from './SyncExpression';
 export class LanguageProvider extends DisposableBase {
     private _container: Container;
     private _atomTextEditorSource: AtomTextEditorSource;
+    private _connections: Map<ILanguageProvider, Set<ILanguageProtocolClient>>;
+
     constructor(container: Container) {
         super();
         this._container = container;
@@ -29,55 +33,85 @@ export class LanguageProvider extends DisposableBase {
             this._atomTextEditorSource = this._container.resolve(AtomTextEditorSource);
         }
 
+        if (!this._connections.has(provider)) {
+            this._connections.set(provider, new Set<ILanguageProtocolClient>());
+        }
+
+        const connections = this._connections.get(provider) !;
         const syncExpression = SyncExpression.create(provider.clientOptions);
         this._atomTextEditorSource.observeTextEditors
             .filter(editor => syncExpression.evaluate(editor))
+            // .concatMap(editor => {
+            //     // Allow multiple language servers to run a given language.
+            //     // Based on the context of the language server (could be from a different project, for example)
+            //     if (provider.chooseConnection) {
+            //         return Observable.fromPromise(provider.chooseConnection({
+            //             connections: _.toArray(connections),
+            //             editor
+            //         }))
+            //         .filter(x => x).map(() => editor);
+            //     }
+
+            //     return Observable.of(editor);
+            // })
             .take(1)
             .toPromise()
             .then(() => {
-                const container = this._container.createChild();
-                container.registerInstance(ISyncExpression, syncExpression);
-                container.registerInstance(ILanguageProtocolClientOptions, provider.clientOptions);
-                container.registerSingleton(IDocumentDelayer, Delayer);
-                const capabilities = container.registerCapabilities(ILanguageProtocolClient);
-
-                const errorHandler = (error: Error, message: Message, count: number) => {
-                    console.error(error, message, count);
-                };
-
-                const closeHandler = () => { /* */ };
-
-                const connectionOptions = {
-                    /* tslint:disable-next-line:no-any */
-                    closeHandler, errorHandler, output(x: any) { console.log(x); }
-                };
-
-                const cd = new CompositeDisposable(container);
-                this._disposable.add(cd);
-
-                const connectionRequest = Connection.create(provider.serverOptions, connectionOptions);
-                connectionRequest.then(connection => {
-                    container.registerInstance(IConnection, connection);
-                    container.registerSingleton(LanguageProtocolClient);
-                    container.registerAlias(LanguageProtocolClient, ILanguageProtocolClient);
-
-                    const client = container.resolve(LanguageProtocolClient);
-                    cd.add(connection, client);
-
-                    return client.start().then(() => client);
-                }).then(client => {
-                    const disposables = container.resolveEach(capabilities);
-                    for (const item of disposables) {
-                        if (item instanceof Error) {
-                            console.error(item, item.innerError);
-                        } else if (item.dipose) {
-                            cd.add(item);
-                        }
-                    }
-                    if (provider.onConnected) {
-                        provider.onConnected(client);
-                    }
-                });
+                return this._createClient(provider, syncExpression);
+            })
+            .then(client => {
+                connections.add(client);
             });
+    }
+
+    private _createClient(provider: ILanguageProvider, syncExpression: ISyncExpression) {
+        let connection: IConnection;
+        let client: LanguageProtocolClient;
+        const container = this._container.createChild();
+        container.registerInstance(ISyncExpression, syncExpression);
+        container.registerInstance(ILanguageProtocolClientOptions, provider.clientOptions);
+        container.registerSingleton(IDocumentDelayer, Delayer);
+        const capabilities = container.registerCapabilities(ILanguageProtocolClient);
+
+        const errorHandler = (error: Error, message: Message, count: number) => {
+            console.error(error, message, count);
+        };
+
+        const closeHandler = () => {
+            /* */
+        };
+
+        const connectionOptions = {
+            /* tslint:disable-next-line:no-any */
+            closeHandler, errorHandler, output(x: any) { console.log(x); }
+        };
+
+        const cd = new CompositeDisposable(container);
+        this._disposable.add(cd);
+
+        const connectionRequest = Connection.create(provider.serverOptions, connectionOptions);
+        return connectionRequest.then(conn => {
+            connection = conn;
+            container.registerInstance(IConnection, connection);
+            container.registerSingleton(LanguageProtocolClient);
+            container.registerAlias(LanguageProtocolClient, ILanguageProtocolClient);
+
+            client = container.resolve(LanguageProtocolClient);
+            cd.add(connection, client);
+            return client.start().then(() => client);
+        }).then(() => {
+            const disposables = container.resolveEach(capabilities);
+            for (const item of disposables) {
+                if (item instanceof Error) {
+                    console.error(item, item.innerError);
+                } else if (item.dipose) {
+                    cd.add(item);
+                }
+            }
+            if (provider.onConnected) {
+                provider.onConnected(client);
+            }
+            return client;
+        });
     }
 }

@@ -285,34 +285,6 @@ export class Connection implements IConnection {
         this._connection.onNotification(TelemetryEventNotification.type, handler);
     }
 
-    // public didChangeConfiguration(params: DidChangeConfigurationParams) {
-    //     this._connection.sendNotification(DidChangeConfigurationNotification.type, params);
-    // }
-
-    // public didChangeWatchedFiles(params: DidChangeWatchedFilesParams) {
-    //     this._connection.sendNotification(DidChangeWatchedFilesNotification.type, params);
-    // }
-
-    // public didOpenTextDocument(params: DidOpenTextDocumentParams) {
-    //     this._connection.sendNotification(DidOpenTextDocumentNotification.type, params);
-    // }
-
-    // public didChangeTextDocument(params: DidChangeTextDocumentParams | DidChangeTextDocumentParams[] | undefined) {
-    //     this._connection.sendNotification(DidChangeTextDocumentNotification.type, params);
-    // }
-
-    // public didCloseTextDocument(params: DidCloseTextDocumentParams) {
-    //     this._connection.sendNotification(DidCloseTextDocumentNotification.type, params);
-    // }
-
-    // public didSaveTextDocument(params: DidSaveTextDocumentParams) {
-    //     this._connection.sendNotification(DidSaveTextDocumentNotification.type, params);
-    // }
-
-    // public onDiagnostics(handler: NotificationHandler<PublishDiagnosticsParams>) {
-    //     this._connection.onNotification(PublishDiagnosticsNotification.type, handler);
-    // }
-
     public dispose() {
         this._connection.dispose();
     }

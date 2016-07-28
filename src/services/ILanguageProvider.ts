@@ -19,6 +19,12 @@ export const ILanguageProvider = Symbol.for('ILanguageProvider');
 export interface ILanguageProvider {
     clientOptions: ILanguageProtocolClientOptions;
     serverOptions: ILanguageProtocolServerOptions;
+    chooseConnection?: (context: IChooseConnectionContext) => Promise<boolean>;
     onConnected?: (connection: ILanguageProtocolClient) => void;
     dispose?: () => void;
+}
+
+export interface IChooseConnectionContext {
+    editor: Atom.TextEditor;
+    connections: ILanguageProtocolClient[];
 }

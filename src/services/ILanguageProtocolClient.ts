@@ -17,6 +17,7 @@ export interface ILanguageProtocolClient {
     readonly state: ClientState;
     readonly options: ILanguageProtocolClientOptions;
     readonly name: string;
+    readonly rootPath: string;
 
     sendRequest<P, R, E>(type: RequestType<P, R, E>, params: P, token?: CancellationToken): Promise<R>;
     sendNotification<P>(type: NotificationType<P>): void;
