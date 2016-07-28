@@ -13,7 +13,7 @@ import { TextDocumentIdentifier } from '../vscode-languageserver-types';
 import { RenameParams, RenameRequest } from '../vscode-protocol';
 
 @capability
-export class LanguageProtocolRename extends DisposableBase {
+export class RenameProtocol extends DisposableBase {
     private _client: ILanguageProtocolClient;
     private _syncExpression: ISyncExpression;
     private _renameService: IRenameService;

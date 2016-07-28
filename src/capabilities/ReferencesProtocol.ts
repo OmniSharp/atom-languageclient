@@ -14,7 +14,7 @@ import { Position, ReferenceParams, TextDocumentIdentifier } from '../vscode-lan
 import { ReferencesRequest } from '../vscode-protocol';
 
 @capability
-export class LanguageProtocolReferences extends DisposableBase {
+export class ReferencesProtocol extends DisposableBase {
     private _client: ILanguageProtocolClient;
     private _syncExpression: ISyncExpression;
     private _referencesService: IReferencesService;

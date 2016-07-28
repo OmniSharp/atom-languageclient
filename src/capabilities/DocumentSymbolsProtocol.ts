@@ -15,7 +15,7 @@ import { SymbolInformation, SymbolKind, TextDocumentIdentifier } from '../vscode
 import { DocumentSymbolRequest } from '../vscode-protocol';
 
 @capability
-export class LanguageProtocolDocumentSymbols extends DisposableBase {
+export class DocumentSymbolsProtocol extends DisposableBase {
     private _client: ILanguageProtocolClient;
     private _syncExpression: ISyncExpression;
     private _finderService: IDocumentFinderService;

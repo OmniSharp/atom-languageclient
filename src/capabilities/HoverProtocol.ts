@@ -13,7 +13,7 @@ import { Hover, MarkedString, Position, TextDocumentIdentifier } from '../vscode
 import { HoverRequest } from '../vscode-protocol';
 
 @capability
-export class LanguageProtocolHover extends DisposableBase {
+export class HoverProtocol extends DisposableBase {
     private _client: ILanguageProtocolClient;
     private _syncExpression: ISyncExpression;
     private _hoverService: IHoverService;

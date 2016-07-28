@@ -15,7 +15,7 @@ import { SymbolInformation, SymbolKind } from '../vscode-languageserver-types';
 import { WorkspaceSymbolRequest } from '../vscode-protocol';
 
 @capability
-export class LanguageProtocolWorkspaceSymbols extends DisposableBase {
+export class WorkspaceSymbolsProtocol extends DisposableBase {
     private _client: ILanguageProtocolClient;
     private _finderService: IWorkspaceFinderService;
     constructor(

@@ -5,7 +5,7 @@
  */
 import * as _ from 'lodash';
 import { IAtomViewFinder, IDocumentDelayer, ILanguageProtocolClient, ISyncExpression } from '../services/_public';
-import { getLanguageId, toUri, toRange, toTextDocumentIdentifier } from './utils/convert';
+import { getLanguageId, toRange, toTextDocumentIdentifier, toUri } from './utils/convert';
 import { TextDocumentSyncKind } from '../vscode-languageserver-types';
 import {
     DidChangeTextDocumentNotification,
@@ -19,7 +19,7 @@ import {
 import { AtomTextChange } from '../omni/LanguageClientTextEditorChanges';
 import { TextEditorSync } from './TextEditorSync';
 
-export class LanguageProtocolTextEditorSync extends TextEditorSync {
+export class TextEditorSyncProtocol extends TextEditorSync {
     private _client: ILanguageProtocolClient;
 
     constructor(

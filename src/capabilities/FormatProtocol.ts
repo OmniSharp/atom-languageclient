@@ -10,11 +10,11 @@ import { DisposableBase } from 'ts-disposables';
 import { capability, inject } from '../services/_decorators';
 import { AtomFormat, IFormatProvider, IFormatService, ILanguageProtocolClient, ISyncExpression } from '../services/_public';
 import { fromTextEdits, toRange } from './utils/convert';
-import { MarkedString, TextDocumentIdentifier } from '../vscode-languageserver-types';
+import { TextDocumentIdentifier } from '../vscode-languageserver-types';
 import { DocumentFormattingParams, DocumentFormattingRequest, DocumentRangeFormattingParams, DocumentRangeFormattingRequest } from '../vscode-protocol';
 
 @capability
-export class LanguageProtocolFormat extends DisposableBase {
+export class FormatProtocol extends DisposableBase {
     private _client: ILanguageProtocolClient;
     private _syncExpression: ISyncExpression;
     private _FormatService: IFormatService;

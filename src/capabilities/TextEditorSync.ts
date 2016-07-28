@@ -5,8 +5,8 @@
  */
 import * as _ from 'lodash';
 import { DisposableBase } from 'ts-disposables';
-import { className } from '../constants';
 import { IAtomViewFinder, IDocumentDelayer, ISyncExpression } from '../services/_public';
+import { className } from '../constants';
 import { AtomTextChange, LanguageClientTextEditorChanges } from '../omni/LanguageClientTextEditorChanges';
 
 export abstract class TextEditorSync extends DisposableBase {

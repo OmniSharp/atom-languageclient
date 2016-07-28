@@ -12,7 +12,7 @@ import { PublishDiagnosticsNotification, PublishDiagnosticsParams } from '../vsc
 import { Linter as LinterBase } from './Linter';
 
 @capability
-export class LanguageProtocolLinter extends LinterBase {
+export class LinterProtocol extends LinterBase {
     private _client: ILanguageProtocolClient;
     constructor(
         @inject(ILanguageProtocolClient) client: ILanguageProtocolClient,

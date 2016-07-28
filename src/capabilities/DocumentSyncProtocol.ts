@@ -12,7 +12,7 @@ import { AtomTextEditorSource } from '../atom/AtomTextEditorSource';
 import { LanguageProtocolTextEditorSync } from './LanguageProtocolTextEditorSync';
 
 @capability
-export class DocumentSync extends DisposableBase {
+export class DocumentSyncProtocol extends DisposableBase {
     private _client: ILanguageProtocolClient;
     private _atomTextEditorSource: AtomTextEditorSource;
     private _syncExpression: ISyncExpression;

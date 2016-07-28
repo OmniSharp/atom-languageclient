@@ -14,7 +14,7 @@ import { Position, TextDocumentIdentifier, TextDocumentPositionParams } from '..
 import { DefinitionRequest } from '../vscode-protocol';
 
 @capability
-export class LanguageProtocolDefinition extends DisposableBase {
+export class DefinitionProtocol extends DisposableBase {
     private _client: ILanguageProtocolClient;
     private _syncExpression: ISyncExpression;
     private _definitionService: IDefinitionService;

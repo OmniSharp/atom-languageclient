@@ -19,7 +19,7 @@ function isCompletionList(item: any): item is CompletionList {
 }
 
 @capability
-export class LanguageProtocolAutocomplete extends DisposableBase {
+export class AutocompleteProtocol extends DisposableBase {
     private _client: ILanguageProtocolClient;
     private _autocompleteService: IAutocompleteService;
     private _syncExpression: ISyncExpression;
