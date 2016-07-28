@@ -21,7 +21,6 @@ class SortImportsWalker extends Lint.RuleWalker {
         const importCompareLines = _.map(imports, getSortKey);
         const sortedImportLines = _.sortBy(importCompareLines, customSortKey);
 
-
         _.each(imports, (actualImport, index) => {
             if (importCompareLines[index] !== sortedImportLines[index]) {
                 const expectedImportIndex = _.findIndex(importCompareLines, line => line === sortedImportLines[index]);
@@ -55,7 +54,7 @@ class SortImportsWalker extends Lint.RuleWalker {
         });
 
         const groups = _.groupBy(
-            _.filter(imports, statement => (isImportStatement(statement) || isExportStatement(statement)) && !isImportRequireStatement(statement)),
+            _.filter(imports, statement => ((isImportStatement(statement) || isExportStatement(statement)) && !isImportRequireStatement(statement)) && statement.moduleSpecifier),
             (statement: ts.ImportDeclaration | ts.ExportDeclaration) => `${statement.kind}|${_.trim(statement.moduleSpecifier.getText(), '\'"')}`);
 
         _.each(groups, (statements, key) => {
@@ -129,12 +128,16 @@ class SortImportsWalker extends Lint.RuleWalker {
 }
 
 function getSortKey(statement: ImportOrExportDeclaration) {
-    if (isImportStatement(statement) && !isImportRequireStatement(statement)) {
-        return _.trim(statement.moduleSpecifier.getText(), '\'"');
-    } else if (isExportStatement(statement) && !isImportRequireStatement(statement)) {
-        return _.trim(statement.moduleSpecifier.getText(), '\'"');
-    } else {
-        return _.trim(statement.moduleReference.getText(), '\'"');
+    try {
+        if (isImportStatement(statement) && !isImportRequireStatement(statement)) {
+            return _.trim(statement.moduleSpecifier.getText(), '\'"');
+        } else if (isExportStatement(statement) && !isImportRequireStatement(statement)) {
+            return _.trim(statement.moduleSpecifier.getText(), '\'"');
+        } else {
+            return _.trim(statement.moduleReference.getText(), '\'"');
+        }
+    } catch (e) {
+        return null;
     }
 }
 
@@ -173,27 +176,31 @@ function isNamedImports(node: ts.Node): node is ts.NamedImports {
 }
 
 function customSortKey(key: string) {
-    let result = key;
-    if (key[0] === '@') {
-        result = _.trim(key, '@').toLowerCase();
-    } else if (_.startsWith(key, 'lodash')) {
-        result = `0${key}`;
-    } else if (_.startsWith(key, `rxjs`)) {
-        result = `0${key}`;
-    } else if (_.startsWith(key, './') || _.startsWith(key, '../')) {
-        const split = key.split('/');
-        let prefix: string;
-        result = _.last(split)
-        if (result === 'index') {
-            result = _.nth(split, -2);
+    try {
+        let result = key;
+        if (key[0] === '@') {
+            result = _.trim(key, '@').toLowerCase();
+        } else if (_.startsWith(key, 'lodash')) {
+            result = `0${key}`;
+        } else if (_.startsWith(key, `rxjs`)) {
+            result = `0${key}`;
+        } else if (_.startsWith(key, './') || _.startsWith(key, '../')) {
+            const split = key.split('/');
+            let prefix: string;
+            result = _.last(split);
+            if (result === 'index') {
+                result = _.nth(split, -2);
+            }
+            if (result.match(/^[A-Z]/)) {
+                prefix = 'z';
+            } else {
+                prefix = 'y';
+            }
+            result = `${prefix}${result}`.toLowerCase();
         }
-        if (result.match(/^[A-Z]/)) {
-            prefix = 'z';
-        } else {
-            prefix = 'y';
-        }
-        result = `${prefix}${result}`.toLowerCase();
-    }
 
-    return result.replace(/\//g, '');
+        return result.replace(/\//g, '');
+    } catch (e) {
+        return null;
+    }
 }

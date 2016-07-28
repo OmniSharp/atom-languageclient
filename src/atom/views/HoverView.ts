@@ -40,6 +40,7 @@ export class HoverView extends View<HTMLDivElement> {
             this._rect = rect;
         }
 
+        /* tslint:disable-next-line:no-inner-html */
         this._text.innerHTML = text;
         this.updatePosition(this._rect);
     }

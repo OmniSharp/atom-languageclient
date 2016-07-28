@@ -2,7 +2,7 @@
  *
  */
 import * as _ from 'lodash';
-import Fuse = require('fuse.js');
+import * as Fuse from 'fuse.js';
 import { AtomCommands } from '../AtomCommands';
 import { SelectListView } from './SelectListView';
 

@@ -1,7 +1,6 @@
 /**
  *
  */
-import * as _ from 'lodash';
 import { DisposableBase } from 'ts-disposables';
 /* tslint:disable:no-invalid-this */
 
@@ -189,6 +188,7 @@ export abstract class View<TElement extends HTMLElement> extends DisposableBase 
         if (element == null) {
             element = this._root!;
         }
+        /* tslint:disable-next-line:no-inner-html */
         element.innerHTML = '';
     }
 }

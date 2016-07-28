@@ -4,12 +4,11 @@
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
 /* tslint:disable:no-any */
-import * as _ from 'lodash';
 import { Disposable, DisposableBase } from 'ts-disposables';
 import { CancellationToken, ErrorCodes, NotificationHandler, NotificationType, RequestHandler, RequestType, ResponseError } from 'vscode-jsonrpc';
 import { inject } from '../services/_decorators';
 import { ClientState, IDocumentDelayer, ILanguageProtocolClient, ILanguageProtocolClientOptions, IProjectProvider, ISyncExpression } from '../services/_public';
-import { InitializeError, InitializeParams, InitializeResult, ServerCapabilities, TextDocumentSyncKind } from '../vscode-languageserver-types';
+import { InitializeError, InitializeParams, InitializeResult, ServerCapabilities } from '../vscode-languageserver-types';
 import { ShowMessageRequest } from '../vscode-protocol';
 import { IConnection } from './Connection';
 

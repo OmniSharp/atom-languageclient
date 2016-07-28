@@ -5,4 +5,3 @@
  */
 export const packageName = 'atom-languageclient';
 export const className = 'languageclient-editor';
-

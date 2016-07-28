@@ -50,6 +50,7 @@ class LanguageProtocolDefinitionProvider extends DisposableBase implements IDefi
 
     public request(options: Definition.RequestOptions) {
         if (!this._syncExpression.evaluate(options.editor)) {
+            /* tslint:disable-next-line:no-any */
             return Observable.empty<any>();
         }
 

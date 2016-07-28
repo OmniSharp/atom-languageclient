@@ -126,6 +126,7 @@ export abstract class SelectListView<T> extends View<HTMLDivElement> {
         if (items == null) {
             return;
         }
+        /* tslint:disable-next-line:no-inner-html */
         this._list.innerHTML = '';
         if (items.length) {
             this.setError(undefined);
@@ -199,6 +200,7 @@ export abstract class SelectListView<T> extends View<HTMLDivElement> {
     }
 
     public storeFocusedElement() {
+        /* tslint:disable-next-line:no-any */
         return this._previouslyFocusedElement = <any>document.activeElement;
     }
 
@@ -242,7 +244,7 @@ export abstract class SelectListView<T> extends View<HTMLDivElement> {
         if (desiredTop < scrollTop) {
             this._list.scrollTop = desiredTop;
         } else if (desiredBottom > this.scrollBottom(this._list)) {
-            this.scrollBottom(this._list, desiredBottom)
+            this.scrollBottom(this._list, desiredBottom);
         }
     }
 
@@ -278,7 +280,9 @@ export abstract class SelectListView<T> extends View<HTMLDivElement> {
 
     private _buildHtml() {
         this.root.classList.add('select-list');
+        /* tslint:disable-next-line:no-any */
         const editor: Atom.TextEditorPresenter = this._filterEditorView = <any>document.createElement('atom-text-editor');
+        /* tslint:disable-next-line:no-any */
         editor.setAttribute('mini', <any>true);
         const errorMessage = this._error = document.createElement('div');
         errorMessage.classList.add('error-message');

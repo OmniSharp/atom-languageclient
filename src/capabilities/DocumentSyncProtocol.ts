@@ -9,7 +9,7 @@ import { capability, inject } from '../services/_decorators';
 import { IAtomViewFinder, IDocumentDelayer, ILanguageProtocolClient, ISyncExpression } from '../services/_public';
 import { TextDocumentSyncKind } from '../vscode-languageserver-types';
 import { AtomTextEditorSource } from '../atom/AtomTextEditorSource';
-import { LanguageProtocolTextEditorSync } from './LanguageProtocolTextEditorSync';
+import { TextEditorSyncProtocol } from './TextEditorSyncProtocol';
 
 @capability
 export class DocumentSyncProtocol extends DisposableBase {
@@ -18,7 +18,7 @@ export class DocumentSyncProtocol extends DisposableBase {
     private _syncExpression: ISyncExpression;
     private _documentDelayer: IDocumentDelayer;
     private _atomViewFinder: IAtomViewFinder;
-    private _editors = new WeakMap<Atom.TextEditor, LanguageProtocolTextEditorSync>();
+    private _editors = new WeakMap<Atom.TextEditor, TextEditorSyncProtocol>();
 
     constructor(
         @inject(ILanguageProtocolClient) client: ILanguageProtocolClient,
@@ -48,7 +48,7 @@ export class DocumentSyncProtocol extends DisposableBase {
 
     private _configureEditor(editor: Atom.TextEditor) {
         if (!this._editors.has(editor)) {
-            const sync = new LanguageProtocolTextEditorSync(this._client, this._syncExpression, this._documentDelayer, this._atomViewFinder, editor);
+            const sync = new TextEditorSyncProtocol(this._client, this._syncExpression, this._documentDelayer, this._atomViewFinder, editor);
             this._editors.set(editor, sync);
             this._disposable.add(sync);
         }

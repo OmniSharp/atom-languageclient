@@ -1,8 +1,9 @@
-/* --------------------------------------------------------------------------------------------
- * Copyright (c) Microsoft Corporation. All rights reserved.
- * Licensed under the MIT License. See License.txt in the project root for license information.
- * ------------------------------------------------------------------------------------------ */
-'use strict';
+/**
+ *  @license   MIT
+ *  @copyright OmniSharp Team
+ *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
+ */
+/* tslint:disable */
 
 /**
  * Position in a text document expressed as zero-based line and character offset.

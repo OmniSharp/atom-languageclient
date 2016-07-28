@@ -32,7 +32,7 @@ export class TextEditorSyncProtocol extends TextEditorSync {
         this._client = client;
         this._fullText = this._client.capabilities.textDocumentSync === TextDocumentSyncKind.Full;
 
-        this._configure();
+        this.configure();
     }
 
     protected fullTextChange(change: AtomTextChange) {

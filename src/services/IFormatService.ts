@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 import { IDisposable } from 'ts-disposables';
 
 export namespace AtomFormat {
+    /* tslint:disable-next-line:no-any */
     export function formatRange(options: any): options is Format.RangeOptions {
         return !!options.range;
     }

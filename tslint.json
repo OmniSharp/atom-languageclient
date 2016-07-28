@@ -66,7 +66,7 @@
         "no-empty": true,
         "no-increment-decrement": true,
         "no-invalid-regexp": true,
-        "no-invalid-this": true,
+        "no-invalid-this": false, // TODO: Update when this supports new this construct
         "no-jquery-raw-elements": true,
         "no-regex-spaces": true,
         "no-sparse-arrays": true,

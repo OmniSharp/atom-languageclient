@@ -10,6 +10,7 @@ import { IAtomViewFinder } from '../services/_public';
 @injectable
 @alias(IAtomViewFinder)
 export class AtomViewFinder implements IAtomViewFinder {
+    /* tslint:disable-next-line:no-any */
     public getView(item: any): HTMLElement {
         return atom.views.getView(item);
     }

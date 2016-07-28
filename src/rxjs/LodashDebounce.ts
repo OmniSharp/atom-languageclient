@@ -1,6 +1,9 @@
 /**
- *
+ *  @license   MIT
+ *  @copyright OmniSharp Team
+ *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
+/* tslint:disable:no-any */
 import { DebounceOptions, bind, debounce } from 'lodash';
 import { Observable } from 'rxjs/Observable';
 import { Operator } from 'rxjs/Operator';
@@ -11,13 +14,10 @@ export function lodashDebounce<T>(this: Observable<T>, duration: number, options
     return this.lift(new LodashDebounceOperator<T>(duration, options || {}));
 }
 
-export interface LodashDebounceSignature<T> {
-    (duration: number): Observable<T>;
-}
-
 declare module 'rxjs/Observable' {
+    /* tslint:disable-next-line:interface-name */
     export interface Observable<T> {
-        lodashDebounce: LodashDebounceSignature<T>;
+        lodashDebounce: typeof lodashDebounce;
     }
 }
 
@@ -51,6 +51,7 @@ class LodashDebounceSubscriber<T> extends Subscriber<T> {
         this._method = debounce(bind(this._dispatchNext, this));
     }
 
+    /* tslint:disable-next-line */
     protected _next(value: T): void {
         this._method(value);
     }

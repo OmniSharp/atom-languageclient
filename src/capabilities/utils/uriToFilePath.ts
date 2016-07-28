@@ -11,7 +11,7 @@ export function uriToFilePath(uri: string): string {
         return '';
     }
     const segments = parsed.path.split('/');
-    for (let i = 0; i < segments.length; i++) {
+    for (let i = 0; i < segments.length; i += 1) {
         segments[i] = decodeURIComponent(segments[i]);
     }
     if (process.platform === 'win32' && segments.length > 1) {

@@ -53,7 +53,7 @@ export class DocumentFinderView extends FilterSelectListView<Finder.Symbol> {
             filename += ': ' + item.location.row;
         }
 
-        let filenameContent = filename;
+        const filenameContent = filename;
         let nameContent = item.name;
 
         // const pathMatches = _.find(matches!, { key: 'filePath' });

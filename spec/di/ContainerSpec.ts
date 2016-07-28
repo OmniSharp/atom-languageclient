@@ -3,11 +3,12 @@
  *  @copyright OmniSharp Team
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
+/* tslint:disable:no-any */
 import * as _ from 'lodash';
 import { expect } from 'chai';
-import * as I from './fixtures/interfaces';
-import { capability, inject } from '../../src/di/decorators';
 import { ILanguageProtocolClient, IOmniClient } from '../../src/services/_public';
+import { capability, inject } from '../../src/di/decorators';
+import * as I from './fixtures/interfaces';
 import { A } from './fixtures/A';
 import { B } from './fixtures/B';
 import { C } from './fixtures/C';
@@ -72,9 +73,6 @@ describe(Container.name, () => {
     });
 
     describe('capabilities', () => {
-        const aKey = 1;
-        const bKey = 2;
-
         @capability
         class CapabilityA {
             constructor( @inject(ILanguageProtocolClient) value: any) { /* */ }

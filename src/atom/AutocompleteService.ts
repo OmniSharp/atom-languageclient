@@ -5,7 +5,8 @@
  */
 /* tslint:disable:no-any */
 import * as _ from 'lodash';
-import Fuse = require('fuse.js');
+/* tslint:disable-next-line:no-require-imports */
+import * as Fuse from 'fuse.js';
 import { ProviderServiceBase } from './_ProviderServiceBase';
 import { AutocompleteKind, AutocompleteSuggestion, IAutocompleteProvider, IAutocompleteService } from '../services/_public';
 import { className, packageName } from '../constants';

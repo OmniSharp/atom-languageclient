@@ -11,6 +11,13 @@ import { alias, injectable } from '../services/_decorators';
 import { IAtomTextEditorSource } from '../services/_public';
 import { observeCallback } from '../helpers/index';
 
+const activeEditorCallback = (pane: any) => {
+    if (pane && pane.getGrammar && pane.getPath) {
+        return <Atom.TextEditor>pane;
+    }
+    return null;
+};
+
 @injectable
 @alias(IAtomTextEditorSource)
 export class AtomTextEditorSource extends DisposableBase implements IAtomTextEditorSource {
@@ -63,10 +70,3 @@ export class AtomTextEditorSource extends DisposableBase implements IAtomTextEdi
     public get observeActiveTextEditor() { return this._observeActiveTextEditor; }
     public get observeTextEditors() { return this._observeTextEditors; }
 }
-
-const activeEditorCallback = (pane: any) => {
-    if (pane && pane.getGrammar && pane.getPath) {
-        return <Atom.TextEditor>pane;
-    }
-    return null;
-};

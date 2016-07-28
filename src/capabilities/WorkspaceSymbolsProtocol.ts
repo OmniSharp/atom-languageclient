@@ -5,7 +5,6 @@
  */
 import * as _ from 'lodash';
 import { Observable, Observer, Subject } from 'rxjs';
-import * as toUri from 'file-url';
 import { DisposableBase } from 'ts-disposables';
 import { capability, inject } from '../services/_decorators';
 import { AutocompleteKind, ILanguageProtocolClient, IWorkspaceFinderProvider, IWorkspaceFinderService } from '../services/_public';
@@ -56,7 +55,6 @@ class WorkspaceFinderService extends DisposableBase implements IWorkspaceFinderP
 
     public results: Observable<Finder.Symbol[]>;
     public filter: Observer<string>;
-
 
     private _makeSymbol(symbol: SymbolInformation): Finder.Symbol {
         // TODO: Icon html

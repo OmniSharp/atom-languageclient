@@ -53,6 +53,7 @@ export class AtomChanges implements IAtomChanges {
             const tab = pane.querySelector('.preview-tab.active');
             if (tab) {
                 tab.classList.remove('preview-tab');
+                /* tslint:disable-next-line:no-any */
                 (<any>tab).isPreviewTab = false;
             }
         }

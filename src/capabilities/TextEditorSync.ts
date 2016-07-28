@@ -30,7 +30,7 @@ export abstract class TextEditorSync extends DisposableBase {
         this._atomViewFinder = atomViewFinder;
     }
 
-    protected _configure() {
+    protected configure() {
         const editor = this._editor;
 
         this.open();

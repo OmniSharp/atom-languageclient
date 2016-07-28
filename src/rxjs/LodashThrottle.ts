@@ -1,6 +1,9 @@
 /**
- *
+ *  @license   MIT
+ *  @copyright OmniSharp Team
+ *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
+/* tslint:disable:no-any */
 import { ThrottleOptions, bind, throttle } from 'lodash';
 import { Observable } from 'rxjs/Observable';
 import { Operator } from 'rxjs/Operator';
@@ -14,6 +17,7 @@ export function lodashThrottle<T>(this: Observable<T>, duration: number, options
 }
 
 declare module 'rxjs/Observable' {
+/* tslint:disable-next-line:interface-name */
     export interface Observable<T> {
         lodashThrottle: typeof lodashThrottle;
     }
@@ -49,6 +53,7 @@ class LodashThrottleSubscriber<T> extends Subscriber<T> {
         this._method = throttle(bind(this._dispatchNext, this));
     }
 
+    /* tslint:disable-next-line */
     protected _next(value: T): void {
         this._method(value);
     }

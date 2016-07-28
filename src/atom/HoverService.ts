@@ -5,7 +5,7 @@
  */
 import * as _ from 'lodash';
 import { Observable, Subscription } from 'rxjs';
-import { CompositeDisposable, Disposable, DisposableBase, IDisposable } from 'ts-disposables';
+import { CompositeDisposable, IDisposable } from 'ts-disposables';
 import { alias, injectable } from '../services/_decorators';
 import { ProviderServiceBase } from './_ProviderServiceBase';
 import { ATOM_COMMANDS, IHoverProvider, IHoverService } from '../services/_public';
@@ -63,6 +63,7 @@ export class HoverService
 
         if (editor) {
             this._editor = editor;
+            /* tslint:disable-next-line:no-any */
             this._editorView = <any>this._viewFinder.getView(editor);
             this._editorShadow = this._getFromShadowDom(this._editorView!, '.scroll-view');
             this._setupMouse(editor);

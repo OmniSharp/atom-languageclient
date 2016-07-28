@@ -2,10 +2,8 @@
  *
  */
 import * as _ from 'lodash';
-import { AutocompleteKind } from '../../services/_public';
-import { packageName } from '../../constants';
-import { AtomNavigation } from '../AtomNavigation';
 import { AtomCommands } from '../AtomCommands';
+import { AtomNavigation } from '../AtomNavigation';
 import { FilterSelectListView } from './FilterSelectListView';
 
 export class ReferenceView extends FilterSelectListView<Reference.Symbol> {
@@ -94,51 +92,5 @@ export class ReferenceView extends FilterSelectListView<Reference.Symbol> {
             text = `${startStr}${replace}${endStr}`;
         });
         return text;
-    }
-
-    private _renderIcon(completionItem: { type?: Autocomplete.SuggestionType; }) {
-        return `<img height="16px" width="16px" src="atom://${packageName}/styles/icons/${this._getIconFromKind(completionItem.type!)}.svg" />`;
-    }
-
-    private _getIconFromKind(kind: Autocomplete.SuggestionType): string {
-        switch (kind) {
-            case 'class':
-            case 'type':
-                return AutocompleteKind.Class;
-            case 'mixin':
-                return 'union';
-            case 'constant':
-                return 'constant';
-            case 'import':
-                return 'reference';
-            case 'keyword':
-                return 'keyword';
-            case 'function':
-            case 'method':
-                return AutocompleteKind.Method;
-            case 'module':
-            case 'require':
-            case 'package':
-                return AutocompleteKind.Module;
-            case 'property':
-                return AutocompleteKind.Property;
-            case 'snippet':
-                return 'snippet';
-            case 'tag':
-                return AutocompleteKind.Class;
-            case 'selector':
-            case 'pseudo-selector':
-            case 'variable':
-                return AutocompleteKind.Field;
-            case 'interface':
-                return AutocompleteKind.Interface;
-            case 'enum':
-                return AutocompleteKind.Enum;
-            case 'value':
-            case 'attribute':
-            case 'builtin':
-            default:
-                return 'valuetype';
-        }
     }
 }

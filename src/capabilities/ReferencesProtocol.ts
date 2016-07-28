@@ -50,6 +50,7 @@ class LanguageProtocolReferencesProvider extends DisposableBase implements IRefe
 
     public request(editor: Atom.TextEditor) {
         if (!this._syncExpression.evaluate(editor)) {
+            /* tslint:disable-next-line:no-any */
             return Observable.empty<any>();
         }
 

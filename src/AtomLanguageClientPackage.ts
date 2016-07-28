@@ -5,7 +5,7 @@
  */
 import * as _ from 'lodash';
 import { Observable } from 'rxjs';
-import { exists, readdir } from 'fs';
+import { readdir } from 'fs';
 import { join, resolve } from 'path';
 import { CompositeDisposable, isDisposable } from 'ts-disposables';
 import { ILanguageProvider, ILanguageService } from './services/_internal';
@@ -16,7 +16,6 @@ import { AtomLanguageClientSettings, IAtomLanguageClientSettings } from './AtomL
 import { Container } from './di/Container';
 
 const $readdir = Observable.bindNodeCallback(readdir);
-const $exists = Observable.bindCallback(exists);
 
 export class AtomLanguageClientPackage implements IAtomPackage<AtomLanguageClientSettings> {
     private _container: Container;
@@ -77,6 +76,7 @@ export class AtomLanguageClientPackage implements IAtomPackage<AtomLanguageClien
                             .mergeMap(files => files)
                             .filter(x => _.endsWith(x, 'Package.ts'))
                             .map(x => join(pathToPlugins, folder, _.trimEnd(x, '.ts'))))
+                        /* tslint:disable-next-line:no-require-imports */
                         .map(path => require(path))
                         .map(module => {
                             const cls: { new (): any } = _.find(module, _.isFunction);

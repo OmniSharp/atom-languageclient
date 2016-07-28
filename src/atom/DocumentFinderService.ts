@@ -44,7 +44,7 @@ export class DocumentFinderService
     public open() {
         const activeEditor = atom.workspace.getActiveTextEditor();
         if (activeEditor) {
-            const view = new DocumentFinderView(this._commands, this._navigation, this.invoke(activeEditor));
+            this._disposable.add(new DocumentFinderView(this._commands, this._navigation, this.invoke(activeEditor)));
         }
     }
 }

@@ -17,7 +17,6 @@ export const IDocumentDelayer = Symbol.for('IDocumentDelayer');
 export interface IDocumentDelayer extends IDelayer { }
 /* tslint:enable */
 
-
 export class Delayer<T> extends DisposableBase {
     public defaultDelay: number = 100;
     private timeout: NodeJS.Timer | null;

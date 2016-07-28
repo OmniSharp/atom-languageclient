@@ -24,7 +24,9 @@ export class RenameView extends View<HTMLDivElement> {
 
         this.root.classList.add('rename', 'overlay', 'from-top');
         this._message = document.createElement('p');
+        /* tslint:disable-next-line:no-any */
         this._editorView = <any>document.createElement('atom-text-editor');
+        /* tslint:disable-next-line:no-any */
         this._editorView.setAttribute('mini', <any>true);
         this._editor = this._editorView.getModel();
 

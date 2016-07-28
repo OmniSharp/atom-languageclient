@@ -4,7 +4,7 @@
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
 import { IDisposable } from 'ts-disposables';
-import { CompletionItem, CompletionList, TextDocumentPositionParams } from '../vscode-languageserver-types';
+import { CompletionItem } from '../vscode-languageserver-types';
 /* tslint:disable:variable-name no-any */
 
 /**

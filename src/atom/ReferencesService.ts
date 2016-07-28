@@ -4,9 +4,8 @@
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
 import * as _ from 'lodash';
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { readFile } from 'fs';
-import { Disposable, DisposableBase } from 'ts-disposables';
 import { alias, injectable } from '../services/_decorators';
 import { ProviderServiceBase } from './_ProviderServiceBase';
 import { ATOM_COMMANDS, ATOM_NAVIGATION, IReferencesProvider, IReferencesService } from '../services/_public';

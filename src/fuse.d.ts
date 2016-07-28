@@ -16,9 +16,9 @@ declare module fuse {
 }
 
 declare module 'fuse.js' {
-    declare class Fuse<T> {
-        constructor(list: T[]): Fuse<T>;
-        constructor(list: T[], options: IFuseOptions);
+    interface Fuse<T> {
+        new (list: T[]): Fuse<T>;
+        new (list: T[], options: IFuseOptions);
         search(pattern: string): fuse.Result<T>[];
         search<T>(pattern: string): T[];
         set(list: T[]);
@@ -43,5 +43,7 @@ declare module 'fuse.js' {
         threshold?: number;
         maxPatternLength?: number;
     }
+
+    declare const Fuse: IFuse;
     export = Fuse;
 }

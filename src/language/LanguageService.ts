@@ -3,8 +3,6 @@
  *  @copyright OmniSharp Team
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
-import * as _ from 'lodash';
-import { Observable } from 'rxjs';
 import { DisposableBase } from 'ts-disposables';
 import { ILanguageService, IResolver } from '../services/_internal';
 

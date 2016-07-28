@@ -33,7 +33,6 @@ export class RenameProtocol extends DisposableBase {
         const service = new RenameProvider(client, syncExpression);
         this._disposable.add(service);
         this._renameService.registerProvider(service);
-        // TODO: Handle trigger characters
     }
 }
 

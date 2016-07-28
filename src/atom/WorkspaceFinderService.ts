@@ -40,6 +40,7 @@ export class WorkspaceFinderService extends DisposableBase implements IWorkspace
 
     private _getResults() {
         const providers = Observable.defer(() => {
+            /* tslint:disable-next-line:no-any */
             return Observable.from<IWorkspaceFinderProvider>(<any>this._providers)
                 .mergeMap(x => x.results, (provider, results) => ({ provider, results }))
                 .scan<Map<IWorkspaceFinderProvider, Finder.Symbol[]>>(
