@@ -7,12 +7,11 @@ import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 import * as toUri from 'file-url';
 import { DisposableBase } from 'ts-disposables';
-import { capability, inject } from '../../services/_decorators';
-import { ILanguageProtocolClient, IReferencesProvider, IReferencesService, ISyncExpression } from '../../services/_public';
-import { fromRange } from './utils/convert';
-import { uriToFilePath } from './utils/uriToFilePath';
-import { Position, ReferenceParams, TextDocumentIdentifier } from '../../vscode-languageserver-types';
-import { ReferencesRequest } from '../../vscode-protocol';
+import { capability, inject } from '../services/_decorators';
+import { ILanguageProtocolClient, IReferencesProvider, IReferencesService, ISyncExpression } from '../services/_public';
+import { fromRange, fromUri } from './utils/convert';
+import { Position, ReferenceParams, TextDocumentIdentifier } from '../vscode-languageserver-types';
+import { ReferencesRequest } from '../vscode-protocol';
 
 @capability
 export class LanguageProtocolReferences extends DisposableBase {
@@ -67,7 +66,7 @@ class LanguageProtocolReferencesProvider extends DisposableBase implements IRefe
             .map(response => {
                 return _.map(response, location => {
                     return {
-                        filePath: uriToFilePath(location.uri),
+                        filePath: fromUri(location.uri),
                         range: fromRange(location.range)
                     };
                 });

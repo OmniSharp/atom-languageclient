@@ -23,9 +23,9 @@ export class HoverService
     private _textEditorSource: AtomTextEditorSource;
     private _viewFinder: AtomViewFinder;
 
-    private _editor: Atom.TextEditor;
-    private _editorView: Atom.TextEditorPresenter;
-    private _editorShadow: Element;
+    private _editor: Atom.TextEditor | undefined;
+    private _editorView: Atom.TextEditorPresenter | undefined;
+    private _editorShadow: Element | undefined;
     private _editorDisposable: IDisposable;
 
     private _view: HoverView;
@@ -61,17 +61,23 @@ export class HoverService
             this._editorDisposable.dispose();
         }
 
-        this._editor = editor;
-        this._editorView = <any>this._viewFinder.getView(editor);
-        this._editorShadow = this._getFromShadowDom(this._editorView, '.scroll-view');
-        this._setupMouse(editor);
+        if (editor) {
+            this._editor = editor;
+            this._editorView = <any>this._viewFinder.getView(editor);
+            this._editorShadow = this._getFromShadowDom(this._editorView!, '.scroll-view');
+            this._setupMouse(editor);
+        } else {
+            this._editor = undefined;
+            this._editorView = undefined;
+            this._editorShadow = undefined;
+        }
     }
 
     private _setupMouse(editor: Atom.TextEditor) {
         const cd = new CompositeDisposable();
-        const mousemove = Observable.fromEvent<MouseEvent>(this._editorShadow, 'mousemove');
-        const mouseout = Observable.fromEvent<MouseEvent>(this._editorShadow, 'mouseout');
-        this._keydown = Observable.fromEvent<KeyboardEvent>(this._editorShadow, 'keydown');
+        const mousemove = Observable.fromEvent<MouseEvent>(this._editorShadow!, 'mousemove');
+        const mouseout = Observable.fromEvent<MouseEvent>(this._editorShadow!, 'mouseout');
+        this._keydown = Observable.fromEvent<KeyboardEvent>(this._editorShadow!, 'keydown');
 
         cd.add(
             mousemove
@@ -109,22 +115,22 @@ export class HoverService
     }
 
     public showOnCommand() {
-        if (this._editor.cursors.length < 1) {
+        if (this._editor!.cursors.length < 1) {
             return;
         }
 
-        const bufferPt = this._editor.getCursorBufferPosition();
+        const bufferPt = this._editor!.getCursorBufferPosition();
         if (!this._checkPosition(bufferPt)) {
             return;
         }
 
         // find out show position
-        const shadow = this._getFromShadowDom(this._editorView, '.cursor-line');
+        const shadow = this._getFromShadowDom(this._editorView!, '.cursor-line');
         if (!shadow) {
             return;
         }
 
-        const offset = (this._editorView.component.getFontSize() * bufferPt.column) * 0.7;
+        const offset = (this._editorView!.component.getFontSize() * bufferPt.column) * 0.7;
         const rect = shadow.getBoundingClientRect();
 
         const tooltipRect = {
@@ -141,7 +147,7 @@ export class HoverService
 
     private _showOnMouseOver(e: MouseEvent, bufferPt: TextBuffer.Point) {
         // find out show position
-        const offset = this._editor.getLineHeightInPixels() * 0.7;
+        const offset = this._editor!.getLineHeightInPixels() * 0.7;
         const tooltipRect = {
             left: e.clientX,
             right: e.clientX,
@@ -153,8 +159,8 @@ export class HoverService
     }
 
     private _checkPosition(bufferPt: TextBuffer.Point) {
-        const curCharPixelPt = this._editor.pixelPositionForBufferPosition([bufferPt.row, bufferPt.column]);
-        const nextCharPixelPt = this._editor.pixelPositionForBufferPosition([bufferPt.row, bufferPt.column + 1]);
+        const curCharPixelPt = this._editor!.pixelPositionForBufferPosition([bufferPt.row, bufferPt.column]);
+        const nextCharPixelPt = this._editor!.pixelPositionForBufferPosition([bufferPt.row, bufferPt.column + 1]);
 
         if (curCharPixelPt.left >= nextCharPixelPt.left) {
             return false;
@@ -165,7 +171,7 @@ export class HoverService
 
     private _showToolTip(bufferPt: TextBuffer.Point, rect: IHoverPosition) {
         this._view.updatePosition(rect, this._editorView);
-        this.invoke({ editor: this._editor, location: bufferPt })
+        this.invoke({ editor: this._editor!, location: bufferPt })
             .scan((acc, result) => acc.concat(result), [])
             .subscribe(rows => {
                 const lines = _.map(rows, row => {
@@ -200,8 +206,8 @@ export class HoverService
         const clientX = event.clientX;
         const clientY = event.clientY;
         const linesClientRect = shadow.getBoundingClientRect();
-        const top = clientY - linesClientRect.top + this._editor.getScrollTop();
-        const left = clientX - linesClientRect.left + this._editor.getScrollLeft();
+        const top = clientY - linesClientRect.top + this._editor!.getScrollTop();
+        const left = clientX - linesClientRect.left + this._editor!.getScrollLeft();
         return { top, left };
     }
 }

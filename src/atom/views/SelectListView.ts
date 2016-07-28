@@ -2,6 +2,8 @@
  *
  */
 import * as _ from 'lodash';
+import { Observable } from 'rxjs';
+import { AtomCommands } from '../AtomCommands';
 import { View } from './View';
 
 atom.themes.requireStylesheet(require.resolve('../../../styles/select-list.less'));
@@ -21,72 +23,77 @@ export abstract class SelectListView<T> extends View<HTMLDivElement> {
     private _cancelling: boolean;
     private _scheduleTimeout: NodeJS.Timer;
     private _inputThrottle: number = 100;
+    protected _commands: AtomCommands;
 
-    public constructor() {
+    public constructor(commands: AtomCommands) {
         super(document.createElement('div'));
+        this._commands = commands;
         this._buildHtml();
         this._filterEditor = this._filterEditorView.getModel();
-        this._filterEditorView.addEventListener('blur', () => {
-            if (!document.hasFocus() && !this._cancelling) {
-                this.cancel();
-            }
-        });
 
-        atom.commands.add(this.root, {
-            'core:move-up': (event) => {
-                this.selectPreviousItem();
-                event.stopPropagation();
-            },
-            'core:move-down': (event) => {
-                this.selectNextItem();
-                event.stopPropagation();
-            },
-            'core:move-to-top': (event) => {
-                this.selectFirstItem();
-                this.scrollToTop(this._list);
-                event.stopPropagation();
-            },
-            'core:move-to-bottom': (event) => {
-                this.selectLastItem();
-                this.scrollToBottom(this._list);
-                event.stopPropagation();
-            },
-            'core:confirm': (event) => {
-                this._confirmSelection();
-                event.stopPropagation();
-            },
-            'core:cancel': (event) => {
-                this.cancel();
-                event.stopPropagation();
-            }
-        });
-
-        this._list.addEventListener('mousedown', (e) => {
-            if ((<HTMLElement>e.target).tagName === 'li') {
-                this._selectItem(<Element>e.target);
-                e.preventDefault();
-                return false;
-            }
-            return;
-        });
-
-        this._list.addEventListener('mouseup', (e) => {
-            if ((<HTMLElement>e.target).tagName === 'li') {
-                if ((<HTMLElement>e.target).classList.contains('selected')) {
+        this._disposable.add(
+            Observable.fromEvent(this._filterEditorView, 'blur')
+                .subscribe(() => {
+                    if (!document.hasFocus() && !this._cancelling) {
+                        this.cancel();
+                    }
+                }),
+            commands.add(this.root, {
+                'core:move-up': (event) => {
+                    this.selectPreviousItem();
+                    event.stopPropagation();
+                },
+                'core:move-down': (event) => {
+                    this.selectNextItem();
+                    event.stopPropagation();
+                },
+                'core:move-to-top': (event) => {
+                    this.selectFirstItem();
+                    this.scrollToTop(this._list);
+                    event.stopPropagation();
+                },
+                'core:move-to-bottom': (event) => {
+                    this.selectLastItem();
+                    this.scrollToBottom(this._list);
+                    event.stopPropagation();
+                },
+                'core:confirm': (event) => {
                     this._confirmSelection();
+                    event.stopPropagation();
+                },
+                'core:cancel': (event) => {
+                    this.cancel();
+                    event.stopPropagation();
                 }
-                e.preventDefault();
-                return false;
-            }
-            return;
-        });
-
-        this._list.addEventListener('mousedown', ({target}) => {
-            if (target === this._list) {
-                return false;
-            }
-            return;
-        });
+            }),
+            Observable.fromEvent(this._list, 'mousedown')
+                .subscribe((e: MouseEvent) => {
+                    if ((<HTMLElement>e.target).tagName === 'li') {
+                        this._selectItem(<Element>e.target);
+                        e.preventDefault();
+                        return false;
+                    }
+                    return;
+                }),
+            Observable.fromEvent(this._list, 'mouseup')
+                .subscribe((e: MouseEvent) => {
+                    if ((<HTMLElement>e.target).tagName === 'li') {
+                        if ((<HTMLElement>e.target).classList.contains('selected')) {
+                            this._confirmSelection();
+                        }
+                        e.preventDefault();
+                        return false;
+                    }
+                    return;
+                }),
+            Observable.fromEvent(this._list, 'mousedown')
+                .subscribe(({target}: MouseEvent) => {
+                    if (target === this._list) {
+                        return false;
+                    }
+                    return;
+                })
+        );
     }
 
     public abstract viewForItem(item: fuse.Result<T>): HTMLLIElement;
@@ -183,7 +190,8 @@ export abstract class SelectListView<T> extends View<HTMLDivElement> {
             this._restoreFocus();
         }
         this._cancelling = false;
-        return clearTimeout(this._scheduleTimeout);
+        clearTimeout(this._scheduleTimeout);
+        this.dispose();
     }
 
     public focusFilterEditor() {
@@ -251,9 +259,10 @@ export abstract class SelectListView<T> extends View<HTMLDivElement> {
     private _confirmSelection() {
         const item = this.selected;
         if (item != null) {
-            return this.confirmed(item);
+            this.confirmed(item);
+            this.dispose();
         } else {
-            return this.cancel();
+            this.cancel();
         }
     }
 

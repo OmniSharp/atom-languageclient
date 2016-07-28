@@ -81,7 +81,7 @@ export class WorkspaceFinderService extends DisposableBase implements IWorkspace
     }
 
     public open() {
-        const view = new WorkspaceFinderView(this._navigation, this._results$, this._filter$);
+        const view = new WorkspaceFinderView(this._commands, this._navigation, this._results$, this._filter$);
         view.setMaxItems(MAX_ITEMS);
     }
 }

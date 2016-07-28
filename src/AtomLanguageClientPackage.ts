@@ -57,8 +57,7 @@ export class AtomLanguageClientPackage implements IAtomPackage<AtomLanguageClien
         const activateServices =
             Observable.merge(
                 this._container.registerFolder(__dirname, 'atom'),
-                this._container.registerFolder(__dirname, 'capabilities', 'languageprotocol'),
-                this._container.registerFolder(__dirname, 'capabilities', 'omniclient'),
+                this._container.registerFolder(__dirname, 'capabilities'),
                 this._container.registerFolder(__dirname, 'services')
             )
                 .toPromise()

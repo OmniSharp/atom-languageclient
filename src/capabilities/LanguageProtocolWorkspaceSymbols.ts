@@ -4,66 +4,59 @@
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
 import * as _ from 'lodash';
-import { Observable } from 'rxjs';
+import { Observable, Observer, Subject } from 'rxjs';
 import * as toUri from 'file-url';
 import { DisposableBase } from 'ts-disposables';
-import { capability, inject } from '../../services/_decorators';
-import { AutocompleteKind, IDocumentFinderProvider, IDocumentFinderService, ILanguageProtocolClient, ISyncExpression } from '../../services/_public';
-import { packageName } from '../../constants';
-import { fromPosition } from './utils/convert';
-import { uriToFilePath } from './utils/uriToFilePath';
-import { SymbolInformation, SymbolKind, TextDocumentIdentifier } from '../../vscode-languageserver-types';
-import { DocumentSymbolRequest } from '../../vscode-protocol';
+import { capability, inject } from '../services/_decorators';
+import { AutocompleteKind, ILanguageProtocolClient, IWorkspaceFinderProvider, IWorkspaceFinderService } from '../services/_public';
+import { packageName } from '../constants';
+import { fromPosition, fromUri } from './utils/convert';
+import { SymbolInformation, SymbolKind } from '../vscode-languageserver-types';
+import { WorkspaceSymbolRequest } from '../vscode-protocol';
 
 @capability
-export class LanguageProtocolDocumentSymbols extends DisposableBase {
+export class LanguageProtocolWorkspaceSymbols extends DisposableBase {
     private _client: ILanguageProtocolClient;
-    private _syncExpression: ISyncExpression;
-    private _finderService: IDocumentFinderService;
+    private _finderService: IWorkspaceFinderService;
     constructor(
         @inject(ILanguageProtocolClient) client: ILanguageProtocolClient,
-        @inject(IDocumentFinderService) finderService: IDocumentFinderService,
-        @inject(ISyncExpression) syncExpression: ISyncExpression
+        @inject(IWorkspaceFinderService) finderService: IWorkspaceFinderService
     ) {
         super();
         this._client = client;
         this._finderService = finderService;
-        this._syncExpression = syncExpression;
-        if (!client.capabilities.documentSymbolProvider) {
+        if (!client.capabilities.workspaceSymbolProvider) {
             return;
         }
 
         // TODO: Handle trigger characters
-        const service = new DocumentFinderProvider(client, syncExpression);
+        const service = new WorkspaceFinderService(client);
         this._disposable.add(service);
         this._finderService.registerProvider(service);
     }
 }
 
-class DocumentFinderProvider extends DisposableBase implements IDocumentFinderProvider {
+class WorkspaceFinderService extends DisposableBase implements IWorkspaceFinderProvider {
     private _client: ILanguageProtocolClient;
-    private _syncExpression: ISyncExpression;
-    public constructor(
-        client: ILanguageProtocolClient,
-        syncExpression: ISyncExpression) {
+    public constructor(client: ILanguageProtocolClient) {
         super();
         this._client = client;
-        this._syncExpression = syncExpression;
-    }
 
-    public request(editor: Atom.TextEditor) {
-        if (!this._syncExpression.evaluate(editor)) {
-            return Observable.empty<Finder.Symbol[]>();
-        }
+        const filter = this.filter = new Subject<string>();
 
-        return Observable.fromPromise(
-            this._client.sendRequest(DocumentSymbolRequest.type, {
-                textDocument: TextDocumentIdentifier.create(toUri(editor!.getURI()))
+        this.results = filter
+            .asObservable()
+            .switchMap(query => {
+                return this._client.sendRequest(WorkspaceSymbolRequest.type, { query });
             })
-        ).map(results => {
-            return _.map(results, result => this._makeSymbol(result));
-        });
+            .map(results => {
+                return _.map(results, symbol => this._makeSymbol(symbol));
+            });
     }
+
+    public results: Observable<Finder.Symbol[]>;
+    public filter: Observer<string>;
+
 
     private _makeSymbol(symbol: SymbolInformation): Finder.Symbol {
         // TODO: Icon html
@@ -71,7 +64,7 @@ class DocumentFinderProvider extends DisposableBase implements IDocumentFinderPr
             name: symbol.name,
             filterText: symbol.name,
             iconHTML: this._renderIcon(symbol),
-            filePath: uriToFilePath(symbol.location.uri),
+            filePath: fromUri(symbol.location.uri),
             location: fromPosition(symbol.location.range.start),
             type: this._getTypeFromKind(symbol.kind)
         };

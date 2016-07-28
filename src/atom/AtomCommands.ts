@@ -27,15 +27,24 @@ export class AtomCommands extends DisposableBase implements IAtomCommands {
         cd.add(() => this._disposable.remove(cd));
 
         if (typeof commandsOrName === 'string') {
-            cd.add(atom.commands.add(this._getCommandType(target), `${packageName}:${commandsOrName}`, callback!));
+            cd.add(atom.commands.add(this._getCommandType(target), this._getKey(commandsOrName), callback!));
         } else {
             const result: typeof commandsOrName = {};
             _.each(commandsOrName, (method, key) => {
-                result[`${packageName}:${key}`] = method;
+                result[this._getKey(key)] = method;
             });
             cd.add(atom.commands.add(this._getCommandType(target), result));
         }
         return cd;
+    }
+
+    private _getKey(key: string) {
+        // only one : is strictly allowed
+        // In this case they are binding to a specific command, not package specific.
+        if (_.includes(key, ':')) {
+            return key;
+        }
+        return `${packageName}:${key}`;
     }
 
     private _getCommandType(command: string | CommandType | Node) {

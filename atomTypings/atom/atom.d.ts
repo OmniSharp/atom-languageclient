@@ -10267,7 +10267,7 @@ declare module Atom {
 
         getLastCursor(): Cursor;
 
-        getWordUnderCursor(options?: any): Cursor;
+        getWordUnderCursor(options?: any): string;
 
         /**
          * Get an Array of all {Cursor}s.

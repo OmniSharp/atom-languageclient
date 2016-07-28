@@ -3,16 +3,14 @@
  */
 import * as _ from 'lodash';
 import Fuse = require('fuse.js');
+import { AtomCommands } from '../AtomCommands';
 import { SelectListView } from './SelectListView';
 
 export abstract class FilterSelectListView<T> extends SelectListView<T> {
     private _fuse: Fuse<T>;
     private _filter: string;
-    public constructor() {
-        super();
-        // this._filterEditor.buffer.onDidChange(() => {
-        //     this.schedulePopulateList();
-        // });
+    public constructor(commands: AtomCommands) {
+        super(commands);
         this._fuse = new Fuse<T>([], {
             caseSensitive: false,
             tokenize: true,

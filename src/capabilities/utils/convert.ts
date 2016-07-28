@@ -6,11 +6,13 @@
 /* tslint:disable:no-any */
 import * as _ from 'lodash';
 import { Point, Range } from 'atom';
-import * as toUri from 'file-url';
-import { Position, Range as LsRange, TextDocumentIdentifier, TextEdit } from 'vscode-languageserver-types';
+import * as _toUri from 'file-url';
+import { Position, Range as LsRange, TextDocumentIdentifier, TextEdit, WorkspaceEdit } from 'vscode-languageserver-types';
+import { uriToFilePath as fromUri } from './uriToFilePath';
+export { fromUri };
 
-export function getUri(editor: Atom.TextEditor) {
-    return toUri(editor.getURI());
+export function toUri(editor: Atom.TextEditor) {
+    return _toUri(editor.getURI());
 }
 
 export function getLanguageId(editor: Atom.TextEditor) {
@@ -44,8 +46,17 @@ export function fromTextEdits(values: TextEdit[]): Text.FileChange[] {
     return _.map(values, fromTextEdit);
 }
 
+export function fromWorkspaceEdit(edit: WorkspaceEdit): Text.WorkspaceChange[] {
+    return _.map(edit.changes, (edits, filePath) => {
+        return ({
+            changes: fromTextEdits(edits),
+            filePath: fromUri(filePath)
+        });
+    });
+}
+
 export function toTextDocumentIdentifier(editor: Atom.TextEditor): TextDocumentIdentifier {
-    return TextDocumentIdentifier.create(getUri(editor));
+    return TextDocumentIdentifier.create(toUri(editor));
 }
 
 export function hasLinterText(message: any): message is Linter.TextMessage {

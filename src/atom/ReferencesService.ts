@@ -77,7 +77,7 @@ export class ReferencesService
                     }
                 }
                 if (!view) {
-                    view = new ReferenceView(this._navigation, items);
+                    view = new ReferenceView(this._commands, this._navigation, items);
                 } else {
                     view.setItems(items);
                 }

@@ -22,5 +22,6 @@ export * from './IOmniClient';
 export * from './IProjectProvider';
 export * from './IProjectTracker';
 export * from './IReferencesService';
+export * from './IRenameService';
 export * from './ISyncExpression';
 export * from './IWorkspaceFinderService';

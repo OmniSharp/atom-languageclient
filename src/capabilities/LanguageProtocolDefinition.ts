@@ -7,12 +7,11 @@ import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 import * as toUri from 'file-url';
 import { DisposableBase } from 'ts-disposables';
-import { capability, inject } from '../../services/_decorators';
-import { IDefinitionProvider, IDefinitionService, ILanguageProtocolClient, ISyncExpression } from '../../services/_public';
-import { fromRange } from './utils/convert';
-import { uriToFilePath } from './utils/uriToFilePath';
-import { Position, TextDocumentIdentifier, TextDocumentPositionParams } from '../../vscode-languageserver-types';
-import { DefinitionRequest } from '../../vscode-protocol';
+import { capability, inject } from '../services/_decorators';
+import { IDefinitionProvider, IDefinitionService, ILanguageProtocolClient, ISyncExpression } from '../services/_public';
+import { fromRange, fromUri } from './utils/convert';
+import { Position, TextDocumentIdentifier, TextDocumentPositionParams } from '../vscode-languageserver-types';
+import { DefinitionRequest } from '../vscode-protocol';
 
 @capability
 export class LanguageProtocolDefinition extends DisposableBase {
@@ -49,29 +48,27 @@ class LanguageProtocolDefinitionProvider extends DisposableBase implements IDefi
         this._syncExpression = syncExpression;
     }
 
-    public request(editor: Atom.TextEditor) {
-        if (!this._syncExpression.evaluate(editor)) {
+    public request(options: Definition.RequestOptions) {
+        if (!this._syncExpression.evaluate(options.editor)) {
             return Observable.empty<any>();
         }
 
-        const marker = editor!.getCursorBufferPosition();
-
         const params: TextDocumentPositionParams = {
-            textDocument: TextDocumentIdentifier.create(toUri(editor!.getURI())),
-            position: Position.create(marker.row, marker.column)
+            textDocument: TextDocumentIdentifier.create(toUri(options.editor!.getURI())),
+            position: Position.create(options.location.row, options.location.column)
         };
         return Observable.fromPromise(this._client.sendRequest(DefinitionRequest.type, params))
             .map(response => {
                 if (_.isArray(response)) {
                     return _.map(response, location => {
                         return {
-                            filePath: uriToFilePath(location.uri),
+                            filePath: fromUri(location.uri),
                             range: fromRange(location.range)
                         };
                     });
                 } else {
                     return [{
-                        filePath: uriToFilePath(response.uri),
+                        filePath: fromUri(response.uri),
                         range: fromRange(response.range)
                     }];
                 }

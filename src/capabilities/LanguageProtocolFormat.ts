@@ -7,11 +7,11 @@ import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 import * as toUri from 'file-url';
 import { DisposableBase } from 'ts-disposables';
-import { capability, inject } from '../../services/_decorators';
-import { AtomFormat, IFormatProvider, IFormatService, ILanguageProtocolClient, ISyncExpression } from '../../services/_public';
+import { capability, inject } from '../services/_decorators';
+import { AtomFormat, IFormatProvider, IFormatService, ILanguageProtocolClient, ISyncExpression } from '../services/_public';
 import { fromTextEdits, toRange } from './utils/convert';
-import { MarkedString, TextDocumentIdentifier } from '../../vscode-languageserver-types';
-import { DocumentFormattingParams, DocumentFormattingRequest, DocumentRangeFormattingParams, DocumentRangeFormattingRequest } from '../../vscode-protocol';
+import { MarkedString, TextDocumentIdentifier } from '../vscode-languageserver-types';
+import { DocumentFormattingParams, DocumentFormattingRequest, DocumentRangeFormattingParams, DocumentRangeFormattingRequest } from '../vscode-protocol';
 
 @capability
 export class LanguageProtocolFormat extends DisposableBase {

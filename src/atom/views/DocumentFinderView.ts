@@ -5,6 +5,7 @@ import * as _ from 'lodash';
 import { Observable, Subscription } from 'rxjs';
 import { AutocompleteKind } from '../../services/_public';
 import { packageName } from '../../constants';
+import { AtomCommands } from '../AtomCommands';
 import { AtomNavigation } from '../AtomNavigation';
 import { FilterSelectListView } from './FilterSelectListView';
 
@@ -12,8 +13,8 @@ export class DocumentFinderView extends FilterSelectListView<Finder.Symbol> {
     private _navigation: AtomNavigation;
     private _subscription: Subscription;
     private _panel: Atom.Panel;
-    constructor(navigation: AtomNavigation, results: Observable<Finder.Symbol[]>) {
-        super();
+    constructor(commands: AtomCommands, navigation: AtomNavigation, results: Observable<Finder.Symbol[]>) {
+        super(commands);
         this._navigation = navigation;
         this._subscription = results.subscribe(items => {
             this.setFilterItems(items);

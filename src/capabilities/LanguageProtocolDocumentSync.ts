@@ -5,10 +5,10 @@
  */
 import * as _ from 'lodash';
 import { DisposableBase } from 'ts-disposables';
-import { capability, inject } from '../../services/_decorators';
-import { IAtomViewFinder, IDocumentDelayer, ILanguageProtocolClient, ISyncExpression } from '../../services/_public';
-import { TextDocumentSyncKind } from '../../vscode-languageserver-types';
-import { AtomTextEditorSource } from '../../atom/AtomTextEditorSource';
+import { capability, inject } from '../services/_decorators';
+import { IAtomViewFinder, IDocumentDelayer, ILanguageProtocolClient, ISyncExpression } from '../services/_public';
+import { TextDocumentSyncKind } from '../vscode-languageserver-types';
+import { AtomTextEditorSource } from '../atom/AtomTextEditorSource';
 import { LanguageProtocolTextEditorSync } from './LanguageProtocolTextEditorSync';
 
 @capability

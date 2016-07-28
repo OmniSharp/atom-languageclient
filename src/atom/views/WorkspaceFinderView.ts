@@ -4,8 +4,9 @@
 import * as _ from 'lodash';
 import { Observable, Subscription } from 'rxjs';
 import { NextObserver } from 'rxjs/Observer';
-import { packageName } from '../../constants';
 import { AutocompleteKind } from '../../services/_public';
+import { packageName } from '../../constants';
+import { AtomCommands } from '../AtomCommands';
 import { AtomNavigation } from '../AtomNavigation';
 import { FilterSelectListView } from './FilterSelectListView';
 
@@ -13,8 +14,8 @@ export class WorkspaceFinderView extends FilterSelectListView<Finder.Symbol> {
     private _navigation: AtomNavigation;
     private _subscription: Subscription;
     private _panel: Atom.Panel;
-    constructor(navigation: AtomNavigation, results: Observable<{ filter: string; results: Finder.Symbol[] }>, filter$: NextObserver<string>) {
-        super();
+    constructor(commands: AtomCommands, navigation: AtomNavigation, results: Observable<{ filter: string; results: Finder.Symbol[] }>, filter$: NextObserver<string>) {
+        super(commands);
         this._navigation = navigation;
         this._subscription = results.subscribe(items => {
             this.setFilterItems(items.results, items.filter);
@@ -55,7 +56,6 @@ export class WorkspaceFinderView extends FilterSelectListView<Finder.Symbol> {
             filename += ': ' + item.location.row;
         }
 
-        let filenameContent = filename;
         let nameContent = item.name;
 
         // const pathMatches = _.find(matches!, { key: 'filePath' });
@@ -69,7 +69,7 @@ export class WorkspaceFinderView extends FilterSelectListView<Finder.Symbol> {
         /* tslint:disable-next-line:no-inner-html */
         li.innerHTML = `
             <span>${item.iconHTML || this._renderIcon(item)}<span>${nameContent}</span></span><br/>
-            <span class="filename">${filenameContent}</span>
+            <span class="filename">${item.filePath}</span>
             `;
 
         return li;

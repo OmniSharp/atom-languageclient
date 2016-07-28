@@ -24,25 +24,22 @@ export class AtomChanges implements IAtomChanges {
                     buffer.setTextInRange(change.range, change.text);
                 });
             });
-
         }
     }
 
-    public applyWorkspaceChanges(textChanges: Text.WorkspaceChange[]) {
-        const fileChanges = _.map(_.groupBy(textChanges, change => change.filePath), (changes, filePath) => {
-            return { filePath, changes: this._orderInReverse(changes) };
-        });
-        Observable.from(fileChanges)
+    public applyWorkspaceChanges(textChanges: Text.WorkspaceChange[]): Observable<void> {
+        return Observable.from(textChanges)
             .concatMap(
             change => {
                 return atom.workspace.open(change.filePath);
             },
-            (context, editor) => ({ changes: context.changes, editor })
+            ({changes}, editor) => ({ changes, editor })
             )
-            .subscribe(({changes, editor}) => {
+            .do(({changes, editor}) => {
                 this._resetPreviewTab(editor);
                 this.applyChanges(editor, changes);
-            });
+            })
+            .reduce(_.noop, void 0);
     }
 
     private _resetPreviewTab(editor: Atom.TextEditor) {
@@ -61,7 +58,7 @@ export class AtomChanges implements IAtomChanges {
         }
     }
 
-    private _orderInReverse<T extends (Text.FileChange | Text.WorkspaceChange)>(changes: T[]) {
+    private _orderInReverse<T extends Text.FileChange>(changes: T[]) {
         return _.orderBy(changes, [result => result.range.start.row, result => result.range.start.column], ['desc', 'desc']);
     }
 }

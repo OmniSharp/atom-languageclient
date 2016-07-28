@@ -2,18 +2,17 @@
  *
  */
 import * as _ from 'lodash';
-import { Observable, Subscription } from 'rxjs';
-import { NextObserver } from 'rxjs/Observer';
-import { packageName } from '../../constants';
 import { AutocompleteKind } from '../../services/_public';
+import { packageName } from '../../constants';
 import { AtomNavigation } from '../AtomNavigation';
+import { AtomCommands } from '../AtomCommands';
 import { FilterSelectListView } from './FilterSelectListView';
 
 export class ReferenceView extends FilterSelectListView<Reference.Symbol> {
     private _navigation: AtomNavigation;
     private _panel: Atom.Panel;
-    constructor(navigation: AtomNavigation, results: Reference.Symbol[]) {
-        super();
+    constructor(commands: AtomCommands, navigation: AtomNavigation, results: Reference.Symbol[]) {
+        super(commands);
         this._navigation = navigation;
         this.setFilterItems(results, this._filterEditorView.getModel().getText());
         this._filterEditorView.getModel().buffer.onDidChange(() => {

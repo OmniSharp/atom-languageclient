@@ -73,6 +73,12 @@ declare namespace Finder {
         className?: string;
     }
 }
+declare namespace Definition {
+    export interface RequestOptions {
+        editor: Atom.TextEditor;
+        location: TextBuffer.Point;
+    }
+}
 declare namespace Reference {
     export interface Symbol {
         lines: string[];
@@ -105,6 +111,13 @@ declare namespace Format {
     }
     export type FormatOptions  = DocumentType | RangeOptions;
 }
+declare namespace Rename {
+    export interface RequestOptions {
+        editor: Atom.TextEditor;
+        location: TextBuffer.Point;
+        word: string;
+    }
+}
 declare namespace Text {
     export interface FileChange {
         range: TextBuffer.Range;
@@ -112,8 +125,7 @@ declare namespace Text {
     }
     export interface WorkspaceChange {
         filePath: string;
-        range: TextBuffer.Range;
-        text: string;
+        changes: FileChange[];
     }
 }
 declare type Thenable<T> = Promise<T>;

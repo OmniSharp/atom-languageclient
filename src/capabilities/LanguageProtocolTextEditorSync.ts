@@ -4,9 +4,9 @@
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
 import * as _ from 'lodash';
-import { IAtomViewFinder, IDocumentDelayer, ILanguageProtocolClient, ISyncExpression } from '../../services/_public';
-import { getLanguageId, getUri, toRange, toTextDocumentIdentifier } from './utils/convert';
-import { TextDocumentSyncKind } from '../../vscode-languageserver-types';
+import { IAtomViewFinder, IDocumentDelayer, ILanguageProtocolClient, ISyncExpression } from '../services/_public';
+import { getLanguageId, toUri, toRange, toTextDocumentIdentifier } from './utils/convert';
+import { TextDocumentSyncKind } from '../vscode-languageserver-types';
 import {
     DidChangeTextDocumentNotification,
     DidCloseTextDocumentNotification,
@@ -15,9 +15,9 @@ import {
     DidOpenTextDocumentParams,
     DidSaveTextDocumentNotification,
     DidSaveTextDocumentParams
-} from '../../vscode-protocol';
-import { AtomTextChange } from '../../omni/LanguageClientTextEditorChanges';
-import { TextEditorSync } from '../TextEditorSync';
+} from '../vscode-protocol';
+import { AtomTextChange } from '../omni/LanguageClientTextEditorChanges';
+import { TextEditorSync } from './TextEditorSync';
 
 export class LanguageProtocolTextEditorSync extends TextEditorSync {
     private _client: ILanguageProtocolClient;
@@ -41,7 +41,7 @@ export class LanguageProtocolTextEditorSync extends TextEditorSync {
         this._documentDelayer.trigger(() => {
             this._client.sendNotification(DidChangeTextDocumentNotification.type, {
                 textDocument: {
-                    uri: getUri(this._editor),
+                    uri: toUri(this._editor),
                     version: this._version
                 },
                 contentChanges: [{ text: this._editor.getText() }]
@@ -55,7 +55,7 @@ export class LanguageProtocolTextEditorSync extends TextEditorSync {
         this._documentDelayer.trigger(() => {
             this._client.sendNotification(DidChangeTextDocumentNotification.type, {
                 textDocument: {
-                    uri: getUri(this._editor),
+                    uri: toUri(this._editor),
                     version: this._version
                 },
                 contentChanges: _.map(this._changes.pop(), (c) => {
@@ -74,7 +74,7 @@ export class LanguageProtocolTextEditorSync extends TextEditorSync {
 
         this._client.sendNotification<DidOpenTextDocumentParams>(DidOpenTextDocumentNotification.type, {
             textDocument: {
-                uri: getUri(this._editor),
+                uri: toUri(this._editor),
                 languageId: getLanguageId(this._editor),
                 version: this._version,
                 text: this._editor.getText()
