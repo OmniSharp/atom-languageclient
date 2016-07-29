@@ -2036,6 +2036,7 @@ declare module Atom {
      * around marked ranges of text.
      */
     export class Decoration {
+        public destroy(): void;
     }
 
     /**

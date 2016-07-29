@@ -60,7 +60,7 @@ export class RenameService
                 editor: editor,
                 location: editor!.getCursorBufferPosition()
             });
-            view.onRename
+            view.rename$
                 .take(1)
                 .concatMap(options => {
                     return this.invoke(options);

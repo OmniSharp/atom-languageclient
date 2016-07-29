@@ -61,7 +61,7 @@ export class RenameView extends View<HTMLDivElement> {
         }).share();
     }
 
-    public get onRename() { return this._rename$; }
+    public get rename$() { return this._rename$; }
 
     private _rename() {
         if (this._renameObserver) {

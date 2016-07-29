@@ -118,6 +118,18 @@ declare namespace Rename {
         word: string;
     }
 }
+declare namespace CodeAction {
+    export interface RequestOptions {
+        editor: Atom.TextEditor;
+        location: TextBuffer.Point;
+    }
+
+    export interface Item {
+        id: string;
+        name: string;
+        title: string;
+    }
+}
 declare namespace Text {
     export interface FileChange {
         range: TextBuffer.Range;
