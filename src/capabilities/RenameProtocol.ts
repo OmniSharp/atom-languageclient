@@ -4,13 +4,12 @@
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
 import { Observable } from 'rxjs';
+import { ILanguageProtocolClient, IRenameProvider, IRenameService, ISyncExpression, capability, inject } from 'atom-languageservices';
+import { RenameRequest } from 'atom-languageservices/protocol';
+import { RenameParams, TextDocumentIdentifier } from 'atom-languageservices/types';
 import * as toUri from 'file-url';
 import { DisposableBase } from 'ts-disposables';
-import { capability, inject } from '../services/_decorators';
-import { ILanguageProtocolClient, IRenameProvider, IRenameService, ISyncExpression } from '../services/_public';
 import { fromWorkspaceEdit, toPosition } from './utils/convert';
-import { TextDocumentIdentifier } from '../vscode-languageserver-types';
-import { RenameParams, RenameRequest } from '../vscode-protocol';
 
 @capability
 export class RenameProtocol extends DisposableBase {

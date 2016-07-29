@@ -6,9 +6,8 @@
 /* tslint:disable:no-any */
 import * as _ from 'lodash';
 import { Observable, Subject } from 'rxjs';
+import { IAtomTextEditorSource, alias, injectable } from 'atom-languageservices';
 import { CompositeDisposable, DisposableBase } from 'ts-disposables';
-import { alias, injectable } from '../services/_decorators';
-import { IAtomTextEditorSource } from '../services/_public';
 import { observeCallback } from '../helpers/index';
 
 const activeEditorCallback = (pane: any) => {

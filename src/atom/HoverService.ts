@@ -5,10 +5,9 @@
  */
 import * as _ from 'lodash';
 import { Observable, Subscription } from 'rxjs';
+import { ATOM_COMMANDS, IHoverProvider, IHoverService, alias, injectable } from 'atom-languageservices';
 import { CompositeDisposable, IDisposable } from 'ts-disposables';
-import { alias, injectable } from '../services/_decorators';
 import { ProviderServiceBase } from './_ProviderServiceBase';
-import { ATOM_COMMANDS, IHoverProvider, IHoverService } from '../services/_public';
 import { AtomCommands } from './AtomCommands';
 import { AtomTextEditorSource } from './AtomTextEditorSource';
 import { AtomViewFinder } from './AtomViewFinder';

@@ -3,8 +3,8 @@
  *  @copyright OmniSharp Team
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
-import { alias, injectable } from '../services/_decorators';
-import { ATOM_NAVIGATION, IAtomNavigation } from '../services/_public';
+import { alias, injectable } from 'atom-languageservices';
+import { ATOM_NAVIGATION, IAtomNavigation } from 'atom-languageservices';
 const { navigationHasLocation, navigationHasRange} = ATOM_NAVIGATION;
 
 @injectable

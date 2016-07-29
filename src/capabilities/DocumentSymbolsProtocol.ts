@@ -5,14 +5,13 @@
  */
 import * as _ from 'lodash';
 import { Observable } from 'rxjs';
+import { AutocompleteKind, IDocumentFinderProvider, IDocumentFinderService, ILanguageProtocolClient, ISyncExpression, capability, inject } from 'atom-languageservices';
+import { DocumentSymbolRequest } from 'atom-languageservices/protocol';
+import { SymbolInformation, SymbolKind, TextDocumentIdentifier } from 'atom-languageservices/types';
 import * as toUri from 'file-url';
 import { DisposableBase } from 'ts-disposables';
-import { capability, inject } from '../services/_decorators';
-import { AutocompleteKind, IDocumentFinderProvider, IDocumentFinderService, ILanguageProtocolClient, ISyncExpression } from '../services/_public';
 import { packageName } from '../constants';
 import { fromPosition, fromUri } from './utils/convert';
-import { SymbolInformation, SymbolKind, TextDocumentIdentifier } from '../vscode-languageserver-types';
-import { DocumentSymbolRequest } from '../vscode-protocol';
 
 @capability
 export class DocumentSymbolsProtocol extends DisposableBase {

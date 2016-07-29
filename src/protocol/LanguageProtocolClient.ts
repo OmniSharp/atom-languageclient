@@ -6,10 +6,10 @@
 /* tslint:disable:no-any */
 import { Disposable, DisposableBase } from 'ts-disposables';
 import { CancellationToken, ErrorCodes, NotificationHandler, NotificationType, RequestHandler, RequestType, ResponseError } from 'vscode-jsonrpc';
-import { inject } from '../services/_decorators';
-import { ClientState, IDocumentDelayer, ILanguageProtocolClient, ILanguageProtocolClientOptions, IProjectProvider, ISyncExpression } from '../services/_public';
-import { InitializeError, InitializeParams, InitializeResult, ServerCapabilities } from '../vscode-languageserver-types';
-import { ShowMessageRequest } from '../vscode-protocol';
+import { inject } from 'atom-languageservices';
+import { ClientState, IDocumentDelayer, ILanguageProtocolClient, ILanguageProtocolClientOptions, IProjectProvider, ISyncExpression } from 'atom-languageservices';
+import { InitializeError, InitializeParams, InitializeResult, ServerCapabilities } from 'atom-languageservices/types';
+import { ShowMessageRequest } from 'atom-languageservices/protocol';
 import { IConnection } from './Connection';
 
 export class LanguageProtocolClient extends DisposableBase implements ILanguageProtocolClient {

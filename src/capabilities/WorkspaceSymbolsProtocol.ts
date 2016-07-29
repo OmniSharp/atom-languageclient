@@ -5,13 +5,12 @@
  */
 import * as _ from 'lodash';
 import { Observable, Observer, Subject } from 'rxjs';
+import { AutocompleteKind, ILanguageProtocolClient, IWorkspaceFinderProvider, IWorkspaceFinderService, capability, inject } from 'atom-languageservices';
+import { WorkspaceSymbolRequest } from 'atom-languageservices/protocol';
+import { SymbolInformation, SymbolKind } from 'atom-languageservices/types';
 import { DisposableBase } from 'ts-disposables';
-import { capability, inject } from '../services/_decorators';
-import { AutocompleteKind, ILanguageProtocolClient, IWorkspaceFinderProvider, IWorkspaceFinderService } from '../services/_public';
 import { packageName } from '../constants';
 import { fromPosition, fromUri } from './utils/convert';
-import { SymbolInformation, SymbolKind } from '../vscode-languageserver-types';
-import { WorkspaceSymbolRequest } from '../vscode-protocol';
 
 @capability
 export class WorkspaceSymbolsProtocol extends DisposableBase {

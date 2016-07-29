@@ -6,9 +6,8 @@
 
 import * as _ from 'lodash';
 import { Observable } from 'rxjs';
-import { alias, injectable } from '../services/_decorators';
+import { ATOM_COMMANDS, IFormatProvider, IFormatService, alias, injectable } from 'atom-languageservices';
 import { ProviderServiceBase } from './_ProviderServiceBase';
-import { ATOM_COMMANDS, IFormatProvider, IFormatService } from '../services/_public';
 import { AtomChanges } from './AtomChanges';
 import { AtomCommands } from './AtomCommands';
 import { AtomTextEditorSource } from './AtomTextEditorSource';

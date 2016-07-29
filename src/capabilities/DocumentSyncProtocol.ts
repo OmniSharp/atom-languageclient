@@ -5,9 +5,9 @@
  */
 import * as _ from 'lodash';
 import { DisposableBase } from 'ts-disposables';
-import { capability, inject } from '../services/_decorators';
-import { IAtomViewFinder, IDocumentDelayer, ILanguageProtocolClient, ISyncExpression } from '../services/_public';
-import { TextDocumentSyncKind } from '../vscode-languageserver-types';
+import { capability, inject } from 'atom-languageservices';
+import { IAtomViewFinder, IDocumentDelayer, ILanguageProtocolClient, ISyncExpression } from 'atom-languageservices';
+import { TextDocumentSyncKind } from 'atom-languageservices/types';
 import { AtomTextEditorSource } from '../atom/AtomTextEditorSource';
 import { TextEditorSyncProtocol } from './TextEditorSyncProtocol';
 

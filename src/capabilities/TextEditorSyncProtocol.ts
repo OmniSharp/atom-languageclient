@@ -4,18 +4,20 @@
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
 import * as _ from 'lodash';
-import { IAtomViewFinder, IDocumentDelayer, ILanguageProtocolClient, ISyncExpression } from '../services/_public';
-import { getLanguageId, toRange, toTextDocumentIdentifier, toUri } from './utils/convert';
-import { TextDocumentSyncKind } from '../vscode-languageserver-types';
+import { IAtomViewFinder, IDocumentDelayer, ILanguageProtocolClient, ISyncExpression } from 'atom-languageservices';
 import {
     DidChangeTextDocumentNotification,
     DidCloseTextDocumentNotification,
-    DidCloseTextDocumentParams,
     DidOpenTextDocumentNotification,
+    DidSaveTextDocumentNotification
+} from 'atom-languageservices/protocol';
+import {
+    DidCloseTextDocumentParams,
     DidOpenTextDocumentParams,
-    DidSaveTextDocumentNotification,
-    DidSaveTextDocumentParams
-} from '../vscode-protocol';
+    DidSaveTextDocumentParams,
+    TextDocumentSyncKind
+} from 'atom-languageservices/types';
+import { getLanguageId, toRange, toTextDocumentIdentifier, toUri } from './utils/convert';
 import { AtomTextChange } from '../omni/LanguageClientTextEditorChanges';
 import { TextEditorSync } from './TextEditorSync';
 

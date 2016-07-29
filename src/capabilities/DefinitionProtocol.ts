@@ -5,13 +5,12 @@
  */
 import * as _ from 'lodash';
 import { Observable } from 'rxjs';
+import { IDefinitionProvider, IDefinitionService, ILanguageProtocolClient, ISyncExpression, capability, inject } from 'atom-languageservices';
+import { DefinitionRequest } from 'atom-languageservices/protocol';
+import { Position, TextDocumentIdentifier, TextDocumentPositionParams } from 'atom-languageservices/types';
 import * as toUri from 'file-url';
 import { DisposableBase } from 'ts-disposables';
-import { capability, inject } from '../services/_decorators';
-import { IDefinitionProvider, IDefinitionService, ILanguageProtocolClient, ISyncExpression } from '../services/_public';
 import { fromRange, fromUri } from './utils/convert';
-import { Position, TextDocumentIdentifier, TextDocumentPositionParams } from '../vscode-languageserver-types';
-import { DefinitionRequest } from '../vscode-protocol';
 
 @capability
 export class DefinitionProtocol extends DisposableBase {

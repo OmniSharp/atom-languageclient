@@ -5,6 +5,28 @@
  */
 /* tslint:disable:no-any */
 import * as _ from 'lodash';
+import { IExecutable, IExecutableOptions, IForkOptions, ILanguageProtocolServerOptions, INodeModule, IStreamInfo, TransportKind } from 'atom-languageservices';
+/* tslint:disable */
+import {
+    DidChangeConfigurationNotification,
+    DidChangeTextDocumentNotification,
+    DidChangeWatchedFilesNotification, DidCloseTextDocumentNotification,
+    DidOpenTextDocumentNotification,
+    DidSaveTextDocumentNotification, ExitNotification,
+    InitializeRequest,
+    LogMessageNotification,
+    PublishDiagnosticsNotification,
+    ShowMessageNotification,
+    ShutdownRequest, TelemetryEventNotification
+} from 'atom-languageservices/protocol';
+import {
+    DidChangeConfigurationParams, DidChangeTextDocumentParams, DidChangeWatchedFilesParams,
+    DidCloseTextDocumentParams, DidOpenTextDocumentParams, DidSaveTextDocumentParams
+    , InitializeParams, InitializeResult, LogMessageParams
+    , PublishDiagnosticsParams, ShowMessageParams
+} from 'atom-languageservices/types';
+/* tslint:enable */
+/* tslint:disable:no-any */
 import { ChildProcess, spawn } from 'child_process';
 
 import {
@@ -15,23 +37,7 @@ import {
     createClientMessageConnection
 } from 'vscode-jsonrpc';
 
-import { IExecutable, IExecutableOptions, IForkOptions, ILanguageProtocolServerOptions, INodeModule, IStreamInfo, TransportKind } from '../services/_public';
 import { fork } from './utils/electron';
-/* tslint:disable */
-import {
-    DidChangeConfigurationNotification,
-    DidChangeConfigurationParams, DidChangeTextDocumentNotification, DidChangeTextDocumentParams,
-    DidChangeWatchedFilesNotification, DidChangeWatchedFilesParams, DidCloseTextDocumentNotification,
-    DidCloseTextDocumentParams, DidOpenTextDocumentNotification, DidOpenTextDocumentParams,
-    DidSaveTextDocumentNotification, DidSaveTextDocumentParams, ExitNotification,
-    InitializeParams, InitializeRequest, InitializeResult,
-    LogMessageNotification, LogMessageParams,
-    PublishDiagnosticsNotification, PublishDiagnosticsParams,
-    ShowMessageNotification, ShowMessageParams,
-    ShutdownRequest, TelemetryEventNotification
-} from '../vscode-protocol';
-/* tslint:enable */
-/* tslint:disable:no-any */
 import { ConsoleLogger } from './ConsoleLogger';
 
 const isDefined = _.negate(_.isUndefined);

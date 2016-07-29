@@ -5,12 +5,11 @@
  */
 import * as _ from 'lodash';
 import { Observable } from 'rxjs';
+import { IHoverProvider, IHoverService, ILanguageProtocolClient, ISyncExpression, capability, inject } from 'atom-languageservices';
+import { HoverRequest } from 'atom-languageservices/protocol';
+import { Hover, MarkedString, Position, TextDocumentIdentifier } from 'atom-languageservices/types';
 import * as toUri from 'file-url';
 import { DisposableBase } from 'ts-disposables';
-import { capability, inject } from '../services/_decorators';
-import { IHoverProvider, IHoverService, ILanguageProtocolClient, ISyncExpression } from '../services/_public';
-import { Hover, MarkedString, Position, TextDocumentIdentifier } from '../vscode-languageserver-types';
-import { HoverRequest } from '../vscode-protocol';
 
 @capability
 export class HoverProtocol extends DisposableBase {

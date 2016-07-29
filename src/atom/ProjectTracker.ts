@@ -5,7 +5,7 @@
  */
 import * as _ from 'lodash';
 import { Observable, Subscriber } from 'rxjs';
-import { alias, injectable } from '../services/_decorators';
+import { alias, injectable } from 'atom-languageservices';
 import { ProjectProvider } from './ProjectProvider';
 
 /* tslint:disable-next-line:variable-name */

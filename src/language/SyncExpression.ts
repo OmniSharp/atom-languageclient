@@ -4,7 +4,7 @@
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
 import * as _ from 'lodash';
-import { ILanguageProtocolClientOptions, ISyncExpression } from '../services/_public';
+import { ILanguageProtocolClientOptions, ISyncExpression } from 'atom-languageservices';
 
 /* tslint:disable */
 export abstract class SyncExpression implements ISyncExpression {

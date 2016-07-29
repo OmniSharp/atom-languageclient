@@ -4,7 +4,7 @@
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
 import { CancellationToken, NotificationHandler, NotificationType, RequestHandler, RequestType } from 'vscode-jsonrpc';
-import { ServerCapabilities } from '../vscode-languageserver-types';
+import { ServerCapabilities } from 'atom-languageservices/types';
 import { ClientState, ILanguageProtocolClientOptions } from './ILanguageProtocolClientOptions';
 /* tslint:disable:variable-name no-any */
 

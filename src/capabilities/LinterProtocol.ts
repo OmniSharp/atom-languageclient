@@ -4,11 +4,10 @@
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
 import * as _ from 'lodash';
-import { capability, inject } from '../services/_decorators';
-import { ILanguageProtocolClient, ILinterService } from '../services/_public';
+import { ILanguageProtocolClient, ILinterService, capability, inject } from 'atom-languageservices';
+import { PublishDiagnosticsNotification } from 'atom-languageservices/protocol';
+import { Diagnostic, DiagnosticSeverity, PublishDiagnosticsParams } from 'atom-languageservices/types';
 import { fromRange, fromUri } from './utils/convert';
-import { Diagnostic, DiagnosticSeverity } from '../vscode-languageserver-types';
-import { PublishDiagnosticsNotification, PublishDiagnosticsParams } from '../vscode-protocol';
 import { Linter as LinterBase } from './Linter';
 
 @capability

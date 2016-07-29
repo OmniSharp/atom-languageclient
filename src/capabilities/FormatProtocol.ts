@@ -4,13 +4,12 @@
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
 import { Observable } from 'rxjs';
+import { AtomFormat, IFormatProvider, IFormatService, ILanguageProtocolClient, ISyncExpression, capability, inject } from 'atom-languageservices';
+import { DocumentFormattingRequest, DocumentRangeFormattingRequest } from 'atom-languageservices/protocol';
+import { DocumentFormattingParams, DocumentRangeFormattingParams, TextDocumentIdentifier } from 'atom-languageservices/types';
 import * as toUri from 'file-url';
 import { DisposableBase } from 'ts-disposables';
-import { capability, inject } from '../services/_decorators';
-import { AtomFormat, IFormatProvider, IFormatService, ILanguageProtocolClient, ISyncExpression } from '../services/_public';
 import { fromTextEdits, toRange } from './utils/convert';
-import { TextDocumentIdentifier } from '../vscode-languageserver-types';
-import { DocumentFormattingParams, DocumentFormattingRequest, DocumentRangeFormattingParams, DocumentRangeFormattingRequest } from '../vscode-protocol';
 
 @capability
 export class FormatProtocol extends DisposableBase {

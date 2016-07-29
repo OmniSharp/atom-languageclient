@@ -5,9 +5,8 @@
  */
 /* tslint:disable:no-any */
 import * as _ from 'lodash';
+import { ILanguageProtocolClient, IOmniClient, capability, inject } from 'atom-languageservices';
 import { expect } from 'chai';
-import { ILanguageProtocolClient, IOmniClient } from '../../src/services/_public';
-import { capability, inject } from '../../src/di/decorators';
 import * as I from './fixtures/interfaces';
 import { A } from './fixtures/A';
 import { B } from './fixtures/B';

@@ -5,7 +5,7 @@
  */
 import * as _ from 'lodash';
 import { DisposableBase } from 'ts-disposables';
-import { ILinterService } from '../services/_public';
+import { ILinterService } from 'atom-languageservices';
 
 export abstract class Linter extends DisposableBase {
     private _linterService: ILinterService;

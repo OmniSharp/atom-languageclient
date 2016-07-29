@@ -6,14 +6,14 @@
 /* tslint:disable:no-require-imports no-any */
 import * as _ from 'lodash';
 import { Observable } from 'rxjs';
+import { IResolver }  from 'atom-languageservices';
+import * as symbols  from 'atom-languageservices/symbols';
 import { Container as AureliaContainer } from 'aurelia-dependency-injection';
 import { metadata } from 'aurelia-metadata';
 import { AggregateError } from 'aurelia-pal';
 import { exists, readdir } from 'fs';
 import { join } from 'path';
 import { DisposableBase } from 'ts-disposables';
-import { IResolver } from '../services/_internal';
-import * as symbols from './symbols';
 
 const interfaceRegex = /^I((?:[A-Z^I]))/;
 const $readdir = Observable.bindNodeCallback(readdir);

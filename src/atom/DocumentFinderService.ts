@@ -5,9 +5,8 @@
  */
 import * as _ from 'lodash';
 import { Observable } from 'rxjs';
-import { alias, injectable } from '../services/_decorators';
+import { IDocumentFinderProvider, IDocumentFinderService, alias, injectable } from 'atom-languageservices';
 import { ProviderServiceBase } from './_ProviderServiceBase';
-import { IDocumentFinderProvider, IDocumentFinderService } from '../services/_public';
 import { AtomCommands } from './AtomCommands';
 import { AtomNavigation } from './AtomNavigation';
 import { AtomTextEditorSource } from './AtomTextEditorSource';

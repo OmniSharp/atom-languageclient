@@ -6,11 +6,11 @@
 import * as _ from 'lodash';
 import * as toUri from 'file-url';
 import { DisposableBase } from 'ts-disposables';
-import { capability, inject } from '../services/_decorators';
-import { AutocompleteKind, AutocompleteSuggestion, IAutocompleteProvider, IAutocompleteService, ILanguageProtocolClient, ISyncExpression } from '../services/_public';
+import { capability, inject } from 'atom-languageservices';
+import { AutocompleteKind, AutocompleteSuggestion, IAutocompleteProvider, IAutocompleteService, ILanguageProtocolClient, ISyncExpression } from 'atom-languageservices';
 import { packageName } from '../constants';
-import { CompletionItem, CompletionItemKind, CompletionList, CompletionOptions, Position, TextDocumentIdentifier, TextDocumentPositionParams } from '../vscode-languageserver-types';
-import { CompletionRequest } from '../vscode-protocol';
+import { CompletionItem, CompletionItemKind, CompletionList, CompletionOptions, Position, TextDocumentIdentifier, TextDocumentPositionParams } from 'atom-languageservices/types';
+import { CompletionRequest } from 'atom-languageservices/protocol';
 
 const _snippetRegex = /{{(.*?)}}/;
 

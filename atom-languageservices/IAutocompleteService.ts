@@ -4,8 +4,8 @@
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
 import { IDisposable } from 'ts-disposables';
-import { CompletionItem } from '../vscode-languageserver-types';
-/* tslint:disable:variable-name no-any */
+import { CompletionItem } from 'vscode-languageserver-types';
+/* tslint:disable:variable-name no-any interface-name */
 
 /**
  * Symbol for the AutocompleteService
@@ -60,4 +60,33 @@ export namespace AutocompleteKind {
     export const Structure = 'structure';
     export const TypeParameter = 'typeparameter';
     export const Submission = 'submission';
+}
+
+export namespace Autocomplete {
+    export type SuggestionType = 'attribute' | 'builtin' | 'class' | 'constant' | 'function' | 'import' | 'keyword' | 'method' | 'module' | 'mixin' | 'package' | 'property' | 'require' | 'snippet' | 'tag' | 'type' | 'value' | 'variable' | 'selector' | 'pseudo-selector' | 'interface' | 'enum';
+    export interface SuggestionBase {
+        displayText?: string;
+        replacementPrefix?: string;
+        type: SuggestionType;
+        leftLabel?: string;
+        leftLabelHTML?: string;
+        rightLabel?: string;
+        rightLabelHTML?: string;
+        iconHTML?: string;
+        description?: string;
+        descriptionMoreURL?: string;
+        className?: string;
+        onDidInsertSuggestion?: (context: { editor: Atom.TextEditor, suggestion: Suggestion, triggerPosition: TextBuffer.Point; }) => void;
+    }
+    export interface TextSuggestion extends SuggestionBase { text: string; }
+    export interface SnippetSuggestion extends SuggestionBase { snippet: string; }
+    export type Suggestion = TextSuggestion | SnippetSuggestion;
+
+    export interface RequestOptions {
+        editor: Atom.TextEditor;
+        bufferPosition: TextBuffer.Point; // the position of the cursor
+        prefix: string;
+        scopeDescriptor: { scopes: string[] };
+        activatedManually: boolean;
+    }
 }

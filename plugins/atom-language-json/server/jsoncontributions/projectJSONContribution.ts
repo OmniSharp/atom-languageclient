@@ -6,7 +6,7 @@
 import * as _ from 'lodash';
 import { XHRResponse, getErrorStatusDescription, xhr } from 'request-light';
 import { CompletionsCollector, JSONPath, JSONWorkerContribution } from 'vscode-json-languageservice';
-import { CompletionItem, CompletionItemKind, MarkedString } from '../../../../src/vscode-languageserver-types';
+import { CompletionItem, CompletionItemKind, MarkedString } from 'atom-languageservices/types';
 
 const FEED_INDEX_URL = 'https://api.nuget.org/v3/index.json';
 const LIMIT = 30;

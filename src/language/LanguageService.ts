@@ -3,8 +3,8 @@
  *  @copyright OmniSharp Team
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
+import { ILanguageService, IResolver } from 'atom-languageservices';
 import { DisposableBase } from 'ts-disposables';
-import { ILanguageService, IResolver } from '../services/_internal';
 
 /**
  * Defines the common interface that a module can then consume to interact with us.

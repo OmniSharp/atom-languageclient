@@ -5,8 +5,8 @@
  */
 import * as _ from 'lodash';
 import { CompositeDisposable, DisposableBase, IDisposable } from 'ts-disposables';
-import { alias, injectable } from '../services/_decorators';
-import { ATOM_COMMANDS, IAtomCommands } from '../services/_public';
+import { alias, injectable } from 'atom-languageservices';
+import { ATOM_COMMANDS, IAtomCommands } from 'atom-languageservices';
 import { packageName } from '../constants';
 type CommandType = ATOM_COMMANDS.CommandType;
 type CommandObject = ATOM_COMMANDS.CommandObject;

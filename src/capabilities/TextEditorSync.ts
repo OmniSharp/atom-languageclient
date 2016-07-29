@@ -5,7 +5,7 @@
  */
 import * as _ from 'lodash';
 import { DisposableBase } from 'ts-disposables';
-import { IAtomViewFinder, IDocumentDelayer, ISyncExpression } from '../services/_public';
+import { IAtomViewFinder, IDocumentDelayer, ISyncExpression } from 'atom-languageservices';
 import { className } from '../constants';
 import { AtomTextChange, LanguageClientTextEditorChanges } from '../omni/LanguageClientTextEditorChanges';
 

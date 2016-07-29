@@ -3,7 +3,7 @@
  */
 import * as _ from 'lodash';
 import { Observable, Subscription } from 'rxjs';
-import { AutocompleteKind } from '../../services/_public';
+import { AutocompleteKind } from 'atom-languageservices';
 import { packageName } from '../../constants';
 import { AtomCommands } from '../AtomCommands';
 import { AtomNavigation } from '../AtomNavigation';

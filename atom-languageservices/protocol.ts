@@ -32,22 +32,22 @@ import {
     ServerCapabilities, ShowMessageParams, ShowMessageRequestParams,
     SignatureHelpOptions, TextDocumentPositionParams, TextDocumentSyncKind,
     WorkspaceSymbolParams
-} from './vscode-languageserver-types';
+} from './types';
 
-export {
-    ClientCapabilities, CodeActionParams, CodeLensOptions,
-    CodeLensParams, CompletionOptions, DidChangeConfigurationParams,
-    DidChangeTextDocumentParams, DidChangeWatchedFilesParams, DidCloseTextDocumentParams,
-    DidOpenTextDocumentParams, DidSaveTextDocumentParams, DocumentFormattingParams,
-    DocumentOnTypeFormattingOptions, DocumentOnTypeFormattingParams, DocumentRangeFormattingParams,
-    DocumentSymbolParams, FileChangeType, FileEvent,
-    InitializeError, InitializeParams, InitializeResult,
-    LogMessageParams, MessageActionItem, MessageType,
-    ReferenceParams, RenameParams, PublishDiagnosticsParams,
-    ServerCapabilities, ShowMessageParams, ShowMessageRequestParams,
-    SignatureHelpOptions, TextDocumentPositionParams, TextDocumentSyncKind,
-    WorkspaceSymbolParams
-} from './vscode-languageserver-types';
+// export {
+//     ClientCapabilities, CodeActionParams, CodeLensOptions,
+//     CodeLensParams, CompletionOptions, DidChangeConfigurationParams,
+//     DidChangeTextDocumentParams, DidChangeWatchedFilesParams, DidCloseTextDocumentParams,
+//     DidOpenTextDocumentParams, DidSaveTextDocumentParams, DocumentFormattingParams,
+//     DocumentOnTypeFormattingOptions, DocumentOnTypeFormattingParams, DocumentRangeFormattingParams,
+//     DocumentSymbolParams, FileChangeType, FileEvent,
+//     InitializeError, InitializeParams, InitializeResult,
+//     LogMessageParams, MessageActionItem, MessageType,
+//     ReferenceParams, RenameParams, PublishDiagnosticsParams,
+//     ServerCapabilities, ShowMessageParams, ShowMessageRequestParams,
+//     SignatureHelpOptions, TextDocumentPositionParams, TextDocumentSyncKind,
+//     WorkspaceSymbolParams
+// } from './types';
 
 
 //---- Initialize Method ----

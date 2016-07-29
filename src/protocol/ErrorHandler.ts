@@ -4,7 +4,7 @@
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
 import { Message } from 'vscode-jsonrpc';
-import { CloseAction, ErrorAction, IErrorHandler } from '../services/_public';
+import { CloseAction, ErrorAction, IErrorHandler } from 'atom-languageservices';
 
 export class DefaultErrorHandler implements IErrorHandler {
     private name: string;

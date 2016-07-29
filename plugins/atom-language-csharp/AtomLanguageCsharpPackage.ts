@@ -5,11 +5,10 @@
  */
 import * as _ from 'lodash';
 import { ReplaySubject } from 'rxjs';
+import { CloseAction, ErrorAction, ILanguageProtocolServerOptions, ILanguageProvider, ILanguageService, TransportKind } from 'atom-languageservices';
 import { join } from 'path';
 import { CompositeDisposable } from 'ts-disposables';
 import { Message } from 'vscode-jsonrpc';
-import { ILanguageProvider, ILanguageService } from '../../src/services/_internal';
-import { CloseAction, ErrorAction, ILanguageProtocolServerOptions, TransportKind } from '../../src/services/_public';
 import { AtomLanguageCsharpSettings, IAtomLanguageCsharpSettings } from './atom/AtomLanguageCsharpSettings';
 
 export class AtomLanguageCsharpPackage implements IAtomPackage<IAtomLanguageCsharpSettings> {

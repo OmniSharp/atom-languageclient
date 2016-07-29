@@ -5,10 +5,9 @@
  */
 import * as _ from 'lodash';
 import { Observable } from 'rxjs';
+import { Delayer, IDocumentDelayer, ILanguageProtocolClient, ILanguageProtocolClientOptions, ILanguageProvider, ISyncExpression } from 'atom-languageservices';
 import { CompositeDisposable, DisposableBase } from 'ts-disposables';
 import { Message } from 'vscode-jsonrpc';
-import { ILanguageProvider } from '../services/_internal';
-import { Delayer, IDocumentDelayer, ILanguageProtocolClient, ILanguageProtocolClientOptions, ISyncExpression } from '../services/_public';
 import { AtomTextEditorSource } from '../atom/AtomTextEditorSource';
 import { Connection, IConnection } from '../protocol/Connection';
 import { Container } from '../di/Container';

@@ -8,7 +8,7 @@ import * as _ from 'lodash';
 /* tslint:disable-next-line:no-require-imports */
 import * as Fuse from 'fuse.js';
 import { ProviderServiceBase } from './_ProviderServiceBase';
-import { AutocompleteKind, AutocompleteSuggestion, IAutocompleteProvider, IAutocompleteService } from '../services/_public';
+import { AutocompleteKind, AutocompleteSuggestion, IAutocompleteProvider, IAutocompleteService } from 'atom-languageservices';
 import { className, packageName } from '../constants';
 
 export class AutocompleteService

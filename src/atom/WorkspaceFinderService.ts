@@ -6,8 +6,8 @@
 import * as _ from 'lodash';
 import { Observable, Subject } from 'rxjs';
 import { Disposable, DisposableBase } from 'ts-disposables';
-import { alias, injectable } from '../services/_decorators';
-import { ATOM_COMMANDS, IWorkspaceFinderProvider, IWorkspaceFinderService } from '../services/_public';
+import { alias, injectable } from 'atom-languageservices';
+import { ATOM_COMMANDS, IWorkspaceFinderProvider, IWorkspaceFinderService } from 'atom-languageservices';
 import { AtomCommands } from './AtomCommands';
 import { AtomNavigation } from './AtomNavigation';
 import { WorkspaceFinderView } from './views/WorkspaceFinderView';

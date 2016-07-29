@@ -5,10 +5,9 @@
  */
 import * as _ from 'lodash';
 import { Observable, Subscription } from 'rxjs';
+import { ATOM_COMMANDS, ATOM_NAVIGATION, IDefinitionProvider, IDefinitionService, alias, injectable } from 'atom-languageservices';
 import { readFile } from 'fs';
-import { alias, injectable } from '../services/_decorators';
 import { ProviderServiceBase } from './_ProviderServiceBase';
-import { ATOM_COMMANDS, ATOM_NAVIGATION, IDefinitionProvider, IDefinitionService } from '../services/_public';
 import { AtomCommands } from './AtomCommands';
 import { AtomNavigation } from './AtomNavigation';
 import { AtomTextEditorSource } from './AtomTextEditorSource';
