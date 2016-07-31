@@ -17,7 +17,7 @@ import { RenameView } from './views/RenameView';
 @injectable
 @alias(Services.IRenameService)
 export class RenameService
-    extends ProviderServiceBase<Services.IRenameProvider, Services.Rename.IRequest, Observable<Services.Text.WorkspaceChange[]>, Observable<Services.Text.WorkspaceChange[]>>
+    extends ProviderServiceBase<Services.IRenameProvider, Services.Rename.IRequest, Observable<Services.Text.IWorkspaceChange[]>, Observable<Services.Text.IWorkspaceChange[]>>
     implements Services.IRenameService {
     private _navigation: AtomNavigation;
     private _commands: AtomCommands;
@@ -38,7 +38,7 @@ export class RenameService
         );
     }
 
-    protected createInvoke(callbacks: ((options: Services.Rename.IRequest) => Observable<Services.Text.WorkspaceChange[]>)[]) {
+    protected createInvoke(callbacks: ((options: Services.Rename.IRequest) => Observable<Services.Text.IWorkspaceChange[]>)[]) {
         return (options: Services.Rename.IRequest) => {
             return Observable.from(_.over(callbacks)(options))
                 .mergeMap(_.identity)

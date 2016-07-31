@@ -4,7 +4,7 @@
     "description": "",
     "main": "src/index.js",
     "scripts": {
-        "lint": "npm run lint-rules && tslint \"src/**/*.ts\" \"spec/**/*.ts\" -e \"**/*.d.ts\" -t verbose",
+        "lint": "npm run lint-rules && tslint \"src/**/*.ts\" \"spec/**/*.ts\" \"atom-languageservices/*.ts\" -e \"**/*.d.ts\" -t verbose",
         "lint-rules": "tsc -p rules/tsconfig.json",
         "test": "npm run lint",
         "tsc": "tsc",

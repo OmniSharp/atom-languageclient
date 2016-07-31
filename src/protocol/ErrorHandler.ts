@@ -3,8 +3,8 @@
  *  @copyright OmniSharp Team
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
-import { Message } from 'vscode-jsonrpc';
 import { CloseAction, ErrorAction, IErrorHandler } from 'atom-languageservices';
+import { Message } from 'vscode-jsonrpc';
 
 export class DefaultErrorHandler implements IErrorHandler {
     private name: string;

@@ -9,7 +9,7 @@ export namespace Text {
         range: TextBuffer.Range;
         text: string;
     }
-    export interface WorkspaceChange {
+    export interface IWorkspaceChange {
         filePath: string;
         changes: IFileChange[];
     }

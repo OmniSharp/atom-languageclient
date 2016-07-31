@@ -47,7 +47,7 @@ export function fromTextEdits(values: TextEdit[]): Text.IFileChange[] {
     return _.map(values, fromTextEdit);
 }
 
-export function fromWorkspaceEdit(edit: WorkspaceEdit): Text.WorkspaceChange[] {
+export function fromWorkspaceEdit(edit: WorkspaceEdit): Text.IWorkspaceChange[] {
     return _.map(edit.changes, (edits, filePath) => {
         return ({
             changes: fromTextEdits(edits),

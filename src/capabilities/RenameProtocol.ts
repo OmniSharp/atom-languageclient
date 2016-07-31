@@ -47,7 +47,7 @@ class RenameProvider extends DisposableBase implements IRenameProvider {
 
     public request(options: Rename.IRequest) {
         if (!this._syncExpression.evaluate(options.editor)) {
-            return Observable.empty<Text.WorkspaceChange[]>();
+            return Observable.empty<Text.IWorkspaceChange[]>();
         }
 
         const params: RenameParams = {

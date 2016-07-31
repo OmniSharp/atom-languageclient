@@ -14,7 +14,7 @@ export interface IRenameService {
 }
 
 export interface IRenameProvider extends IDisposable {
-    request(editor: Rename.IRequest): Observable<Text.WorkspaceChange[]>;
+    request(editor: Rename.IRequest): Observable<Text.IWorkspaceChange[]>;
 }
 
 export namespace Rename {

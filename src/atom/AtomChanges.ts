@@ -27,7 +27,7 @@ export class AtomChanges implements IAtomChanges {
         }
     }
 
-    public applyWorkspaceChanges(textChanges: Text.WorkspaceChange[]): Observable<void> {
+    public applyWorkspaceChanges(textChanges: Text.IWorkspaceChange[]): Observable<void> {
         return Observable.from(textChanges)
             .concatMap(
             change => {

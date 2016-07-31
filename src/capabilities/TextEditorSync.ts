@@ -4,8 +4,8 @@
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
 import * as _ from 'lodash';
-import { DisposableBase } from 'ts-disposables';
 import { IAtomViewFinder, IDocumentDelayer, ISyncExpression } from 'atom-languageservices';
+import { DisposableBase } from 'ts-disposables';
 import { className } from '../constants';
 import { AtomTextChange, LanguageClientTextEditorChanges } from '../omni/LanguageClientTextEditorChanges';
 

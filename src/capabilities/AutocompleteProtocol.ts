@@ -7,7 +7,7 @@ import * as _ from 'lodash';
 import { Autocomplete, IAutocompleteProvider, IAutocompleteService, ILanguageProtocolClient, ISyncExpression } from 'atom-languageservices';
 import { capability, inject } from 'atom-languageservices/decorators';
 import { CompletionRequest } from 'atom-languageservices/protocol';
-import { CompletionItem, CompletionItemKind, CompletionList, CompletionOptions, Position, TextDocumentIdentifier, TextDocumentPositionParams } from 'atom-languageservices/types';
+import { CompletionItem, CompletionList, CompletionOptions, Position, TextDocumentIdentifier, TextDocumentPositionParams } from 'atom-languageservices/types';
 import * as toUri from 'file-url';
 import { DisposableBase } from 'ts-disposables';
 import { packageName } from '../constants';

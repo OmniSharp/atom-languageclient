@@ -83,7 +83,7 @@ class FormatDocumentProvider extends DisposableBase implements IFormatProvider {
         this._syncExpression = syncExpression;
     }
 
-    public request(options: Format.IDocument | Format.IRangeRequest) {
+    public request(options: Format.IRequest) {
         if (Format.formatRange(options)) {
             return Observable.empty<Text.IFileChange[]>();
         }

@@ -3,6 +3,7 @@
  *  @copyright OmniSharp Team
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
+
 import { Observable, Subscriber } from 'rxjs';
 import { CodeAction } from 'atom-languageservices';
 import { createObservable } from '../../helpers/createObservable';
@@ -21,7 +22,7 @@ export class CodeActionView extends FilterSelectListView<CodeAction.IResponse> {
         super(commands);
         this.root.classList.add('code-actions-overlay');
         this._editor = editor;
-        this._editorView = <any>viewFinder.getView(editor);
+        this._editorView = viewFinder.getView<Atom.TextEditorPresenter>(editor);
 
         this._decoration = this._editor.decorateMarker(
             this._editor.getLastCursor().getMarker(),
