@@ -5,7 +5,7 @@
  */
 
 /* tslint:disable:no-any */
-export namespace ATOM_NAVIGATION {
+export namespace AtomNavigation {
     export function navigationHasRange(value: any): value is { filePath: string; range: TextBuffer.Range; } {
         return value.range;
     }
@@ -13,10 +13,13 @@ export namespace ATOM_NAVIGATION {
     export function navigationHasLocation(value: any): value is { filePath: string; location: TextBuffer.Point; } {
         return value.location;
     }
+
+    /* tslint:disable:variable-name */
+    export type Location = ({ filePath: string; } | { filePath: string; range: TextBuffer.Range; } | { filePath: string; location: TextBuffer.Point; });
 }
 
 /* tslint:disable:variable-name */
 export const IAtomNavigation = Symbol.for('IAtomNavigation');
 export interface IAtomNavigation {
-    navigateTo(context: AtomNavigationLocation): void;
+    navigateTo(context: AtomNavigation.Location): void;
 }

@@ -6,17 +6,19 @@
 
 import * as _ from 'lodash';
 import { Observable } from 'rxjs';
-import { ATOM_COMMANDS, IFormatProvider, IFormatService, alias, injectable } from 'atom-languageservices';
+import * as Services from 'atom-languageservices';
+import { alias, injectable } from 'atom-languageservices/decorators';
 import { ProviderServiceBase } from './_ProviderServiceBase';
 import { AtomChanges } from './AtomChanges';
 import { AtomCommands } from './AtomCommands';
 import { AtomTextEditorSource } from './AtomTextEditorSource';
+const ATOM_COMMANDS = Services.AtomCommands;
 
 @injectable()
-@alias(IFormatService)
+@alias(Services.IFormatService)
 export class FormatService
-    extends ProviderServiceBase<IFormatProvider, (Format.DocumentOptions | Format.RangeOptions), Observable<Text.FileChange[]>, Observable<Text.FileChange[]>>
-    implements IFormatService {
+    extends ProviderServiceBase<Services.IFormatProvider, (Services.Format.DocumentOptions | Services.Format.RangeOptions), Observable<Services.Text.FileChange[]>, Observable<Services.Text.FileChange[]>>
+    implements Services.IFormatService {
     private _changes: AtomChanges;
     private _commands: AtomCommands;
     private _source: AtomTextEditorSource;
@@ -33,8 +35,8 @@ export class FormatService
         );
     }
 
-    protected createInvoke(callbacks: (((options: (Format.DocumentOptions | Format.RangeOptions)) => Observable<Text.FileChange[]>)[])) {
-        return (options: (Format.DocumentOptions | Format.RangeOptions)) => {
+    protected createInvoke(callbacks: (((options: (Services.Format.DocumentOptions | Services.Format.RangeOptions)) => Observable<Services.Text.FileChange[]>)[])) {
+        return (options: (Services.Format.DocumentOptions | Services.Format.RangeOptions)) => {
             return Observable.from(_.over(callbacks)(options))
                 .mergeMap(_.identity)
                 .reduce((acc, results) => _.compact(acc.concat(results)), []);

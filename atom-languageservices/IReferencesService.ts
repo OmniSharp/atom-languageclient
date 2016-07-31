@@ -4,6 +4,7 @@
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
 import { Observable } from 'rxjs';
+import { AtomNavigation } from 'atom-languageservices';
 import { IDisposable } from 'ts-disposables';
 
 /* tslint:disable:variable-name */
@@ -13,5 +14,13 @@ export interface IReferencesService {
 }
 
 export interface IReferencesProvider extends IDisposable {
-    request(editor: Atom.TextEditor): Observable<AtomNavigationLocation[]>;
+    request(editor: Atom.TextEditor): Observable<AtomNavigation.Location[]>;
+}
+
+export namespace Reference {
+    export interface Item {
+        lines: string[];
+        filePath: string;
+        range: TextBuffer.Range;
+    }
 }

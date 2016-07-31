@@ -2,14 +2,15 @@
  *
  */
 import * as _ from 'lodash';
+import { Reference } from 'atom-languageservices';
 import { AtomCommands } from '../AtomCommands';
 import { AtomNavigation } from '../AtomNavigation';
 import { FilterSelectListView } from './FilterSelectListView';
 
-export class ReferenceView extends FilterSelectListView<Reference.Symbol> {
+export class ReferenceView extends FilterSelectListView<Reference.Item> {
     private _navigation: AtomNavigation;
     private _panel: Atom.Panel;
-    constructor(commands: AtomCommands, navigation: AtomNavigation, results: Reference.Symbol[]) {
+    constructor(commands: AtomCommands, navigation: AtomNavigation, results: Reference.Item[]) {
         super(commands);
         this._navigation = navigation;
         this.setFilterItems(results, this._filterEditorView.getModel().getText());
@@ -34,11 +35,11 @@ export class ReferenceView extends FilterSelectListView<Reference.Symbol> {
         this._panel.destroy();
     }
 
-    public confirmed(item: Reference.Symbol) {
+    public confirmed(item: Reference.Item) {
         this._navigation.navigateTo(item);
     }
 
-    public viewForItem(result: fuse.Result<Reference.Symbol>) {
+    public viewForItem(result: fuse.Result<Reference.Item>) {
         const {item, matches} = result;
         const {lines, range} = item;
         const li = document.createElement('li');

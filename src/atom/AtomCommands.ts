@@ -4,9 +4,9 @@
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
 import * as _ from 'lodash';
+import { AtomCommands as ATOM_COMMANDS, IAtomCommands } from 'atom-languageservices';
+import { alias, injectable } from 'atom-languageservices/decorators';
 import { CompositeDisposable, DisposableBase, IDisposable } from 'ts-disposables';
-import { alias, injectable } from 'atom-languageservices';
-import { ATOM_COMMANDS, IAtomCommands } from 'atom-languageservices';
 import { packageName } from '../constants';
 type CommandType = ATOM_COMMANDS.CommandType;
 type CommandObject = ATOM_COMMANDS.CommandObject;

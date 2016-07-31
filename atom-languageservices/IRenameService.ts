@@ -5,6 +5,7 @@
  */
 import { Observable } from 'rxjs';
 import { IDisposable } from 'ts-disposables';
+import { Text } from './Text';
 
 /* tslint:disable:variable-name */
 export const IRenameService = Symbol.for('IRenameService');
@@ -14,4 +15,12 @@ export interface IRenameService {
 
 export interface IRenameProvider extends IDisposable {
     request(editor: Rename.RequestOptions): Observable<Text.WorkspaceChange[]>;
+}
+
+export namespace Rename {
+    export interface RequestOptions {
+        editor: Atom.TextEditor;
+        location: TextBuffer.Point;
+        word: string;
+    }
 }

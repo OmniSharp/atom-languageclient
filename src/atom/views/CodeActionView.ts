@@ -4,6 +4,7 @@
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
 import { Observable, Subscriber } from 'rxjs';
+import { CodeAction } from 'atom-languageservices';
 import { createObservable } from '../../helpers/createObservable';
 import { AtomCommands } from '../AtomCommands';
 import { AtomViewFinder } from '../AtomViewFinder';

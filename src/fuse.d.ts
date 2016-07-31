@@ -16,9 +16,11 @@ declare module fuse {
 }
 
 declare module 'fuse.js' {
+    interface IFuse {
+        new <T>(list: T[]): Fuse<T>;
+        new <T>(list: T[], options: IFuseOptions): Fuse<T>;
+    }
     interface Fuse<T> {
-        new (list: T[]): Fuse<T>;
-        new (list: T[], options: IFuseOptions);
         search(pattern: string): fuse.Result<T>[];
         search<T>(pattern: string): T[];
         set(list: T[]);

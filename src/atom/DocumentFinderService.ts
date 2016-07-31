@@ -5,7 +5,8 @@
  */
 import * as _ from 'lodash';
 import { Observable } from 'rxjs';
-import { IDocumentFinderProvider, IDocumentFinderService, alias, injectable } from 'atom-languageservices';
+import { Finder, IDocumentFinderProvider, IDocumentFinderService } from 'atom-languageservices';
+import { alias, injectable } from 'atom-languageservices/decorators';
 import { ProviderServiceBase } from './_ProviderServiceBase';
 import { AtomCommands } from './AtomCommands';
 import { AtomNavigation } from './AtomNavigation';
@@ -15,7 +16,7 @@ import { DocumentFinderView } from './views/DocumentFinderView';
 @injectable
 @alias(IDocumentFinderService)
 export class DocumentFinderService
-    extends ProviderServiceBase<IDocumentFinderProvider, Atom.TextEditor, Observable<Finder.Symbol[]>, Observable<Finder.Symbol[]>>
+    extends ProviderServiceBase<IDocumentFinderProvider, Atom.TextEditor, Observable<Finder.Item[]>, Observable<Finder.Item[]>>
     implements IDocumentFinderService {
     private _navigation: AtomNavigation;
     private _commands: AtomCommands;
@@ -28,7 +29,7 @@ export class DocumentFinderService
         this._source = source;
     }
 
-    protected createInvoke(callbacks: ((options: Atom.TextEditor) => Observable<Finder.Symbol[]>)[]) {
+    protected createInvoke(callbacks: ((options: Atom.TextEditor) => Observable<Finder.Item[]>)[]) {
         return (options: Atom.TextEditor) => {
             return Observable.from(_.over(callbacks)(options))
                 .mergeMap(_.identity)

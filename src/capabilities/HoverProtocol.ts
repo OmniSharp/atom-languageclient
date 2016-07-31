@@ -5,9 +5,10 @@
  */
 import * as _ from 'lodash';
 import { Observable } from 'rxjs';
-import { IHoverProvider, IHoverService, ILanguageProtocolClient, ISyncExpression, capability, inject } from 'atom-languageservices';
+import { Hover, IHoverProvider, IHoverService, ILanguageProtocolClient, ISyncExpression } from 'atom-languageservices';
+import { capability, inject } from 'atom-languageservices/decorators';
 import { HoverRequest } from 'atom-languageservices/protocol';
-import { Hover, MarkedString, Position, TextDocumentIdentifier } from 'atom-languageservices/types';
+import { Hover as THover, MarkedString, Position, TextDocumentIdentifier } from 'atom-languageservices/types';
 import * as toUri from 'file-url';
 import { DisposableBase } from 'ts-disposables';
 
@@ -49,7 +50,7 @@ class HoverProvider extends DisposableBase implements IHoverProvider {
 
     public request(options: Hover.RequestOptions) {
         if (!this._syncExpression.evaluate(options.editor)) {
-            return Observable.empty<Hover.Symbol>();
+            return Observable.empty<Hover.Item>();
         }
 
         return Observable.fromPromise(
@@ -74,7 +75,7 @@ class HoverProvider extends DisposableBase implements IHoverProvider {
         }
     }
 
-    private _makeSymbol(s: Hover): Hover.Symbol {
+    private _makeSymbol(s: THover): Hover.Item {
         if (!s) {
             return undefined!;
         }

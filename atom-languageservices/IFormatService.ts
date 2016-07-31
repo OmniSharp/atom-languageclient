@@ -5,13 +5,7 @@
  */
 import { Observable } from 'rxjs';
 import { IDisposable } from 'ts-disposables';
-
-export namespace AtomFormat {
-    /* tslint:disable-next-line:no-any */
-    export function formatRange(options: any): options is Format.RangeOptions {
-        return !!options.range;
-    }
-}
+import { Text } from './Text';
 
 /* tslint:disable:variable-name */
 export const IFormatService = Symbol.for('IFormatService');
@@ -21,4 +15,23 @@ export interface IFormatService {
 
 export interface IFormatProvider extends IDisposable {
     request(options: Format.RangeOptions | Format.DocumentOptions): Observable<Text.FileChange[]>;
+}
+
+export namespace Format {
+    /* tslint:disable-next-line:no-any */
+    export function formatRange(options: any): options is RangeOptions {
+        return !!options.range;
+    }
+    export interface Base {
+        insertSpaces: boolean;
+        tabSize: number;
+    }
+    export interface DocumentOptions extends Base {
+        editor: Atom.TextEditor;
+    }
+    export interface RangeOptions extends Base {
+        editor: Atom.TextEditor;
+        range: TextBuffer.Range;
+    }
+    export type FormatOptions  = DocumentType | RangeOptions;
 }

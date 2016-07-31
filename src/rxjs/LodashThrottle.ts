@@ -59,7 +59,7 @@ class LodashThrottleSubscriber<T> extends Subscriber<T> {
     }
 
     private _dispatchNext(value: T) {
-        if (this.isUnsubscribed) {
+        if (this.closed) {
             return;
         }
         this.destination.next!(value);

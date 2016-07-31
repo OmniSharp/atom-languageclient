@@ -13,6 +13,10 @@
             "es2015.symbol",
             "es2015.symbol.wellknown"
         ],
+        "baseUrl": "",
+        "paths": {
+            "rxjs": ["node_modules/rxjs"]
+        },
         "module": "commonjs",
         "moduleResolution": "node",
         "diagnostics": true,

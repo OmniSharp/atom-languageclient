@@ -4,25 +4,45 @@
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
 import * as _ from 'lodash';
-import { ILanguageProtocolClient, ILinterService, capability, inject } from 'atom-languageservices';
+import { ILanguageProtocolClient, ILinterService, Linter } from 'atom-languageservices';
+import { capability, inject } from 'atom-languageservices/decorators';
 import { PublishDiagnosticsNotification } from 'atom-languageservices/protocol';
 import { Diagnostic, DiagnosticSeverity, PublishDiagnosticsParams } from 'atom-languageservices/types';
+import { DisposableBase } from 'ts-disposables';
 import { fromRange, fromUri } from './utils/convert';
-import { Linter as LinterBase } from './Linter';
 
 @capability
-export class LinterProtocol extends LinterBase {
+export class LinterProtocol extends DisposableBase {
     private _client: ILanguageProtocolClient;
+    private _linterService: ILinterService;
+    private _linter: Linter.IndieLinter;
+    private _diagnostics = new Map<string, Linter.Message[]>();
+
     constructor(
         @inject(ILanguageProtocolClient) client: ILanguageProtocolClient,
         @inject(ILinterService) linterService: ILinterService) {
-        super(client.name, linterService);
+        super();
+        this._linterService = linterService;
+        this._linter = this._linterService.getLinter(client.name);
+        this._disposable.add(this._linter);
         this._client = client;
 
-        this.configure();
+        this._configure();
     }
 
-    protected configure() {
+    public setMessages(path: string, messages: Linter.Message[]) {
+        this._diagnostics.set(path, messages);
+        this.updateMessages();
+    }
+
+    public updateMessages = _.throttle(
+        () => {
+            this._linter.setMessages(_.flatten(_.toArray(this._diagnostics.values())));
+        },
+        100,
+        { trailing: true, leading: true });
+
+    private _configure() {
         this._client.onNotification(PublishDiagnosticsNotification.type, _.bind(this._recieveDiagnostics, this));
     }
 

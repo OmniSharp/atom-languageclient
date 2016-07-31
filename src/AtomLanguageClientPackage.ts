@@ -5,7 +5,7 @@
  */
 import * as _ from 'lodash';
 import { Observable } from 'rxjs';
-import { IAutocompleteService, ILanguageProvider, ILanguageService, ILinterService } from 'atom-languageservices';
+import { IAutocompleteService, ILanguageProvider, ILanguageService, ILinterService, Linter } from 'atom-languageservices';
 import { readdir } from 'fs';
 import { join, resolve } from 'path';
 import { CompositeDisposable, isDisposable } from 'ts-disposables';

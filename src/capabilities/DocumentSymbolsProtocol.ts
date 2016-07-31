@@ -5,7 +5,8 @@
  */
 import * as _ from 'lodash';
 import { Observable } from 'rxjs';
-import { AutocompleteKind, IDocumentFinderProvider, IDocumentFinderService, ILanguageProtocolClient, ISyncExpression, capability, inject } from 'atom-languageservices';
+import { Autocomplete, Finder, IDocumentFinderProvider, IDocumentFinderService, ILanguageProtocolClient, ISyncExpression } from 'atom-languageservices';
+import { capability, inject } from 'atom-languageservices/decorators';
 import { DocumentSymbolRequest } from 'atom-languageservices/protocol';
 import { SymbolInformation, SymbolKind, TextDocumentIdentifier } from 'atom-languageservices/types';
 import * as toUri from 'file-url';
@@ -51,7 +52,7 @@ class DocumentFinderProvider extends DisposableBase implements IDocumentFinderPr
 
     public request(editor: Atom.TextEditor) {
         if (!this._syncExpression.evaluate(editor)) {
-            return Observable.empty<Finder.Symbol[]>();
+            return Observable.empty<Finder.Item[]>();
         }
 
         return Observable.fromPromise(
@@ -63,73 +64,19 @@ class DocumentFinderProvider extends DisposableBase implements IDocumentFinderPr
         });
     }
 
-    private _makeSymbol(symbol: SymbolInformation): Finder.Symbol {
+    private _makeSymbol(symbol: SymbolInformation): Finder.Item {
         // TODO: Icon html
-        return <Finder.Symbol>{
+        return <Finder.Item>{
             name: symbol.name,
             filterText: symbol.name,
             iconHTML: this._renderIcon(symbol),
             filePath: fromUri(symbol.location.uri),
             location: fromPosition(symbol.location.range.start),
-            type: this._getTypeFromKind(symbol.kind)
+            type: Autocomplete.getTypeFromSymbolKind(symbol.kind)
         };
     }
 
     private _renderIcon(completionItem: { kind: SymbolKind }) {
-        return `<img height="16px" width="16px" src="atom://${packageName}/styles/icons/${this._getIconFromKind(completionItem.kind!)}.svg" />`;
-    }
-
-    private _getIconFromKind(kind: SymbolKind): string {
-        switch (kind) {
-            case SymbolKind.Method:
-            case SymbolKind.Function:
-                return AutocompleteKind.Method;
-            case SymbolKind.Constructor:
-                return AutocompleteKind.Class;
-            case SymbolKind.Property:
-                return AutocompleteKind.Property;
-            case SymbolKind.Field:
-            case SymbolKind.Variable:
-                return AutocompleteKind.Field;
-            case SymbolKind.Class:
-                return AutocompleteKind.Class;
-            case SymbolKind.Interface:
-                return AutocompleteKind.Interface;
-            case SymbolKind.Module:
-                return AutocompleteKind.Module;
-            case SymbolKind.Enum:
-                return AutocompleteKind.Enum;
-            case SymbolKind.File:
-                return 'file';
-            default:
-                return 'valuetype';
-        }
-    }
-
-    private _getTypeFromKind(kind: SymbolKind): Autocomplete.SuggestionType {
-        switch (kind) {
-            case SymbolKind.Method:
-                return 'method';
-            case SymbolKind.Function:
-            case SymbolKind.Constructor:
-                return 'function';
-            case SymbolKind.Field:
-            case SymbolKind.Property:
-                return 'property';
-            case SymbolKind.Variable:
-                return 'variable';
-            case SymbolKind.Class:
-                return 'class';
-            case SymbolKind.Interface:
-                return 'interface';
-            case SymbolKind.Module:
-                return 'module';
-            case SymbolKind.Enum:
-                return 'enum';
-            case SymbolKind.File:
-                return 'import';
-            default:
-                return 'value';
-        }
+        return `<img height="16px" width="16px" src="atom://${packageName}/styles/icons/${Autocomplete.getIconFromSymbolKind(completionItem.kind!)}.svg" />`;
     }
 }

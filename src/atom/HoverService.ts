@@ -5,7 +5,8 @@
  */
 import * as _ from 'lodash';
 import { Observable, Subscription } from 'rxjs';
-import { ATOM_COMMANDS, IHoverProvider, IHoverService, alias, injectable } from 'atom-languageservices';
+import * as Services from 'atom-languageservices';
+import { alias, injectable } from 'atom-languageservices/decorators';
 import { CompositeDisposable, IDisposable } from 'ts-disposables';
 import { ProviderServiceBase } from './_ProviderServiceBase';
 import { AtomCommands } from './AtomCommands';
@@ -14,10 +15,10 @@ import { AtomViewFinder } from './AtomViewFinder';
 import { HoverView, IHoverPosition } from './views/HoverView';
 
 @injectable()
-@alias(IHoverService)
+@alias(Services.IHoverService)
 export class HoverService
-    extends ProviderServiceBase<IHoverProvider, Hover.RequestOptions, Observable<Hover.Symbol>, Observable<Hover.Symbol[]>>
-    implements IHoverService {
+    extends ProviderServiceBase<Services.IHoverProvider, Services.Hover.RequestOptions, Observable<Services.Hover.Item>, Observable<Services.Hover.Item[]>>
+    implements Services.IHoverService {
     private _commands: AtomCommands;
     private _textEditorSource: AtomTextEditorSource;
     private _viewFinder: AtomViewFinder;
@@ -40,14 +41,14 @@ export class HoverService
         this._view = new HoverView();
 
         this._disposable.add(
-            this._commands.add(ATOM_COMMANDS.CommandType.TextEditor, `hover`, () => this.showOnCommand()),
+            this._commands.add(Services.AtomCommands.CommandType.TextEditor, `hover`, () => this.showOnCommand()),
             this._textEditorSource.observeActiveTextEditor
                 .subscribe(_.bind(this._setupView, this))
         );
     }
 
-    protected createInvoke(callbacks: ((options: Hover.RequestOptions) => Observable<Hover.Symbol>)[]) {
-        return (options: Hover.RequestOptions) => {
+    protected createInvoke(callbacks: ((options: Services.Hover.RequestOptions) => Observable<Services.Hover.Item>)[]) {
+        return (options: Services.Hover.RequestOptions) => {
             return Observable.from(_.over(callbacks)(options))
                 .mergeMap(_.identity)
                 .scan((acc, results) => _.compact(acc.concat(results)), []);

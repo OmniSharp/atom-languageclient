@@ -6,7 +6,8 @@
 /* tslint:disable:no-any */
 import * as _ from 'lodash';
 import { Observable, Subject } from 'rxjs';
-import { IAtomTextEditorSource, alias, injectable } from 'atom-languageservices';
+import { IAtomTextEditorSource } from 'atom-languageservices';
+import { alias, injectable } from 'atom-languageservices/decorators';
 import { CompositeDisposable, DisposableBase } from 'ts-disposables';
 import { observeCallback } from '../helpers/index';
 

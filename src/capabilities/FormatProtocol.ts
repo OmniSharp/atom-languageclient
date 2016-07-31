@@ -4,7 +4,8 @@
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
 import { Observable } from 'rxjs';
-import { AtomFormat, IFormatProvider, IFormatService, ILanguageProtocolClient, ISyncExpression, capability, inject } from 'atom-languageservices';
+import { Format, IFormatProvider, IFormatService, ILanguageProtocolClient, ISyncExpression, Text } from 'atom-languageservices';
+import { capability, inject } from 'atom-languageservices/decorators';
 import { DocumentFormattingRequest, DocumentRangeFormattingRequest } from 'atom-languageservices/protocol';
 import { DocumentFormattingParams, DocumentRangeFormattingParams, TextDocumentIdentifier } from 'atom-languageservices/types';
 import * as toUri from 'file-url';
@@ -50,7 +51,7 @@ class FormatRangeProvider extends DisposableBase implements IFormatProvider {
     }
 
     public request(options: Format.DocumentOptions | Format.RangeOptions) {
-        if (!AtomFormat.formatRange(options)) {
+        if (!Format.formatRange(options)) {
             return Observable.empty<Text.FileChange[]>();
         }
 
@@ -83,7 +84,7 @@ class FormatDocumentProvider extends DisposableBase implements IFormatProvider {
     }
 
     public request(options: Format.DocumentOptions | Format.RangeOptions) {
-        if (AtomFormat.formatRange(options)) {
+        if (Format.formatRange(options)) {
             return Observable.empty<Text.FileChange[]>();
         }
 

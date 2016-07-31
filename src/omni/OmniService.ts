@@ -4,8 +4,8 @@
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
 /* tslint:disable:no-any */
+import { injectable } from 'atom-languageservices/decorators';
 import { DisposableBase } from 'ts-disposables';
-import { injectable } from 'atom-languageservices';
 import { ActiveTextEditorProvider, IActiveTextEditorProvider } from './ActiveTextEditorProvider';
 import { ITextEditorProvider, TextEditorProvider } from './TextEditorProvider';
 

@@ -5,6 +5,7 @@
  */
 import { Observable } from 'rxjs';
 import { IDisposable } from 'ts-disposables';
+import { AtomNavigation } from './IAtomNavigation';
 
 /* tslint:disable:variable-name */
 export const IDefinitionService = Symbol.for('IDefinitionService');
@@ -13,5 +14,12 @@ export interface IDefinitionService {
 }
 
 export interface IDefinitionProvider extends IDisposable {
-    request(editor: Definition.RequestOptions): Observable<AtomNavigationLocation[]>;
+    request(editor: Definition.RequestOptions): Observable<AtomNavigation.Location[]>;
+}
+
+export namespace Definition {
+    export interface RequestOptions {
+        editor: Atom.TextEditor;
+        location: TextBuffer.Point;
+    }
 }

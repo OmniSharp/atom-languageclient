@@ -5,7 +5,8 @@
  */
 import * as _ from 'lodash';
 import { Observable } from 'rxjs';
-import { ILanguageProtocolClient, IReferencesProvider, IReferencesService, ISyncExpression, capability, inject } from 'atom-languageservices';
+import { ILanguageProtocolClient, IReferencesProvider, IReferencesService, ISyncExpression } from 'atom-languageservices';
+import { capability, inject } from 'atom-languageservices/decorators';
 import { ReferencesRequest } from 'atom-languageservices/protocol';
 import { Position, ReferenceParams, TextDocumentIdentifier } from 'atom-languageservices/types';
 import * as toUri from 'file-url';

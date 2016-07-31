@@ -5,8 +5,8 @@
  */
 import * as _ from 'lodash';
 import { Observable } from 'rxjs';
-import { alias, injectable } from 'atom-languageservices';
-import { IAtomChanges } from 'atom-languageservices';
+import { IAtomChanges, Text } from 'atom-languageservices';
+import { alias, injectable } from 'atom-languageservices/decorators';
 
 @injectable
 @alias(IAtomChanges)

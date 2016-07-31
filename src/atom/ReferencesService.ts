@@ -5,22 +5,23 @@
  */
 import * as _ from 'lodash';
 import { Observable } from 'rxjs';
-import { ATOM_COMMANDS, ATOM_NAVIGATION, IReferencesProvider, IReferencesService, alias, injectable } from 'atom-languageservices';
+import * as Services from 'atom-languageservices';
+import { alias, injectable } from 'atom-languageservices/decorators';
 import { readFile } from 'fs';
 import { ProviderServiceBase } from './_ProviderServiceBase';
 import { AtomCommands } from './AtomCommands';
 import { AtomNavigation } from './AtomNavigation';
 import { AtomTextEditorSource } from './AtomTextEditorSource';
 import { ReferenceView } from './views/ReferenceView';
-const {navigationHasRange} = ATOM_NAVIGATION;
+const {navigationHasRange} = Services.AtomNavigation;
 
 const readFile$ = Observable.bindNodeCallback(readFile);
 
 @injectable
-@alias(IReferencesService)
+@alias(Services.IReferencesService)
 export class ReferencesService
-    extends ProviderServiceBase<IReferencesProvider, Atom.TextEditor, Observable<AtomNavigationLocation[]>, Observable<AtomNavigationLocation[]>>
-    implements IReferencesService {
+    extends ProviderServiceBase<Services.IReferencesProvider, Atom.TextEditor, Observable<Services.AtomNavigation.Location[]>, Observable<Services.AtomNavigation.Location[]>>
+    implements Services.IReferencesService {
     private _navigation: AtomNavigation;
     private _commands: AtomCommands;
     private _source: AtomTextEditorSource;
@@ -31,10 +32,10 @@ export class ReferencesService
         this._commands = commands;
         this._source = source;
 
-        this._commands.add(ATOM_COMMANDS.CommandType.TextEditor, 'references', () => this.open());
+        this._commands.add(Services.AtomCommands.CommandType.TextEditor, 'references', () => this.open());
     }
 
-    protected createInvoke(callbacks: ((options: Atom.TextEditor) => Observable<AtomNavigationLocation[]>)[]) {
+    protected createInvoke(callbacks: ((options: Atom.TextEditor) => Observable<Services.AtomNavigation.Location[]>)[]) {
         return ((options: Atom.TextEditor) => {
             const requests = _.over(callbacks)(options);
             return Observable.from(requests)
@@ -61,7 +62,7 @@ export class ReferencesService
             },
             (results, files) => ({ results, files }))
             .subscribe(({results, files}) => {
-                const items: Reference.Symbol[] = [];
+                const items: Services.Reference.Item[] = [];
                 for (const result of results) {
                     const filePath = result.filePath;
                     const file = _.find(files, file => file.filePath === result.filePath);

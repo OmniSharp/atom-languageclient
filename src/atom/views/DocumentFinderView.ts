@@ -3,17 +3,17 @@
  */
 import * as _ from 'lodash';
 import { Observable, Subscription } from 'rxjs';
-import { AutocompleteKind } from 'atom-languageservices';
+import { Autocomplete, Finder } from 'atom-languageservices';
 import { packageName } from '../../constants';
 import { AtomCommands } from '../AtomCommands';
 import { AtomNavigation } from '../AtomNavigation';
 import { FilterSelectListView } from './FilterSelectListView';
 
-export class DocumentFinderView extends FilterSelectListView<Finder.Symbol> {
+export class DocumentFinderView extends FilterSelectListView<Finder.Item> {
     private _navigation: AtomNavigation;
     private _subscription: Subscription;
     private _panel: Atom.Panel;
-    constructor(commands: AtomCommands, navigation: AtomNavigation, results: Observable<Finder.Symbol[]>) {
+    constructor(commands: AtomCommands, navigation: AtomNavigation, results: Observable<Finder.Item[]>) {
         super(commands);
         this._navigation = navigation;
         this._subscription = results.subscribe(items => {
@@ -40,12 +40,12 @@ export class DocumentFinderView extends FilterSelectListView<Finder.Symbol> {
         this._panel.destroy();
     }
 
-    public confirmed(item: Finder.Symbol) {
+    public confirmed(item: Finder.Item) {
         this._subscription.unsubscribe();
         this._navigation.navigateTo(item);
     }
 
-    public viewForItem(result: fuse.Result<Finder.Symbol>) {
+    public viewForItem(result: fuse.Result<Finder.Item>) {
         const {item, matches} = result;
         const li = document.createElement('li');
         let filename = atom.project.relativizePath(item.filePath)[1];
@@ -84,48 +84,6 @@ export class DocumentFinderView extends FilterSelectListView<Finder.Symbol> {
     }
 
     private _renderIcon(completionItem: { type?: Autocomplete.SuggestionType; }) {
-        return `<img height="16px" width="16px" src="atom://${packageName}/styles/icons/${this._getIconFromKind(completionItem.type!)}.svg" />`;
-    }
-
-    private _getIconFromKind(kind: Autocomplete.SuggestionType): string {
-        switch (kind) {
-            case 'class':
-            case 'type':
-                return AutocompleteKind.Class;
-            case 'mixin':
-                return 'union';
-            case 'constant':
-                return 'constant';
-            case 'import':
-                return 'reference';
-            case 'keyword':
-                return 'keyword';
-            case 'function':
-            case 'method':
-                return AutocompleteKind.Method;
-            case 'module':
-            case 'require':
-            case 'package':
-                return AutocompleteKind.Module;
-            case 'property':
-                return AutocompleteKind.Property;
-            case 'snippet':
-                return 'snippet';
-            case 'tag':
-                return AutocompleteKind.Class;
-            case 'selector':
-            case 'pseudo-selector':
-            case 'variable':
-                return AutocompleteKind.Field;
-            case 'interface':
-                return AutocompleteKind.Interface;
-            case 'enum':
-                return AutocompleteKind.Enum;
-            case 'value':
-            case 'attribute':
-            case 'builtin':
-            default:
-                return 'valuetype';
-        }
+        return `<img height="16px" width="16px" src="atom://${packageName}/styles/icons/${Autocomplete.getIconFromSuggestionType(completionItem.type!)}.svg" />`;
     }
 }

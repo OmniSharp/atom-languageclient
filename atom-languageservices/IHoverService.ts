@@ -13,5 +13,17 @@ export interface IHoverService {
 }
 
 export interface IHoverProvider extends IDisposable {
-    request(editor: Hover.RequestOptions): Observable<Hover.Symbol>;
+    request(editor: Hover.RequestOptions): Observable<Hover.Item>;
+}
+
+export namespace Hover {
+    export interface Item {
+        text: string;
+        description?: string;
+    }
+
+    export interface RequestOptions {
+        editor: Atom.TextEditor;
+        location: TextBuffer.Point;
+    }
 }

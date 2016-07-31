@@ -5,21 +5,22 @@
  */
 import * as _ from 'lodash';
 import { Observable, Subscription } from 'rxjs';
-import { ATOM_COMMANDS, ATOM_NAVIGATION, IDefinitionProvider, IDefinitionService, alias, injectable } from 'atom-languageservices';
+import * as Services from 'atom-languageservices';
+import { alias, injectable } from 'atom-languageservices/decorators';
 import { readFile } from 'fs';
 import { ProviderServiceBase } from './_ProviderServiceBase';
 import { AtomCommands } from './AtomCommands';
 import { AtomNavigation } from './AtomNavigation';
 import { AtomTextEditorSource } from './AtomTextEditorSource';
 import { ReferenceView } from './views/ReferenceView';
-const { navigationHasRange } = ATOM_NAVIGATION;
+const { navigationHasRange } = Services.AtomNavigation;
 
 const readFile$ = Observable.bindNodeCallback(readFile);
 @injectable
-@alias(IDefinitionService)
+@alias(Services.IDefinitionService)
 export class DefinitionService
-    extends ProviderServiceBase<IDefinitionProvider, Definition.RequestOptions, Observable<AtomNavigationLocation[]>, Observable<AtomNavigationLocation[]>>
-    implements IDefinitionService {
+    extends ProviderServiceBase<Services.IDefinitionProvider, Services.Definition.RequestOptions, Observable<Services.AtomNavigation.Location[]>, Observable<Services.AtomNavigation.Location[]>>
+    implements Services.IDefinitionService {
     private _navigation: AtomNavigation;
     private _commands: AtomCommands;
     private _source: AtomTextEditorSource;
@@ -30,11 +31,11 @@ export class DefinitionService
         this._commands = commands;
         this._source = source;
 
-        this._commands.add(ATOM_COMMANDS.CommandType.TextEditor, 'definition', () => this.open());
+        this._commands.add(Services.AtomCommands.CommandType.TextEditor, 'definition', () => this.open());
     }
 
-    protected createInvoke(callbacks: ((options: Definition.RequestOptions) => Observable<AtomNavigationLocation[]>)[]) {
-        return ((options: Definition.RequestOptions) => {
+    protected createInvoke(callbacks: ((options: Services.Definition.RequestOptions) => Observable<Services.AtomNavigation.Location[]>)[]) {
+        return ((options: Services.Definition.RequestOptions) => {
             const requests = _.over(callbacks)(options);
             return Observable.from(requests)
                 .mergeMap(_.identity)
@@ -72,7 +73,7 @@ export class DefinitionService
                 },
                 (results, files) => ({ results, files }))
                 .subscribe(({results, files}) => {
-                    const items: Reference.Symbol[] = [];
+                    const items: Services.Reference.Item[] = [];
                     for (const result of results) {
                         const filePath = result.filePath;
                         const file = _.find(files, file => file.filePath === result.filePath);

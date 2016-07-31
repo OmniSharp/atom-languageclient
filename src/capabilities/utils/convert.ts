@@ -6,8 +6,9 @@
 /* tslint:disable:no-any */
 import * as _ from 'lodash';
 import { Point, Range } from 'atom';
+import { Autocomplete, Linter, Text } from 'atom-languageservices';
+import { Position, Range as LsRange, TextDocumentIdentifier, TextEdit, WorkspaceEdit } from 'atom-languageservices/types';
 import * as _toUri from 'file-url';
-import { Position, Range as LsRange, TextDocumentIdentifier, TextEdit, WorkspaceEdit } from 'vscode-languageserver-types';
 import { uriToFilePath as fromUri } from './uriToFilePath';
 export { fromUri };
 

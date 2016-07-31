@@ -5,7 +5,8 @@
  */
 import * as _ from 'lodash';
 import { Observable } from 'rxjs';
-import { ATOM_COMMANDS, IRenameProvider, IRenameService, alias, injectable } from 'atom-languageservices';
+import * as Services from 'atom-languageservices';
+import { alias, injectable } from 'atom-languageservices/decorators';
 import { ProviderServiceBase } from './_ProviderServiceBase';
 import { AtomChanges } from './AtomChanges';
 import { AtomCommands } from './AtomCommands';
@@ -14,10 +15,10 @@ import { AtomTextEditorSource } from './AtomTextEditorSource';
 import { RenameView } from './views/RenameView';
 
 @injectable
-@alias(IRenameService)
+@alias(Services.IRenameService)
 export class RenameService
-    extends ProviderServiceBase<IRenameProvider, Rename.RequestOptions, Observable<Text.WorkspaceChange[]>, Observable<Text.WorkspaceChange[]>>
-    implements IRenameService {
+    extends ProviderServiceBase<Services.IRenameProvider, Services.Rename.RequestOptions, Observable<Services.Text.WorkspaceChange[]>, Observable<Services.Text.WorkspaceChange[]>>
+    implements Services.IRenameService {
     private _navigation: AtomNavigation;
     private _commands: AtomCommands;
     private _changes: AtomChanges;
@@ -31,14 +32,14 @@ export class RenameService
         this._source = source;
 
         this._disposable.add(
-            this._commands.add(ATOM_COMMANDS.CommandType.TextEditor, 'rename', () => {
+            this._commands.add(Services.AtomCommands.CommandType.TextEditor, 'rename', () => {
                 this.open();
             })
         );
     }
 
-    protected createInvoke(callbacks: ((options: Rename.RequestOptions) => Observable<Text.WorkspaceChange[]>)[]) {
-        return (options: Rename.RequestOptions) => {
+    protected createInvoke(callbacks: ((options: Services.Rename.RequestOptions) => Observable<Services.Text.WorkspaceChange[]>)[]) {
+        return (options: Services.Rename.RequestOptions) => {
             return Observable.from(_.over(callbacks)(options))
                 .mergeMap(_.identity)
                 .reduce(

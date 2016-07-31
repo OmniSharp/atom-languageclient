@@ -5,6 +5,7 @@
  */
 import * as _ from 'lodash';
 import { Observable, Subscriber } from 'rxjs';
+import { Rename } from 'atom-languageservices';
 import { createObservable } from '../../helpers/createObservable';
 import { AtomCommands } from '../AtomCommands';
 import { View } from './View';

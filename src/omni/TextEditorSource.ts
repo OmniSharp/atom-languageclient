@@ -5,8 +5,8 @@
  */
 /* tslint:disable:no-any */
 import { Observable } from 'rxjs';
+import { injectable } from 'atom-languageservices/decorators';
 import { DisposableBase } from 'ts-disposables';
-import { injectable } from 'atom-languageservices';
 import { observeCallback } from '../helpers/index';
 import { ILanguageClientTextEditor } from './ILanguageClientTextEditor';
 

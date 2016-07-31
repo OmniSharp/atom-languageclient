@@ -4,12 +4,12 @@
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
 /* tslint:disable:no-any */
+import { ClientState, IDocumentDelayer, ILanguageProtocolClient, ILanguageProtocolClientOptions, IProjectProvider, ISyncExpression } from 'atom-languageservices';
+import { inject } from 'atom-languageservices/decorators';
+import { ShowMessageRequest } from 'atom-languageservices/protocol';
+import { InitializeError, InitializeParams, InitializeResult, ServerCapabilities } from 'atom-languageservices/types';
 import { Disposable, DisposableBase } from 'ts-disposables';
 import { CancellationToken, ErrorCodes, NotificationHandler, NotificationType, RequestHandler, RequestType, ResponseError } from 'vscode-jsonrpc';
-import { inject } from 'atom-languageservices';
-import { ClientState, IDocumentDelayer, ILanguageProtocolClient, ILanguageProtocolClientOptions, IProjectProvider, ISyncExpression } from 'atom-languageservices';
-import { InitializeError, InitializeParams, InitializeResult, ServerCapabilities } from 'atom-languageservices/types';
-import { ShowMessageRequest } from 'atom-languageservices/protocol';
 import { IConnection } from './Connection';
 
 export class LanguageProtocolClient extends DisposableBase implements ILanguageProtocolClient {

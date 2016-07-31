@@ -4,7 +4,8 @@
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
 import { Observable } from 'rxjs';
-import { ILanguageProtocolClient, IRenameProvider, IRenameService, ISyncExpression, capability, inject } from 'atom-languageservices';
+import { ILanguageProtocolClient, IRenameProvider, IRenameService, ISyncExpression, Rename, Text } from 'atom-languageservices';
+import { capability, inject } from 'atom-languageservices/decorators';
 import { RenameRequest } from 'atom-languageservices/protocol';
 import { RenameParams, TextDocumentIdentifier } from 'atom-languageservices/types';
 import * as toUri from 'file-url';

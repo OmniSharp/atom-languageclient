@@ -5,9 +5,9 @@
  */
 import * as _ from 'lodash';
 import { Observable, Subject } from 'rxjs';
+import * as Services from 'atom-languageservices';
+import { alias, injectable } from 'atom-languageservices/decorators';
 import { Disposable, DisposableBase } from 'ts-disposables';
-import { alias, injectable } from 'atom-languageservices';
-import { ATOM_COMMANDS, IWorkspaceFinderProvider, IWorkspaceFinderService } from 'atom-languageservices';
 import { AtomCommands } from './AtomCommands';
 import { AtomNavigation } from './AtomNavigation';
 import { WorkspaceFinderView } from './views/WorkspaceFinderView';
@@ -15,14 +15,14 @@ import { WorkspaceFinderView } from './views/WorkspaceFinderView';
 const MAX_ITEMS = 100;
 
 @injectable
-@alias(IWorkspaceFinderService)
-export class WorkspaceFinderService extends DisposableBase implements IWorkspaceFinderService {
+@alias(Services.IWorkspaceFinderService)
+export class WorkspaceFinderService extends DisposableBase implements Services.IWorkspaceFinderService {
     private _navigation: AtomNavigation;
     private _commands: AtomCommands;
     private _filter$ = new Subject<string>();
     private _filterObservable$ = this._filter$.asObservable().lodashThrottle(300, { leading: true, trailing: true });
-    private _providers = new Set<IWorkspaceFinderProvider>();
-    private _results$: Observable<{ filter: string; results: Finder.Symbol[] }>;
+    private _providers = new Set<Services.IWorkspaceFinderProvider>();
+    private _results$: Observable<{ filter: string; results: Services.Finder.Item[] }>;
 
     constructor(navigation: AtomNavigation, commands: AtomCommands) {
         super();
@@ -41,14 +41,14 @@ export class WorkspaceFinderService extends DisposableBase implements IWorkspace
     private _getResults() {
         const providers = Observable.defer(() => {
             /* tslint:disable-next-line:no-any */
-            return Observable.from<IWorkspaceFinderProvider>(<any>this._providers)
+            return Observable.from<Services.IWorkspaceFinderProvider>(<any>this._providers)
                 .mergeMap(x => x.results, (provider, results) => ({ provider, results }))
-                .scan<Map<IWorkspaceFinderProvider, Finder.Symbol[]>>(
+                .scan<Map<Services.IWorkspaceFinderProvider, Services.Finder.Item[]>>(
                 (acc, { provider, results }) => {
                     acc.set(provider, results);
                     return acc;
                 },
-                new Map<IWorkspaceFinderProvider, Finder.Symbol[]>());
+                new Map<Services.IWorkspaceFinderProvider, Services.Finder.Item[]>());
         });
 
         return Observable.combineLatest(providers, this._filter$)
@@ -56,7 +56,7 @@ export class WorkspaceFinderService extends DisposableBase implements IWorkspace
                 // atom.project.relativizePath(item.filePath)
                 const iterator = map.values();
                 let result = iterator.next();
-                const results: Finder.Symbol[] = [];
+                const results: Services.Finder.Item[] = [];
                 while (!result.done) {
                     results.push(..._.map(_.take(result.value, MAX_ITEMS), value => {
                         value.filePath = atom.project.relativizePath(value.filePath)[1];
@@ -68,9 +68,9 @@ export class WorkspaceFinderService extends DisposableBase implements IWorkspace
             });
     }
 
-    public registerProvider(provider: IWorkspaceFinderProvider) {
+    public registerProvider(provider: Services.IWorkspaceFinderProvider) {
         this._disposable.add(
-            this._commands.add(ATOM_COMMANDS.CommandType.Workspace, `finder-workspace`, () => this.open())
+            this._commands.add(Services.AtomCommands.CommandType.Workspace, `finder-workspace`, () => this.open())
         );
         const sub = this._filterObservable$.subscribe(provider.filter);
         this._providers.add(provider);

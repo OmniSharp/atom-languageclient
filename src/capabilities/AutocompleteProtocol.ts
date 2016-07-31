@@ -4,13 +4,13 @@
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
 import * as _ from 'lodash';
+import { Autocomplete, IAutocompleteProvider, IAutocompleteService, ILanguageProtocolClient, ISyncExpression } from 'atom-languageservices';
+import { capability, inject } from 'atom-languageservices/decorators';
+import { CompletionRequest } from 'atom-languageservices/protocol';
+import { CompletionItem, CompletionItemKind, CompletionList, CompletionOptions, Position, TextDocumentIdentifier, TextDocumentPositionParams } from 'atom-languageservices/types';
 import * as toUri from 'file-url';
 import { DisposableBase } from 'ts-disposables';
-import { capability, inject } from 'atom-languageservices';
-import { AutocompleteKind, AutocompleteSuggestion, IAutocompleteProvider, IAutocompleteService, ILanguageProtocolClient, ISyncExpression } from 'atom-languageservices';
 import { packageName } from '../constants';
-import { CompletionItem, CompletionItemKind, CompletionList, CompletionOptions, Position, TextDocumentIdentifier, TextDocumentPositionParams } from 'atom-languageservices/types';
-import { CompletionRequest } from 'atom-languageservices/protocol';
 
 const _snippetRegex = /{{(.*?)}}/;
 
@@ -80,7 +80,7 @@ class AutocompleteService extends DisposableBase implements IAutocompleteProvide
             });
     }
 
-    private _makeSuggestion(completionItem: CompletionItem, options: Autocomplete.RequestOptions): AutocompleteSuggestion {
+    private _makeSuggestion(completionItem: CompletionItem, options: Autocomplete.RequestOptions): Autocomplete.Suggestion {
         let replacementPrefix: string = options.prefix;
         let hasSnippetLocation = false;
         let snippet: string | undefined;
@@ -107,7 +107,7 @@ class AutocompleteService extends DisposableBase implements IAutocompleteProvide
             displayText: completionItem.label,
             iconHTML: this._renderIcon(completionItem),
             filterText: completionItem.filterText || completionItem.label,
-            type: this._getTypeFromKind(<CompletionItemKind>completionItem.kind),
+            type: Autocomplete.getTypeFromCompletionItemKind(completionItem.kind!),
             description: completionItem.detail,
             descriptionMoreURL: completionItem.documentation,
             className: `autocomplete-${packageName}`
@@ -137,84 +137,6 @@ class AutocompleteService extends DisposableBase implements IAutocompleteProvide
     }
 
     private _renderIcon(completionItem: CompletionItem) {
-        return `<img height="16px" width="16px" src="atom://${packageName}/styles/icons/${this._getIconFromKind(completionItem.kind!)}.svg" />`;
-    }
-
-    private _getIconFromKind(kind: CompletionItemKind): string {
-        switch (kind) {
-            case CompletionItemKind.Method:
-            case CompletionItemKind.Function:
-                return AutocompleteKind.Method;
-            case CompletionItemKind.Constructor:
-                return AutocompleteKind.Class;
-            case CompletionItemKind.Property:
-                return AutocompleteKind.Property;
-            case CompletionItemKind.Field:
-            case CompletionItemKind.Variable:
-                return AutocompleteKind.Field;
-            case CompletionItemKind.Class:
-                return AutocompleteKind.Class;
-            case CompletionItemKind.Interface:
-                return AutocompleteKind.Interface;
-            case CompletionItemKind.Module:
-                return AutocompleteKind.Module;
-            case CompletionItemKind.Unit:
-                return 'unit';
-            case CompletionItemKind.Enum:
-                return AutocompleteKind.Enum;
-            case CompletionItemKind.Keyword:
-                return 'keyword';
-            case CompletionItemKind.Snippet:
-                return 'snippet';
-            case CompletionItemKind.File:
-                return 'file';
-            case CompletionItemKind.Reference:
-                return 'reference';
-            case CompletionItemKind.Color:
-                return 'color';
-            case CompletionItemKind.Text:
-                return 'text';
-            case CompletionItemKind.Value:
-            default:
-                return 'valuetype';
-        }
-    }
-
-    private _getTypeFromKind(kind: CompletionItemKind): Autocomplete.SuggestionType {
-        switch (kind) {
-            case CompletionItemKind.Method:
-                return 'method';
-            case CompletionItemKind.Function:
-            case CompletionItemKind.Constructor:
-                return 'function';
-            case CompletionItemKind.Field:
-            case CompletionItemKind.Property:
-                return 'property';
-            case CompletionItemKind.Variable:
-                return 'variable';
-            case CompletionItemKind.Class:
-                return 'class';
-            case CompletionItemKind.Interface:
-                return 'interface';
-            case CompletionItemKind.Module:
-                return 'module';
-            case CompletionItemKind.Unit:
-                return 'builtin';
-            case CompletionItemKind.Enum:
-                return 'enum';
-            case CompletionItemKind.Keyword:
-                return 'keyword';
-            case CompletionItemKind.Snippet:
-                return 'snippet';
-            case CompletionItemKind.File:
-                return 'import';
-            case CompletionItemKind.Reference:
-                return 'require';
-            case CompletionItemKind.Color:
-            case CompletionItemKind.Text:
-            case CompletionItemKind.Value:
-            default:
-                return 'value';
-        }
+        return `<img height="16px" width="16px" src="atom://${packageName}/styles/icons/${Autocomplete.getIconFromCompletionItemKind(completionItem.kind!)}.svg" />`;
     }
 }

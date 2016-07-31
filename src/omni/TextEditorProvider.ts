@@ -6,8 +6,8 @@
 /* tslint:disable:no-any */
 import * as _ from 'lodash';
 import { Observable } from 'rxjs';
+import { injectable } from 'atom-languageservices/decorators';
 import { CompositeDisposable, DisposableBase, IDisposable } from 'ts-disposables';
-import { injectable } from 'atom-languageservices';
 import { ensureEditor, subscribeAsync } from './helpers';
 import { ILanguageClientTextEditor } from './ILanguageClientTextEditor';
 import { TextEditorSource } from './TextEditorSource';
