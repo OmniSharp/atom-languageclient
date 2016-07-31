@@ -12,8 +12,8 @@ import { alias, injectable } from 'atom-languageservices/decorators';
 @alias(IAtomChanges)
 export class AtomChanges implements IAtomChanges {
     public applyChanges(editor: Atom.TextEditor, buffer: string): void;
-    public applyChanges(editor: Atom.TextEditor, changes: Text.FileChange[]): void;
-    public applyChanges(editor: Atom.TextEditor, changes: string | Text.FileChange[]) {
+    public applyChanges(editor: Atom.TextEditor, changes: Text.IFileChange[]): void;
+    public applyChanges(editor: Atom.TextEditor, changes: string | Text.IFileChange[]) {
         if (_.isString(changes)) {
             editor.setText(changes);
         } else {
@@ -59,7 +59,7 @@ export class AtomChanges implements IAtomChanges {
         }
     }
 
-    private _orderInReverse<T extends Text.FileChange>(changes: T[]) {
+    private _orderInReverse<T extends Text.IFileChange>(changes: T[]) {
         return _.orderBy(changes, [result => result.range.start.row, result => result.range.start.column], ['desc', 'desc']);
     }
 }

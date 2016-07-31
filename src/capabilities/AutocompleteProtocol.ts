@@ -55,7 +55,7 @@ class AutocompleteService extends DisposableBase implements IAutocompleteProvide
         this._syncExpression = syncExpression;
     }
 
-    public request(options: Autocomplete.RequestOptions) {
+    public request(options: Autocomplete.IRequest) {
         if (!this._syncExpression.evaluate(options.editor)) {
             return;
         }
@@ -80,7 +80,7 @@ class AutocompleteService extends DisposableBase implements IAutocompleteProvide
             });
     }
 
-    private _makeSuggestion(completionItem: CompletionItem, options: Autocomplete.RequestOptions): Autocomplete.Suggestion {
+    private _makeSuggestion(completionItem: CompletionItem, options: Autocomplete.IRequest): Autocomplete.Suggestion {
         let replacementPrefix: string = options.prefix;
         let hasSnippetLocation = false;
         let snippet: string | undefined;

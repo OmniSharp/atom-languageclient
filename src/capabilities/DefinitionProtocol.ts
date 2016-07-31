@@ -48,7 +48,7 @@ class LanguageProtocolDefinitionProvider extends DisposableBase implements IDefi
         this._syncExpression = syncExpression;
     }
 
-    public request(options: Definition.RequestOptions) {
+    public request(options: Definition.IRequest) {
         if (!this._syncExpression.evaluate(options.editor)) {
             /* tslint:disable-next-line:no-any */
             return Observable.empty<any>();

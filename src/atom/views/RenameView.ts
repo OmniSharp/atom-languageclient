@@ -14,12 +14,12 @@ export class RenameView extends View<HTMLDivElement> {
     private _message: HTMLParagraphElement;
     private _editorView: Atom.TextEditorPresenter;
     private _editor: Atom.TextEditor;
-    private _rename$: Observable<Rename.RequestOptions>;
-    private _renameObserver: Subscriber<Rename.RequestOptions>;
+    private _rename$: Observable<Rename.IRequest>;
+    private _renameObserver: Subscriber<Rename.IRequest>;
     private _panel: { destroy(): void; };
-    private _options: Rename.RequestOptions;
+    private _options: Rename.IRequest;
 
-    constructor(commands: AtomCommands, options: Rename.RequestOptions) {
+    constructor(commands: AtomCommands, options: Rename.IRequest) {
         super(document.createElement('div'));
         this._options = options;
 
@@ -56,7 +56,7 @@ export class RenameView extends View<HTMLDivElement> {
         this._editor.setText(options.word);
         this._editorView.focus();
 
-        this._rename$ = createObservable<Rename.RequestOptions>(observer => {
+        this._rename$ = createObservable<Rename.IRequest>(observer => {
             this._renameObserver = observer;
             this._disposable.add(observer);
         }).share();

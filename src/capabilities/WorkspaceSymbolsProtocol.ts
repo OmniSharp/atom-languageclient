@@ -53,12 +53,12 @@ class WorkspaceFinderService extends DisposableBase implements IWorkspaceFinderP
             });
     }
 
-    public results: Observable<Finder.Item[]>;
+    public results: Observable<Finder.IResponse[]>;
     public filter: Observer<string>;
 
-    private _makeSymbol(symbol: SymbolInformation): Finder.Item {
+    private _makeSymbol(symbol: SymbolInformation): Finder.IResponse {
         // TODO: Icon html
-        return <Finder.Item>{
+        return <Finder.IResponse>{
             name: symbol.name,
             filterText: symbol.name,
             iconHTML: this._renderIcon(symbol),

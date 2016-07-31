@@ -14,11 +14,11 @@ export interface IRenameService {
 }
 
 export interface IRenameProvider extends IDisposable {
-    request(editor: Rename.RequestOptions): Observable<Text.WorkspaceChange[]>;
+    request(editor: Rename.IRequest): Observable<Text.WorkspaceChange[]>;
 }
 
 export namespace Rename {
-    export interface RequestOptions {
+    export interface IRequest {
         editor: Atom.TextEditor;
         location: TextBuffer.Point;
         word: string;

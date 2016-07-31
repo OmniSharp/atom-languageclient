@@ -19,7 +19,7 @@ const readFile$ = Observable.bindNodeCallback(readFile);
 @injectable
 @alias(Services.IDefinitionService)
 export class DefinitionService
-    extends ProviderServiceBase<Services.IDefinitionProvider, Services.Definition.RequestOptions, Observable<Services.AtomNavigation.Location[]>, Observable<Services.AtomNavigation.Location[]>>
+    extends ProviderServiceBase<Services.IDefinitionProvider, Services.Definition.IRequest, Observable<Services.AtomNavigation.Location[]>, Observable<Services.AtomNavigation.Location[]>>
     implements Services.IDefinitionService {
     private _navigation: AtomNavigation;
     private _commands: AtomCommands;
@@ -34,8 +34,8 @@ export class DefinitionService
         this._commands.add(Services.AtomCommands.CommandType.TextEditor, 'definition', () => this.open());
     }
 
-    protected createInvoke(callbacks: ((options: Services.Definition.RequestOptions) => Observable<Services.AtomNavigation.Location[]>)[]) {
-        return ((options: Services.Definition.RequestOptions) => {
+    protected createInvoke(callbacks: ((options: Services.Definition.IRequest) => Observable<Services.AtomNavigation.Location[]>)[]) {
+        return ((options: Services.Definition.IRequest) => {
             const requests = _.over(callbacks)(options);
             return Observable.from(requests)
                 .mergeMap(_.identity)
@@ -73,7 +73,7 @@ export class DefinitionService
                 },
                 (results, files) => ({ results, files }))
                 .subscribe(({results, files}) => {
-                    const items: Services.Reference.Item[] = [];
+                    const items: Services.Reference.IResponse[] = [];
                     for (const result of results) {
                         const filePath = result.filePath;
                         const file = _.find(files, file => file.filePath === result.filePath);

@@ -22,7 +22,6 @@ export * from './ILanguageProtocolServerOptions';
 export * from './ILanguageProvider';
 export * from './ILanguageService';
 export * from './ILinterService';
-export * from './IOmniClient';
 export * from './IProjectProvider';
 export * from './IProjectTracker';
 export * from './IReferencesService';

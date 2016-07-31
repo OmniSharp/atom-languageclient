@@ -7,10 +7,10 @@ import { AtomCommands } from '../AtomCommands';
 import { AtomNavigation } from '../AtomNavigation';
 import { FilterSelectListView } from './FilterSelectListView';
 
-export class ReferenceView extends FilterSelectListView<Reference.Item> {
+export class ReferenceView extends FilterSelectListView<Reference.IResponse> {
     private _navigation: AtomNavigation;
     private _panel: Atom.Panel;
-    constructor(commands: AtomCommands, navigation: AtomNavigation, results: Reference.Item[]) {
+    constructor(commands: AtomCommands, navigation: AtomNavigation, results: Reference.IResponse[]) {
         super(commands);
         this._navigation = navigation;
         this.setFilterItems(results, this._filterEditorView.getModel().getText());
@@ -35,11 +35,11 @@ export class ReferenceView extends FilterSelectListView<Reference.Item> {
         this._panel.destroy();
     }
 
-    public confirmed(item: Reference.Item) {
+    public confirmed(item: Reference.IResponse) {
         this._navigation.navigateTo(item);
     }
 
-    public viewForItem(result: fuse.Result<Reference.Item>) {
+    public viewForItem(result: fuse.Result<Reference.IResponse>) {
         const {item, matches} = result;
         const {lines, range} = item;
         const li = document.createElement('li');

@@ -14,11 +14,11 @@ export interface IDefinitionService {
 }
 
 export interface IDefinitionProvider extends IDisposable {
-    request(editor: Definition.RequestOptions): Observable<AtomNavigation.Location[]>;
+    request(editor: Definition.IRequest): Observable<AtomNavigation.Location[]>;
 }
 
 export namespace Definition {
-    export interface RequestOptions {
+    export interface IRequest {
         editor: Atom.TextEditor;
         location: TextBuffer.Point;
     }

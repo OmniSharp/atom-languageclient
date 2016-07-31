@@ -48,9 +48,9 @@ class HoverProvider extends DisposableBase implements IHoverProvider {
         this._syncExpression = syncExpression;
     }
 
-    public request(options: Hover.RequestOptions) {
+    public request(options: Hover.IRequest) {
         if (!this._syncExpression.evaluate(options.editor)) {
-            return Observable.empty<Hover.Item>();
+            return Observable.empty<Hover.IResponse>();
         }
 
         return Observable.fromPromise(
@@ -75,7 +75,7 @@ class HoverProvider extends DisposableBase implements IHoverProvider {
         }
     }
 
-    private _makeSymbol(s: THover): Hover.Item {
+    private _makeSymbol(s: THover): Hover.IResponse {
         if (!s) {
             return undefined!;
         }

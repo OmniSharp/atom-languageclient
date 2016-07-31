@@ -6,7 +6,7 @@
 import { Autocomplete } from './IAutoCompleteService';
 
 export namespace Finder {
-    export interface Item {
+    export interface IResponse {
         name: string;
         containerName?: string;
         type: Autocomplete.SuggestionType;

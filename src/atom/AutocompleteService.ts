@@ -12,14 +12,14 @@ import { ProviderServiceBase } from './_ProviderServiceBase';
 import { className, packageName } from '../constants';
 
 export class AutocompleteService
-    extends ProviderServiceBase<IAutocompleteProvider, Autocomplete.RequestOptions, Promise<Autocomplete.Suggestion[]> | undefined, Promise<Autocomplete.Suggestion[]>>
+    extends ProviderServiceBase<IAutocompleteProvider, Autocomplete.IRequest, Promise<Autocomplete.Suggestion[]> | undefined, Promise<Autocomplete.Suggestion[]>>
     implements IAutocompleteService {
     constructor() {
         super();
     }
 
-    protected createInvoke(callbacks: ((options: Autocomplete.RequestOptions) => Promise<Autocomplete.Suggestion[]> | undefined)[]) {
-        return ((options: Autocomplete.RequestOptions) => {
+    protected createInvoke(callbacks: ((options: Autocomplete.IRequest) => Promise<Autocomplete.Suggestion[]> | undefined)[]) {
+        return ((options: Autocomplete.IRequest) => {
             const requests = _.compact(_.over(callbacks)(options));
             return Promise.all<Autocomplete.Suggestion[]>(<any>requests)
                 .then(_.bind(this._reduceItems, this));
@@ -63,7 +63,7 @@ export class AutocompleteService
         ]
     });
 
-    public getSuggestions(options: Autocomplete.RequestOptions): Promise<Autocomplete.Suggestion[]> | null {
+    public getSuggestions(options: Autocomplete.IRequest): Promise<Autocomplete.Suggestion[]> | null {
         if (!this.hasProviders) {
             return null;
         }

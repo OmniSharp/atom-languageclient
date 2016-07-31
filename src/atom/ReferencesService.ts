@@ -62,7 +62,7 @@ export class ReferencesService
             },
             (results, files) => ({ results, files }))
             .subscribe(({results, files}) => {
-                const items: Services.Reference.Item[] = [];
+                const items: Services.Reference.IResponse[] = [];
                 for (const result of results) {
                     const filePath = result.filePath;
                     const file = _.find(files, file => file.filePath === result.filePath);

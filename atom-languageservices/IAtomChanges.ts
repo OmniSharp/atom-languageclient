@@ -8,6 +8,6 @@ import { Text } from './Text';
 export const IAtomChanges = Symbol.for('IAtomChanges');
 export interface IAtomChanges {
     applyChanges(editor: Atom.TextEditor, buffer: string): void;
-    applyChanges(editor: Atom.TextEditor, changes: Text.FileChange[]): void;
+    applyChanges(editor: Atom.TextEditor, changes: Text.IFileChange[]): void;
     applyWorkspaceChanges(changes: Text.WorkspaceChange[]): void;
 }

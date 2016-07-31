@@ -10,12 +10,12 @@ import { AtomCommands } from '../AtomCommands';
 import { AtomViewFinder } from '../AtomViewFinder';
 import { FilterSelectListView } from './FilterSelectListView';
 
-export class CodeActionView extends FilterSelectListView<CodeAction.Item> {
+export class CodeActionView extends FilterSelectListView<CodeAction.IResponse> {
     private _decoration: Atom.Decoration;
     private _editor: Atom.TextEditor;
     private _editorView: Atom.TextEditorPresenter;
-    private _codeaction$: Observable<CodeAction.Item>;
-    private _codeactionObserver: Subscriber<CodeAction.Item>;
+    private _codeaction$: Observable<CodeAction.IResponse>;
+    private _codeactionObserver: Subscriber<CodeAction.IResponse>;
 
     public constructor(commands: AtomCommands, viewFinder: AtomViewFinder, editor: Atom.TextEditor) {
         super(commands);
@@ -28,7 +28,7 @@ export class CodeActionView extends FilterSelectListView<CodeAction.Item> {
             { type: 'overlay', position: 'tail', item: this.root }
         );
 
-        this._codeaction$ = createObservable<CodeAction.Item>(observer => {
+        this._codeaction$ = createObservable<CodeAction.IResponse>(observer => {
             this._codeactionObserver = observer;
             this._disposable.add(observer);
         }).share();
@@ -48,7 +48,7 @@ export class CodeActionView extends FilterSelectListView<CodeAction.Item> {
         ];
     }
 
-    public confirmed(item: CodeAction.Item) {
+    public confirmed(item: CodeAction.IResponse) {
         if (this._codeactionObserver) {
             this._codeactionObserver.next(item);
         }
@@ -56,7 +56,7 @@ export class CodeActionView extends FilterSelectListView<CodeAction.Item> {
 
     public get codeaction$() { return this._codeaction$; }
 
-    public viewForItem(value: fuse.Result<CodeAction.Item>) {
+    public viewForItem(value: fuse.Result<CodeAction.IResponse>) {
         const element = document.createElement('li');
         element.classList.add('event');
         const span = document.createElement('span');

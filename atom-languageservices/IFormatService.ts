@@ -14,24 +14,24 @@ export interface IFormatService {
 }
 
 export interface IFormatProvider extends IDisposable {
-    request(options: Format.RangeOptions | Format.DocumentOptions): Observable<Text.FileChange[]>;
+    request(options: Format.IRangeRequest | Format.IDocumentRequest): Observable<Text.IFileChange[]>;
 }
 
 export namespace Format {
     /* tslint:disable-next-line:no-any */
-    export function formatRange(options: any): options is RangeOptions {
+    export function formatRange(options: any): options is IRangeRequest {
         return !!options.range;
     }
-    export interface Base {
+    export interface IRequestBase {
         insertSpaces: boolean;
         tabSize: number;
     }
-    export interface DocumentOptions extends Base {
+    export interface IDocumentRequest extends IRequestBase {
         editor: Atom.TextEditor;
     }
-    export interface RangeOptions extends Base {
+    export interface IRangeRequest extends IRequestBase {
         editor: Atom.TextEditor;
         range: TextBuffer.Range;
     }
-    export type FormatOptions  = DocumentType | RangeOptions;
+    export type IRequest = IDocumentRequest | IRangeRequest;
 }

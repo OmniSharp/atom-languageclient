@@ -14,5 +14,5 @@ export interface IDocumentFinderService {
 }
 
 export interface IDocumentFinderProvider extends IDisposable {
-    request(editor: Atom.TextEditor): Observable<Finder.Item[]>;
+    request(editor: Atom.TextEditor): Observable<Finder.IResponse[]>;
 }

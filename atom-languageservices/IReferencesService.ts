@@ -18,7 +18,7 @@ export interface IReferencesProvider extends IDisposable {
 }
 
 export namespace Reference {
-    export interface Item {
+    export interface IResponse {
         lines: string[];
         filePath: string;
         range: TextBuffer.Range;

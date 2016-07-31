@@ -36,14 +36,14 @@ export function fromRange(value: LsRange): TextBuffer.Range {
     return new Range(fromPosition(value.start), fromPosition(value.end));
 }
 
-export function fromTextEdit(value: TextEdit): Text.FileChange {
+export function fromTextEdit(value: TextEdit): Text.IFileChange {
     return {
         range: fromRange(value.range),
         text: value.newText
     };
 }
 
-export function fromTextEdits(values: TextEdit[]): Text.FileChange[] {
+export function fromTextEdits(values: TextEdit[]): Text.IFileChange[] {
     return _.map(values, fromTextEdit);
 }
 
@@ -71,7 +71,7 @@ export function getLinterText(message: Linter.Message) {
     return message.text;
 }
 
-export function hasCompletionText(message: any): message is Autocomplete.TextSuggestion {
+export function hasCompletionText(message: any): message is Autocomplete.ITextSuggestion {
     return !!message.text;
 }
 

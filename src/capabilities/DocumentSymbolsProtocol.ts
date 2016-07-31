@@ -52,7 +52,7 @@ class DocumentFinderProvider extends DisposableBase implements IDocumentFinderPr
 
     public request(editor: Atom.TextEditor) {
         if (!this._syncExpression.evaluate(editor)) {
-            return Observable.empty<Finder.Item[]>();
+            return Observable.empty<Finder.IResponse[]>();
         }
 
         return Observable.fromPromise(
@@ -64,9 +64,9 @@ class DocumentFinderProvider extends DisposableBase implements IDocumentFinderPr
         });
     }
 
-    private _makeSymbol(symbol: SymbolInformation): Finder.Item {
+    private _makeSymbol(symbol: SymbolInformation): Finder.IResponse {
         // TODO: Icon html
-        return <Finder.Item>{
+        return <Finder.IResponse>{
             name: symbol.name,
             filterText: symbol.name,
             iconHTML: this._renderIcon(symbol),

@@ -15,6 +15,6 @@ export interface IWorkspaceFinderService {
 }
 
 export interface IWorkspaceFinderProvider extends IDisposable {
-    results: Observable<Finder.Item[]>;
+    results: Observable<Finder.IResponse[]>;
     filter: NextObserver<string>;
 }

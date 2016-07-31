@@ -9,11 +9,11 @@ import { AtomCommands } from '../AtomCommands';
 import { AtomNavigation } from '../AtomNavigation';
 import { FilterSelectListView } from './FilterSelectListView';
 
-export class DocumentFinderView extends FilterSelectListView<Finder.Item> {
+export class DocumentFinderView extends FilterSelectListView<Finder.IResponse> {
     private _navigation: AtomNavigation;
     private _subscription: Subscription;
     private _panel: Atom.Panel;
-    constructor(commands: AtomCommands, navigation: AtomNavigation, results: Observable<Finder.Item[]>) {
+    constructor(commands: AtomCommands, navigation: AtomNavigation, results: Observable<Finder.IResponse[]>) {
         super(commands);
         this._navigation = navigation;
         this._subscription = results.subscribe(items => {
@@ -40,12 +40,12 @@ export class DocumentFinderView extends FilterSelectListView<Finder.Item> {
         this._panel.destroy();
     }
 
-    public confirmed(item: Finder.Item) {
+    public confirmed(item: Finder.IResponse) {
         this._subscription.unsubscribe();
         this._navigation.navigateTo(item);
     }
 
-    public viewForItem(result: fuse.Result<Finder.Item>) {
+    public viewForItem(result: fuse.Result<Finder.IResponse>) {
         const {item, matches} = result;
         const li = document.createElement('li');
         let filename = atom.project.relativizePath(item.filePath)[1];

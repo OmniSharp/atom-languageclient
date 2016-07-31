@@ -5,7 +5,7 @@
  */
 import { IDisposable } from 'ts-disposables';
 import { CompletionItem, CompletionItemKind, SymbolKind } from './types';
-/* tslint:disable:variable-name no-any interface-name */
+/* tslint:disable:variable-name no-any */
 
 /**
  * Symbol for the AutocompleteService
@@ -19,12 +19,12 @@ export interface IAutocompleteService {
 }
 
 export interface IAutocompleteProvider extends IDisposable {
-    request(params: Autocomplete.RequestOptions): Promise<Autocomplete.Suggestion[]> | undefined;
+    request(params: Autocomplete.IRequest): Promise<Autocomplete.Suggestion[]> | undefined;
 }
 
 export namespace Autocomplete {
     export type SuggestionType = 'attribute' | 'builtin' | 'class' | 'constant' | 'function' | 'import' | 'keyword' | 'method' | 'module' | 'mixin' | 'package' | 'property' | 'require' | 'snippet' | 'tag' | 'type' | 'value' | 'variable' | 'selector' | 'pseudo-selector' | 'interface' | 'enum';
-    export interface SuggestionBase {
+    export interface ISuggestionBase {
         displayText?: string;
         replacementPrefix?: string;
         type: SuggestionType;
@@ -40,11 +40,11 @@ export namespace Autocomplete {
         completionItem?: CompletionItem;
         onDidInsertSuggestion?: (context: { editor: Atom.TextEditor, suggestion: Suggestion, triggerPosition: TextBuffer.Point; }) => void;
     }
-    export interface TextSuggestion extends SuggestionBase { text: string; }
-    export interface SnippetSuggestion extends SuggestionBase { snippet: string; }
-    export type Suggestion = TextSuggestion | SnippetSuggestion;
+    export interface ITextSuggestion extends ISuggestionBase { text: string; }
+    export interface ISnippetSuggestion extends ISuggestionBase { snippet: string; }
+    export type Suggestion = ITextSuggestion | ISnippetSuggestion;
 
-    export interface RequestOptions {
+    export interface IRequest {
         editor: Atom.TextEditor;
         bufferPosition: TextBuffer.Point; // the position of the cursor
         prefix: string;
@@ -87,7 +87,7 @@ export namespace Autocomplete {
         export const Submission = 'submission';
     }
 
-    export function getIconFromSuggestionType(kind: SuggestionType){
+    export function getIconFromSuggestionType(kind: SuggestionType) {
         switch (kind) {
             case 'class':
             case 'type':

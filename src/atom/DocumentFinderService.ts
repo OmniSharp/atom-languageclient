@@ -16,7 +16,7 @@ import { DocumentFinderView } from './views/DocumentFinderView';
 @injectable
 @alias(IDocumentFinderService)
 export class DocumentFinderService
-    extends ProviderServiceBase<IDocumentFinderProvider, Atom.TextEditor, Observable<Finder.Item[]>, Observable<Finder.Item[]>>
+    extends ProviderServiceBase<IDocumentFinderProvider, Atom.TextEditor, Observable<Finder.IResponse[]>, Observable<Finder.IResponse[]>>
     implements IDocumentFinderService {
     private _navigation: AtomNavigation;
     private _commands: AtomCommands;
@@ -29,7 +29,7 @@ export class DocumentFinderService
         this._source = source;
     }
 
-    protected createInvoke(callbacks: ((options: Atom.TextEditor) => Observable<Finder.Item[]>)[]) {
+    protected createInvoke(callbacks: ((options: Atom.TextEditor) => Observable<Finder.IResponse[]>)[]) {
         return (options: Atom.TextEditor) => {
             return Observable.from(_.over(callbacks)(options))
                 .mergeMap(_.identity)

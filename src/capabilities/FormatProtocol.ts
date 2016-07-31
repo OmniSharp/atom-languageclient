@@ -50,13 +50,13 @@ class FormatRangeProvider extends DisposableBase implements IFormatProvider {
         this._syncExpression = syncExpression;
     }
 
-    public request(options: Format.DocumentOptions | Format.RangeOptions) {
+    public request(options: Format.IRequest) {
         if (!Format.formatRange(options)) {
-            return Observable.empty<Text.FileChange[]>();
+            return Observable.empty<Text.IFileChange[]>();
         }
 
         if (!this._syncExpression.evaluate(options.editor)) {
-            return Observable.empty<Text.FileChange[]>();
+            return Observable.empty<Text.IFileChange[]>();
         }
 
         const params: DocumentRangeFormattingParams = {
@@ -83,13 +83,13 @@ class FormatDocumentProvider extends DisposableBase implements IFormatProvider {
         this._syncExpression = syncExpression;
     }
 
-    public request(options: Format.DocumentOptions | Format.RangeOptions) {
+    public request(options: Format.IDocument | Format.IRangeRequest) {
         if (Format.formatRange(options)) {
-            return Observable.empty<Text.FileChange[]>();
+            return Observable.empty<Text.IFileChange[]>();
         }
 
         if (!this._syncExpression.evaluate(options.editor)) {
-            return Observable.empty<Text.FileChange[]>();
+            return Observable.empty<Text.IFileChange[]>();
         }
 
         const params: DocumentFormattingParams = {

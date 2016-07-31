@@ -5,12 +5,12 @@
  */
 
 export namespace CodeAction {
-    export interface RequestOptions {
+    export interface IRequest {
         editor: Atom.TextEditor;
         location: TextBuffer.Point;
     }
 
-    export interface Item {
+    export interface IResponse {
         id: string;
         name: string;
         title: string;

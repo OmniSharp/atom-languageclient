@@ -17,7 +17,7 @@ import { HoverView, IHoverPosition } from './views/HoverView';
 @injectable()
 @alias(Services.IHoverService)
 export class HoverService
-    extends ProviderServiceBase<Services.IHoverProvider, Services.Hover.RequestOptions, Observable<Services.Hover.Item>, Observable<Services.Hover.Item[]>>
+    extends ProviderServiceBase<Services.IHoverProvider, Services.Hover.IRequest, Observable<Services.Hover.IResponse>, Observable<Services.Hover.IResponse[]>>
     implements Services.IHoverService {
     private _commands: AtomCommands;
     private _textEditorSource: AtomTextEditorSource;
@@ -47,8 +47,8 @@ export class HoverService
         );
     }
 
-    protected createInvoke(callbacks: ((options: Services.Hover.RequestOptions) => Observable<Services.Hover.Item>)[]) {
-        return (options: Services.Hover.RequestOptions) => {
+    protected createInvoke(callbacks: ((options: Services.Hover.IRequest) => Observable<Services.Hover.IResponse>)[]) {
+        return (options: Services.Hover.IRequest) => {
             return Observable.from(_.over(callbacks)(options))
                 .mergeMap(_.identity)
                 .scan((acc, results) => _.compact(acc.concat(results)), []);

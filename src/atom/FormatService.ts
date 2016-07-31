@@ -17,7 +17,7 @@ const ATOM_COMMANDS = Services.AtomCommands;
 @injectable()
 @alias(Services.IFormatService)
 export class FormatService
-    extends ProviderServiceBase<Services.IFormatProvider, (Services.Format.DocumentOptions | Services.Format.RangeOptions), Observable<Services.Text.FileChange[]>, Observable<Services.Text.FileChange[]>>
+    extends ProviderServiceBase<Services.IFormatProvider, Services.Format.IRequest, Observable<Services.Text.IFileChange[]>, Observable<Services.Text.IFileChange[]>>
     implements Services.IFormatService {
     private _changes: AtomChanges;
     private _commands: AtomCommands;
@@ -35,8 +35,8 @@ export class FormatService
         );
     }
 
-    protected createInvoke(callbacks: (((options: (Services.Format.DocumentOptions | Services.Format.RangeOptions)) => Observable<Services.Text.FileChange[]>)[])) {
-        return (options: (Services.Format.DocumentOptions | Services.Format.RangeOptions)) => {
+    protected createInvoke(callbacks: (((options: Services.Format.IRequest) => Observable<Services.Text.IFileChange[]>)[])) {
+        return (options: Services.Format.IRequest) => {
             return Observable.from(_.over(callbacks)(options))
                 .mergeMap(_.identity)
                 .reduce((acc, results) => _.compact(acc.concat(results)), []);

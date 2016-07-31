@@ -5,12 +5,12 @@
  */
 
 export namespace Text {
-    export interface FileChange {
+    export interface IFileChange {
         range: TextBuffer.Range;
         text: string;
     }
     export interface WorkspaceChange {
         filePath: string;
-        changes: FileChange[];
+        changes: IFileChange[];
     }
 }

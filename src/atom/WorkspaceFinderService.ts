@@ -22,7 +22,7 @@ export class WorkspaceFinderService extends DisposableBase implements Services.I
     private _filter$ = new Subject<string>();
     private _filterObservable$ = this._filter$.asObservable().lodashThrottle(300, { leading: true, trailing: true });
     private _providers = new Set<Services.IWorkspaceFinderProvider>();
-    private _results$: Observable<{ filter: string; results: Services.Finder.Item[] }>;
+    private _results$: Observable<{ filter: string; results: Services.Finder.IResponse[] }>;
 
     constructor(navigation: AtomNavigation, commands: AtomCommands) {
         super();
@@ -43,12 +43,12 @@ export class WorkspaceFinderService extends DisposableBase implements Services.I
             /* tslint:disable-next-line:no-any */
             return Observable.from<Services.IWorkspaceFinderProvider>(<any>this._providers)
                 .mergeMap(x => x.results, (provider, results) => ({ provider, results }))
-                .scan<Map<Services.IWorkspaceFinderProvider, Services.Finder.Item[]>>(
+                .scan<Map<Services.IWorkspaceFinderProvider, Services.Finder.IResponse[]>>(
                 (acc, { provider, results }) => {
                     acc.set(provider, results);
                     return acc;
                 },
-                new Map<Services.IWorkspaceFinderProvider, Services.Finder.Item[]>());
+                new Map<Services.IWorkspaceFinderProvider, Services.Finder.IResponse[]>());
         });
 
         return Observable.combineLatest(providers, this._filter$)
@@ -56,7 +56,7 @@ export class WorkspaceFinderService extends DisposableBase implements Services.I
                 // atom.project.relativizePath(item.filePath)
                 const iterator = map.values();
                 let result = iterator.next();
-                const results: Services.Finder.Item[] = [];
+                const results: Services.Finder.IResponse[] = [];
                 while (!result.done) {
                     results.push(..._.map(_.take(result.value, MAX_ITEMS), value => {
                         value.filePath = atom.project.relativizePath(value.filePath)[1];

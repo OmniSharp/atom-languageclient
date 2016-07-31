@@ -5,7 +5,7 @@
  */
 /* tslint:disable:no-any */
 import * as _ from 'lodash';
-import { ILanguageProtocolClient, IOmniClient } from 'atom-languageservices';
+import { ILanguageProtocolClient } from 'atom-languageservices';
 import { capability, inject } from 'atom-languageservices/decorators';
 import { expect } from 'chai';
 import * as I from './fixtures/interfaces';
@@ -87,7 +87,7 @@ describe(Container.name, () => {
 
         @capability
         class CapabilityC {
-            constructor( @inject(IOmniClient) value: any) { /* */ }
+            constructor(value: any) { /* */ }
             public a = 1;
         }
 
