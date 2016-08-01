@@ -1336,6 +1336,17 @@ declare module TextBuffer {
         onDidChange(callback : Function /* needs to be defined */) : EventKit.Disposable;
 
         /**
+         * Invoke the given callback synchronously when the content of the
+         * buffer changes.
+         *
+         * Because observers are invoked synchronously, it"s important not to perform
+         * any expensive operations via this method. Consider {::onDidStopChanging} to
+         * delay expensive operations until after changes stop occurring.
+         * @param callback - {Function} to be called when the buffer changes.
+         */
+        onDidChangeText(callback : Function /* needs to be defined */) : EventKit.Disposable;
+
+        /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
         preemptDidChange(callback? : any) : any;

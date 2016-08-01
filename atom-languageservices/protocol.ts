@@ -5,6 +5,7 @@
  */
 /* tslint:disable */
 
+import { NotificationType, RequestType } from 'vscode-jsonrpc';
 import {
     TextDocument, TextDocumentChangeEvent, TextDocumentContentChangeEvent,
     Range, Position, Location, Diagnostic, DiagnosticSeverity, Command,

@@ -25,6 +25,7 @@ export class LanguageProvider extends DisposableBase {
     constructor(container: Container) {
         super();
         this._container = container;
+        this._connections = new Map<ILanguageProvider, Set<ILanguageProtocolClient>>();
     }
 
     public add(provider: ILanguageProvider): void {

@@ -13,6 +13,7 @@ import { AtomCommands } from './AtomCommands';
 import { AtomNavigation } from './AtomNavigation';
 import { AtomTextEditorSource } from './AtomTextEditorSource';
 import { RenameView } from './views/RenameView';
+import { WaitService } from './WaitService';
 
 @injectable
 @alias(Services.IRenameService)
@@ -23,13 +24,15 @@ export class RenameService
     private _commands: AtomCommands;
     private _changes: AtomChanges;
     private _source: AtomTextEditorSource;
+    private _waitService: WaitService;
 
-    constructor(changes: AtomChanges, navigation: AtomNavigation, commands: AtomCommands, source: AtomTextEditorSource) {
+    constructor(changes: AtomChanges, navigation: AtomNavigation, commands: AtomCommands, source: AtomTextEditorSource, waitService: WaitService) {
         super();
         this._changes = changes;
         this._commands = commands;
         this._navigation = navigation;
         this._source = source;
+        this._waitService = waitService;
 
         this._disposable.add(
             this._commands.add(Services.AtomCommands.CommandType.TextEditor, 'rename', () => {
@@ -63,12 +66,15 @@ export class RenameService
             view.rename$
                 .take(1)
                 .concatMap(options => {
-                    return this.invoke(options);
+                    const result = this.invoke(options)
+                        .concatMap(changes => {
+                            return this._changes.applyWorkspaceChanges(changes);
+                        })
+                        .toPromise();
+                    this._waitService.waitUntil(result);
+                    return result;
                 })
-                .concatMap(changes => {
-                    return this._changes.applyWorkspaceChanges(changes);
-                })
-                .subscribe();
+                .toPromise();
         }
     }
 }

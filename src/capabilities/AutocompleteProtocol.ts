@@ -16,7 +16,7 @@ const _snippetRegex = /{{(.*?)}}/;
 
 /* tslint:disable-next-line:no-any */
 function isCompletionList(item: any): item is CompletionList {
-    return item.items;
+    return item && item.items;
 }
 
 @capability

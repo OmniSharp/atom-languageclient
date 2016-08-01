@@ -4,7 +4,7 @@
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
 import * as _ from 'lodash';
-import { IAtomViewFinder, IDocumentDelayer, ILanguageProtocolClient, ISyncExpression } from 'atom-languageservices';
+import { IAtomViewFinder, IDocumentDelayer, ILanguageProtocolClient, ISyncExpression, IWaitService } from 'atom-languageservices';
 import { capability, inject } from 'atom-languageservices/decorators';
 import { TextDocumentSyncKind } from 'atom-languageservices/types';
 import { DisposableBase } from 'ts-disposables';
@@ -18,6 +18,7 @@ export class DocumentSyncProtocol extends DisposableBase {
     private _syncExpression: ISyncExpression;
     private _documentDelayer: IDocumentDelayer;
     private _atomViewFinder: IAtomViewFinder;
+    private _waitService: IWaitService;
     private _editors = new WeakMap<Atom.TextEditor, TextEditorSyncProtocol>();
 
     constructor(
@@ -25,6 +26,7 @@ export class DocumentSyncProtocol extends DisposableBase {
         @inject(ISyncExpression) syncExpression: ISyncExpression,
         @inject(IDocumentDelayer) documentDelayer: IDocumentDelayer,
         @inject(IAtomViewFinder) atomViewFinder: IAtomViewFinder,
+        @inject(IWaitService) waitService: IWaitService,
         atomTextEditorSource: AtomTextEditorSource
     ) {
         super();
@@ -34,6 +36,7 @@ export class DocumentSyncProtocol extends DisposableBase {
         this._documentDelayer = documentDelayer;
         this._atomTextEditorSource = atomTextEditorSource;
         this._atomViewFinder = atomViewFinder;
+        this._waitService = waitService;
 
         this._configure();
 
@@ -48,9 +51,15 @@ export class DocumentSyncProtocol extends DisposableBase {
 
     private _configureEditor(editor: Atom.TextEditor) {
         if (!this._editors.has(editor)) {
-            const sync = new TextEditorSyncProtocol(this._client, this._syncExpression, this._documentDelayer, this._atomViewFinder, editor);
+            const sync = new TextEditorSyncProtocol(this._client, this._syncExpression, this._documentDelayer, this._atomViewFinder, this._waitService, editor);
+
             this._editors.set(editor, sync);
             this._disposable.add(sync);
+            this._disposable.add(editor.onDidDestroy(() => {
+                this._editors.delete(editor);
+                this._disposable.remove(sync);
+                sync.dispose();
+            }));
         }
     }
 }

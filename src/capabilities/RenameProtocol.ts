@@ -11,26 +11,31 @@ import { RenameParams, TextDocumentIdentifier } from 'atom-languageservices/type
 import * as toUri from 'file-url';
 import { DisposableBase } from 'ts-disposables';
 import { fromWorkspaceEdit, toPosition } from './utils/convert';
+import { DocumentSyncProtocol } from './DocumentSyncProtocol';
 
 @capability
 export class RenameProtocol extends DisposableBase {
     private _client: ILanguageProtocolClient;
     private _syncExpression: ISyncExpression;
     private _renameService: IRenameService;
+    private _documentSyncProtocol: DocumentSyncProtocol;
+
     constructor(
         @inject(ILanguageProtocolClient) client: ILanguageProtocolClient,
         @inject(IRenameService) finderService: IRenameService,
-        @inject(ISyncExpression) syncExpression: ISyncExpression
+        @inject(ISyncExpression) syncExpression: ISyncExpression,
+        documentSyncProtocol: DocumentSyncProtocol
     ) {
         super();
         this._client = client;
         this._renameService = finderService;
         this._syncExpression = syncExpression;
+        this._documentSyncProtocol = documentSyncProtocol;
 
         if (!this._client.capabilities.renameProvider) {
             return;
         }
-        const service = new RenameProvider(client, syncExpression);
+        const service = new RenameProvider(client, syncExpression, documentSyncProtocol);
         this._disposable.add(service);
         this._renameService.registerProvider(service);
     }
@@ -39,10 +44,12 @@ export class RenameProtocol extends DisposableBase {
 class RenameProvider extends DisposableBase implements IRenameProvider {
     private _client: ILanguageProtocolClient;
     private _syncExpression: ISyncExpression;
-    public constructor(client: ILanguageProtocolClient, syncExpression: ISyncExpression) {
+    private _documentSyncProtocol: DocumentSyncProtocol;
+    public constructor(client: ILanguageProtocolClient, syncExpression: ISyncExpression, documentSyncProtocol: DocumentSyncProtocol) {
         super();
         this._client = client;
         this._syncExpression = syncExpression;
+        this._documentSyncProtocol = documentSyncProtocol;
     }
 
     public request(options: Rename.IRequest) {

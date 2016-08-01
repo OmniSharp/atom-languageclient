@@ -29,6 +29,6 @@ export function capability(target: any) {
  */
 export function alias(alias: symbol) {
     return (target: any) => {
-        metadata.define(symbols.alias, true, target);
+        metadata.define(symbols.alias, alias, target);
     };
 }

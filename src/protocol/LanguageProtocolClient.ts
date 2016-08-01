@@ -7,7 +7,7 @@
 import { ClientState, IDocumentDelayer, ILanguageProtocolClient, ILanguageProtocolClientOptions, IProjectProvider, ISyncExpression } from 'atom-languageservices';
 import { inject } from 'atom-languageservices/decorators';
 import { ShowMessageRequest } from 'atom-languageservices/protocol';
-import { InitializeError, InitializeParams, InitializeResult } from 'atom-languageservices/types';
+import { InitializeError, InitializeParams, InitializeResult, MessageType } from 'atom-languageservices/types';
 import { ServerCapabilities } from 'atom-languageservices/types-extended';
 import { Disposable, DisposableBase } from 'ts-disposables';
 import { CancellationToken, ErrorCodes, NotificationHandler, NotificationType, RequestHandler, RequestType, ResponseError } from 'vscode-jsonrpc';
@@ -51,22 +51,23 @@ export class LanguageProtocolClient extends DisposableBase implements ILanguageP
     public start() {
         this._state = ClientState.Starting;
         this._connection.onLogMessage((message) => {
-            console.warn(message);
-            /*
+            let obj: any = message.message;
+            try {
+                obj = JSON.parse(obj);
+            } catch (e) { }
             switch (message.type) {
                 case MessageType.Error:
-                    this.outputChannel.appendLine(`[Error] ${message.message}`);
+                    console.error(`[Error]`, obj);
                     break;
                 case MessageType.Warning:
-                    this.outputChannel.appendLine(`[Warn] ${message.message}`);
+                    console.warn(`[Warn]`, obj);
                     break;
                 case MessageType.Info:
-                    this.outputChannel.appendLine(`[Info] ${message.message}`);
+                    console.info(`[Info]`, obj);
                     break;
                 default:
-                    this.outputChannel.appendLine(message.message);
+                    console.log(message.message);
             }
-            */
         });
         this._connection.onShowMessage((message) => {
             // switch (message.type) {
@@ -101,7 +102,7 @@ export class LanguageProtocolClient extends DisposableBase implements ILanguageP
             // return messageFunc(params.message, ...params.actions);
         });
         this._connection.onTelemetry((data) => {
-            // this._telemetryEmitter.fire(data);
+            console.log(data);
         });
         this._connection.listen();
         return this._initialize();
@@ -126,7 +127,7 @@ export class LanguageProtocolClient extends DisposableBase implements ILanguageP
             },
             (error: ResponseError<InitializeError>) => {
                 console.error(error);
-                if (error.data.retry) {
+                if (error && error.data && error.data.retry) {
                     // Window.showErrorMessage(error.message, { title: 'Retry', id: 'retry' })
                     //     .then(item => {
                     //         if (is.defined(item) && item.id === 'retry') {
