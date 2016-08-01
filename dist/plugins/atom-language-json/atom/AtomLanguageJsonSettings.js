@@ -1,0 +1,18 @@
+"use strict";
+var AtomLanguageJsonSettings = (function () {
+    function AtomLanguageJsonSettings(state) {
+    }
+    Object.defineProperty(AtomLanguageJsonSettings, "empty", {
+        get: function () { return new AtomLanguageJsonSettings({}); },
+        enumerable: true,
+        configurable: true
+    });
+    AtomLanguageJsonSettings.prototype.serialize = function (fn) {
+        return {
+            deserializer: fn.name
+        };
+    };
+    return AtomLanguageJsonSettings;
+}());
+exports.AtomLanguageJsonSettings = AtomLanguageJsonSettings;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiQXRvbUxhbmd1YWdlSnNvblNldHRpbmdzLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vLi4vcGx1Z2lucy9hdG9tLWxhbmd1YWdlLWpzb24vYXRvbS9BdG9tTGFuZ3VhZ2VKc29uU2V0dGluZ3MudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IjtBQVNBO0lBR0ksa0NBQVksS0FBZ0M7SUFBVSxDQUFDO0lBRnZELHNCQUFrQixpQ0FBSzthQUF2QixjQUE0QixNQUFNLENBQUMsSUFBSSx3QkFBd0IsQ0FBQyxFQUFFLENBQUMsQ0FBQyxDQUFDLENBQUM7OztPQUFBO0lBSS9ELDRDQUFTLEdBQWhCLFVBQWlCLEVBQVk7UUFDekIsTUFBTSxDQUFDO1lBQ0gsWUFBWSxFQUFFLEVBQUUsQ0FBQyxJQUFJO1NBQ3hCLENBQUM7SUFDTixDQUFDO0lBQ0wsK0JBQUM7QUFBRCxDQUFDLEFBVkQsSUFVQztBQVZZLGdDQUF3QiwyQkFVcEMsQ0FBQSIsInNvdXJjZXNDb250ZW50IjpbIi8qKlxyXG4gKiAgQGxpY2Vuc2UgICBNSVRcclxuICogIEBjb3B5cmlnaHQgT21uaVNoYXJwIFRlYW1cclxuICogIEBzdW1tYXJ5ICAgQWRkcyBzdXBwb3J0IGZvciBodHRwczovL2dpdGh1Yi5jb20vTWljcm9zb2Z0L2xhbmd1YWdlLXNlcnZlci1wcm90b2NvbCAoYW5kIG1vcmUhKSB0byBodHRwczovL2F0b20uaW9cclxuICovXHJcbmV4cG9ydCBpbnRlcmZhY2UgSUF0b21MYW5ndWFnZUpzb25TZXR0aW5ncyB7XHJcbiAgICBkZXNlcmlhbGl6ZXI/OiBzdHJpbmc7XHJcbn1cclxuXHJcbmV4cG9ydCBjbGFzcyBBdG9tTGFuZ3VhZ2VKc29uU2V0dGluZ3Mge1xyXG4gICAgcHVibGljIHN0YXRpYyBnZXQgZW1wdHkoKSB7IHJldHVybiBuZXcgQXRvbUxhbmd1YWdlSnNvblNldHRpbmdzKHt9KTsgfVxyXG5cclxuICAgIGNvbnN0cnVjdG9yKHN0YXRlOiBJQXRvbUxhbmd1YWdlSnNvblNldHRpbmdzKSB7IC8qICovIH1cclxuXHJcbiAgICBwdWJsaWMgc2VyaWFsaXplKGZuOiBGdW5jdGlvbik6IElBdG9tTGFuZ3VhZ2VKc29uU2V0dGluZ3Mge1xyXG4gICAgICAgIHJldHVybiB7XHJcbiAgICAgICAgICAgIGRlc2VyaWFsaXplcjogZm4ubmFtZVxyXG4gICAgICAgIH07XHJcbiAgICB9XHJcbn1cclxuIl19

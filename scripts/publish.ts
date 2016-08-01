@@ -5,8 +5,9 @@
  */
 import * as _ from 'lodash';
 import { execSync } from 'child_process';
-import { readFileSync } from 'fs';
+import { rmdirSync } from 'fs';
 import { join, resolve } from 'path';
+import { sync as rimraf } from 'rimraf';
 
 const root = resolve(__dirname, '..');
 const languageservices = resolve(root, 'atom-languageservices');
@@ -18,4 +19,5 @@ execSync('npm version patch');
 execSync('npm publish');
 
 process.chdir(root);
+execSync('tsc -outDir dist');
 execSync('apm publish patch');

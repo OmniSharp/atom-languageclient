@@ -39,5 +39,8 @@ jspm_packages
 # Other
 *.js
 *.js.map
-dist/
 typings/
+!dist/**/*.js
+dist/atom-languageservices/
+dist/scripts/
+dist/spec/

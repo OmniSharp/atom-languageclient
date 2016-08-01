@@ -9,5 +9,8 @@
     "chokidar": "registry:dt/chokidar#1.4.3+20160316155526",
     "mocha": "registry:env/mocha#2.2.5+20160321223601",
     "node": "registry:env/node#6.0.0+20160622202520"
+  },
+  "devDependencies": {
+    "rimraf": "registry:npm/rimraf#2.5.0+20160723033700"
   }
 }
