@@ -20,4 +20,5 @@ execSync('npm publish');
 
 process.chdir(root);
 execSync('tsc -outDir dist');
+execSync('npm install');
 execSync('apm publish patch');

@@ -8,6 +8,7 @@
     "lint-rules": "tsc -p rules/tsconfig.json",
     "test": "npm run lint",
     "tsc": "tsc",
+    "do-publish": "node scripts/publish.js",
     "tsc:w": "tsc -w"
   },
   "repository": {
