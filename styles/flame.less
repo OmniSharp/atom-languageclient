@@ -1,0 +1,42 @@
+.flame {
+    .icon-flame-loading {
+        color: rgba(156, 164, 180, 0.6);
+        -webkit-animation: loading 1s linear infinite alternate;
+    }
+
+    .icon-flame-processing {
+        color: @text-color-success;
+        -webkit-animation: processing 1s linear infinite alternate;
+    }
+
+    .span, span {
+        transition: opacity;
+        transition-duration: 0.3s;
+        transition-timing-function: ease-in-out;
+        opacity: 1;
+
+        &.fade {
+            opacity: 0;
+        }
+    }
+}
+
+@-webkit-keyframes loading {
+    from {
+        color: rgba(156, 164, 180, 1);
+    }
+
+    to {
+        color: rgba(156, 164, 180, 0.3);
+    }
+}
+
+@-webkit-keyframes processing {
+    from {
+        color: rgba(red(@text-color-success), green(@text-color-success), blue(@text-color-success), 1);
+    }
+
+    to {
+        color: rgba(red(@text-color-success), green(@text-color-success), blue(@text-color-success), 0.3);
+    }
+}

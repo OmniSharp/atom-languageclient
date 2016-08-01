@@ -5,11 +5,11 @@
  */
 import * as _ from 'lodash';
 import { Observable } from 'rxjs';
-import { IAutocompleteService, ILanguageProvider, ILanguageService, ILinterService, Linter } from 'atom-languageservices';
+import { IAutocompleteService, ILanguageProvider, ILanguageService, ILinterService, IResolver, IStatusBarService, Linter, StatusBar } from 'atom-languageservices';
 import { readdir } from 'fs';
 import { join, resolve } from 'path';
 import { CompositeDisposable, isDisposable } from 'ts-disposables';
-import { AutocompleteService, LinterService } from './atom/index';
+import { AutocompleteService, LinterService, StatusBarService } from './atom/index';
 import { LanguageProvider, LanguageService } from './language/index';
 import { AtomLanguageClientSettings, IAtomLanguageClientSettings } from './AtomLanguageClientSettings';
 import { Container } from './di/Container';
@@ -24,6 +24,7 @@ export class AtomLanguageClientPackage implements IAtomPackage<AtomLanguageClien
     private _atomLanguageService: LanguageService;
     private _atomAutocompleteProvider: AutocompleteService;
     private _atomLinterProvider: LinterService;
+    private _atomStatusBarService: StatusBarService;
     public activated: Promise<void>;
 
     /* tslint:disable:no-any */
@@ -36,15 +37,24 @@ export class AtomLanguageClientPackage implements IAtomPackage<AtomLanguageClien
         this._atomLanguageService = new LanguageService(this._container);
         this._atomAutocompleteProvider = new AutocompleteService();
         this._atomLinterProvider = new LinterService();
+        this._atomStatusBarService = new StatusBarService();
 
         this._container.registerInstance(LanguageProvider, this._atomLanguageProvider);
         this._container.registerAlias(LanguageProvider, ILanguageProvider);
+
         this._container.registerInstance(LanguageService, this._atomLanguageService);
         this._container.registerAlias(LanguageService, ILanguageService);
+
         this._container.registerInstance(AutocompleteService, this._atomAutocompleteProvider);
         this._container.registerAlias(AutocompleteService, IAutocompleteService);
+
         this._container.registerInstance(LinterService, this._atomLinterProvider);
         this._container.registerAlias(LinterService, ILinterService);
+
+        this._container.registerInstance(StatusBarService, this._atomStatusBarService);
+        this._container.registerAlias(StatusBarService, IStatusBarService);
+
+        this._container.registerInstance(IResolver, this._container);
 
         this._disposable.add(
             this._container,
@@ -56,7 +66,8 @@ export class AtomLanguageClientPackage implements IAtomPackage<AtomLanguageClien
             Observable.merge(
                 this._container.registerFolder(__dirname, 'atom'),
                 this._container.registerFolder(__dirname, 'capabilities'),
-                this._container.registerFolder(__dirname, 'services')
+                this._container.registerFolder(__dirname, 'services'),
+                this._container.registerFolder(__dirname, 'ui')
             )
                 .toPromise()
                 .then(() => {
@@ -68,7 +79,7 @@ export class AtomLanguageClientPackage implements IAtomPackage<AtomLanguageClien
         /* We're going to pretend to load these packages, as if they were real */
         const pathToPlugins = resolve(__dirname, '../', 'plugins');
         this.activated.then(() => {
-            $readdir(pathToPlugins)
+            return $readdir(pathToPlugins)
                 .mergeMap(folders => {
                     return Observable.from(folders)
                         .mergeMap(folder => $readdir(join(pathToPlugins, folder))
@@ -91,7 +102,12 @@ export class AtomLanguageClientPackage implements IAtomPackage<AtomLanguageClien
                         });
 
                 })
-                .subscribe();
+                .toPromise();
+        });
+
+        this.activated.then(() => {
+            /* tslint:disable-next-line:no-require-imports */
+            this._container.resolveEach(_.values(require('./ui/UserInterface')));
         });
     }
 
@@ -125,6 +141,11 @@ export class AtomLanguageClientPackage implements IAtomPackage<AtomLanguageClien
     /* tslint:disable-next-line:function-name */
     public ['consume-atom-linter'](service: Linter.IndieRegistry) {
         this._atomLinterProvider.registry = service;
+    }
+
+    /* tslint:disable-next-line:function-name */
+    public ['consume-status-bar'](service: StatusBar.Api) {
+        this._atomStatusBarService.api = service;
     }
 
     /* tslint:disable-next-line:no-any */

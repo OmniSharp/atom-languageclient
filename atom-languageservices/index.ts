@@ -28,6 +28,7 @@ export * from './IProjectTracker';
 export * from './IReferencesService';
 export * from './IRenameService';
 export * from './IResolver';
+export * from './IStatusBarService';
 export * from './ISyncExpression';
 export * from './IWaitService';
 export * from './IWorkspaceFinderService';

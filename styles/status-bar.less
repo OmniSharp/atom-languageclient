@@ -1,0 +1,49 @@
+.status-bar .atom-languageclient {
+    overflow: visible !important;
+    .flame {
+        margin-right: 0 !important;
+    }
+}
+
+.diagnostic-summary,
+.project-summary {
+    cursor: pointer;
+
+    &:focus {
+        color: @text-color;
+    }
+
+    &:hover {
+        text-decoration: none;
+    }
+
+    .span, span {
+        padding-left: 3px;
+        padding-right: 3px;
+    }
+}
+
+.diagnostic-summary {
+    color: @text-color;
+    padding-left: 10px;
+
+    &:focus {
+        color: @text-color;
+    }
+
+    &:hover {
+        color: @text-color;
+    }
+
+    .icon-issue-opened {
+        color: @text-color-error;
+    }
+
+    .icon-info {
+        color: @text-color-info;
+    }
+
+    .icon-alert {
+        color: @text-color-warning;
+    }
+}

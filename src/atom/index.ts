@@ -9,4 +9,5 @@ export * from './DocumentFinderService';
 export * from './LinterService';
 export * from './ProjectProvider';
 export * from './ProjectTracker';
+export * from './StatusBarService';
 export * from './WorkspaceFinderService';
