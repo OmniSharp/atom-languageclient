@@ -20,5 +20,7 @@ execSync('npm publish');
 
 process.chdir(root);
 execSync('tsc -outDir dist');
+execSync('git add .');
+execSync('git commit -m "prepare publish"');
 execSync('npm install');
 execSync('apm publish patch');
