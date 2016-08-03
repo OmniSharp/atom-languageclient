@@ -50,7 +50,7 @@ class LodashThrottleSubscriber<T> extends Subscriber<T> {
     constructor(destination: Subscriber<T>, duration: number, options: ThrottleOptions) {
         super(destination);
         this._duration = duration;
-        this._method = throttle(bind(this._dispatchNext, this));
+        this._method = throttle(bind(this._dispatchNext, this), duration, options);
     }
 
     /* tslint:disable-next-line */

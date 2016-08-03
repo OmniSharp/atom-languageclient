@@ -30,6 +30,7 @@ export abstract class SelectListView<T> extends View<HTMLDivElement> {
         this._commands = commands;
         this._buildHtml();
         this._filterEditor = this._filterEditorView.getModel();
+        this.storeFocusedElement();
 
         this._disposable.add(
             Observable.fromEvent(this._filterEditorView, 'blur')

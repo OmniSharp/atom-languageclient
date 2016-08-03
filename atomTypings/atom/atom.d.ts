@@ -1912,16 +1912,16 @@ declare module Atom {
          */
         getBeginningOfNextWordBufferPosition(options?: { wordRegex: RegExp; }): TextBuffer.Point;
 
-        getCurrentWordBufferRange(options?: { wordRegex: RegExp; }): Range;
+        getCurrentWordBufferRange(options?: { wordRegex: RegExp; }): TextBuffer.Range;
 
-        getCurrentLineBufferRange(options?: { includeNewline: boolean; }): Range;
+        getCurrentLineBufferRange(options?: { includeNewline: boolean; }): TextBuffer.Range;
 
         /**
-         * Retrieves the range for the current paragraph.
+         * Retrieves the TextBuffer.Range for the current paragraph.
          *
          * A paragraph is defined as a block of text surrounded by empty lines.
          */
-        getCurrentParagraphBufferRange(): Range;
+        getCurrentParagraphBufferRange(): TextBuffer.Range;
 
         getCurrentWordPrefix(): string;
 
@@ -2403,7 +2403,7 @@ declare module Atom {
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        scrollToScreenRange(screenRange?: Range, options?: any): Range;
+        scrollToScreenRange(screenRange?: TextBuffer.Range, options?: any): TextBuffer.Range;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
@@ -2471,7 +2471,7 @@ declare module Atom {
         tokenizedLineForScreenRow(screenRow?: number): TokenizedLine;
 
         /**
-         * Gets the screen lines for the given screen row range.
+         * Gets the screen lines for the given screen row TextBuffer.Range.
          *
          * startRow - A {Number} indicating the beginning screen row.
          * endRow - A {Number} indicating the ending screen row.
@@ -2492,7 +2492,7 @@ declare module Atom {
 
         /**
          * Given starting and ending screen rows, this returns an array of the
-         * buffer rows corresponding to every screen row in the range
+         * buffer rows corresponding to every screen row in the TextBuffer.Range
          *
          * startScreenRow - The screen row {Number} to start at
          * endScreenRow - The screen row {Number} to end at (default: the last screen row)
@@ -2577,7 +2577,7 @@ declare module Atom {
          *
          * This field or method was marked private by atomdoc. Use with caution.
          */
-        outermostFoldsInBufferRowRange(startRow?: number, endRow?: number): Range;
+        outermostFoldsInBufferRowRange(startRow?: number, endRow?: number): TextBuffer.Range;
 
         /**
          * Given a buffer row, this returns folds that include it.
@@ -2608,20 +2608,20 @@ declare module Atom {
         bufferRowForScreenRow(screenRow?: number): number;
 
         /**
-         * Given a buffer range, this converts it into a screen position.
+         * Given a buffer TextBuffer.Range, this converts it into a screen position.
          *
-         * bufferRange - The {Range} to convert
+         * bufferRange - The {TextBuffer.Range} to convert
          * This field or method was marked private by atomdoc. Use with caution.
          */
-        screenRangeForBufferRange(bufferRange?: Range, options?: any): Range;
+        screenRangeForBufferRange(bufferRange?: TextBuffer.Range, options?: any): TextBuffer.Range;
 
         /**
-         * Given a screen range, this converts it into a buffer position.
+         * Given a screen TextBuffer.Range, this converts it into a buffer position.
          *
-         * screenRange - The {Range} to convert
+         * screenRange - The {TextBuffer.Range} to convert
          * This field or method was marked private by atomdoc. Use with caution.
          */
-        bufferRangeForScreenRange(screenRange?: Range): Range;
+        bufferRangeForScreenRange(screenRange?: TextBuffer.Range): TextBuffer.Range;
 
         /**
          * Gets the number of screen lines.
@@ -2732,16 +2732,16 @@ declare module Atom {
         clipScreenPosition(screenPosition?: TextBuffer.Point | { row: number; column: number } | [number, number], options?: any): TextBuffer.Point;
 
         /**
-         * Clip the start and end of the given range to valid positions on screen.
+         * Clip the start and end of the given TextBuffer.Range to valid positions on screen.
          * See {::clipScreenPosition} for more information.
          * This field or method was marked private by atomdoc. Use with caution.
-         * @param range? - The {Range} to clip.
-         * @param options? - See {::clipScreenPosition} `options`. Returns a {Range}.
+         * @param TextBuffer.Range? - The {TextBuffer.Range} to clip.
+         * @param options? - See {::clipScreenPosition} `options`. Returns a {TextBuffer.Range}.
          */
-        clipScreenRange(range?: Range, options?: TextBuffer.Range): Range;
+        clipScreenRange(range?: TextBuffer.Range, options?: TextBuffer.Range): TextBuffer.Range;
 
         /**
-         * Calculates a {Range} representing the start of the {TextBuffer} until the end.
+         * Calculates a {TextBuffer.Range} representing the start of the {TextBuffer} until the end.
          * This field or method was marked private by atomdoc. Use with caution.
          */
         rangeForAllLines(): string[];
@@ -2779,7 +2779,7 @@ declare module Atom {
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        decorationsForScreenRowRange(startScreenRow?: number, endScreenRow?: number): Range;
+        decorationsForScreenRowRange(startScreenRow?: number, endScreenRow?: number): TextBuffer.Range;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
@@ -2816,25 +2816,25 @@ declare module Atom {
         getMarkerCount(): number;
 
         /**
-         * Constructs a new marker at the given screen range.
+         * Constructs a new marker at the given screen TextBuffer.Range.
          *
-         * range - The marker {Range} (representing the distance between the head and tail)
+         * TextBuffer.Range - The marker {TextBuffer.Range} (representing the distance between the head and tail)
          * options - Options to pass to the {Marker} constructor
          */
         markScreenRange(args?: any): Marker;
 
         /**
-         * Constructs a new marker at the given buffer range.
+         * Constructs a new marker at the given buffer TextBuffer.Range.
          *
-         * range - The marker {Range} (representing the distance between the head and tail)
+         * TextBuffer.Range - The marker {TextBuffer.Range} (representing the distance between the head and tail)
          * options - Options to pass to the {Marker} constructor
          */
-        markBufferRange(range?: Range, options?: any): Marker;
+        markBufferRange(range?: TextBuffer.Range, options?: any): Marker;
 
         /**
          * Constructs a new marker at the given screen position.
          *
-         * range - The marker {Range} (representing the distance between the head and tail)
+         * TextBuffer.Range - The marker {TextBuffer.Range} (representing the distance between the head and tail)
          * options - Options to pass to the {Marker} constructor
          */
         markScreenPosition(screenPosition?: TextBuffer.Point | { row: number; column: number } | [number, number], options?: any): Marker;
@@ -2842,7 +2842,7 @@ declare module Atom {
         /**
          * Constructs a new marker at the given buffer position.
          *
-         * range - The marker {Range} (representing the distance between the head and tail)
+         * TextBuffer.Range - The marker {TextBuffer.Range} (representing the distance between the head and tail)
          * options - Options to pass to the {Marker} constructor
          */
         markBufferPosition(bufferPosition?: TextBuffer.Point | { row: number; column: number } | [number, number], options?: any): Marker;
@@ -2873,12 +2873,12 @@ declare module Atom {
          *     buffer coordinates.
          *   :endBufferRow - A {Number}. Only returns markers ending at this row in
          *     buffer coordinates.
-         *   :containsBufferRange - A {Range} or range-compatible {Array}. Only returns
-         *     markers containing this range in buffer coordinates.
+         *   :containsBufferRange - A {TextBuffer.Range} or TextBuffer.Range-compatible {Array}. Only returns
+         *     markers containing this TextBuffer.Range in buffer coordinates.
          *   :containsBufferPosition - A {Point} or point-compatible {Array}. Only
          *     returns markers containing this position in buffer coordinates.
-         *   :containedInBufferRange - A {Range} or range-compatible {Array}. Only
-         *     returns markers contained within this range.
+         *   :containedInBufferRange - A {TextBuffer.Range} or TextBuffer.Range-compatible {Array}. Only
+         *     returns markers contained within this TextBuffer.Range.
          */
         findMarkers(params?: any): Marker[];
 
@@ -3044,12 +3044,12 @@ declare module Atom {
          * includeNewline - A {Boolean} which, if `true`, includes the trailing newline
          * This field or method was marked private by atomdoc. Use with caution.
          */
-        getBufferRange({ includeNewline }: { includeNewline?: number }): Range;
+        getBufferRange({ includeNewline }: { includeNewline?: number }): TextBuffer.Range;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        getBufferRowRange(): Range;
+        getBufferRowRange(): TextBuffer.Range;
 
         /**
          *
@@ -3771,7 +3771,7 @@ declare module Atom {
         foldBufferRow(bufferRow?: number): number;
 
         /**
-         * Find the row range for a fold at a given bufferRow. Will handle comments
+         * Find the row TextBuffer.Range for a fold at a given bufferRow. Will handle comments
          * and code.
          *
          * bufferRow - A {Number} indicating the buffer row
@@ -3801,7 +3801,7 @@ declare module Atom {
         isLineCommentedAtBufferRow(bufferRow?: number): number;
 
         /**
-         * Find a row range for a "paragraph" around specified bufferRow. A paragraph
+         * Find a row TextBuffer.Range for a "paragraph" around specified bufferRow. A paragraph
          * is a block of text bounded by and empty line or a block of text that is not
          * the same type (comments next to source code).
          * This field or method was marked private by atomdoc. Use with caution.
@@ -3829,13 +3829,13 @@ declare module Atom {
         suggestedIndentForTokenizedLineAtBufferRow(bufferRow?: number, line?: number, tokenizedLine?: TokenizedLine, options?: any): number;
 
         /**
-         * Calculate a minimum indent level for a range of lines excluding empty lines.
+         * Calculate a minimum indent level for a TextBuffer.Range of lines excluding empty lines.
          *
          * startRow - The row {Number} to start at
          * endRow - The row {Number} to end at
          * This field or method was marked private by atomdoc. Use with caution.
          */
-        minIndentLevelForRowRange(startRow?: number, endRow?: number): Range;
+        minIndentLevelForRowRange(startRow?: number, endRow?: number): TextBuffer.Range;
 
         /**
          * Indents all the rows between two buffer row numbers.
@@ -4354,12 +4354,12 @@ declare module Atom {
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        setScreenRange(range?: Range): Range;
+        setScreenRange(range?: TextBuffer.Range): TextBuffer.Range;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        setBufferRange(range?: Range): Range;
+        setBufferRange(range?: TextBuffer.Range): TextBuffer.Range;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
@@ -4495,27 +4495,27 @@ declare module Atom {
         compare(other?: Marker): number;
 
         /**
-         * Gets the buffer range of the display marker.
+         * Gets the buffer TextBuffer.Range of the display marker.
          */
-        getBufferRange(): Range;
+        getBufferRange(): TextBuffer.Range;
 
         /**
-         * Modifies the buffer range of the display marker.
-         * @param bufferRange? - The new {Range} to use
+         * Modifies the buffer TextBuffer.Range of the display marker.
+         * @param bufferRange? - The new {TextBuffer.Range} to use
          * @param properties? - {Object} properties to associate with the marker.
          */
-        setBufferRange(bufferRange?: Range, properties?: any): Range;
+        setBufferRange(bufferRange?: TextBuffer.Range, properties?: any): TextBuffer.Range;
 
         /**
-         * Gets the screen range of the display marker.
+         * Gets the screen TextBuffer.Range of the display marker.
          */
-        getScreenRange(): Range;
+        getScreenRange(): TextBuffer.Range;
 
         /**
-         * Modifies the screen range of the display marker.
-         * @param screenRange? - The new {Range} to use
+         * Modifies the screen TextBuffer.Range of the display marker.
+         * @param screenRange? - The new {TextBuffer.Range} to use
          */
-        setScreenRange(screenRange?: Range, options?: any): Range;
+        setScreenRange(screenRange?: TextBuffer.Range, options?: any): TextBuffer.Range;
 
         /**
          * Retrieves the buffer position of the marker"s start. This will always be
@@ -4679,22 +4679,6 @@ declare module Atom {
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
         isDestroyed(): boolean;
-
-    }
-
-    /**
-     * Extend semver.Range to memoize matched versions for speed
-     */
-    export class Range /*extends SemVerModule.SemVer*/ {
-        /**
-         * This field or method was not documented by atomdoc, assume it is private. Use with caution.
-         */
-        constructor();
-
-        /**
-         * This field or method was not documented by atomdoc, assume it is private. Use with caution.
-         */
-        test(version?: number): any;
 
     }
 
@@ -6820,8 +6804,8 @@ declare module Atom {
         bufferRowRangeForScreenRow(targetScreenRow?: number): number;
 
         /**
-         * If the given buffer row is part of a folded row range, returns that
-         * row range. Otherwise returns a range spanning only the given buffer row.
+         * If the given buffer row is part of a folded row TextBuffer.Range, returns that
+         * row TextBuffer.Range. Otherwise returns a TextBuffer.Range spanning only the given buffer row.
          */
         bufferRowRangeForBufferRow(targetBufferRow?: number): number;
 
@@ -7015,7 +6999,7 @@ declare module Atom {
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        initialScreenRange: Range;
+        initialScreenRange: TextBuffer.Range;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
@@ -7049,25 +7033,25 @@ declare module Atom {
          */
         onDidDestroy(callback: Function /* needs to be defined */): EventKit.Disposable;
 
-        getScreenRange(): Range;
+        getScreenRange(): TextBuffer.Range;
 
         /**
-         * Modifies the screen range for the selection.
-         * @param screenRange? - The new {Range} to use.
+         * Modifies the screen TextBuffer.Range for the selection.
+         * @param screenRange? - The new {TextBuffer.Range} to use.
          * @param options? - {Object} options matching those found in {::setBufferRange}.
          */
-        setScreenRange(screenRange?: Range, options?: any): Range;
+        setScreenRange(screenRange?: TextBuffer.Range, options?: any): TextBuffer.Range;
 
-        getBufferRange(): Range;
+        getBufferRange(): TextBuffer.Range;
 
         /**
-         * Modifies the buffer {Range} for the selection.
-         * @param bufferRange? - The new {Range} to select.
+         * Modifies the buffer {TextBuffer.Range} for the selection.
+         * @param bufferRange? - The new {TextBuffer.Range} to select.
          * @param options? - {Object} with the keys:
          */
-        setBufferRange(bufferRange?: Range, options?: any): Range;
+        setBufferRange(bufferRange?: TextBuffer.Range, options?: any): TextBuffer.Range;
 
-        getBufferRowRange(): Range;
+        getBufferRowRange(): TextBuffer.Range;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
@@ -7107,15 +7091,15 @@ declare module Atom {
         getText(): string;
 
         /**
-         * Identifies if a selection intersects with a given buffer range.
-         * @param bufferRange? - A {Range} to check against.
+         * Identifies if a selection intersects with a given buffer TextBuffer.Range.
+         * @param bufferRange? - A {TextBuffer.Range} to check against.
          */
-        intersectsBufferRange(bufferRange?: Range): Range;
+        intersectsBufferRange(bufferRange?: TextBuffer.Range): TextBuffer.Range;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        intersectsScreenRowRange(startRow?: number, endRow?: number): Range;
+        intersectsScreenRowRange(startRow?: number, endRow?: number): TextBuffer.Range;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
@@ -7265,7 +7249,7 @@ declare module Atom {
 
         /**
          * Modifies the selection to encompass the current word.
-         * Returns a {Range}.
+         * Returns a {TextBuffer.Range}.
          */
         selectWord(options?: any): TextBuffer.Range;
 
@@ -7469,10 +7453,10 @@ declare module Atom {
         merge(otherSelection?: Selection, options?: Object): any;
 
         /**
-         * Compare this selection"s buffer range to another selection"s buffer
-         * range.
+         * Compare this selection"s buffer TextBuffer.Range to another selection"s buffer
+         * TextBuffer.Range.
          *
-         * See {Range::compare} for more details.
+         * See {TextBuffer.Range::compare} for more details.
          * @param otherSelection? - A {Selection} to compare against
          */
         compare(otherSelection?: Selection): any;
@@ -7520,7 +7504,7 @@ declare module Atom {
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        getGoalScreenRange(): Range;
+        getGoalScreenRange(): TextBuffer.Range;
 
     }
 
@@ -8025,7 +8009,7 @@ declare module Atom {
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        getVisibleRowRange(): Range;
+        getVisibleRowRange(): TextBuffer.Range;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
@@ -8040,12 +8024,12 @@ declare module Atom {
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        pixelRectForScreenRange(screenRange?: Range): Range;
+        pixelRectForScreenRange(screenRange?: TextBuffer.Range): TextBuffer.Range;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        pixelRangeForScreenRange(screenRange?: Range, clip?: any): Range;
+        pixelRangeForScreenRange(screenRange?: TextBuffer.Range, clip?: any): TextBuffer.Range;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
@@ -8080,7 +8064,7 @@ declare module Atom {
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        handleGutterDrag(initialRange?: Range): void;
+        handleGutterDrag(initialRange?: TextBuffer.Range): void;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
@@ -8625,7 +8609,7 @@ declare module Atom {
          *
          * This field or method was marked private by atomdoc. Use with caution.
          */
-        customGutterDecorationsInRange(gutterName?: string, startRow?: number, endRow?: number): Range;
+        customGutterDecorationsInRange(gutterName?: string, startRow?: number, endRow?: number): TextBuffer.Range;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
@@ -8855,7 +8839,7 @@ declare module Atom {
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        pixelRectForScreenRange(screenRange?: Range): Range;
+        pixelRectForScreenRange(screenRange?: TextBuffer.Range): TextBuffer.Range;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
@@ -8895,17 +8879,17 @@ declare module Atom {
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        addToLineDecorationCaches(decoration?: Decoration, range?: Range): void;
+        addToLineDecorationCaches(decoration?: Decoration, range?: TextBuffer.Range): void;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        intersectRangeWithTile(range?: Range, tileStartRow?: number): StatusBar.Tile;
+        intersectRangeWithTile(range?: TextBuffer.Range, tileStartRow?: number): StatusBar.Tile;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        updateHighlightState(decoration?: Decoration, range?: Range): void;
+        updateHighlightState(decoration?: Decoration, range?: TextBuffer.Range): void;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
@@ -8915,7 +8899,7 @@ declare module Atom {
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        buildHighlightRegions(screenRange?: Range): any;
+        buildHighlightRegions(screenRange?: TextBuffer.Range): any;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
@@ -9030,7 +9014,7 @@ declare module Atom {
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        getVisibleRowRange(): Range;
+        getVisibleRowRange(): TextBuffer.Range;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
@@ -9201,7 +9185,7 @@ declare module Atom {
         onDidChangeCursorPosition(callback: (event: { oldBufferPosition: TextBuffer.Point; oldScreenPosition: TextBuffer.Point; newBufferPosition: TextBuffer.Point; newScreenPosition: TextBuffer.Point; textChanged: boolean; cursor: Cursor; }) => any): EventKit.Disposable;
 
         /**
-         * Calls your `callback` when a selection"s screen range changes.
+         * Calls your `callback` when a selection"s screen TextBuffer.Range changes.
          * @param callback - {Function}
          */
         onDidChangeSelectionRange(callback: (event: { oldBufferRange: TextBuffer.Point; oldScreenRange: TextBuffer.Point; newBufferRange: TextBuffer.Point; newScreenRange: TextBuffer.Point; selection: Selection; }) => any): EventKit.Disposable;
@@ -9529,10 +9513,10 @@ declare module Atom {
         getText(): string;
 
         /**
-         * Get the text in the given {Range} in buffer coordinates.
-         * @param range? - A {Range} or range-compatible {Array}.
+         * Get the text in the given {TextBuffer.Range} in buffer coordinates.
+         * @param TextBuffer.Range? - A {TextBuffer.Range} or TextBuffer.Range-compatible {Array}.
          */
-        getTextInBufferRange(range?: Range): Range;
+        getTextInBufferRange(range?: TextBuffer.Range): TextBuffer.Range;
 
         getLineCount(): number;
 
@@ -9595,10 +9579,10 @@ declare module Atom {
         bufferRangeForBufferRow(row?: number, options?: (includeNewline?: number) => any): number;
 
         /**
-         * Get the text in the given {Range}.
+         * Get the text in the given {TextBuffer.Range}.
          * This field or method was marked private by atomdoc. Use with caution.
          */
-        getTextInRange(range?: Range | [[number, number], [number, number]]): string;
+        getTextInRange(range?: TextBuffer.Range | [[number, number], [number, number]]): string;
 
         /**
          * {Delegates to: TextBuffer.isRowBlank}
@@ -9619,10 +9603,10 @@ declare module Atom {
         getEofBufferPosition(): TextBuffer.Point;
 
         /**
-         * Get the {Range} of the paragraph surrounding the most recently added
+         * Get the {TextBuffer.Range} of the paragraph surrounding the most recently added
          * cursor.
          */
-        getCurrentParagraphBufferRange(): Range;
+        getCurrentParagraphBufferRange(): TextBuffer.Range;
 
         /**
          * Replaces the entire contents of the buffer with the given {String}.
@@ -9631,12 +9615,12 @@ declare module Atom {
         setText(text?: string): string;
 
         /**
-         * Set the text in the given {Range} in buffer coordinates.
-         * @param range? - A {Range} or range-compatible {Array}.
+         * Set the text in the given {TextBuffer.Range} in buffer coordinates.
+         * @param TextBuffer.Range? - A {TextBuffer.Range} or TextBuffer.Range-compatible {Array}.
          * @param text? - A {String}
          * @param options? - {Object}
          */
-        setTextInBufferRange(range?: Range, text?: string, options?: any): Range;
+        setTextInBufferRange(range?: TextBuffer.Range, text?: string, options?: any): TextBuffer.Range;
 
         /**
          * For each selection, replace the selected text with the given text.
@@ -9905,16 +9889,16 @@ declare module Atom {
         bufferPositionForScreenPosition(screenPosition?: TextBuffer.Point | { row: number; column: number } | [number, number], options?: any): TextBuffer.Point;
 
         /**
-         * Convert a range in buffer-coordinates to screen-coordinates.
-         * @param bufferRange? - {Range} in buffer coordinates to translate into screen coordinates.
+         * Convert a TextBuffer.Range in buffer-coordinates to screen-coordinates.
+         * @param bufferRange? - {TextBuffer.Range} in buffer coordinates to translate into screen coordinates.
          */
-        screenRangeForBufferRange(bufferRange?: Range): Range;
+        screenRangeForBufferRange(bufferRange?: TextBuffer.Range): TextBuffer.Range;
 
         /**
-         * Convert a range in screen-coordinates to buffer-coordinates.
-         * @param screenRange? - {Range} in screen coordinates to translate into buffer coordinates.
+         * Convert a TextBuffer.Range in screen-coordinates to buffer-coordinates.
+         * @param screenRange? - {TextBuffer.Range} in screen coordinates to translate into buffer coordinates.
          */
-        bufferRangeForScreenRange(screenRange?: Range): Range;
+        bufferRangeForScreenRange(screenRange?: TextBuffer.Range): TextBuffer.Range;
 
         /**
          * Clip the given {Point} to a valid position in the buffer.
@@ -9928,11 +9912,11 @@ declare module Atom {
         clipBufferPosition(bufferPosition?: TextBuffer.Point | { row: number; column: number } | [number, number]): TextBuffer.Point;
 
         /**
-         * Clip the start and end of the given range to valid positions in the
+         * Clip the start and end of the given TextBuffer.Range to valid positions in the
          * buffer. See {::clipBufferPosition} for more information.
-         * @param range? - The {Range} to clip.
+         * @param TextBuffer.Range? - The {TextBuffer.Range} to clip.
          */
-        clipBufferRange(range?: Range): Range;
+        clipBufferRange(range?: TextBuffer.Range): TextBuffer.Range;
 
         /**
          * Clip the given {Point} to a valid position on screen.
@@ -9947,12 +9931,12 @@ declare module Atom {
         clipScreenPosition(screenPosition?: TextBuffer.Point | { row: number; column: number } | [number, number], options?: Object): TextBuffer.Point;
 
         /**
-         * Clip the start and end of the given range to valid positions on screen.
+         * Clip the start and end of the given TextBuffer.Range to valid positions on screen.
          * See {::clipScreenPosition} for more information.
-         * @param range? - The {Range} to clip.
-         * @param options? - See {::clipScreenPosition} `options`. Returns a {Range}.
+         * @param TextBuffer.Range? - The {TextBuffer.Range} to clip.
+         * @param options? - See {::clipScreenPosition} `options`. Returns a {TextBuffer.Range}.
          */
-        clipScreenRange(range?: Range, options?: TextBuffer.Range): Range;
+        clipScreenRange(range?: TextBuffer.Range, options?: TextBuffer.Range): TextBuffer.Range;
 
         /**
          * Adds a decoration that tracks a {Marker}. When the marker moves,
@@ -9961,17 +9945,17 @@ declare module Atom {
          *
          * The following are the supported decorations types:
          *
-         * * __line__: Adds your CSS `class` to the line nodes within the range
+         * * __line__: Adds your CSS `class` to the line nodes within the TextBuffer.Range
          *     marked by the marker
          * * __line-number__: Adds your CSS `class` to the line number nodes within the
-         *     range marked by the marker
+         *     TextBuffer.Range marked by the marker
          * * __highlight__: Adds a new highlight div to the editor surrounding the
-         *     range marked by the marker. When the user selects text, the selection is
+         *     TextBuffer.Range marked by the marker. When the user selects text, the selection is
          *     visualized with a highlight decoration internally. The structure of this
          *     highlight will be
          *   ```html
          *     <div class="highlight <your-class>">
-         *       <!-- Will be one region for each row in the range. Spans 2 lines? There will be 2 regions. -->
+         *       <!-- Will be one region for each row in the TextBuffer.Range. Spans 2 lines? There will be 2 regions. -->
          *       <div class="region"></div>
          *     </div>
          *   ```
@@ -9986,11 +9970,11 @@ declare module Atom {
         decorateMarker(marker?: Marker, decorationParams?: Object): Marker;
 
         /**
-         * Get all the decorations within a screen row range.
+         * Get all the decorations within a screen row TextBuffer.Range.
          * @param startScreenRow? - the {Number} beginning screen row
          * @param endScreenRow? - the {Number} end screen row (inclusive)
          */
-        decorationsForScreenRowRange(startScreenRow?: number, endScreenRow?: number): Range;
+        decorationsForScreenRowRange(startScreenRow?: number, endScreenRow?: number): TextBuffer.Range;
 
         /**
          * Get all decorations.
@@ -10033,7 +10017,7 @@ declare module Atom {
         decorationsForMarkerId(id?: any): any;
 
         /**
-         * Create a marker with the given range in buffer coordinates. This
+         * Create a marker with the given TextBuffer.Range in buffer coordinates. This
          * marker will maintain its logical location as the buffer is changed, so if
          * you mark a particular word, the marker will remain over that word even if
          * the word"s location in the buffer changes.
@@ -10041,7 +10025,7 @@ declare module Atom {
         markBufferRange(args?: any): Marker;
 
         /**
-         * Create a marker with the given range in screen coordinates. This
+         * Create a marker with the given TextBuffer.Range in screen coordinates. This
          * marker will maintain its logical location as the buffer is changed, so if
          * you mark a particular word, the marker will remain over that word even if
          * the word"s location in the buffer changes.
@@ -10064,8 +10048,8 @@ declare module Atom {
          * This method finds markers based on the given properties. Markers can be
          * associated with custom properties that will be compared with basic equality.
          * In addition, there are several special properties that will be compared
-         * with the range of the markers rather than their properties.
-         * @param properties? - An {Object} containing properties that each returned marker must satisfy. Markers can be associated with custom properties, which are compared with basic equality. In addition, several reserved properties can be used to filter markers based on their current range:
+         * with the TextBuffer.Range of the markers rather than their properties.
+         * @param properties? - An {Object} containing properties that each returned marker must satisfy. Markers can be associated with custom properties, which are compared with basic equality. In addition, several reserved properties can be used to filter markers based on their current TextBuffer.Range:
          */
         findMarkers(properties?: Object): Marker[];
 
@@ -10314,76 +10298,76 @@ declare module Atom {
         getSelectedText(): string;
 
         /**
-         * Get the {Range} of the most recently added selection in buffer
+         * Get the {TextBuffer.Range} of the most recently added selection in buffer
          * coordinates.
          */
-        getSelectedBufferRange(): Range;
+        getSelectedBufferRange(): TextBuffer.Range;
 
         /**
-         * Get the {Range}s of all selections in buffer coordinates.
+         * Get the {TextBuffer.Range}s of all selections in buffer coordinates.
          *
          * The ranges are sorted by when the selections were added. Most recent at the end.
          */
-        getSelectedBufferRanges(): Range[];
+        getSelectedBufferRanges(): TextBuffer.Range[];
 
         /**
-         * Set the selected range in buffer coordinates. If there are multiple
-         * selections, they are reduced to a single selection with the given range.
-         * @param bufferRange? - A {Range} or range-compatible {Array}.
+         * Set the selected TextBuffer.Range in buffer coordinates. If there are multiple
+         * selections, they are reduced to a single selection with the given TextBuffer.Range.
+         * @param bufferRange? - A {TextBuffer.Range} or TextBuffer.Range-compatible {Array}.
          * @param options? - An options {Object}:
          */
-        setSelectedBufferRange(bufferRange?: Range, options?: any): Range;
+        setSelectedBufferRange(bufferRange?: TextBuffer.Range, options?: any): TextBuffer.Range;
 
         /**
          * Set the selected ranges in buffer coordinates. If there are multiple
          * selections, they are replaced by new selections with the given ranges.
-         * @param bufferRanges? - An {Array} of {Range}s or range-compatible {Array}s.
+         * @param bufferRanges? - An {Array} of {TextBuffer.Range}s or TextBuffer.Range-compatible {Array}s.
          * @param options? - An options {Object}:
          */
-        setSelectedBufferRanges(bufferRanges?: Range[], options?: any): Range[];
+        setSelectedBufferRanges(bufferRanges?: TextBuffer.Range[], options?: any): TextBuffer.Range[];
 
         /**
-         * Get the {Range} of the most recently added selection in screen
+         * Get the {TextBuffer.Range} of the most recently added selection in screen
          * coordinates.
          */
-        getSelectedScreenRange(): Range;
+        getSelectedScreenRange(): TextBuffer.Range;
 
         /**
-         * Get the {Range}s of all selections in screen coordinates.
+         * Get the {TextBuffer.Range}s of all selections in screen coordinates.
          *
          * The ranges are sorted by when the selections were added. Most recent at the end.
          */
         getSelectedScreenRanges(): TextBuffer.Range[];
 
         /**
-         * Set the selected range in screen coordinates. If there are multiple
-         * selections, they are reduced to a single selection with the given range.
-         * @param screenRange? - A {Range} or range-compatible {Array}.
+         * Set the selected TextBuffer.Range in screen coordinates. If there are multiple
+         * selections, they are reduced to a single selection with the given TextBuffer.Range.
+         * @param screenRange? - A {TextBuffer.Range} or TextBuffer.Range-compatible {Array}.
          * @param options? - An options {Object}:
          */
-        setSelectedScreenRange(screenRange?: Range, options?: any): Range;
+        setSelectedScreenRange(screenRange?: TextBuffer.Range, options?: any): TextBuffer.Range;
 
         /**
          * Set the selected ranges in screen coordinates. If there are multiple
          * selections, they are replaced by new selections with the given ranges.
-         * @param screenRanges? - An {Array} of {Range}s or range-compatible {Array}s.
+         * @param screenRanges? - An {Array} of {TextBuffer.Range}s or TextBuffer.Range-compatible {Array}s.
          * @param options? - An options {Object}:
          */
-        setSelectedScreenRanges(screenRanges?: Range[], options?: any): Range[];
+        setSelectedScreenRanges(screenRanges?: TextBuffer.Range[], options?: any): TextBuffer.Range[];
 
         /**
-         * Add a selection for the given range in buffer coordinates.
-         * @param bufferRange? - A {Range}
+         * Add a selection for the given TextBuffer.Range in buffer coordinates.
+         * @param bufferRange? - A {TextBuffer.Range}
          * @param options? - An options {Object}:
          */
-        addSelectionForBufferRange(bufferRange?: Range, options?: any): Range;
+        addSelectionForBufferRange(bufferRange?: TextBuffer.Range, options?: any): TextBuffer.Range;
 
         /**
-         * Add a selection for the given range in screen coordinates.
-         * @param screenRange? - A {Range}
+         * Add a selection for the given TextBuffer.Range in screen coordinates.
+         * @param screenRange? - A {TextBuffer.Range}
          * @param options? - An options {Object}:
          */
-        addSelectionForScreenRange(screenRange?: Range, options?: any): Range;
+        addSelectionForScreenRange(screenRange?: TextBuffer.Range, options?: any): TextBuffer.Range;
 
         /**
          * Select from the current cursor position to the given position in
@@ -10573,7 +10557,7 @@ declare module Atom {
         selectToBeginningOfPreviousParagraph(): any;
 
         /**
-         * Select the range of the given marker if it is valid.
+         * Select the TextBuffer.Range of the given marker if it is valid.
          * @param marker? - A {Marker}
          */
         selectMarker(marker?: Marker): Marker;
@@ -10595,11 +10579,11 @@ declare module Atom {
         getSelectionsOrderedByBufferPosition(): TextBuffer.Point;
 
         /**
-         * Determine if a given range in buffer coordinates intersects a
+         * Determine if a given TextBuffer.Range in buffer coordinates intersects a
          * selection.
-         * @param bufferRange? - A {Range} or range-compatible {Array}.
+         * @param bufferRange? - A {TextBuffer.Range} or TextBuffer.Range-compatible {Array}.
          */
-        selectionIntersectsBufferRange(bufferRange?: Range): Range;
+        selectionIntersectsBufferRange(bufferRange?: TextBuffer.Range): TextBuffer.Range;
 
         /**
          * Add a similarly-shaped selection to the next eligible line below
@@ -10725,22 +10709,22 @@ declare module Atom {
         scan(regex?: RegExp, iterator?: Function): any;
 
         /**
-         * Scan regular expression matches in a given range, calling the given
+         * Scan regular expression matches in a given TextBuffer.Range, calling the given
          * iterator function on each match.
          * @param regex? - A {RegExp} to search for.
-         * @param range? - A {Range} in which to search.
+         * @param TextBuffer.Range? - A {TextBuffer.Range} in which to search.
          * @param iterator? - A {Function} that"s called on each match with an {Object} containing the following keys:
          */
-        scanInBufferRange(regex?: RegExp, range?: Range, iterator?: Function): Range;
+        scanInBufferRange(regex?: RegExp, range?: TextBuffer.Range, iterator?: Function): TextBuffer.Range;
 
         /**
-         * Scan regular expression matches in a given range in reverse order,
+         * Scan regular expression matches in a given TextBuffer.Range in reverse order,
          * calling the given iterator function on each match.
          * @param regex? - A {RegExp} to search for.
-         * @param range? - A {Range} in which to search.
+         * @param TextBuffer.Range? - A {TextBuffer.Range} in which to search.
          * @param iterator? - A {Function} that"s called on each match with an {Object} containing the following keys:
          */
-        backwardsScanInBufferRange(regex?: RegExp, range?: Range, iterator?: Function): Range;
+        backwardsScanInBufferRange(regex?: RegExp, range?: TextBuffer.Range, iterator?: Function): TextBuffer.Range;
 
         getSoftTabs(): boolean;
 
@@ -10782,10 +10766,10 @@ declare module Atom {
 
         /**
          * If soft tabs are enabled, convert all hard tabs to soft tabs in the given
-         * {Range}.
+         * {TextBuffer.Range}.
          * This field or method was marked private by atomdoc. Use with caution.
          */
-        normalizeTabsInBufferRange(bufferRange?: Range): Range;
+        normalizeTabsInBufferRange(bufferRange?: TextBuffer.Range): TextBuffer.Range;
 
         /**
          * Computes whether or not this editor should use softTabs based on
@@ -10903,7 +10887,7 @@ declare module Atom {
         scopeDescriptorForBufferPosition(bufferPosition?: TextBuffer.Point | { row: number; column: number } | [number, number]): TextBuffer.Point;
 
         /**
-         * Get the range in buffer coordinates of all tokens surrounding the
+         * Get the TextBuffer.Range in buffer coordinates of all tokens surrounding the
          * cursor that match the given scope selector.
          *
          * For example, if you wanted to find the string surrounding the cursor, you
@@ -11023,7 +11007,7 @@ declare module Atom {
         /**
          * Determine whether the given row in buffer coordinates is foldable.
          *
-         * A *foldable* row is a row that *starts* a row range that can be folded.
+         * A *foldable* row is a row that *starts* a row TextBuffer.Range that can be folded.
          * @param bufferRow? - A {Number}
          */
         isFoldableAtBufferRow(bufferRow?: number): number;
@@ -11031,7 +11015,7 @@ declare module Atom {
         /**
          * Determine whether the given row in screen coordinates is foldable.
          *
-         * A *foldable* row is a row that *starts* a row range that can be folded.
+         * A *foldable* row is a row that *starts* a row TextBuffer.Range that can be folded.
          */
         isFoldableAtScreenRow(screenRow?: number): number;
 
@@ -11070,16 +11054,16 @@ declare module Atom {
         destroyFoldWithId(id?: any): void;
 
         /**
-         * Remove any {Fold}s found that intersect the given buffer range.
+         * Remove any {Fold}s found that intersect the given buffer TextBuffer.Range.
          * This field or method was marked private by atomdoc. Use with caution.
          */
-        destroyFoldsIntersectingBufferRange(bufferRange?: Range): Range;
+        destroyFoldsIntersectingBufferRange(bufferRange?: TextBuffer.Range): TextBuffer.Range;
 
         /**
-         * Remove any {Fold}s found that contain the given buffer range.
+         * Remove any {Fold}s found that contain the given buffer TextBuffer.Range.
          * This field or method was marked private by atomdoc. Use with caution.
          */
-        destroyFoldsContainingBufferRange(bufferRange?: Range): Range;
+        destroyFoldsContainingBufferRange(bufferRange?: TextBuffer.Range): TextBuffer.Range;
 
         /**
          * {Delegates to: DisplayBuffer.largestFoldContainingBufferRow}
@@ -11097,7 +11081,7 @@ declare module Atom {
          * {Delegates to: DisplayBuffer.outermostFoldsForBufferRowRange}
          * This field or method was marked private by atomdoc. Use with caution.
          */
-        outermostFoldsInBufferRowRange(startRow?: number, endRow?: number): Range;
+        outermostFoldsInBufferRowRange(startRow?: number, endRow?: number): TextBuffer.Range;
 
         /**
          * Add a custom {Gutter}.
@@ -11149,7 +11133,7 @@ declare module Atom {
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        scrollToScreenRange(screenRange?: Range, options?: any): Range;
+        scrollToScreenRange(screenRange?: TextBuffer.Range, options?: any): TextBuffer.Range;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
@@ -11420,17 +11404,17 @@ declare module Atom {
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        getVisibleRowRange(): Range;
+        getVisibleRowRange(): TextBuffer.Range;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        intersectsVisibleRowRange(startRow?: number, endRow?: number): Range;
+        intersectsVisibleRowRange(startRow?: number, endRow?: number): TextBuffer.Range;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        selectionIntersectsVisibleRowRange(selection?: Selection): Range;
+        selectionIntersectsVisibleRowRange(selection?: Selection): TextBuffer.Range;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
@@ -11440,7 +11424,7 @@ declare module Atom {
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        pixelRectForScreenRange(screenRange?: Range): Range;
+        pixelRectForScreenRange(screenRange?: TextBuffer.Range): TextBuffer.Range;
 
         /**
          * Utility

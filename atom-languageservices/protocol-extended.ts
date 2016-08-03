@@ -4,13 +4,13 @@
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
 import { /* NotificationType, */ RequestType } from 'vscode-jsonrpc';
-import { CodeActionList, GetCodeActionParams, Methods, RunCodeActionParams, WorkspaceEdit } from './types-extended';
+import { CodeActionList, GetCodeActionsParams, Methods, RunCodeActionParams, WorkspaceEdit } from './types-extended';
 
 /**
  * A request to rename a symbol.
  */
-export namespace GetCodeActionRequest {
-    export const type: RequestType<GetCodeActionParams, CodeActionList, void> = { get method() { return Methods.Extended.GetCodeActionRequest; } };
+export namespace GetCodeActionsRequest {
+    export const type: RequestType<GetCodeActionsParams, CodeActionList, void> = { get method() { return Methods.Extended.GetCodeActionsRequest; } };
 }
 
 /**

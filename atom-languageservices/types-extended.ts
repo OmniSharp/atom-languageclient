@@ -6,20 +6,17 @@
  */
 
 /* tslint:disable */
-import { CodeActionContext, CodeActionParams, ServerCapabilities, TextDocumentIdentifier } from './types';
+import { CodeActionContext, CodeActionParams, Range, ServerCapabilities as BaseServerCapabilities, TextDocumentIdentifier } from './types';
 export * from './types';
 
-export interface ServerCapabilities {
+export interface ServerCapabilities extends BaseServerCapabilities {
     extended: {
-        serverCodeActionProvider?: ServerCodeActionOptions;
+        getCodeActionsProvider?: boolean;
+        runCodeActionProvider?: boolean;
     }
 }
 
-export interface ServerCodeActionOptions {
-    resolver?: boolean;
-}
-
-export interface GetCodeActionParams {
+export interface GetCodeActionsParams {
     /**
      * The document in which the command was invoked.
      */
@@ -45,16 +42,16 @@ export interface CodeAction {
     identifier: string;
 }
 
-export interface RunCodeActionParams extends GetCodeActionParams {
+export interface RunCodeActionParams extends GetCodeActionsParams {
     /**
      * The identifier of the code action to execute
      */
-    identifier: number;
+    identifier: string;
 }
 
 export namespace Methods {
     export namespace Extended {
-        export const GetCodeActionRequest = '__extended/textDocument/getCodeAction'
+        export const GetCodeActionsRequest = '__extended/textDocument/getCodeActions'
         export const RunCodeActionRequest = '__extended/textDocument/runCodeAction'
     }
 }

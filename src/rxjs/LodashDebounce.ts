@@ -48,7 +48,7 @@ class LodashDebounceSubscriber<T> extends Subscriber<T> {
     constructor(destination: Subscriber<T>, duration: number, options: DebounceOptions) {
         super(destination);
         this._duration = duration;
-        this._method = debounce(bind(this._dispatchNext, this));
+        this._method = debounce(bind(this._dispatchNext, this), duration, options);
     }
 
     /* tslint:disable-next-line */

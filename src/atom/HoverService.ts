@@ -174,6 +174,7 @@ export class HoverService
         this._view.updatePosition(rect, this._editorView);
         this.invoke({ editor: this._editor!, location: bufferPt })
             .scan((acc, result) => acc.concat(result), [])
+            .map(rows => _.filter(rows, row => !!row.text))
             .subscribe(rows => {
                 const lines = _.map(rows, row => {
                     return `${row.text}<br/>${row.description}`;

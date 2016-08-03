@@ -3,7 +3,7 @@
  *  @copyright OmniSharp Team
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
-import { ServerCapabilities } from 'atom-languageservices/types';
+import { ServerCapabilities } from 'atom-languageservices/types-extended';
 import { CancellationToken, NotificationHandler, NotificationType, RequestHandler, RequestType } from 'vscode-jsonrpc';
 import { ClientState, ILanguageProtocolClientOptions } from './ILanguageProtocolClientOptions';
 /* tslint:disable:variable-name no-any */
