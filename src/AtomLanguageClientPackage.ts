@@ -32,8 +32,13 @@ export class AtomLanguageClientPackage implements IAtomPackage<AtomLanguageClien
         this._container = new Container();
         this._disposable = new CompositeDisposable();
         this._settings = settings instanceof AtomLanguageClientSettings ? settings : new AtomLanguageClientSettings(settings);
+        let resolveActivate: () => void;
+        /* tslint:disable-next-line */
+        const activated = new Promise<void>((resolve) => {
+            resolveActivate = resolve;
+        });
 
-        this._atomLanguageProvider = new LanguageProvider(this._container);
+        this._atomLanguageProvider = new LanguageProvider(this._container, activated);
         this._atomLanguageService = new LanguageService(this._container);
         this._atomAutocompleteProvider = new AutocompleteService();
         this._atomLinterProvider = new LinterService();
@@ -72,7 +77,7 @@ export class AtomLanguageClientPackage implements IAtomPackage<AtomLanguageClien
                 .toPromise()
                 .then(() => {
                     this._container.registerInterfaceSymbols();
-                });
+                }).then(() => resolveActivate());
 
         this.activated = activateServices;
 

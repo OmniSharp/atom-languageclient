@@ -64,7 +64,7 @@ class RunCodeActionProvider extends DisposableBase implements IRunCodeActionProv
             context: options.context
         };
 
-        return Observable.fromPromise(this._client.sendRequest(RunCodeActionRequest.type, params))
+        return this._client.sendRequest(RunCodeActionRequest.type, params)
             .map(fromWorkspaceEdit);
     }
 }

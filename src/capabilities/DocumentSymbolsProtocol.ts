@@ -55,11 +55,9 @@ class DocumentFinderProvider extends DisposableBase implements IDocumentFinderPr
             return Observable.empty<Finder.IResponse[]>();
         }
 
-        return Observable.fromPromise(
-            this._client.sendRequest(DocumentSymbolRequest.type, {
-                textDocument: TextDocumentIdentifier.create(toUri(editor!.getURI()))
-            })
-        ).map(results => {
+        return this._client.sendRequest(DocumentSymbolRequest.type, {
+            textDocument: TextDocumentIdentifier.create(toUri(editor!.getURI()))
+        }).map(results => {
             return _.map(results, result => this._makeSymbol(result));
         });
     }

@@ -58,7 +58,7 @@ class LanguageProtocolDefinitionProvider extends DisposableBase implements IDefi
             textDocument: TextDocumentIdentifier.create(toUri(options.editor!.getURI())),
             position: Position.create(options.location.row, options.location.column)
         };
-        return Observable.fromPromise(this._client.sendRequest(DefinitionRequest.type, params))
+        return this._client.sendRequest(DefinitionRequest.type, params)
             .map(response => {
                 if (_.isArray(response)) {
                     return _.map(response, location => {

@@ -54,12 +54,11 @@ class GetCodeActionsProvider extends DisposableBase implements IGetCodeActionsPr
             return Observable.empty<GetCodeActions.IResponse[]>();
         }
 
-        return Observable.fromPromise(
-            this._client.sendRequest(GetCodeActionsRequest.type, {
-                textDocument: TextDocumentIdentifier.create(toUri(options.editor.getURI())),
-                range: toRange(options.range),
-                context: {}
-            }))
+        return this._client.sendRequest(GetCodeActionsRequest.type, {
+            textDocument: TextDocumentIdentifier.create(toUri(options.editor.getURI())),
+            range: toRange(options.range),
+            context: {}
+        })
             .map(response => {
                 return _.map(response.codeActions, action => {
                     return {

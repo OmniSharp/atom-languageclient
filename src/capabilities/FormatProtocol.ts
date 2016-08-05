@@ -69,7 +69,7 @@ class FormatRangeProvider extends DisposableBase implements IFormatProvider {
             }
         };
 
-        return Observable.fromPromise(this._client.sendRequest(DocumentRangeFormattingRequest.type, params))
+        return this._client.sendRequest(DocumentRangeFormattingRequest.type, params)
             .map(fromTextEdits);
     }
 }
@@ -101,7 +101,7 @@ class FormatDocumentProvider extends DisposableBase implements IFormatProvider {
             }
         };
 
-        return Observable.fromPromise(this._client.sendRequest(DocumentFormattingRequest.type, params))
+        return this._client.sendRequest(DocumentFormattingRequest.type, params)
             .map(fromTextEdits);
     }
 }

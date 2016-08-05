@@ -53,15 +53,13 @@ class HoverProvider extends DisposableBase implements IHoverProvider {
             return Observable.empty<Hover.IResponse>();
         }
 
-        return Observable.fromPromise(
-            this._client.sendRequest(HoverRequest.type, {
-                textDocument: TextDocumentIdentifier.create(toUri(options.editor.getURI())),
-                position: Position.create(options.location.row, options.location.column)
-            })
-        ).map(result => {
+        return this._client.sendRequest(HoverRequest.type, {
+            textDocument: TextDocumentIdentifier.create(toUri(options.editor.getURI())),
+            position: Position.create(options.location.row, options.location.column)
+        }).map(result => {
             return this._makeSymbol(result);
         })
-        .filter(x => !!x);
+            .filter(x => !!x);
     }
 
     private _getString(markedString: MarkedString) {

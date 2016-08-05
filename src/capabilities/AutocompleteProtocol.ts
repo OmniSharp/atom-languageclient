@@ -4,6 +4,7 @@
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
 import * as _ from 'lodash';
+import { Observable } from 'rxjs';
 import { Autocomplete, IAutocompleteProvider, IAutocompleteService, ILanguageProtocolClient, ISyncExpression } from 'atom-languageservices';
 import { capability, inject } from 'atom-languageservices/decorators';
 import { CompletionRequest } from 'atom-languageservices/protocol';
@@ -57,7 +58,7 @@ class AutocompleteService extends DisposableBase implements IAutocompleteProvide
 
     public request(options: Autocomplete.IRequest) {
         if (!this._syncExpression.evaluate(options.editor)) {
-            return;
+            return Observable.empty<Autocomplete.Suggestion[]>();
         }
         const {editor, bufferPosition} = options;
 
@@ -67,7 +68,7 @@ class AutocompleteService extends DisposableBase implements IAutocompleteProvide
         };
 
         return this._client.sendRequest(CompletionRequest.type, params)
-            .then(response => {
+            .map(response => {
                 let items: CompletionItem[];
                 if (isCompletionList(response)) {
                     // TODO: How to merge incomplete?

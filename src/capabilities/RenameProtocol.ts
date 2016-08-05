@@ -63,7 +63,7 @@ class RenameProvider extends DisposableBase implements IRenameProvider {
             newName: options.word
         };
 
-        return Observable.fromPromise(this._client.sendRequest(RenameRequest.type, params))
+        return this._client.sendRequest(RenameRequest.type, params)
             .map(fromWorkspaceEdit);
     }
 }

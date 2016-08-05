@@ -5,6 +5,7 @@
  */
 /* tslint:disable:no-any */
 import * as _ from 'lodash';
+import { Observable } from 'rxjs';
 /* tslint:disable-next-line:no-require-imports */
 import { Autocomplete, IAutocompleteProvider, IAutocompleteService } from 'atom-languageservices';
 import * as Fuse from 'fuse.js';
@@ -12,22 +13,22 @@ import { ProviderServiceBase } from './_ProviderServiceBase';
 import { className, packageName } from '../constants';
 
 export class AutocompleteService
-    extends ProviderServiceBase<IAutocompleteProvider, Autocomplete.IRequest, Promise<Autocomplete.Suggestion[]> | undefined, Promise<Autocomplete.Suggestion[]>>
+    extends ProviderServiceBase<IAutocompleteProvider, Autocomplete.IRequest, Observable<Autocomplete.Suggestion[]>, Observable<Autocomplete.Suggestion[]>>
     implements IAutocompleteService {
     constructor() {
         super();
     }
 
-    protected createInvoke(callbacks: ((options: Autocomplete.IRequest) => Promise<Autocomplete.Suggestion[]> | undefined)[]) {
+    protected createInvoke(callbacks: ((options: Autocomplete.IRequest) => Observable<Autocomplete.Suggestion[]>)[]) {
         return ((options: Autocomplete.IRequest) => {
-            const requests = _.compact(_.over(callbacks)(options));
-            return Promise.all<Autocomplete.Suggestion[]>(<any>requests)
-                .then(_.bind(this._reduceItems, this));
+            return Observable.from(_.over(callbacks)(options))
+                .mergeMap(_.identity)
+                .reduce((acc, results) => _.compact(acc.concat(this._reduceItems(results))), []);
         });
     }
 
-    private _reduceItems(results: Autocomplete.Suggestion[][]) {
-        return _.flatMap<Autocomplete.Suggestion[], Autocomplete.Suggestion>(results, item => {
+    private _reduceItems(results: Autocomplete.Suggestion[]) {
+        return _.map<Autocomplete.Suggestion[], Autocomplete.Suggestion>(results, item => {
             if (item.length > 0) {
                 if (item[0].iconHTML) {
                     return item;
@@ -63,7 +64,7 @@ export class AutocompleteService
         ]
     });
 
-    public getSuggestions(options: Autocomplete.IRequest): Promise<Autocomplete.Suggestion[]> | null {
+    public getSuggestions(options: Autocomplete.IRequest): Observable<Autocomplete.Suggestion[]> | null {
         if (!this.hasProviders) {
             return null;
         }
@@ -77,7 +78,7 @@ export class AutocompleteService
         const search = options.prefix;
 
         return this.invoke(options)
-            .then(results => {
+            .map(results => {
                 if (search) {
                     this._fuse.set(results);
                     results = this._fuse.search<Autocomplete.Suggestion>(search);

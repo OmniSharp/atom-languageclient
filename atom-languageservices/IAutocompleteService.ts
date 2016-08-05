@@ -3,6 +3,7 @@
  *  @copyright OmniSharp Team
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
+import { Observable } from 'rxjs';
 import { IDisposable } from 'ts-disposables';
 import { CompletionItem, CompletionItemKind, SymbolKind } from './types';
 /* tslint:disable:variable-name no-any */
@@ -19,7 +20,7 @@ export interface IAutocompleteService {
 }
 
 export interface IAutocompleteProvider extends IDisposable {
-    request(params: Autocomplete.IRequest): Promise<Autocomplete.Suggestion[]> | undefined;
+    request(params: Autocomplete.IRequest): Observable<Autocomplete.Suggestion[]>;
 }
 
 export namespace Autocomplete {

@@ -21,14 +21,23 @@ export class LanguageProvider extends DisposableBase {
     private _container: Container;
     private _atomTextEditorSource: AtomTextEditorSource;
     private _connections: Map<ILanguageProvider, Set<ILanguageProtocolClient>>;
+    private _activated: boolean;
+    private _activatedPromise: Promise<void>;
 
-    constructor(container: Container) {
+    constructor(container: Container, activated: Promise<void>) {
         super();
         this._container = container;
         this._connections = new Map<ILanguageProvider, Set<ILanguageProtocolClient>>();
+        this._activatedPromise = activated;
+        activated.then(() => this._activated = true);
     }
 
     public add(provider: ILanguageProvider): void {
+        if (!this._activated) {
+            this._activatedPromise.then(() => this.add(provider));
+            return;
+        }
+
         if (!this._atomTextEditorSource) {
             this._atomTextEditorSource = this._container.resolve(AtomTextEditorSource);
         }

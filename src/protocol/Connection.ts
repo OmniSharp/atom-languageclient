@@ -48,7 +48,7 @@ export interface IConnection {
 
     listen(): void;
 
-    sendRequest<P, R, E>(type: RequestType<P, R, E>, params: P, token?: CancellationToken): Promise<R>;
+    sendRequest<P, R, E>(type: RequestType<P, R, E>, params: P, token: CancellationToken): Promise<R>;
     sendNotification<P>(type: NotificationType<P>, params: P): void;
     onNotification<P>(type: NotificationType<P>, handler: NotificationHandler<P>): void;
     onRequest<P, R, E>(type: RequestType<P, R, E>, handler: RequestHandler<P, R, E>): void;
@@ -246,7 +246,7 @@ export class Connection implements IConnection {
         this._connection.listen();
     }
 
-    public sendRequest<P, R, E>(type: RequestType<P, R, E>, params: P, token?: CancellationToken) {
+    public sendRequest<P, R, E>(type: RequestType<P, R, E>, params: P, token: CancellationToken) {
         return this._connection.sendRequest(type, params, token);
     }
 

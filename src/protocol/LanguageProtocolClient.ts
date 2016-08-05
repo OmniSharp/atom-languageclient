@@ -4,13 +4,15 @@
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
 /* tslint:disable:no-any */
+import { Observable } from 'rxjs';
 import { ClientState, IDocumentDelayer, ILanguageProtocolClient, ILanguageProtocolClientOptions, IProjectProvider, ISyncExpression } from 'atom-languageservices';
 import { inject } from 'atom-languageservices/decorators';
 import { ShowMessageRequest } from 'atom-languageservices/protocol';
 import { InitializeError, InitializeParams, InitializeResult, MessageType } from 'atom-languageservices/types';
 import { ServerCapabilities } from 'atom-languageservices/types-extended';
 import { Disposable, DisposableBase } from 'ts-disposables';
-import { CancellationToken, ErrorCodes, NotificationHandler, NotificationType, RequestHandler, RequestType, ResponseError } from 'vscode-jsonrpc';
+import { CancellationTokenSource, ErrorCodes, NotificationHandler, NotificationType, RequestHandler, RequestType, ResponseError } from 'vscode-jsonrpc';
+import { observePromise } from '../helpers/observePromise';
 import { IConnection } from './Connection';
 
 export class LanguageProtocolClient extends DisposableBase implements ILanguageProtocolClient {
@@ -169,16 +171,17 @@ export class LanguageProtocolClient extends DisposableBase implements ILanguageP
         return this._state === ClientState.Running;
     }
 
-    public sendRequest<P, R, E>(type: RequestType<P, R, E>, params: P, token?: CancellationToken): Thenable<R> {
-        return this._doSendRequest(this._connection, type, params, token);
+    public sendRequest<P, R, E>(type: RequestType<P, R, E>, params: P): Observable<R> {
+        return this._doSendRequest<P, R>(this._connection, type, params);
     }
 
-    private _doSendRequest<P, R>(connection: IConnection, type: { method: string; }, params: P, token?: CancellationToken): Thenable<R> {
+    private _doSendRequest<P, R>(connection: IConnection, type: { method: string; }, params: P): Observable<R> {
         if (this._isConnectionActive) {
             this._documentDelayer.force();
-            return connection.sendRequest(<any>type, params, token);
+            return observePromise<R>((token) => connection.sendRequest(<any>type, params, token));
+            // return connection.sendRequest(<any>type, params, token);
         } else {
-            return Promise.reject<R>(new ResponseError(ErrorCodes.InternalError, 'Connection is closed.'));
+            return Observable.throw<R>(new ResponseError(ErrorCodes.InternalError, 'Connection is closed.'));
         }
     }
 

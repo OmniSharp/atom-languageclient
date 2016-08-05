@@ -21,7 +21,7 @@ export class CodeActionView extends FilterSelectListView<GetCodeActions.IRespons
         this.root.classList.add('code-actions-overlay');
 
         this._decoration = editor.decorateMarker(
-            this._filterEditor.getLastCursor().getMarker(),
+            editor.getLastCursor().getMarker(),
             { type: 'overlay', position: 'tail', item: this.root }
         );
 

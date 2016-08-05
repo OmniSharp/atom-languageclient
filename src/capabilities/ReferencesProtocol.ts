@@ -63,7 +63,7 @@ class LanguageProtocolReferencesProvider extends DisposableBase implements IRefe
             textDocument: TextDocumentIdentifier.create(toUri(editor!.getURI())),
             position: Position.create(marker.row, marker.column)
         };
-        return Observable.fromPromise(this._client.sendRequest(ReferencesRequest.type, params))
+        return this._client.sendRequest(ReferencesRequest.type, params)
             .map(response => {
                 return _.map(response, location => {
                     return {
