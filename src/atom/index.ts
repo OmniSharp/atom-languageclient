@@ -5,6 +5,7 @@
  */
 export * from './AtomTextEditorSource';
 export * from './AutocompleteService';
+export * from './CommandsService';
 export * from './DocumentFinderService';
 export * from './LinterService';
 export * from './ProjectProvider';

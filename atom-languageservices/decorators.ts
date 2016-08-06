@@ -6,6 +6,7 @@
 export { all, autoinject as injectable, /* factory, */ inject, lazy, newInstance, /* options, */ parent } from 'aurelia-dependency-injection';
 import { metadata } from 'aurelia-metadata';
 import * as symbols from './symbols';
+import { ServerCapabilities } from './types-extended';
 /* tslint:disable:no-any */
 
 /**
@@ -20,8 +21,11 @@ export function key(key: any) {
 /**
  * Decorator: Specifies the key to register this instance with in the container
  */
-export function capability(target: any) {
-    metadata.define(symbols.capability, true, target);
+export function capability(isCompatible?: (serverCapabilities: ServerCapabilities) => boolean) {
+    return (target: any) => {
+        metadata.define(symbols.capability, true, target);
+        metadata.define(symbols.isCompatible, true, isCompatible || (() => true));
+    };
 }
 
 /**

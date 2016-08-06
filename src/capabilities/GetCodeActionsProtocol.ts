@@ -13,7 +13,7 @@ import * as toUri from 'file-url';
 import { DisposableBase } from 'ts-disposables';
 import { fromWorkspaceEdit, toRange } from './utils/convert';
 
-@capability
+@capability((capabilities) => !!capabilities.extended.getCodeActionsProvider)
 export class GetCodeActionsProtocol extends DisposableBase {
     private _client: ILanguageProtocolClient;
     private _syncExpression: ISyncExpression;
@@ -27,9 +27,6 @@ export class GetCodeActionsProtocol extends DisposableBase {
         this._client = client;
         this._getCodeActionsService = finderService;
         this._syncExpression = syncExpression;
-        if (!client.capabilities.extended.getCodeActionsProvider) {
-            return;
-        }
 
         // TODO: Handle trigger characters
         const service = new GetCodeActionsProvider(client, syncExpression);

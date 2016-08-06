@@ -11,7 +11,7 @@ import { Diagnostic, DiagnosticSeverity, PublishDiagnosticsParams } from 'atom-l
 import { DisposableBase } from 'ts-disposables';
 import { fromRange, fromUri } from './utils/convert';
 
-@capability
+@capability()
 export class LinterProtocol extends DisposableBase {
     private _client: ILanguageProtocolClient;
     private _linterService: ILinterService;

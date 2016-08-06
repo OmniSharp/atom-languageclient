@@ -5,12 +5,14 @@
  */
 import * as _ from 'lodash';
 import { Observable } from 'rxjs';
-import { Finder, IDocumentFinderProvider, IDocumentFinderService } from 'atom-languageservices';
+import { CommandType, Finder, IDocumentFinderProvider, IDocumentFinderService, KeymapPlatform, KeymapType } from 'atom-languageservices';
 import { alias, injectable } from 'atom-languageservices/decorators';
 import { ProviderServiceBase } from './_ProviderServiceBase';
 import { AtomCommands } from './AtomCommands';
+import { AtomLanguageClientConfig } from '../AtomLanguageClientConfig';
 import { AtomNavigation } from './AtomNavigation';
 import { AtomTextEditorSource } from './AtomTextEditorSource';
+import { CommandsService } from './CommandsService';
 import { DocumentFinderView } from './views/DocumentFinderView';
 
 @injectable
@@ -19,14 +21,23 @@ export class DocumentFinderService
     extends ProviderServiceBase<IDocumentFinderProvider, Atom.TextEditor, Observable<Finder.IResponse[]>, Observable<Finder.IResponse[]>>
     implements IDocumentFinderService {
     private _navigation: AtomNavigation;
-    private _commands: AtomCommands;
+    private _commands: CommandsService;
+    private _atomCommands: AtomCommands;
     private _source: AtomTextEditorSource;
 
-    constructor(navigation: AtomNavigation, commands: AtomCommands, source: AtomTextEditorSource) {
-        super();
+    constructor(packageConfig: AtomLanguageClientConfig, navigation: AtomNavigation, commands: CommandsService, atomCommands: AtomCommands, source: AtomTextEditorSource) {
+        super(DocumentFinderService, packageConfig, {
+            default: true,
+            description: 'Adds support for showing document symbols'
+        });
         this._navigation = navigation;
         this._commands = commands;
+        this._atomCommands = atomCommands;
         this._source = source;
+    }
+
+    protected onEnabled() {
+        return this._commands.add(CommandType.TextEditor, 'document-symbols', 'ctrl-shift-,', () => this.open());
     }
 
     protected createInvoke(callbacks: ((options: Atom.TextEditor) => Observable<Finder.IResponse[]>)[]) {
@@ -47,7 +58,7 @@ export class DocumentFinderService
     public open() {
         const activeEditor = this._source.activeTextEditor;
         if (activeEditor) {
-            this._disposable.add(new DocumentFinderView(this._commands, this._navigation, this.invoke(activeEditor)));
+            this._disposable.add(new DocumentFinderView(this._atomCommands, this._navigation, this.invoke(activeEditor)));
         }
     }
 }

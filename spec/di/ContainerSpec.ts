@@ -73,21 +73,21 @@ describe(Container.name, () => {
     });
 
     describe('capabilities', () => {
-        @capability
+        @capability()
         class CapabilityA {
             constructor( @inject(ILanguageProtocolClient) value: any) { /* */ }
             public a = 1;
         }
 
-        @capability
+        @capability()
         class CapabilityB {
             constructor( @inject(ILanguageProtocolClient) value: any) { /* */ }
             public a = 1;
         }
 
-        @capability
+        @capability(() => false)
         class CapabilityC {
-            constructor(value: any) { /* */ }
+            constructor(@inject(ILanguageProtocolClient) value: any) { /* */ }
             public a = 1;
         }
 

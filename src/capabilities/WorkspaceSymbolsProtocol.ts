@@ -13,7 +13,7 @@ import { DisposableBase } from 'ts-disposables';
 import { packageName } from '../constants';
 import { fromPosition, fromUri } from './utils/convert';
 
-@capability
+@capability((capabilities) => !!capabilities.workspaceSymbolProvider)
 export class WorkspaceSymbolsProtocol extends DisposableBase {
     private _client: ILanguageProtocolClient;
     private _finderService: IWorkspaceFinderService;
@@ -24,9 +24,6 @@ export class WorkspaceSymbolsProtocol extends DisposableBase {
         super();
         this._client = client;
         this._finderService = finderService;
-        if (!client.capabilities.workspaceSymbolProvider) {
-            return;
-        }
 
         // TODO: Handle trigger characters
         const service = new WorkspaceFinderService(client);

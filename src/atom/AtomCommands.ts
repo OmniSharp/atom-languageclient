@@ -4,24 +4,21 @@
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
 import * as _ from 'lodash';
-import { AtomCommands as ATOM_COMMANDS, IAtomCommands } from 'atom-languageservices';
+import { CommandType, IAtomCommands } from 'atom-languageservices';
 import { alias, injectable } from 'atom-languageservices/decorators';
 import { CompositeDisposable, DisposableBase, IDisposable } from 'ts-disposables';
 import { packageName } from '../constants';
-type CommandType = ATOM_COMMANDS.CommandType;
-type CommandObject = ATOM_COMMANDS.CommandObject;
-type EventCallback = ATOM_COMMANDS.EventCallback;
 
-@injectable
-@alias(IAtomCommands)
-export class AtomCommands extends DisposableBase implements IAtomCommands {
-    constructor() {
+export class PrefixAtomCommands extends DisposableBase implements IAtomCommands {
+    private _prefix: string;
+    constructor(prefix: string) {
         super();
+        this._prefix = prefix;
     }
 
-    public add(target: (string | CommandType | Node), commands: CommandObject): IDisposable;
-    public add(target: (string | CommandType | Node), commandName: string, callback: EventCallback): IDisposable;
-    public add(target: (string | CommandType | Node), commandsOrName: string | CommandObject, callback?: EventCallback) {
+    public add(target: (string | CommandType | Node), commands: IAtomCommands.CommandObject): IDisposable;
+    public add(target: (string | CommandType | Node), commandName: string, callback: IAtomCommands.EventCallback): IDisposable;
+    public add(target: (string | CommandType | Node), commandsOrName: string | IAtomCommands.CommandObject, callback?: IAtomCommands.EventCallback) {
         const cd = new CompositeDisposable();
         this._disposable.add(cd);
         cd.add(() => this._disposable.remove(cd));
@@ -38,6 +35,12 @@ export class AtomCommands extends DisposableBase implements IAtomCommands {
         return cd;
     }
 
+    public for(packageName: string) {
+        const result = new PrefixAtomCommands(packageName);
+        this._disposable.add(result);
+        return result;
+    }
+
     private _getKey(key: string) {
         // only one : is strictly allowed
         // In this case they are binding to a specific command, not package specific.
@@ -50,13 +53,21 @@ export class AtomCommands extends DisposableBase implements IAtomCommands {
     private _getCommandType(command: string | CommandType | Node) {
         if (typeof command === 'number') {
             switch (command) {
-                case ATOM_COMMANDS.CommandType.TextEditor:
+                case CommandType.TextEditor:
                     return 'atom-text-editor';
-                case ATOM_COMMANDS.CommandType.Workspace:
+                case CommandType.Workspace:
                 default:
                     return 'atom-workspace';
             }
         }
         return command;
+    }
+}
+
+@injectable
+@alias(IAtomCommands)
+export class AtomCommands extends PrefixAtomCommands {
+    constructor() {
+        super(packageName);
     }
 }

@@ -3,7 +3,7 @@
  *  @copyright OmniSharp Team
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
-// import * as _ from 'lodash';
+import * as _ from 'lodash';
 // import { Observable } from 'rxjs';
 import { Delayer, IDocumentDelayer, ILanguageProtocolClient, ILanguageProtocolClientOptions, ILanguageProvider, ISyncExpression } from 'atom-languageservices';
 import { CompositeDisposable, DisposableBase } from 'ts-disposables';
@@ -109,7 +109,7 @@ export class LanguageProvider extends DisposableBase {
             cd.add(connection, client);
             return client.start().then(() => client);
         }).then(() => {
-            const disposables = container.resolveEach(capabilities);
+            const disposables = container.resolveEach(_.filter(capabilities, c => c.isCompatible(client.capabilities)));
             for (const item of disposables) {
                 if (item instanceof Error) {
                     console.error(item, item.innerError);

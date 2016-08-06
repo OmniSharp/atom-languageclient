@@ -5,21 +5,22 @@
  */
 import * as _ from 'lodash';
 import { Observable, Subscription } from 'rxjs';
-import * as Services from 'atom-languageservices';
+import { CommandType, Hover, IHoverProvider, IHoverService } from 'atom-languageservices';
 import { alias, injectable } from 'atom-languageservices/decorators';
 import { CompositeDisposable, IDisposable } from 'ts-disposables';
 import { ProviderServiceBase } from './_ProviderServiceBase';
-import { AtomCommands } from './AtomCommands';
+import { AtomLanguageClientConfig } from '../AtomLanguageClientConfig';
 import { AtomTextEditorSource } from './AtomTextEditorSource';
 import { AtomViewFinder } from './AtomViewFinder';
+import { CommandsService } from './CommandsService';
 import { HoverView, IHoverPosition } from './views/HoverView';
 
 @injectable()
-@alias(Services.IHoverService)
+@alias(IHoverService)
 export class HoverService
-    extends ProviderServiceBase<Services.IHoverProvider, Services.Hover.IRequest, Observable<Services.Hover.IResponse>, Observable<Services.Hover.IResponse[]>>
-    implements Services.IHoverService {
-    private _commands: AtomCommands;
+    extends ProviderServiceBase<IHoverProvider, Hover.IRequest, Observable<Hover.IResponse>, Observable<Hover.IResponse[]>>
+    implements IHoverService {
+    private _commands: CommandsService;
     private _textEditorSource: AtomTextEditorSource;
     private _viewFinder: AtomViewFinder;
 
@@ -32,23 +33,28 @@ export class HoverService
     private _keydown: Observable<KeyboardEvent>;
     private _keydownSubscription: Subscription | undefined;
 
-    constructor(commands: AtomCommands, textEditorSource: AtomTextEditorSource, viewFinder: AtomViewFinder) {
-        super();
+    constructor(packageConfig: AtomLanguageClientConfig, commands: CommandsService, textEditorSource: AtomTextEditorSource, viewFinder: AtomViewFinder) {
+        super(HoverService, packageConfig, {
+            default: true,
+            description: 'Adds support for getting lookup info on hover / key press'
+        });
         this._commands = commands;
         this._textEditorSource = textEditorSource;
         this._viewFinder = viewFinder;
 
         this._view = new HoverView();
+    }
 
-        this._disposable.add(
-            this._commands.add(Services.AtomCommands.CommandType.TextEditor, `hover`, () => this.showOnCommand()),
+    protected onEnabled() {
+        return new CompositeDisposable(
+            this._commands.add(CommandType.TextEditor, `lookup`, 'f1', () => this.showOnCommand()),
             this._textEditorSource.observeActiveTextEditor
                 .subscribe(_.bind(this._setupView, this))
         );
     }
 
-    protected createInvoke(callbacks: ((options: Services.Hover.IRequest) => Observable<Services.Hover.IResponse>)[]) {
-        return (options: Services.Hover.IRequest) => {
+    protected createInvoke(callbacks: ((options: Hover.IRequest) => Observable<Hover.IResponse>)[]) {
+        return (options: Hover.IRequest) => {
             return Observable.from(_.over(callbacks)(options))
                 .mergeMap(_.identity)
                 .scan((acc, results) => _.compact(acc.concat(results)), []);

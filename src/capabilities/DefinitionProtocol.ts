@@ -13,7 +13,7 @@ import * as toUri from 'file-url';
 import { DisposableBase } from 'ts-disposables';
 import { fromRange, fromUri } from './utils/convert';
 
-@capability
+@capability((capabilities) => !!capabilities.definitionProvider)
 export class DefinitionProtocol extends DisposableBase {
     private _client: ILanguageProtocolClient;
     private _syncExpression: ISyncExpression;
@@ -27,13 +27,12 @@ export class DefinitionProtocol extends DisposableBase {
         this._client = client;
         this._syncExpression = syncExpression;
         this._definitionService = definitionService;
-        if (!client.capabilities.definitionProvider) {
-            return;
-        }
 
         const service = new LanguageProtocolDefinitionProvider(this._client, this._syncExpression);
-        this._disposable.add(service);
-        this._definitionService.registerProvider(service);
+        this._disposable.add(
+            service,
+            this._definitionService.registerProvider(service)
+        );
     }
 }
 

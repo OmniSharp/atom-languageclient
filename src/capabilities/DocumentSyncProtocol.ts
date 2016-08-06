@@ -11,7 +11,7 @@ import { DisposableBase } from 'ts-disposables';
 import { AtomTextEditorSource } from '../atom/AtomTextEditorSource';
 import { TextEditorSyncProtocol } from './TextEditorSyncProtocol';
 
-@capability
+@capability((capabilities) => capabilities.textDocumentSync !== TextDocumentSyncKind.None)
 export class DocumentSyncProtocol extends DisposableBase {
     private _client: ILanguageProtocolClient;
     private _atomTextEditorSource: AtomTextEditorSource;
@@ -30,7 +30,6 @@ export class DocumentSyncProtocol extends DisposableBase {
         atomTextEditorSource: AtomTextEditorSource
     ) {
         super();
-        if (client.capabilities.textDocumentSync === TextDocumentSyncKind.None) { return; }
         this._client = client;
         this._syncExpression = syncExpression;
         this._documentDelayer = documentDelayer;

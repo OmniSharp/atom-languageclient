@@ -12,7 +12,7 @@ import { Hover as THover, MarkedString, Position, TextDocumentIdentifier } from 
 import * as toUri from 'file-url';
 import { DisposableBase } from 'ts-disposables';
 
-@capability
+@capability((capabilities) => !!capabilities.hoverProvider)
 export class HoverProtocol extends DisposableBase {
     private _client: ILanguageProtocolClient;
     private _syncExpression: ISyncExpression;
@@ -26,9 +26,6 @@ export class HoverProtocol extends DisposableBase {
         this._client = client;
         this._hoverService = finderService;
         this._syncExpression = syncExpression;
-        if (!client.capabilities.hoverProvider) {
-            return;
-        }
 
         // TODO: Handle trigger characters
         const service = new HoverProvider(client, syncExpression);

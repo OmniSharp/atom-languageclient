@@ -13,7 +13,7 @@ import { DisposableBase } from 'ts-disposables';
 import { fromWorkspaceEdit, toPosition } from './utils/convert';
 import { DocumentSyncProtocol } from './DocumentSyncProtocol';
 
-@capability
+@capability((capabilities) => !!capabilities.renameProvider)
 export class RenameProtocol extends DisposableBase {
     private _client: ILanguageProtocolClient;
     private _syncExpression: ISyncExpression;
@@ -32,9 +32,6 @@ export class RenameProtocol extends DisposableBase {
         this._syncExpression = syncExpression;
         this._documentSyncProtocol = documentSyncProtocol;
 
-        if (!this._client.capabilities.renameProvider) {
-            return;
-        }
         const service = new RenameProvider(client, syncExpression, documentSyncProtocol);
         this._disposable.add(service);
         this._renameService.registerProvider(service);

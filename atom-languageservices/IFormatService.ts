@@ -19,7 +19,7 @@ export interface IFormatProvider extends IDisposable {
 
 export namespace Format {
     /* tslint:disable-next-line:no-any */
-    export function formatRange(options: any): options is IRangeRequest {
+    export function formatHasRange(options: any): options is IRangeRequest {
         return !!options.range;
     }
     export interface IRequestBase {

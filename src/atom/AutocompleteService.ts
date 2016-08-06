@@ -9,14 +9,27 @@ import { Observable } from 'rxjs';
 /* tslint:disable-next-line:no-require-imports */
 import { Autocomplete, IAutocompleteProvider, IAutocompleteService } from 'atom-languageservices';
 import * as Fuse from 'fuse.js';
+import { Disposable } from 'ts-disposables';
 import { ProviderServiceBase } from './_ProviderServiceBase';
 import { className, packageName } from '../constants';
+import { AtomLanguageClientConfig } from '../AtomLanguageClientConfig';
 
 export class AutocompleteService
     extends ProviderServiceBase<IAutocompleteProvider, Autocomplete.IRequest, Observable<Autocomplete.Suggestion[]>, Observable<Autocomplete.Suggestion[]>>
     implements IAutocompleteService {
-    constructor() {
-        super();
+    private _enabled: boolean;
+    constructor(packageConfig: AtomLanguageClientConfig) {
+        super(AutocompleteService, packageConfig, {
+            default: true,
+            description: 'Adds support for integration with atoms autocomplete service'
+        });
+    }
+
+    protected onEnabled() {
+        this._enabled = true;
+        return Disposable.create(() => {
+            this._enabled = false;
+        });
     }
 
     protected createInvoke(callbacks: ((options: Autocomplete.IRequest) => Observable<Autocomplete.Suggestion[]>)[]) {

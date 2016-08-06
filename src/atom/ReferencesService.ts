@@ -5,37 +5,45 @@
  */
 import * as _ from 'lodash';
 import { Observable } from 'rxjs';
-import * as Services from 'atom-languageservices';
+import { CommandType, IAtomNavigation, IReferencesProvider, IReferencesService, Reference, navigationHasRange } from 'atom-languageservices';
 import { alias, injectable } from 'atom-languageservices/decorators';
 import { readFile } from 'fs';
 import { ProviderServiceBase } from './_ProviderServiceBase';
 import { AtomCommands } from './AtomCommands';
+import { AtomLanguageClientConfig } from '../AtomLanguageClientConfig';
 import { AtomNavigation } from './AtomNavigation';
 import { AtomTextEditorSource } from './AtomTextEditorSource';
+import { CommandsService } from './CommandsService';
 import { ReferenceView } from './views/ReferenceView';
-const {navigationHasRange} = Services.AtomNavigation;
+type Location = IAtomNavigation.Location;
 
 const readFile$ = Observable.bindNodeCallback(readFile);
 
 @injectable
-@alias(Services.IReferencesService)
+@alias(IReferencesService)
 export class ReferencesService
-    extends ProviderServiceBase<Services.IReferencesProvider, Atom.TextEditor, Observable<Services.AtomNavigation.Location[]>, Observable<Services.AtomNavigation.Location[]>>
-    implements Services.IReferencesService {
+    extends ProviderServiceBase<IReferencesProvider, Atom.TextEditor, Observable<Location[]>, Observable<Location[]>>
+    implements IReferencesService {
     private _navigation: AtomNavigation;
-    private _commands: AtomCommands;
+    private _commands: CommandsService;
+    private _atomCommands: AtomCommands;
     private _source: AtomTextEditorSource;
 
-    constructor(navigation: AtomNavigation, commands: AtomCommands, source: AtomTextEditorSource) {
-        super();
+    constructor(packageConfig: AtomLanguageClientConfig, navigation: AtomNavigation, commands: CommandsService, atomCommands: AtomCommands, source: AtomTextEditorSource) {
+        super(ReferencesService, packageConfig, {
+            default: true,
+            description: 'Adds support to find references.'
+        });
         this._navigation = navigation;
         this._commands = commands;
         this._source = source;
-
-        this._commands.add(Services.AtomCommands.CommandType.TextEditor, 'references', () => this.open());
     }
 
-    protected createInvoke(callbacks: ((options: Atom.TextEditor) => Observable<Services.AtomNavigation.Location[]>)[]) {
+    protected onEnabled() {
+        return this._commands.add(CommandType.TextEditor, 'find-usages', 'shift-f12', () => this.open())
+    }
+
+    protected createInvoke(callbacks: ((options: Atom.TextEditor) => Observable<Location[]>)[]) {
         return ((options: Atom.TextEditor) => {
             const requests = _.over(callbacks)(options);
             return Observable.from(requests)
@@ -62,7 +70,7 @@ export class ReferencesService
             },
             (results, files) => ({ results, files }))
             .subscribe(({results, files}) => {
-                const items: Services.Reference.IResponse[] = [];
+                const items: Reference.IResponse[] = [];
                 for (const result of results) {
                     const filePath = result.filePath;
                     const file = _.find(files, file => file.filePath === result.filePath);
@@ -79,7 +87,7 @@ export class ReferencesService
                     }
                 }
                 if (!view) {
-                    view = new ReferenceView(this._commands, this._navigation, items);
+                    view = new ReferenceView(this._atomCommands, this._navigation, items);
                 } else {
                     view.setItems(items);
                 }

@@ -12,7 +12,7 @@ import * as toUri from 'file-url';
 import { DisposableBase } from 'ts-disposables';
 import { fromTextEdits, toRange } from './utils/convert';
 
-@capability
+@capability((capabilities) => !!capabilities.documentFormattingProvider || !!capabilities.documentRangeFormattingProvider)
 export class FormatProtocol extends DisposableBase {
     private _client: ILanguageProtocolClient;
     private _syncExpression: ISyncExpression;
@@ -51,7 +51,7 @@ class FormatRangeProvider extends DisposableBase implements IFormatProvider {
     }
 
     public request(options: Format.IRequest) {
-        if (!Format.formatRange(options)) {
+        if (!Format.formatHasRange(options)) {
             return Observable.empty<Text.IFileChange[]>();
         }
 
@@ -84,7 +84,7 @@ class FormatDocumentProvider extends DisposableBase implements IFormatProvider {
     }
 
     public request(options: Format.IRequest) {
-        if (Format.formatRange(options)) {
+        if (Format.formatHasRange(options)) {
             return Observable.empty<Text.IFileChange[]>();
         }
 

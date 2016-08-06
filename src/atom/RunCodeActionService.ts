@@ -5,32 +5,41 @@
  */
 import * as _ from 'lodash';
 import { Observable } from 'rxjs';
-import * as Services from 'atom-languageservices';
+import { IRunCodeActionProvider, IRunCodeActionService, RunCodeAction, Text } from 'atom-languageservices';
 import { alias, injectable } from 'atom-languageservices/decorators';
+import { Disposable } from 'ts-disposables';
 import { ProviderServiceBase } from './_ProviderServiceBase';
 import { AtomChanges } from './AtomChanges';
+import { AtomLanguageClientConfig } from '../AtomLanguageClientConfig';
 
 @injectable()
-@alias(Services.IRunCodeActionService)
+@alias(IRunCodeActionService)
 export class RunCodeActionService
-    extends ProviderServiceBase<Services.IRunCodeActionProvider, Services.RunCodeAction.IRequest, Observable<Services.Text.IWorkspaceChange[]>, Observable<Services.Text.IWorkspaceChange[]>>
-    implements Services.IRunCodeActionService {
+    extends ProviderServiceBase<IRunCodeActionProvider, RunCodeAction.IRequest, Observable<Text.IWorkspaceChange[]>, Observable<Text.IWorkspaceChange[]>>
+    implements IRunCodeActionService {
     private _changes: AtomChanges;
 
-    constructor(changes: AtomChanges) {
-        super();
+    constructor(packageConfig: AtomLanguageClientConfig, changes: AtomChanges) {
+        super(RunCodeActionService, packageConfig, {
+            default: true,
+            description: 'Adds support for running code actions from a list of actual code actions'
+        });
         this._changes = changes;
     }
 
-    protected createInvoke(callbacks: ((options: Services.RunCodeAction.IRequest) => Observable<Services.Text.IWorkspaceChange[]>)[]) {
-        return (options: Services.RunCodeAction.IRequest) => {
+    protected onEnabled() {
+        return Disposable.empty;
+    }
+
+    protected createInvoke(callbacks: ((options: RunCodeAction.IRequest) => Observable<Text.IWorkspaceChange[]>)[]) {
+        return (options: RunCodeAction.IRequest) => {
             return Observable.from(_.over(callbacks)(options))
                 .mergeMap(_.identity)
                 .reduce((acc, results) => _.compact(acc.concat(results)), []);
         };
     }
 
-    public request(options: Services.RunCodeAction.IRequest) {
+    public request(options: RunCodeAction.IRequest) {
         this.invoke(options)
             .concatMap(changes => {
                 return this._changes.applyWorkspaceChanges(changes);

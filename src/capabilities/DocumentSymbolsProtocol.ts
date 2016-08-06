@@ -14,7 +14,7 @@ import { DisposableBase } from 'ts-disposables';
 import { packageName } from '../constants';
 import { fromPosition, fromUri } from './utils/convert';
 
-@capability
+@capability((capabilities) => !!capabilities.documentSymbolProvider)
 export class DocumentSymbolsProtocol extends DisposableBase {
     private _client: ILanguageProtocolClient;
     private _syncExpression: ISyncExpression;
@@ -28,9 +28,6 @@ export class DocumentSymbolsProtocol extends DisposableBase {
         this._client = client;
         this._finderService = finderService;
         this._syncExpression = syncExpression;
-        if (!client.capabilities.documentSymbolProvider) {
-            return;
-        }
 
         // TODO: Handle trigger characters
         const service = new DocumentFinderProvider(client, syncExpression);

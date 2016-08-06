@@ -5,4 +5,5 @@
  */
 export const key = 'languageclient:key';
 export const capability = 'languageclient:capability';
+export const isCompatible = 'languageclient:isCompatible';
 export const alias = 'languageclient:alias';

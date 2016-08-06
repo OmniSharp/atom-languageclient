@@ -4,14 +4,21 @@
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
 import * as _ from 'lodash';
-import { Disposable, DisposableBase, IDisposable } from 'ts-disposables';
+import { Disposable, IDisposable } from 'ts-disposables';
+import { FeatureServiceBase, IFeatureService } from './_FeatureServiceBase';
+import { AtomLanguageClientConfig } from '../AtomLanguageClientConfig';
 
-export abstract class ProviderServiceBase<TProvider extends { request: (options: TRequest) => TResponse; } & IDisposable, TRequest, TResponse, TAggregateResponse> extends DisposableBase {
+export abstract class ProviderServiceBase<TProvider extends { request: (options: TRequest) => TResponse; } & IDisposable, TRequest, TResponse, TAggregateResponse> extends FeatureServiceBase {
     private _providers: Set<TProvider> = new Set<TProvider>();
     private _invoke: (options: TRequest) => TAggregateResponse;
 
-    constructor() {
-        super();
+    constructor(ctor: new <T extends ProviderServiceBase<TProvider, TRequest, TResponse, TAggregateResponse>>(...args: any[]) => T, packageConfig: AtomLanguageClientConfig, descriptor: IFeatureService) {
+        super(ctor, packageConfig, descriptor);
+
+        const name = _.startCase(ctor.name);
+        const setting = _.assign({ type: <'boolean'>'boolean', title: name }, descriptor);
+
+        packageConfig.add(name, setting);
         this._disposable.add(
             Disposable.create(() => {
                 this._providers.forEach(x => x.dispose());

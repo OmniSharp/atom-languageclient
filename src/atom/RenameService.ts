@@ -5,44 +5,49 @@
  */
 import * as _ from 'lodash';
 import { Observable } from 'rxjs';
-import * as Services from 'atom-languageservices';
+import { CommandType, IRenameProvider, IRenameService, Rename, Text } from 'atom-languageservices';
 import { alias, injectable } from 'atom-languageservices/decorators';
 import { ProviderServiceBase } from './_ProviderServiceBase';
 import { AtomChanges } from './AtomChanges';
 import { AtomCommands } from './AtomCommands';
+import { AtomLanguageClientConfig } from '../AtomLanguageClientConfig';
 import { AtomNavigation } from './AtomNavigation';
 import { AtomTextEditorSource } from './AtomTextEditorSource';
+import { CommandsService } from './CommandsService';
 import { RenameView } from './views/RenameView';
 import { WaitService } from './WaitService';
 
 @injectable
-@alias(Services.IRenameService)
+@alias(IRenameService)
 export class RenameService
-    extends ProviderServiceBase<Services.IRenameProvider, Services.Rename.IRequest, Observable<Services.Text.IWorkspaceChange[]>, Observable<Services.Text.IWorkspaceChange[]>>
-    implements Services.IRenameService {
+    extends ProviderServiceBase<IRenameProvider, Rename.IRequest, Observable<Text.IWorkspaceChange[]>, Observable<Text.IWorkspaceChange[]>>
+    implements IRenameService {
     private _navigation: AtomNavigation;
-    private _commands: AtomCommands;
+    private _commands: CommandsService;
+    private _atomCommands: AtomCommands;
     private _changes: AtomChanges;
     private _source: AtomTextEditorSource;
     private _waitService: WaitService;
 
-    constructor(changes: AtomChanges, navigation: AtomNavigation, commands: AtomCommands, source: AtomTextEditorSource, waitService: WaitService) {
-        super();
+    constructor(packageConfig: AtomLanguageClientConfig, changes: AtomChanges, navigation: AtomNavigation, commands: CommandsService, atomCommands: AtomCommands, source: AtomTextEditorSource, waitService: WaitService) {
+        super(RenameService, packageConfig, {
+            default: true,
+            description: 'Adds support for renaming symbols'
+        });
         this._changes = changes;
         this._commands = commands;
+        this._atomCommands = atomCommands;
         this._navigation = navigation;
         this._source = source;
         this._waitService = waitService;
-
-        this._disposable.add(
-            this._commands.add(Services.AtomCommands.CommandType.TextEditor, 'rename', () => {
-                this.open();
-            })
-        );
     }
 
-    protected createInvoke(callbacks: ((options: Services.Rename.IRequest) => Observable<Services.Text.IWorkspaceChange[]>)[]) {
-        return (options: Services.Rename.IRequest) => {
+    protected onEnabled() {
+        return this._commands.add(CommandType.TextEditor, 'rename', 'f2', () => this.open());
+    }
+
+    protected createInvoke(callbacks: ((options: Rename.IRequest) => Observable<Text.IWorkspaceChange[]>)[]) {
+        return (options: Rename.IRequest) => {
             return Observable.from(_.over(callbacks)(options))
                 .mergeMap(_.identity)
                 .reduce(
@@ -58,7 +63,7 @@ export class RenameService
         if (editor) {
             let word = editor.getWordUnderCursor();
             word = _.trim(word, '()[]{}');
-            const view = new RenameView(this._commands, {
+            const view = new RenameView(this._atomCommands, {
                 word,
                 editor: editor,
                 location: editor!.getCursorBufferPosition()

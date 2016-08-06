@@ -1617,10 +1617,10 @@ declare module Atom {
         transact(callback: () => any): any;
 
 
-        observe(keyPath: string, callback: (value: any) => void): EventKit.Disposable
+        observe<T>(keyPath: string, callback: (value: T) => void): EventKit.Disposable
         observe(keyPath: string, options: { scopeDescriptor: ScopeDescriptor }, callback: (value: any) => void): EventKit.Disposable
         onDidChange(callback: (item: { keyPath: string; oldValue: any; newValue: any; }) => void): EventKit.Disposable
-        onDidChange(keyPath: string, callback: (item: { keyPath: string; oldValue: any; newValue: any; }) => void): EventKit.Disposable
+        onDidChange<T>(keyPath: string, callback: (item: { keyPath: string; oldValue: T; newValue: T; }) => void): EventKit.Disposable
         onDidChange(keyPath: string, options: { scopeDescriptor: ScopeDescriptor }, callback: (item: { keyPath: string; oldValue: any; newValue: any; }) => void): EventKit.Disposable
         get<T>(keyPath: string, options?: { sources: string[]; excludeSources: string[]; scope: ScopeDescriptor }): T
         set(keyPath: string, value: any, options?: { scopeSelector: string; source: string }): void;

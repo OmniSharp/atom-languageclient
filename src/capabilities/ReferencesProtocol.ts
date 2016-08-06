@@ -13,7 +13,7 @@ import * as toUri from 'file-url';
 import { DisposableBase } from 'ts-disposables';
 import { fromRange, fromUri } from './utils/convert';
 
-@capability
+@capability((capabilities) => !!capabilities.referencesProvider)
 export class ReferencesProtocol extends DisposableBase {
     private _client: ILanguageProtocolClient;
     private _syncExpression: ISyncExpression;
@@ -27,9 +27,6 @@ export class ReferencesProtocol extends DisposableBase {
         this._client = client;
         this._syncExpression = syncExpression;
         this._referencesService = referencesService;
-        if (!client.capabilities.referencesProvider) {
-            return;
-        }
 
         const service = new LanguageProtocolReferencesProvider(this._client, this._syncExpression);
         this._disposable.add(service);

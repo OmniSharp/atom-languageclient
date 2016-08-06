@@ -13,7 +13,7 @@ import { DisposableBase } from 'ts-disposables';
 import { fromWorkspaceEdit, toRange } from './utils/convert';
 import { DocumentSyncProtocol } from './DocumentSyncProtocol';
 
-@capability
+@capability((capabilities) => !!capabilities.extended.runCodeActionProvider)
 export class RunCodeActionProtocol extends DisposableBase {
     private _client: ILanguageProtocolClient;
     private _syncExpression: ISyncExpression;
@@ -32,9 +32,6 @@ export class RunCodeActionProtocol extends DisposableBase {
         this._syncExpression = syncExpression;
         this._documentSyncProtocol = documentSyncProtocol;
 
-        if (!this._client.capabilities.extended.getCodeActionsProvider) {
-            return;
-        }
         const service = new RunCodeActionProvider(client, syncExpression, documentSyncProtocol);
         this._disposable.add(service);
         this._runCodeActionService.registerProvider(service);

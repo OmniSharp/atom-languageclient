@@ -6,8 +6,9 @@
 /* tslint:disable:no-require-imports no-any */
 import * as _ from 'lodash';
 import { Observable } from 'rxjs';
-import { IResolver }  from 'atom-languageservices';
-import * as symbols  from 'atom-languageservices/symbols';
+import { IResolver } from 'atom-languageservices';
+import * as symbols from 'atom-languageservices/symbols';
+import { ServerCapabilities } from 'atom-languageservices/types-extended';
 import { Container as AureliaContainer } from 'aurelia-dependency-injection';
 import { metadata } from 'aurelia-metadata';
 import { AggregateError } from 'aurelia-pal';
@@ -20,7 +21,8 @@ const $readdir = Observable.bindNodeCallback(readdir);
 const $exists = Observable.bindCallback(exists);
 
 export interface ICapability {
-    item: any;
+    ctor: any;
+    isCompatible: (serverCapabilities: ServerCapabilities) => boolean;
     params: any[];
 }
 
@@ -99,9 +101,11 @@ export class Container extends DisposableBase implements IResolver {
 
         const decoCapability = metadata.get(symbols.capability, fn!);
         if (decoCapability) {
+            const isCompatible = <any>metadata.get(symbols.isCompatible, fn!) || (() => true);
             // Capabilities aren't registered now...
             this._capabilities.push({
-                item: fn,
+                ctor: fn,
+                isCompatible,
                 params: <any[]>(<any>fn).inject || <any>metadata.get(metadata.paramTypes, fn!)
             });
             return this;
@@ -158,14 +162,13 @@ export class Container extends DisposableBase implements IResolver {
         return Container._child(this);
     }
 
-    public registerCapabilities(key: any): any[] {
+    public registerCapabilities(key: any): { ctor: Function; isCompatible: (serverCapabilities: ServerCapabilities) => boolean; }[] {
         const capabilities = _(this._capabilities)
             .filter(x => _.includes(x.params, key))
-            .map(x => x.item)
             .value();
 
         _.each(capabilities, capability => {
-            this.registerTransient(capability);
+            this.registerTransient(capability.ctor);
         });
 
         return capabilities;

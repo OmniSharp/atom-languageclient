@@ -20,7 +20,7 @@ function isCompletionList(item: any): item is CompletionList {
     return item && item.items;
 }
 
-@capability
+@capability((capabilities) => !!capabilities.completionProvider)
 export class AutocompleteProtocol extends DisposableBase {
     private _client: ILanguageProtocolClient;
     private _autocompleteService: IAutocompleteService;
@@ -34,12 +34,9 @@ export class AutocompleteProtocol extends DisposableBase {
         this._client = client;
         this._autocompleteService = autocompleteService;
         this._syncExpression = syncExpression;
-        if (!client.capabilities.completionProvider) {
-            return;
-        }
 
         // TODO: Handle trigger characters
-        const service = new AutocompleteService(client, this._syncExpression, client.capabilities.completionProvider);
+        const service = new AutocompleteService(client, this._syncExpression, client.capabilities.completionProvider!);
         this._disposable.add(service);
         this._autocompleteService.registerProvider(service);
     }

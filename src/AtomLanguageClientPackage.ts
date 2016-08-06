@@ -5,20 +5,27 @@
  */
 import * as _ from 'lodash';
 import { Observable } from 'rxjs';
-import { IAutocompleteService, ILanguageProvider, ILanguageService, ILinterService, IResolver, IStatusBarService, Linter, StatusBar } from 'atom-languageservices';
+import { CommandType, IAtomConfig, IAutocompleteService, ILanguageProvider, ILanguageService, ILinterService, IResolver, IStatusBarService, KeymapType, Linter, StatusBar } from 'atom-languageservices';
 import { readdir } from 'fs';
 import { join, resolve } from 'path';
 import { CompositeDisposable, isDisposable } from 'ts-disposables';
 import { AutocompleteService, LinterService, StatusBarService } from './atom/index';
+import { packageName } from './constants';
 import { LanguageProvider, LanguageService } from './language/index';
+import { AtomCommands } from './atom/AtomCommands';
+import { AtomConfig } from './atom/AtomConfig';
+// import { AtomKeymaps } from './atom/AtomKeymaps';
+import { AtomLanguageClientConfig } from './AtomLanguageClientConfig';
 import { AtomLanguageClientSettings, IAtomLanguageClientSettings } from './AtomLanguageClientSettings';
 import { Container } from './di/Container';
+const atomPackageDeps: { install: (name: string) => Promise<void>; } = require('atom-package-deps');
 
 const $readdir = Observable.bindNodeCallback(readdir);
 
 export class AtomLanguageClientPackage implements IAtomPackage<AtomLanguageClientSettings> {
     private _container: Container;
     private _disposable: CompositeDisposable;
+    private _packageConfig: AtomLanguageClientConfig;
     private _settings: AtomLanguageClientSettings;
     private _atomLanguageProvider: LanguageProvider;
     private _atomLanguageService: LanguageService;
@@ -38,11 +45,19 @@ export class AtomLanguageClientPackage implements IAtomPackage<AtomLanguageClien
             resolveActivate = resolve;
         });
 
+        const atomConfig = new AtomConfig();
+        this._packageConfig = new AtomLanguageClientConfig(atomConfig);
+
         this._atomLanguageProvider = new LanguageProvider(this._container, activated);
         this._atomLanguageService = new LanguageService(this._container);
-        this._atomAutocompleteProvider = new AutocompleteService();
+        this._atomAutocompleteProvider = new AutocompleteService(this._packageConfig);
         this._atomLinterProvider = new LinterService();
         this._atomStatusBarService = new StatusBarService();
+
+        this._container.registerInstance(AtomConfig, this._atomLanguageProvider);
+        this._container.registerAlias(AtomConfig, IAtomConfig);
+
+        this._container.registerInstance(AtomLanguageClientConfig, this._packageConfig);
 
         this._container.registerInstance(LanguageProvider, this._atomLanguageProvider);
         this._container.registerAlias(LanguageProvider, ILanguageProvider);
@@ -68,22 +83,26 @@ export class AtomLanguageClientPackage implements IAtomPackage<AtomLanguageClien
         );
 
         const activateServices =
-            Observable.merge(
-                this._container.registerFolder(__dirname, 'atom'),
-                this._container.registerFolder(__dirname, 'capabilities'),
-                this._container.registerFolder(__dirname, 'services'),
-                this._container.registerFolder(__dirname, 'ui')
-            )
-                .toPromise()
+            atomPackageDeps.install(packageName)
+                .then(() =>
+                    Observable.merge(
+                        this._container.registerFolder(__dirname, 'atom'),
+                        this._container.registerFolder(__dirname, 'capabilities'),
+                        this._container.registerFolder(__dirname, 'services'),
+                        this._container.registerFolder(__dirname, 'ui')
+                    ).toPromise()
+                )
                 .then(() => {
                     this._container.registerInterfaceSymbols();
-                }).then(() => resolveActivate());
+                    this._packageConfig.update();
+                })
+                .then(() => resolveActivate());
 
         this.activated = activateServices;
 
         /* We're going to pretend to load these packages, as if they were real */
-        const pathToPlugins = resolve(__dirname, '../', 'plugins');
         this.activated.then(() => {
+            const pathToPlugins = resolve(__dirname, '../', 'plugins');
             return $readdir(pathToPlugins)
                 .mergeMap(folders => {
                     return Observable.from(folders)
@@ -111,6 +130,16 @@ export class AtomLanguageClientPackage implements IAtomPackage<AtomLanguageClien
         });
 
         this.activated.then(() => {
+            const commands = this._container.resolve(AtomCommands);
+            commands.add(CommandType.Workspace, 'settings', () => {
+                atom.workspace.open('atom://config/packages')
+                    .then(tab => {
+                        if (tab && tab.getURI && tab.getURI() !== `atom://config/packages/${packageName}`) {
+                            atom.workspace.open(`atom://config/packages/${packageName}`);
+                        }
+                    });
+            });
+            // this._container.resolve(AtomKeymaps).add(KeymapType.Autocomplete, 'enter', 'autocomplete-plus:confirm');
             /* tslint:disable-next-line:no-require-imports */
             this._container.resolveEach(_.values(require('./ui/UserInterface')));
         });

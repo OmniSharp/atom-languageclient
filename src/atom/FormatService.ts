@@ -6,41 +6,70 @@
 
 import * as _ from 'lodash';
 import { Observable } from 'rxjs';
-import * as Services from 'atom-languageservices';
+import { CommandType, Format, IFormatProvider, IFormatService, Text } from 'atom-languageservices';
 import { alias, injectable } from 'atom-languageservices/decorators';
+import { CompositeDisposable } from 'ts-disposables';
 import { ProviderServiceBase } from './_ProviderServiceBase';
 import { AtomChanges } from './AtomChanges';
 import { AtomCommands } from './AtomCommands';
+import { AtomLanguageClientConfig } from '../AtomLanguageClientConfig';
 import { AtomTextEditorSource } from './AtomTextEditorSource';
-const ATOM_COMMANDS = Services.AtomCommands;
+import { CommandsService } from './CommandsService';
 
 @injectable()
-@alias(Services.IFormatService)
+@alias(IFormatService)
 export class FormatService
-    extends ProviderServiceBase<Services.IFormatProvider, Services.Format.IRequest, Observable<Services.Text.IFileChange[]>, Observable<Services.Text.IFileChange[]>>
-    implements Services.IFormatService {
+    extends ProviderServiceBase<IFormatProvider, Format.IRequest, Observable<Text.IFileChange[]>, Observable<Text.IFileChange[]>>
+    implements IFormatService {
     private _changes: AtomChanges;
-    private _commands: AtomCommands;
+    private _commands: CommandsService;
+    private _atomCommands: AtomCommands;
     private _source: AtomTextEditorSource;
 
-    public constructor(changes: AtomChanges, commands: AtomCommands, source: AtomTextEditorSource) {
-        super();
+    public constructor(packageConfig: AtomLanguageClientConfig, changes: AtomChanges, commands: CommandsService, atomCommands: AtomCommands, source: AtomTextEditorSource) {
+        super(FormatService, packageConfig, {
+            default: true,
+            description: 'Adds support for formating documents'
+        });
         this._changes = changes;
         this._commands = commands;
         this._source = source;
+        this._atomCommands = atomCommands;
 
         this._disposable.add(
-            this._commands.add(ATOM_COMMANDS.CommandType.TextEditor, `format-document`, () => this.formatDocument(source.activeTextEditor)),
-            this._commands.add(ATOM_COMMANDS.CommandType.TextEditor, `format-range`, () => this.formatRange(source.activeTextEditor))
+            this._commands.add(CommandType.TextEditor, `code-format`, 'ctrl-k ctrl-d', () => this.format(source.activeTextEditor)),
+            this._atomCommands.add(CommandType.TextEditor, `format-document`, () => this.formatDocument(source.activeTextEditor)),
+            this._atomCommands.add(CommandType.TextEditor, `format-range`, () => this.formatRange(source.activeTextEditor))
         );
     }
 
-    protected createInvoke(callbacks: (((options: Services.Format.IRequest) => Observable<Services.Text.IFileChange[]>)[])) {
-        return (options: Services.Format.IRequest) => {
+    protected onEnabled() {
+        return new CompositeDisposable(
+            this._commands.add(CommandType.TextEditor, `code-format`, 'ctrl-k ctrl-d', () => this.format(this._source.activeTextEditor)),
+            this._atomCommands.add(CommandType.TextEditor, `format-document`, () => this.formatDocument(this._source.activeTextEditor)),
+            this._atomCommands.add(CommandType.TextEditor, `format-range`, () => this.formatRange(this._source.activeTextEditor))
+        );
+    }
+
+    protected createInvoke(callbacks: (((options: Format.IRequest) => Observable<Text.IFileChange[]>)[])) {
+        return (options: Format.IRequest) => {
             return Observable.from(_.over(callbacks)(options))
                 .mergeMap(_.identity)
                 .reduce((acc, results) => _.compact(acc.concat(results)), []);
         };
+    }
+
+    public format(editor: Atom.TextEditor) {
+        if (!editor) {
+            return;
+        }
+
+        const ranges = editor.getSelectedBufferRanges();
+        if (ranges.length) {
+            this._formatRange(editor, ranges);
+            return;
+        }
+        this.formatDocument(editor);
     }
 
     public formatDocument(editor: Atom.TextEditor) {
@@ -57,8 +86,8 @@ export class FormatService
         });
     }
 
-    public formatRange(editor: Atom.TextEditor) {
-        Observable.from(editor.getSelectedScreenRanges())
+    private _formatRange(editor: Atom.TextEditor, ranges: TextBuffer.Range[]) {
+        Observable.from(ranges)
             .concatMap(range => {
                 return this.invoke({
                     editor, range,
@@ -69,6 +98,13 @@ export class FormatService
                 });
             })
             .subscribe();
+    }
+
+    public formatRange(editor: Atom.TextEditor) {
+        if (!editor) {
+            return;
+        }
+        this._formatRange(editor, editor.getSelectedBufferRanges());
     }
 
 }
