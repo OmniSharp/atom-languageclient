@@ -30,7 +30,7 @@ declare module TextBuffer {
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        constructor(id? : any, snapshot? : any, isBoundary? : any);
+        constructor(id?: any, snapshot?: any, isBoundary?: any);
 
     }
 
@@ -47,7 +47,7 @@ declare module TextBuffer {
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        constructor(snapshot? : any);
+        constructor(snapshot?: any);
 
     }
 
@@ -64,7 +64,7 @@ declare module TextBuffer {
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        constructor(snapshot? : any);
+        constructor(snapshot?: any);
 
     }
 
@@ -75,7 +75,7 @@ declare module TextBuffer {
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        static deserialize(delegate? : any, state? : any) : any;
+        static deserialize(delegate?: any, state?: any): any;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
@@ -90,78 +90,78 @@ declare module TextBuffer {
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        constructor(delegate? : any, maxUndoEntries? : any);
+        constructor(delegate?: any, maxUndoEntries?: any);
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        createCheckpoint(snapshot? : any, isBoundary? : any) : Checkpoint;
+        createCheckpoint(snapshot?: any, isBoundary?: any): Checkpoint;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        groupChangesSinceCheckpoint(checkpointId? : any, endSnapshot? : any, deleteCheckpoint? : Checkpoint) : Checkpoint;
+        groupChangesSinceCheckpoint(checkpointId?: any, endSnapshot?: any, deleteCheckpoint?: Checkpoint): Checkpoint;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        applyGroupingInterval(groupingInterval? : any) : any;
+        applyGroupingInterval(groupingInterval?: any): any;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        pushChange(change? : any) : any;
+        pushChange(change?: any): any;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        popUndoStack() : any;
+        popUndoStack(): any;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        popRedoStack() : any;
+        popRedoStack(): any;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        truncateUndoStack(checkpointId? : any) : any;
+        truncateUndoStack(checkpointId?: any): any;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        clearUndoStack() : void;
+        clearUndoStack(): void;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        clearRedoStack() : void;
+        clearRedoStack(): void;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        serialize() : any;
+        serialize(): any;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        deserialize(state? : any) : any;
+        deserialize(state?: any): any;
 
         /**
          * Private
          * This field or method was marked private by atomdoc. Use with caution.
          */
-        getCheckpointIndex(checkpointId? : any) : any;
+        getCheckpointIndex(checkpointId?: any): any;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        serializeStack(stack? : any) : any;
+        serializeStack(stack?: any): any;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        deserializeStack(stack? : any) : any;
+        deserializeStack(stack?: any): any;
 
     }
 
@@ -178,88 +178,88 @@ declare module TextBuffer {
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        insert(id? : boolean, start? : boolean, end? : boolean) : Range | boolean;
+        insert(id?: boolean, start?: boolean, end?: boolean): Range | boolean;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        delete(id? : any) : void;
+        delete(id?: any): void;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        splice(position? : Point, oldExtent? : any, newExtent? : any) : any;
+        splice(position?: Point, oldExtent?: any, newExtent?: any): any;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        isExclusive(id? : boolean) : boolean;
+        isExclusive(id?: boolean): boolean;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        setExclusive(id? : any, isExclusive? : any) : void;
+        setExclusive(id?: any, isExclusive?: any): void;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        getRange(id? : any) : TextBuffer.Range;
+        getRange(id?: any): TextBuffer.Range;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        getStart(id? : any) : any;
+        getStart(id?: any): any;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        getEnd(id? : any) : any;
+        getEnd(id?: any): any;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        findContaining(start? : any, end? : any) : any;
+        findContaining(start?: any, end?: any): any;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        findContainedIn(start? : any, end? : any) : any;
+        findContainedIn(start?: any, end?: any): any;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        findIntersecting(start? : any, end? : any) : any;
+        findIntersecting(start?: any, end?: any): any;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        findStartingIn(start? : any, end? : any) : any;
+        findStartingIn(start?: any, end?: any): any;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        findEndingIn(start? : any, end? : any) : any;
+        findEndingIn(start?: any, end?: any): any;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        clear() : void;
+        clear(): void;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        dump(ids? : any) : any;
+        dump(ids?: any): any;
 
         /**
          * Private
          * This field or method was marked private by atomdoc. Use with caution.
          */
-        clearRangeCache() : Range;
+        clearRangeCache(): Range;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        condenseIfNeeded() : any;
+        condenseIfNeeded(): any;
 
     }
 
@@ -271,17 +271,17 @@ declare module TextBuffer {
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        static deserialize(delegate? : any, state? : any) : any;
+        static deserialize(delegate?: any, state?: any): any;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        static serializeSnapshot(snapshot? : any) : any;
+        static serializeSnapshot(snapshot?: any): any;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        static deserializeSnapshot(snapshot? : any) : any;
+        static deserializeSnapshot(snapshot?: any): any;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
@@ -291,110 +291,110 @@ declare module TextBuffer {
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        constructor(delegate? : any);
+        constructor(delegate?: any);
 
         /**
          * TextBuffer API
          * This field or method was marked private by atomdoc. Use with caution.
          */
-        getMarker(id? : any) : Atom.Marker;
+        getMarker(id?: any): Atom.Marker;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        getMarkers() : Atom.Marker[];
+        getMarkers(): Atom.Marker[];
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        getMarkerCount() : number;
+        getMarkerCount(): number;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        findMarkers(params? : any) : Atom.Marker[];
+        findMarkers(params?: any): Atom.Marker[];
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        markRange(range? : TextBuffer.Range, options? : any) : Marker;
+        markRange(range?: TextBuffer.Range, options?: any): Marker;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        markPosition(position? : Point, options? : any) : Marker;
+        markPosition(position?: Point, options?: any): Marker;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        splice(start? : any, oldExtent? : any, newExtent? : any) : any;
+        splice(start?: any, oldExtent?: any, newExtent?: any): any;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        restoreFromSnapshot(snapshots? : any) : void;
+        restoreFromSnapshot(snapshots?: any): void;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        createSnapshot(emitChangeEvents? : any) : any;
+        createSnapshot(emitChangeEvents?: any): any;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        serialize() : any;
+        serialize(): any;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        deserialize(state? : any) : any;
+        deserialize(state?: any): any;
 
         /**
          * Marker interface
          * This field or method was marked private by atomdoc. Use with caution.
          */
-        markerUpdated() : Marker;
+        markerUpdated(): Marker;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        destroyMarker(id? : any) : Atom.Marker;
+        destroyMarker(id?: any): Atom.Marker;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        getMarkerRange(id? : any) : TextBuffer.Range;
+        getMarkerRange(id?: any): TextBuffer.Range;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        getMarkerStartPosition(id? : any) : Point;
+        getMarkerStartPosition(id?: any): Point;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        getMarkerEndPosition(id? : any) : Point;
+        getMarkerEndPosition(id?: any): Point;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        setMarkerRange(id? : any, range? : TextBuffer.Range) : TextBuffer.Range;
+        setMarkerRange(id?: any, range?: TextBuffer.Range): TextBuffer.Range;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        setMarkerHasTail(id? : any, hasTail? : any) : void;
+        setMarkerHasTail(id?: any, hasTail?: any): void;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        createMarker(range? : TextBuffer.Range, params? : any) : Atom.Marker;
+        createMarker(range?: TextBuffer.Range, params?: any): Atom.Marker;
 
         /**
          * Private
          * This field or method was marked private by atomdoc. Use with caution.
          */
-        addMarker(id? : any, range? : TextBuffer.Range, params? : any) : Atom.Marker;
+        addMarker(id?: any, range?: TextBuffer.Range, params?: any): Atom.Marker;
 
     }
 
@@ -408,7 +408,7 @@ declare module TextBuffer {
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        static extractParams(inputParams? : any) : any;
+        static extractParams(inputParams?: any): any;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
@@ -423,39 +423,39 @@ declare module TextBuffer {
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        constructor(id? : any, store? : any, range? : TextBuffer.Range, params? : any);
+        constructor(id?: any, store?: any, range?: TextBuffer.Range, params?: any);
 
         /**
          * Invoke the given callback when the marker is destroyed.
          * @param callback - {Function} to be called when the marker is destroyed.
          */
-        onDidDestroy(callback : Function /* needs to be defined */) : EventKit.Disposable;
+        onDidDestroy(callback: Function /* needs to be defined */): EventKit.Disposable;
 
         /**
          * Invoke the given callback when the state of the marker changes.
          * @param callback - {Function} to be called when the marker changes.
          */
-        onDidChange(callback : Function /* needs to be defined */) : EventKit.Disposable;
+        onDidChange(callback: Function /* needs to be defined */): EventKit.Disposable;
 
-        getRange() : TextBuffer.Range;
+        getRange(): TextBuffer.Range;
 
         /**
          * Sets the range of the marker.
          * @param range? - A {Range} or range-compatible {Array}. The range will be clipped before it is assigned.
          * @param properties? - {Object} properties to associate with the marker.
          */
-        setRange(range? : TextBuffer.Range, properties? : any) : TextBuffer.Range;
+        setRange(range?: TextBuffer.Range, properties?: any): TextBuffer.Range;
 
-        getHeadPosition() : Point;
+        getHeadPosition(): Point;
 
         /**
          * Sets the head position of the marker.
          * @param position? - A {Point} or point-compatible {Array}. The position will be clipped before it is assigned.
          * @param properties? - {Object} properties to associate with the marker.
          */
-        setHeadPosition(position? : Point, properties? : any) : Point;
+        setHeadPosition(position?: Point, properties?: any): Point;
 
-        getTailPosition() : Point;
+        getTailPosition(): Point;
 
         /**
          * Sets the tail position of the marker. If the marker doesn"t have a
@@ -463,11 +463,11 @@ declare module TextBuffer {
          * @param position? - A {Point} or point-compatible {Array}. The position will be clipped before it is assigned.
          * @param properties? - {Object} properties to associate with the marker.
          */
-        setTailPosition(position? : Point, properties? : any) : Point;
+        setTailPosition(position?: Point, properties?: any): Point;
 
-        getStartPosition() : Point;
+        getStartPosition(): Point;
 
-        getEndPosition() : Point;
+        getEndPosition(): Point;
 
         /**
          * Removes the marker"s tail. After calling the marker"s head position
@@ -475,7 +475,7 @@ declare module TextBuffer {
          * again.
          * @param properties? - {Object} properties to associate with the marker.
          */
-        clearTail(properties? : any) : void;
+        clearTail(properties?: any): void;
 
         /**
          * Plants the marker"s tail at the current head position. After calling
@@ -483,23 +483,23 @@ declare module TextBuffer {
          * call, regardless of where the marker"s head is moved.
          * @param properties? - {Object} properties to associate with the marker.
          */
-        plantTail(properties? : Object) : any;
+        plantTail(properties?: Object): any;
 
-        isReversed() : boolean;
+        isReversed(): boolean;
 
-        hasTail() : boolean;
+        hasTail(): boolean;
 
         /**
          * Is the marker valid?
          */
-        isValid() : boolean;
+        isValid(): boolean;
 
         /**
          * Is the marker destroyed?
          */
-        isDestroyed() : boolean;
+        isDestroyed(): boolean;
 
-        isEqual(other? : boolean) : boolean;
+        isEqual(other?: boolean): boolean;
 
         /**
          * Get the invalidation strategy for this marker.
@@ -507,39 +507,39 @@ declare module TextBuffer {
          * Valid values include: `never`, `surround`, `overlap`, `inside`, and `touch`.
          * Returns a {String}.
          */
-        getInvalidationStrategy() : string;
+        getInvalidationStrategy(): string;
 
-        getProperties() : Object;
+        getProperties(): Object;
 
         /**
          * Merges an {Object} containing new properties into the marker"s
          * existing properties.
          * @param properties? - {Object}
          */
-        setProperties(properties? : any) : void;
+        setProperties(properties?: any): void;
 
         /**
          * Creates and returns a new {Marker} with the same properties as this
          * marker.
          */
-        copy(options? : Marker) : Marker;
+        copy(options?: Marker): Marker;
 
         /**
          * Destroys the marker, causing it to emit the "destroyed" event. Once
          * destroyed, a marker cannot be restored by undo/redo operations.
          */
-        destroy() : void;
+        destroy(): void;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        extractParams(params? : any) : any;
+        extractParams(params?: any): any;
 
         /**
          * Compares this marker to another based on their ranges.
          * @param other? - {Marker}
          */
-        compare(other? : Marker) : any;
+        compare(other?: Marker): any;
 
         /**
          *
@@ -547,7 +547,7 @@ declare module TextBuffer {
          * Returns whether this marker matches the given parameters. The parameters
          * are the same as {MarkerManager::findMarkers}.
          */
-        matchesParams(params? : any) : any;
+        matchesParams(params?: any): any;
 
         /**
          *
@@ -555,29 +555,333 @@ declare module TextBuffer {
          * Returns whether this marker matches the given parameter name and value.
          * The parameters are the same as {MarkerManager::findMarkers}.
          */
-        matchesParam(key? : any, value? : any) : any;
+        matchesParam(key?: any, value?: any): any;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        update(oldRange? : TextBuffer.Range, options? : (range? : TextBuffer.Range,reversed? : any,tailed? : any,valid? : any,properties? : any) => any, textChanged? : any) : void;
+        update(oldRange?: TextBuffer.Range, options?: (range?: TextBuffer.Range, reversed?: any, tailed?: any, valid?: any, properties?: any) => any, textChanged?: any): void;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        getSnapshot(range? : TextBuffer.Range) : any;
+        getSnapshot(range?: TextBuffer.Range): any;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        toString() : any;
+        toString(): any;
 
         /**
          * Private
          * This field or method was marked private by atomdoc. Use with caution.
          */
-        emitChangeEvent(currentRange? : TextBuffer.Range, textChanged? : string, propertiesChanged? : any) : void;
+        emitChangeEvent(currentRange?: TextBuffer.Range, textChanged?: string, propertiesChanged?: any): void;
 
+    }
+
+    /**
+     * Represents a buffer annotation that remains logically stationary
+     * even as the buffer changes. This is used to represent cursors, folds, snippet
+     * targets, misspelled words, and anything else that needs to track a logical
+     * location in the buffer over time.
+     */
+    class DisplayMarker {
+        /**
+         * This field or method was not documented by atomdoc, assume it is private. Use with caution.
+         */
+        static extractParams(inputParams?: any): any;
+
+        /**
+         * This field or method was not documented by atomdoc, assume it is private. Use with caution.
+         */
+        id: any /* default */;
+
+        /**
+         * This field or method was not documented by atomdoc, assume it is private. Use with caution.
+         */
+        store: void;
+
+        /**
+         * This field or method was not documented by atomdoc, assume it is private. Use with caution.
+         */
+        constructor(id?: any, store?: any, range?: TextBuffer.Range, params?: any);
+
+        /**
+         * Invoke the given callback when the marker is destroyed.
+         * @param callback - {Function} to be called when the marker is destroyed.
+         */
+        onDidDestroy(callback: Function /* needs to be defined */): EventKit.Disposable;
+
+        /**
+         * Invoke the given callback when the state of the marker changes.
+         * @param callback - {Function} to be called when the marker changes.
+         */
+        onDidChange(callback: Function /* needs to be defined */): EventKit.Disposable;
+
+        getBufferRange(): TextBuffer.Range;
+        setBufferRange(range?: TextBuffer.Range, properties?: any): TextBuffer.Range;
+        getScreenRange(): TextBuffer.Range;
+        setScreenRange(range?: TextBuffer.Range, properties?: any): TextBuffer.Range;
+
+        getHeadBufferPosition(): Point;
+        setHeadBufferPosition(position?: Point, properties?: any): Point;
+        getHeadScreenPosition(): Point;
+        setHeadScreenPosition(position?: Point, properties?: any): Point;
+        getTailBufferPosition(): Point;
+        setTailBufferPosition(position?: Point, properties?: any): Point;
+        getTailScreenPosition(): Point;
+        setTailScreenPosition(position?: Point, properties?: any): Point;
+
+        getStartBufferPosition(): Point;
+        getStartScreenPosition(): Point;
+        getEndBufferPosition(): Point;
+        getEndScreenPosition(): Point;
+        clearTail(properties?: any): void;
+
+        /**
+         * Plants the marker"s tail at the current head position. After calling
+         * the marker"s tail position will be its head position at the time of the
+         * call, regardless of where the marker"s head is moved.
+         * @param properties? - {Object} properties to associate with the marker.
+         */
+        plantTail(properties?: Object): any;
+
+        isReversed(): boolean;
+
+        hasTail(): boolean;
+
+        /**
+         * Is the marker valid?
+         */
+        isValid(): boolean;
+
+        /**
+         * Is the marker destroyed?
+         */
+        isDestroyed(): boolean;
+
+        isEqual(other?: boolean): boolean;
+
+        /**
+         * Get the invalidation strategy for this marker.
+         *
+         * Valid values include: `never`, `surround`, `overlap`, `inside`, and `touch`.
+         * Returns a {String}.
+         */
+        getInvalidationStrategy(): string;
+
+        getProperties(): Object;
+
+        /**
+         * Merges an {Object} containing new properties into the marker"s
+         * existing properties.
+         * @param properties? - {Object}
+         */
+        setProperties(properties?: any): void;
+
+        /**
+         * Creates and returns a new {Marker} with the same properties as this
+         * marker.
+         */
+        copy(options?: Marker): Marker;
+
+        /**
+         * Destroys the marker, causing it to emit the "destroyed" event. Once
+         * destroyed, a marker cannot be restored by undo/redo operations.
+         */
+        destroy(): void;
+
+        /**
+         * This field or method was not documented by atomdoc, assume it is private. Use with caution.
+         */
+        extractParams(params?: any): any;
+
+        /**
+         * Compares this marker to another based on their ranges.
+         * @param other? - {Marker}
+         */
+        compare(other?: Marker): any;
+
+        /**
+         *
+         * This field or method was marked private by atomdoc. Use with caution.
+         * Returns whether this marker matches the given parameters. The parameters
+         * are the same as {MarkerManager::findMarkers}.
+         */
+        matchesParams(params?: any): any;
+
+        /**
+         *
+         * This field or method was marked private by atomdoc. Use with caution.
+         * Returns whether this marker matches the given parameter name and value.
+         * The parameters are the same as {MarkerManager::findMarkers}.
+         */
+        matchesParam(key?: any, value?: any): any;
+
+        /**
+         * This field or method was not documented by atomdoc, assume it is private. Use with caution.
+         */
+        update(oldRange?: TextBuffer.Range, options?: (range?: TextBuffer.Range, reversed?: any, tailed?: any, valid?: any, properties?: any) => any, textChanged?: any): void;
+
+        /**
+         * This field or method was not documented by atomdoc, assume it is private. Use with caution.
+         */
+        getSnapshot(range?: TextBuffer.Range): any;
+
+        /**
+         * This field or method was not documented by atomdoc, assume it is private. Use with caution.
+         */
+        toString(): any;
+
+        /**
+         * Private
+         * This field or method was marked private by atomdoc. Use with caution.
+         */
+        emitChangeEvent(currentRange?: TextBuffer.Range, textChanged?: string, propertiesChanged?: any): void;
+
+    }
+
+    /**
+     * Represents a buffer annotation that remains logically stationary
+     * even as the buffer changes. This is used to represent cursors, folds, snippet
+     * targets, misspelled words, and anything else that needs to track a logical
+     * location in the buffer over time.
+     */
+    class MarkerLayer {
+        /**
+         * Create a marker with the given range. This marker will maintain
+         * its logical location as the buffer is changed, so if you mark a particular
+         * word, the marker will remain over that word even if the word"s location in
+         * the buffer changes.
+         * @param range? - A {Range} or range-compatible {Array}
+         * @param properties? - A hash of key-value pairs to associate with the marker. There are also reserved property names that have marker-specific meaning.
+         */
+        markRange(range?: TextBuffer.Range, properties?: any): Marker;
+
+        /**
+         * Create a marker at the given position with no tail.
+         * @param position? - {Point} or point-compatible {Array}
+         * @param properties? - This is the same as the `properties` parameter in {::markRange}
+         */
+        markPosition(position?: Point, properties?: any): Marker;
+
+        /**
+         * Get all existing markers on the buffer.
+         */
+        getMarkers(): Atom.Marker[];
+
+        /**
+         * Get an existing marker by its id.
+         * @param id? - {Number} id of the marker to retrieve
+         */
+        getMarker(id?: number): Atom.Marker;
+
+        /**
+         * Find markers conforming to the given parameters.
+         *
+         * Markers are sorted based on their position in the buffer. If two markers
+         * start at the same position, the larger marker comes first.
+         * @param params? - A hash of key-value pairs constraining the set of returned markers. You can query against custom marker properties by listing the desired key-value pairs here. In addition, the following keys are reserved and have special semantics:
+         */
+        findMarkers(params?: any): Atom.Marker[];
+
+        /**
+         * Get the number of markers in the buffer.
+         */
+        getMarkerCount(): number;
+
+        /**
+         * Invoke the given callback when the marker is destroyed.
+         * @param callback - {Function} to be called when the marker is destroyed.
+         */
+        onDidDestroy(callback: Function /* needs to be defined */): EventKit.Disposable;
+
+        /**
+         * Invoke the given callback when the state of the marker changes.
+         * @param callback - {Function} to be called when the marker changes.
+         */
+        onDidUpdate(callback: Function /* needs to be defined */): EventKit.Disposable;
+        onDidCreateMarker(callback: Function /* needs to be defined */): EventKit.Disposable;
+    }
+
+    /**
+     * Represents a buffer annotation that remains logically stationary
+     * even as the buffer changes. This is used to represent cursors, folds, snippet
+     * targets, misspelled words, and anything else that needs to track a logical
+     * location in the buffer over time.
+     */
+    class DisplayMarkerLayer {
+        /**
+         * Create a marker with the given range. This marker will maintain
+         * its logical location as the buffer is changed, so if you mark a particular
+         * word, the marker will remain over that word even if the word"s location in
+         * the buffer changes.
+         * @param range? - A {Range} or range-compatible {Array}
+         * @param properties? - A hash of key-value pairs to associate with the marker. There are also reserved property names that have marker-specific meaning.
+         */
+        markScreenRange(range?: TextBuffer.Range, properties?: any): Marker;
+
+        /**
+         * Create a marker at the given position with no tail.
+         * @param position? - {Point} or point-compatible {Array}
+         * @param properties? - This is the same as the `properties` parameter in {::markRange}
+         */
+        markScreenPosition(position?: Point, properties?: any): Marker;
+        /**
+         * Create a marker with the given range. This marker will maintain
+         * its logical location as the buffer is changed, so if you mark a particular
+         * word, the marker will remain over that word even if the word"s location in
+         * the buffer changes.
+         * @param range? - A {Range} or range-compatible {Array}
+         * @param properties? - A hash of key-value pairs to associate with the marker. There are also reserved property names that have marker-specific meaning.
+         */
+        markBufferRange(range?: TextBuffer.Range, properties?: any): Marker;
+
+        /**
+         * Create a marker at the given position with no tail.
+         * @param position? - {Point} or point-compatible {Array}
+         * @param properties? - This is the same as the `properties` parameter in {::markRange}
+         */
+        markBufferPosition(position?: Point, properties?: any): Marker;
+
+        /**
+         * Get all existing markers on the buffer.
+         */
+        getMarkers(): Atom.Marker[];
+
+        /**
+         * Get an existing marker by its id.
+         * @param id? - {Number} id of the marker to retrieve
+         */
+        getMarker(id?: number): Atom.Marker;
+
+        /**
+         * Find markers conforming to the given parameters.
+         *
+         * Markers are sorted based on their position in the buffer. If two markers
+         * start at the same position, the larger marker comes first.
+         * @param params? - A hash of key-value pairs constraining the set of returned markers. You can query against custom marker properties by listing the desired key-value pairs here. In addition, the following keys are reserved and have special semantics:
+         */
+        findMarkers(params?: any): Atom.Marker[];
+
+        /**
+         * Get the number of markers in the buffer.
+         */
+        getMarkerCount(): number;
+
+        /**
+         * Invoke the given callback when the marker is destroyed.
+         * @param callback - {Function} to be called when the marker is destroyed.
+         */
+        onDidDestroy(callback: Function /* needs to be defined */): EventKit.Disposable;
+
+        /**
+         * Invoke the given callback when the state of the marker changes.
+         * @param callback - {Function} to be called when the marker changes.
+         */
+        onDidUpdate(callback: Function /* needs to be defined */): EventKit.Disposable;
+        onDidCreateMarker(callback: Function /* needs to be defined */): EventKit.Disposable;
     }
 
     /**
@@ -608,12 +912,12 @@ declare module TextBuffer {
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        constructor(text? : string, regex? : any, startIndex? : any, endIndex? : any);
+        constructor(text?: string, regex?: any, startIndex?: any, endIndex?: any);
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        next() : any;
+        next(): any;
 
     }
 
@@ -645,17 +949,17 @@ declare module TextBuffer {
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        constructor(text? : string, regex? : any, startIndex? : any, endIndex? : any, chunkSize? : any);
+        constructor(text?: string, regex?: any, startIndex?: any, endIndex?: any, chunkSize?: any);
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        scanNextChunk() : any;
+        scanNextChunk(): any;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        next() : any;
+        next(): any;
 
     }
 
@@ -672,27 +976,27 @@ declare module TextBuffer {
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        constructor(children? : any);
+        constructor(children?: any);
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        splice(childIndex? : any, splitChildren? : any) : any;
+        splice(childIndex?: any, splitChildren?: any): any;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        merge(rightNeighbor? : any) : any;
+        merge(rightNeighbor?: any): any;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        calculateExtent(childIndex? : any) : any;
+        calculateExtent(childIndex?: any): any;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        toString(indentLevel? : any) : any;
+        toString(indentLevel?: any): any;
 
     }
 
@@ -719,22 +1023,22 @@ declare module TextBuffer {
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        constructor(inputExtent? : string, outputExtent? : string, content? : any);
+        constructor(inputExtent?: string, outputExtent?: string, content?: any);
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        insert(inputOffset? : boolean, outputOffset? : boolean, newInputExtent? : string, newOutputExtent? : string, newContent? : boolean) : Range | boolean;
+        insert(inputOffset?: boolean, outputOffset?: boolean, newInputExtent?: string, newOutputExtent?: string, newContent?: boolean): Range | boolean;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        merge(rightNeighbor? : any) : any;
+        merge(rightNeighbor?: any): any;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        toString(indentLevel? : any) : any;
+        toString(indentLevel?: any): any;
 
     }
 
@@ -756,62 +1060,62 @@ declare module TextBuffer {
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        constructor(patch? : Patch, path? : string);
+        constructor(patch?: Patch, path?: string);
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        next() : any;
+        next(): any;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        seek(targetOutputOffset? : any) : any;
+        seek(targetOutputOffset?: any): any;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        seekToInputPosition(targetInputOffset? : any) : Point;
+        seekToInputPosition(targetInputOffset?: any): Point;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        splice(oldOutputExtent? : string, newExtent? : any, newContent? : any) : any;
+        splice(oldOutputExtent?: string, newExtent?: any, newContent?: any): any;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        getOutputPosition() : Point;
+        getOutputPosition(): Point;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        getInputPosition() : Point;
+        getInputPosition(): Point;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        copy() : RegionIterator;
+        copy(): RegionIterator;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        descendToLeftmostLeaf(node? : Node) : Leaf;
+        descendToLeftmostLeaf(node?: Node): Leaf;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        deleteUntil(rightIterator? : any) : void;
+        deleteUntil(rightIterator?: any): void;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        insert(newInputExtent? : string, newOutputExtent? : string, newContent? : boolean) : Range | boolean;
+        insert(newInputExtent?: string, newOutputExtent?: string, newContent?: boolean): Range | boolean;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        toString() : any;
+        toString(): any;
 
     }
 
@@ -828,12 +1132,12 @@ declare module TextBuffer {
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        constructor(patchIterator? : any);
+        constructor(patchIterator?: any);
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        next() : any;
+        next(): any;
 
     }
 
@@ -850,32 +1154,32 @@ declare module TextBuffer {
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        splice(spliceOutputStart? : any, oldOutputExtent? : string, newOutputExtent? : string, content? : any) : any;
+        splice(spliceOutputStart?: any, oldOutputExtent?: string, newOutputExtent?: string, content?: any): any;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        clear() : void;
+        clear(): void;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        regions() : any;
+        regions(): any;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        changes() : any;
+        changes(): any;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        toInputPosition(outputPosition? : Point) : Point;
+        toInputPosition(outputPosition?: Point): Point;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        toOutputPosition(inputPosition? : Point) : Point;
+        toOutputPosition(inputPosition?: Point): Point;
 
     }
 
@@ -889,29 +1193,29 @@ declare module TextBuffer {
          * @param copy? - An optional boolean indicating whether to force the copying of objects that are already points.
          * Returns: A {Point} based on the given object.
          */
-        static fromObject(object? : Point, copy? : any) : Point;
+        static fromObject(object?: Point, copy?: any): Point;
 
-        static min(point1? : Point, point2? : Point) : Point;
-
-        /**
-         * This field or method was not documented by atomdoc, assume it is private. Use with caution.
-         */
-        static max(point1? : any, point2? : any) : any;
+        static min(point1?: Point, point2?: Point): Point;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        static assertValid(point? : Point) : any;
+        static max(point1?: any, point2?: any): any;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        static ZERO() : any;
+        static assertValid(point?: Point): any;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        static INFINITY() : any;
+        static ZERO(): any;
+
+        /**
+         * This field or method was not documented by atomdoc, assume it is private. Use with caution.
+         */
+        static INFINITY(): any;
 
         /**
          * A zero-indexed {Number} representing the row of the {Point}.
@@ -928,17 +1232,17 @@ declare module TextBuffer {
          * @param row? - {Number} row
          * @param column? - {Number} column
          */
-        constructor(row? : number, column? : number);
+        constructor(row?: number, column?: number);
 
-        copy() : Point;
+        copy(): Point;
 
-        negate() : Point;
+        negate(): Point;
 
         /**
          * Makes this point immutable and returns itself.
          * Returns an immutable version of this {Point}
          */
-        freeze() : Point;
+        freeze(): Point;
 
         /**
          * Build and return a new point by adding the rows and columns of
@@ -946,7 +1250,7 @@ declare module TextBuffer {
          * @param other? - A {Point} whose row and column will be added to this point"s row and column to build the returned point.
          * Returns a {Point}.
          */
-        translate(other? : Point) : Point;
+        translate(other?: Point): Point;
 
         /**
          * Build and return a new {Point} by traversing the rows and columns
@@ -960,50 +1264,50 @@ declare module TextBuffer {
          * @param other? - A {Point} providing the rows and columns to traverse by.
          * Returns a {Point}.
          */
-        traverse(other? : Point) : Point;
+        traverse(other?: Point): Point;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        traversalFrom(other? : any) : any;
+        traversalFrom(other?: any): any;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        splitAt(column? : number) : any;
+        splitAt(column?: number): any;
 
-        compare(other? : Point) : any;
+        compare(other?: Point): any;
 
-        isEqual(other? : boolean) : boolean;
+        isEqual(other?: boolean): boolean;
 
-        isLessThan(other? : boolean) : boolean;
+        isLessThan(other?: boolean): boolean;
 
-        isLessThanOrEqual(other? : boolean) : boolean;
+        isLessThanOrEqual(other?: boolean): boolean;
 
-        isGreaterThan(other? : boolean) : boolean;
+        isGreaterThan(other?: boolean): boolean;
 
-        isGreaterThanOrEqual(other? : boolean) : boolean;
-
-        /**
-         * This field or method was not documented by atomdoc, assume it is private. Use with caution.
-         */
-        isZero() : boolean;
+        isGreaterThanOrEqual(other?: boolean): boolean;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        isPositive() : boolean;
+        isZero(): boolean;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        isNegative() : boolean;
+        isPositive(): boolean;
 
-        toArray() : any;
+        /**
+         * This field or method was not documented by atomdoc, assume it is private. Use with caution.
+         */
+        isNegative(): boolean;
 
-        serialize() : any;
+        toArray(): any;
 
-        toString() : any;
+        serialize(): any;
+
+        toString(): any;
 
     }
 
@@ -1017,13 +1321,13 @@ declare module TextBuffer {
          * @param copy? - An optional boolean indicating whether to force the copying of objects that are already ranges.˚
          * Returns: A {Range} based on the given object.
          */
-        static fromObject(object? : Range, copy? : any) : Range;
+        static fromObject(object?: Range, copy?: any): Range;
 
         /**
          *
          * This field or method was marked private by atomdoc. Use with caution.
          */
-        static fromText(args? : any) : string;
+        static fromText(args?: any): string;
 
         /**
          *
@@ -1034,13 +1338,13 @@ declare module TextBuffer {
          * Returns a {Range} that starts at the given point and ends at the
          * start point plus the given row and column deltas.
          */
-        static fromPointWithDelta(startPoint? : Point, rowDelta? : number, columnDelta? : number) : Range;
+        static fromPointWithDelta(startPoint?: Point, rowDelta?: number, columnDelta?: number): Range;
 
         /**
          * Call this with the result of {Range::serialize} to construct a new Range.
          * @param array? - {Array} of params to pass to the {::constructor}
          */
-        static deserialize(array? : any[]) : any;
+        static deserialize(array?: any[]): any;
 
         /**
          * A {Point} representing the start of the {Range}.
@@ -1055,36 +1359,36 @@ declare module TextBuffer {
         /**
          * Construct a {Range} object
          */
-        constructor(pointA? : any, pointB? : any);
+        constructor(pointA?: any, pointB?: any);
 
-        copy() : Range;
+        copy(): Range;
 
-        negate() : any;
+        negate(): any;
 
-        serialize() : any;
+        serialize(): any;
 
         /**
          * Is the start position of this range equal to the end position?
          */
-        isEmpty() : boolean;
+        isEmpty(): boolean;
 
-        isSingleLine() : number;
+        isSingleLine(): number;
 
         /**
          * Get the number of rows in this range.
          */
-        getRowCount() : number;
+        getRowCount(): number;
 
-        getRows() : number[];
+        getRows(): number[];
 
         /**
          * Freezes the range and its start and end point so it becomes
          * immutable and returns itself.
          * Returns an immutable version of this {Range}
          */
-        freeze() : Range;
+        freeze(): Range;
 
-        union(otherRange? : TextBuffer.Range) : any;
+        union(otherRange?: TextBuffer.Range): any;
 
         /**
          * Build and return a new range by translating this range"s start and
@@ -1093,7 +1397,7 @@ declare module TextBuffer {
          * @param endDelta? - A {Point} to by which to translate the end of this range. If omitted, the `startDelta` will be used instead.
          * Returns a {Range}.
          */
-        translate(startDelta? : Point, endDelta? : Point) : Range;
+        translate(startDelta?: Point, endDelta?: Point): Range;
 
         /**
          * Build and return a new range by traversing this range"s start and
@@ -1103,7 +1407,7 @@ declare module TextBuffer {
          * @param delta? - A {Point} containing the rows and columns to traverse to derive the new range.
          * Returns a {Range}.
          */
-        traverse(delta? : Point) : Range;
+        traverse(delta?: Point): Range;
 
         /**
          * Compare two Ranges
@@ -1111,39 +1415,39 @@ declare module TextBuffer {
          * Returns `0` if this range is equivalent to the argument.
          * Returns `1` if this range starts after the argument or is contained by it.
          */
-        compare(other? : any) : any;
+        compare(other?: Range): -1 | 0 | 1;
 
-        isEqual(other? : boolean) : boolean;
+        isEqual(other?: Range): boolean;
 
-        coversSameRows(other? : any) : number[];
+        coversSameRows(other?: any): number[];
 
         /**
          * Determines whether this range intersects with the argument.
          * @param otherRange? - A {Range} or range-compatible {Array}
          * @param exclusive? - {Boolean} indicating whether to exclude endpoints   when testing for intersection. Defaults to `false`.
          */
-        intersectsWith(otherRange? : TextBuffer.Range, exclusive? : boolean) : boolean;
+        intersectsWith(otherRange?: TextBuffer.Range, exclusive?: boolean): boolean;
 
-        containsRange(otherRange? : TextBuffer.Range, exclusive? : any) : TextBuffer.Range;
+        containsRange(otherRange?: TextBuffer.Range, exclusive?: any): TextBuffer.Range;
 
-        containsPoint(point? : Point, exclusive? : any) : Point;
+        containsPoint(point?: Point, exclusive?: any): Point;
 
-        intersectsRow(row? : number) : number;
+        intersectsRow(row?: number): number;
 
-        intersectsRowRange(startRow? : number, endRow? : number) : TextBuffer.Range;
+        intersectsRowRange(startRow?: number, endRow?: number): TextBuffer.Range;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        getExtent() : string;
+        getExtent(): string;
 
         /**
          * Conversion
          * This field or method was marked private by atomdoc. Use with caution.
          */
-        toDelta() : any;
+        toDelta(): any;
 
-        toString() : any;
+        toString(): any;
 
     }
 
@@ -1170,27 +1474,27 @@ declare module TextBuffer {
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        constructor(buffer? : any, match? : any, lengthDelta? : any);
+        constructor(buffer?: any, match?: any, lengthDelta?: any);
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        getReplacementDelta() : any;
+        getReplacementDelta(): any;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        replace(text? : string) : any;
+        replace(text?: string): any;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        stop() : any;
+        stop(): any;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        keepLooping() : any;
+        keepLooping(): any;
 
     }
 
@@ -1300,19 +1604,19 @@ declare module TextBuffer {
          * Create a new buffer with the given params.
          * @param params? - {Object} or {String} of text
          */
-        constructor(params? : Object);
+        constructor(params?: Object);
 
         /**
          * Called by {Serializable} mixin during deserialization.
          * This field or method was marked private by atomdoc. Use with caution.
          */
-        deserializeParams(params? : any) : any;
+        deserializeParams(params?: any): any;
 
         /**
          * Called by {Serializable} mixin during serialization.
          * This field or method was marked private by atomdoc. Use with caution.
          */
-        serializeParams() : any;
+        serializeParams(): any;
 
         /**
          * Invoke the given callback synchronously _before_ the content of the
@@ -1322,7 +1626,7 @@ declare module TextBuffer {
          * any expensive operations via this method.
          * @param callback - {Function} to be called when the buffer changes.
          */
-        onWillChange(callback : Function) : EventKit.Disposable;
+        onWillChange(callback: Function): EventKit.Disposable;
 
         /**
          * Invoke the given callback synchronously when the content of the
@@ -1333,7 +1637,7 @@ declare module TextBuffer {
          * delay expensive operations until after changes stop occurring.
          * @param callback - {Function} to be called when the buffer changes.
          */
-        onDidChange(callback : Function /* needs to be defined */) : EventKit.Disposable;
+        onDidChange(callback: Function /* needs to be defined */): EventKit.Disposable;
 
         /**
          * Invoke the given callback synchronously when the content of the
@@ -1344,12 +1648,12 @@ declare module TextBuffer {
          * delay expensive operations until after changes stop occurring.
          * @param callback - {Function} to be called when the buffer changes.
          */
-        onDidChangeText(callback : Function /* needs to be defined */) : EventKit.Disposable;
+        onDidChangeText(callback: Function /* needs to be defined */): EventKit.Disposable;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        preemptDidChange(callback? : any) : any;
+        preemptDidChange(callback?: any): any;
 
         /**
          * Invoke the given callback asynchronously following one or more
@@ -1361,20 +1665,20 @@ declare module TextBuffer {
          * synchronously, use {::onDidChange} instead.
          * @param callback - {Function} to be called when the buffer stops changing.
          */
-        onDidStopChanging(callback : Function /* needs to be defined */) : EventKit.Disposable;
+        onDidStopChanging(callback: Function /* needs to be defined */): EventKit.Disposable;
 
         /**
          * Invoke the given callback when the in-memory contents of the
          * buffer become in conflict with the contents of the file on disk.
          * @param callback - {Function} to be called when the buffer enters conflict.
          */
-        onDidConflict(callback : Function /* needs to be defined */) : EventKit.Disposable;
+        onDidConflict(callback: Function /* needs to be defined */): EventKit.Disposable;
 
         /**
          * Invoke the given callback the value of {::isModified} changes.
          * @param callback - {Function} to be called when {::isModified} changes.
          */
-        onDidChangeModified(callback : Function /* needs to be defined */) : EventKit.Disposable;
+        onDidChangeModified(callback: Function /* needs to be defined */): EventKit.Disposable;
 
         /**
          * Invoke the given callback when all marker `::onDidChange`
@@ -1393,78 +1697,78 @@ declare module TextBuffer {
          * change and all associated marker changes.
          * @param callback - {Function} to be called after markers are updated.
          */
-        onDidUpdateMarkers(callback : Function /* needs to be defined */) : EventKit.Disposable;
+        onDidUpdateMarkers(callback: Function /* needs to be defined */): EventKit.Disposable;
 
         /**
          * Invoke the given callback when a marker is created.
          * @param callback - {Function} to be called when a marker is created.
          */
-        onDidCreateMarker(callback : Function /* needs to be defined */) : EventKit.Disposable;
+        onDidCreateMarker(callback: Function /* needs to be defined */): EventKit.Disposable;
 
         /**
          * Invoke the given callback when the value of {::getPath} changes.
          * @param callback - {Function} to be called when the path changes.
          */
-        onDidChangePath(callback : Function /* needs to be defined */) : EventKit.Disposable;
+        onDidChangePath(callback: Function /* needs to be defined */): EventKit.Disposable;
 
         /**
          * Invoke the given callback when the value of {::getEncoding} changes.
          * @param callback - {Function} to be called when the encoding changes.
          */
-        onDidChangeEncoding(callback : Function /* needs to be defined */) : EventKit.Disposable;
+        onDidChangeEncoding(callback: Function /* needs to be defined */): EventKit.Disposable;
 
         /**
          * Invoke the given callback before the buffer is saved to disk.
          * @param callback - {Function} to be called before the buffer is saved.
          */
-        onWillSave(callback : Function) : EventKit.Disposable;
+        onWillSave(callback: Function): EventKit.Disposable;
 
         /**
          * Invoke the given callback after the buffer is saved to disk.
          * @param callback - {Function} to be called after the buffer is saved.
          */
-        onDidSave(callback : Function /* needs to be defined */) : EventKit.Disposable;
+        onDidSave(callback: Function /* needs to be defined */): EventKit.Disposable;
 
         /**
          * Invoke the given callback after the file backing the buffer is
          * deleted.
          * @param callback - {Function} to be called after the buffer is deleted.
          */
-        onDidDelete(callback : Function /* needs to be defined */) : EventKit.Disposable;
+        onDidDelete(callback: Function /* needs to be defined */): EventKit.Disposable;
 
         /**
          * Invoke the given callback before the buffer is reloaded from the
          * contents of its file on disk.
          * @param callback - {Function} to be called before the buffer is reloaded.
          */
-        onWillReload(callback : Function) : EventKit.Disposable;
+        onWillReload(callback: Function): EventKit.Disposable;
 
         /**
          * Invoke the given callback after the buffer is reloaded from the
          * contents of its file on disk.
          * @param callback - {Function} to be called after the buffer is reloaded.
          */
-        onDidReload(callback : Function /* needs to be defined */) : EventKit.Disposable;
+        onDidReload(callback: Function /* needs to be defined */): EventKit.Disposable;
 
         /**
          * Invoke the given callback when the buffer is destroyed.
          * @param callback - {Function} to be called when the buffer is destroyed.
          */
-        onDidDestroy(callback : Function /* needs to be defined */) : EventKit.Disposable;
+        onDidDestroy(callback: Function /* needs to be defined */): EventKit.Disposable;
 
         /**
          * Invoke the given callback when there is an error in watching the
          * file.
          * @param callback - {Function} callback
          */
-        onWillThrowWatchError(callback : Function) : EventKit.Disposable;
+        onWillThrowWatchError(callback: Function): EventKit.Disposable;
 
         /**
          * Get the number of milliseconds that will elapse without a change
          * before {::onDidStopChanging} observers are invoked following a change.
          * Returns a {Number}.
          */
-        getStoppedChangingDelay() : number;
+        getStoppedChangingDelay(): number;
 
         /**
          * Determine if the in-memory contents of the buffer differ from its
@@ -1472,47 +1776,47 @@ declare module TextBuffer {
          *
          * If the buffer is unsaved, always returns `true` unless the buffer is empty.
          */
-        isModified() : boolean;
+        isModified(): boolean;
 
         /**
          * Determine if the in-memory contents of the buffer conflict with the
          * on-disk contents of its associated file.
          */
-        isInConflict() : boolean;
+        isInConflict(): boolean;
 
         /**
          * Get the path of the associated file.
          */
-        getPath() : string;
+        getPath(): string;
 
         /**
          * Set the path for the buffer"s associated file.
          * @param filePath? - A {String} representing the new file path
          */
-        setPath(filePath? : string) : string;
+        setPath(filePath?: string): string;
 
         /**
          * Sets the character set encoding for this buffer.
          * @param encoding? - The {String} encoding to use (default: "utf8").
          */
-        setEncoding(encoding? : string) : string;
+        setEncoding(encoding?: string): string;
 
-        getEncoding() : string;
-
-        /**
-         * This field or method was not documented by atomdoc, assume it is private. Use with caution.
-         */
-        setPreferredLineEnding(preferredLineEnding? : any) : void;
+        getEncoding(): string;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        getPreferredLineEnding() : any;
+        setPreferredLineEnding(preferredLineEnding?: any): void;
+
+        /**
+         * This field or method was not documented by atomdoc, assume it is private. Use with caution.
+         */
+        getPreferredLineEnding(): any;
 
         /**
          * Get the path of the associated file.
          */
-        getUri() : string;
+        getUri(): string;
 
         /**
          * Get the basename of the associated file.
@@ -1521,91 +1825,91 @@ declare module TextBuffer {
          * directories.
          * This field or method was marked private by atomdoc. Use with caution.
          */
-        getBaseName() : string;
+        getBaseName(): string;
 
         /**
          * Determine whether the buffer is empty.
          */
-        isEmpty() : boolean;
+        isEmpty(): boolean;
 
         /**
          * Get the entire text of the buffer.
          */
-        getText() : string;
+        getText(): string;
 
         /**
          * Get the text in a range.
          * @param range? - A {Range}
          */
-        getTextInRange(range? : TextBuffer.Range) : TextBuffer.Range;
+        getTextInRange(range?: TextBuffer.Range): TextBuffer.Range;
 
         /**
          * Get the text of all lines in the buffer, without their line endings.
          */
-        getLines() : string[];
+        getLines(): string[];
 
         /**
          * Get the text of the last line of the buffer, without its line
          * ending.
          */
-        getLastLine() : number;
+        getLastLine(): number;
 
         /**
          * Get the text of the line at the given row, without its line ending.
          * @param row? - A {Number} representing a 0-indexed row.
          */
-        lineForRow(row? : number) : number;
+        lineForRow(row?: number): number;
 
         /**
          * Get the line ending for the given 0-indexed row.
          * @param row? - A {Number} indicating the row.
          */
-        lineEndingForRow(row? : number) : number;
+        lineEndingForRow(row?: number): number;
 
         /**
          * Get the length of the line for the given 0-indexed row, without its
          * line ending.
          * @param row? - A {Number} indicating the row.
          */
-        lineLengthForRow(row? : number) : number;
+        lineLengthForRow(row?: number): number;
 
         /**
          * Determine if the given row contains only whitespace.
          * @param row? - A {Number} representing a 0-indexed row.
          */
-        isRowBlank(row? : number) : boolean;
+        isRowBlank(row?: number): boolean;
 
         /**
          * Given a row, find the first preceding row that"s not blank.
          * @param startRow? - A {Number} identifying the row to start checking at.
          */
-        previousNonBlankRow(startRow? : number) : number;
+        previousNonBlankRow(startRow?: number): number;
 
         /**
          * Given a row, find the next row that"s not blank.
          * @param startRow? - A {Number} identifying the row to start checking at.
          */
-        nextNonBlankRow(startRow? : number) : number;
+        nextNonBlankRow(startRow?: number): number;
 
         /**
          * Replace the entire contents of the buffer with the given text.
          * @param text? - A {String}
          */
-        setText(text? : string) : string;
+        setText(text?: string): string;
 
         /**
          * Replace the current buffer contents by applying a diff based on the
          * given text.
          * @param text? - A {String} containing the new buffer contents.
          */
-        setTextViaDiff(text? : string) : string;
+        setTextViaDiff(text?: string): string;
 
         /**
          * Set the text in the given range.
          * @param range? - A {Range}
          * @param options? - {Object}
          */
-        setTextInRange(range? : TextBuffer.Range, newText? : string, options? : any): void;
+        setTextInRange(range?: TextBuffer.Range, newText?: string, options?: any): void;
 
         /**
          * Insert text at the given position.
@@ -1613,7 +1917,7 @@ declare module TextBuffer {
          * @param text? - A {String} representing the text to insert.
          * @param options? - {Object}
          */
-        insert(position? : boolean, text? : string, options? : boolean) : Range | boolean;
+        insert(position?: boolean, text?: string, options?: boolean): Range | boolean;
 
         /**
          * Append text to the end of the buffer.
@@ -1621,25 +1925,25 @@ declare module TextBuffer {
          * @param options? - {Object}
          * Returns the {Range} of the inserted text
          */
-        append(text? : string, options? : Object) : Range;
+        append(text?: string, options?: Object): Range;
 
         /**
          * Applies a change to the buffer based on its old range and new text.
          * This field or method was marked private by atomdoc. Use with caution.
          */
-        applyChange(change? : any, skipUndo? : any) : any;
+        applyChange(change?: any, skipUndo?: any): any;
 
         /**
          * Delete the text in the given range.
          * @param range? - A {Range} in which to delete. The range is clipped before deleting.
          */
-        delete(range? : TextBuffer.Range) : void;
+        delete(range?: TextBuffer.Range): void;
 
         /**
          * Delete the line associated with a specified row.
          * @param row? - A {Number} representing the 0-indexed row to delete.
          */
-        deleteRow(row? : number) : number;
+        deleteRow(row?: number): number;
 
         /**
          * Delete the lines associated with the specified row range.
@@ -1649,7 +1953,7 @@ declare module TextBuffer {
          * @param startRow? - A {Number} representing the first row to delete.
          * @param endRow? - A {Number} representing the last row to delete, inclusive.
          */
-        deleteRows(startRow? : number, endRow? : number) : number[];
+        deleteRows(startRow?: number, endRow?: number): number[];
 
         /**
          * Create a marker with the given range. This marker will maintain
@@ -1659,25 +1963,25 @@ declare module TextBuffer {
          * @param range? - A {Range} or range-compatible {Array}
          * @param properties? - A hash of key-value pairs to associate with the marker. There are also reserved property names that have marker-specific meaning.
          */
-        markRange(range? : TextBuffer.Range, properties? : any) : Marker;
+        markRange(range?: TextBuffer.Range, properties?: any): Marker;
 
         /**
          * Create a marker at the given position with no tail.
          * @param position? - {Point} or point-compatible {Array}
          * @param properties? - This is the same as the `properties` parameter in {::markRange}
          */
-        markPosition(position? : Point, properties? : any) : Marker;
+        markPosition(position?: Point, properties?: any): Marker;
 
         /**
          * Get all existing markers on the buffer.
          */
-        getMarkers() : Atom.Marker[];
+        getMarkers(): Atom.Marker[];
 
         /**
          * Get an existing marker by its id.
          * @param id? - {Number} id of the marker to retrieve
          */
-        getMarker(id? : number) : Atom.Marker;
+        getMarker(id?: number): Atom.Marker;
 
         /**
          * Find markers conforming to the given parameters.
@@ -1686,27 +1990,56 @@ declare module TextBuffer {
          * start at the same position, the larger marker comes first.
          * @param params? - A hash of key-value pairs constraining the set of returned markers. You can query against custom marker properties by listing the desired key-value pairs here. In addition, the following keys are reserved and have special semantics:
          */
-        findMarkers(params? : any) : Atom.Marker[];
+        findMarkers(params?: any): Atom.Marker[];
 
         /**
          * Get the number of markers in the buffer.
          */
-        getMarkerCount() : number;
+        getMarkerCount(): number;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        destroyMarker(id? : any) : Atom.Marker;
+        destroyMarker(id?: any): Atom.Marker;
+
+        /*
+        # Public: Create a layer to contain a set of related markers.
+        #
+        # * `options` An object contaning the following keys:
+        #   * `maintainHistory` A {Boolean} indicating whether or not the state of
+        #     this layer should be restored on undo/redo operations. Defaults to
+        #     `false`.
+        #   * `persistent` A {Boolean} indicating whether or not this marker layer
+        #     should be serialized and deserialized along with the rest of the
+        #     buffer. Defaults to `false`. If `true`, the marker layer's id will be
+        #     maintained across the serialization boundary, allowing you to retrieve
+        #     it via {::getMarkerLayer}.
+        #
+        # Returns a {MarkerLayer}.
+        */
+        addMarkerLayer(options: { maintainHistory?: boolean; persistent?: boolean; }): MarkerLayer;
+
+        /*
+        # Public: Get a {MarkerLayer} by id.
+        #
+        # * `id` The id of the marker layer to retrieve.
+        #
+        # Returns a {MarkerLayer} or `undefined` if no layer exists with the given
+        # id.
+        */
+        getMarkerLayer(id: number): MarkerLayer;
+        addDisplayLayer(options: any): DisplayMarkerLayer;
+        getDisplayLayer(id: number): DisplayMarkerLayer;
 
         /**
          * Undo the last operation. If a transaction is in progress, aborts it.
          */
-        undo() : void;
+        undo(): void;
 
         /**
          * Redo the last operation
          */
-        redo() : void;
+        redo(): void;
 
         /**
          * Batch multiple operations as a single undo/redo step.
@@ -1718,23 +2051,23 @@ declare module TextBuffer {
          * @param groupingInterval? - The {Number} of milliseconds for which this transaction should be considered "open for grouping" after it begins. If a transaction with a positive `groupingInterval` is committed while the previous transaction is still open for grouping, the two transactions are merged with respect to undo and redo.
          * @param fn? - A {Function} to call inside the transaction.
          */
-        transact(groupingInterval? : number, fn? : Function) : any;
+        transact(groupingInterval?: number, fn?: Function): any;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        abortTransaction() : any;
+        abortTransaction(): any;
 
         /**
          * Clear the undo stack.
          */
-        clearUndoStack() : void;
+        clearUndoStack(): void;
 
         /**
          * Create a pointer to the current state of the buffer for use
          * with {::revertToCheckpoint} and {::groupChangesSinceCheckpoint}.
          */
-        createCheckpoint() : Checkpoint;
+        createCheckpoint(): Checkpoint;
 
         /**
          * Revert the buffer to the state it was in when the given
@@ -1745,7 +2078,7 @@ declare module TextBuffer {
          * undo history, no changes will be made to the buffer and this method will
          * return `false`.
          */
-        revertToCheckpoint(checkpoint? : Checkpoint) : Checkpoint;
+        revertToCheckpoint(checkpoint?: Checkpoint): Checkpoint;
 
         /**
          * Group all changes since the given checkpoint into a single
@@ -1754,7 +2087,7 @@ declare module TextBuffer {
          * If the given checkpoint is no longer present in the undo history, no
          * grouping will be performed and this method will return `false`.
          */
-        groupChangesSinceCheckpoint(checkpoint? : Checkpoint) : Checkpoint;
+        groupChangesSinceCheckpoint(checkpoint?: Checkpoint): Checkpoint;
 
         /**
          * Scan regular expression matches in the entire buffer, calling the
@@ -1765,7 +2098,7 @@ declare module TextBuffer {
          * @param regex? - A {RegExp} to search for.
          * @param iterator? - A {Function} that"s called on each match with an {Object} containing the following keys:
          */
-        scan(regex? : RegExp, iterator? : Function) : any;
+        scan(regex?: RegExp, iterator?: Function): any;
 
         /**
          * Scan regular expression matches in the entire buffer in reverse
@@ -1773,7 +2106,7 @@ declare module TextBuffer {
          * @param regex? - A {RegExp} to search for.
          * @param iterator? - A {Function} that"s called on each match with an {Object} containing the following keys:
          */
-        backwardsScan(regex? : RegExp, iterator? : Function) : any;
+        backwardsScan(regex?: RegExp, iterator?: Function): any;
 
         /**
          * Scan regular expression matches in a given range , calling the given
@@ -1782,7 +2115,7 @@ declare module TextBuffer {
          * @param range? - A {Range} in which to search.
          * @param iterator? - A {Function} that"s called on each match with an {Object} containing the following keys:
          */
-        scanInRange(regex? : RegExp, range? : TextBuffer.Range, iterator? : Function, reverse? : any) : TextBuffer.Range;
+        scanInRange(regex?: RegExp, range?: TextBuffer.Range, iterator?: Function, reverse?: any): TextBuffer.Range;
 
         /**
          * Scan regular expression matches in a given range in reverse order,
@@ -1791,7 +2124,7 @@ declare module TextBuffer {
          * @param range? - A {Range} in which to search.
          * @param iterator? - A {Function} that"s called on each match with an {Object} containing the following keys:
          */
-        backwardsScanInRange(regex? : RegExp, range? : TextBuffer.Range, iterator? : Function) : TextBuffer.Range;
+        backwardsScanInRange(regex?: RegExp, range?: TextBuffer.Range, iterator?: Function): TextBuffer.Range;
 
         /**
          * Replace all regular expression matches in the entire buffer.
@@ -1799,46 +2132,46 @@ declare module TextBuffer {
          * @param replacementText? - A {String} representing the text to replace each match.
          * Returns a {Number} representing the number of replacements made.
          */
-        replace(regex? : RegExp, replacementText? : string) : number;
+        replace(regex?: RegExp, replacementText?: string): number;
 
         /**
          * Get the range spanning from `[0, 0]` to {::getEndPosition}.
          */
-        getRange() : TextBuffer.Range;
+        getRange(): TextBuffer.Range;
 
         /**
          * Get the number of lines in the buffer.
          */
-        getLineCount() : number;
+        getLineCount(): number;
 
         /**
          * Get the last 0-indexed row in the buffer.
          */
-        getLastRow() : number;
+        getLastRow(): number;
 
         /**
          * Get the first position in the buffer, which is always `[0, 0]`.
          */
-        getFirstPosition() : Point;
+        getFirstPosition(): Point;
 
         /**
          * Get the maximal position in the buffer, where new text would be
          * appended.
          */
-        getEndPosition() : Point;
+        getEndPosition(): Point;
 
         /**
          * Get the length of the buffer in characters.
          * Returns a {Number}.
          */
-        getMaxCharacterIndex() : number;
+        getMaxCharacterIndex(): number;
 
         /**
          * Get the range for the given row
          * @param row? - A {Number} representing a 0-indexed row.
          * @param includeNewline? - A {Boolean} indicating whether or not to include the newline, which results in a range that extends to the start of the next line.
          */
-        rangeForRow(row? : number, includeNewline? : boolean) : number;
+        rangeForRow(row?: number, includeNewline?: boolean): number;
 
         /**
          * Convert a position in the buffer in row/column coordinates to an
@@ -1847,7 +2180,7 @@ declare module TextBuffer {
          * The position is clipped prior to translating.
          * @param position? - A {Point}.
          */
-        characterIndexForPosition(position? : Point) : Point;
+        characterIndexForPosition(position?: Point): Point;
 
         /**
          * Convert an absolute character offset, inclusive of newlines, to a
@@ -1856,7 +2189,7 @@ declare module TextBuffer {
          * The offset is clipped prior to translating.
          * @param offset? - A {Number}.
          */
-        positionForCharacterIndex(offset? : number) : Point;
+        positionForCharacterIndex(offset?: number): Point;
 
         /**
          * Clip the given range so it starts and ends at valid positions.
@@ -1865,7 +2198,7 @@ declare module TextBuffer {
          * only 10 characters long, and it would be clipped to `(1, 10)`.
          * @param range? - A {Range} or range-compatible {Array} to clip.
          */
-        clipRange(range? : TextBuffer.Range) : TextBuffer.Range;
+        clipRange(range?: TextBuffer.Range): TextBuffer.Range;
 
         /**
          * Clip the given point so it is at a valid position in the buffer.
@@ -1874,31 +2207,31 @@ declare module TextBuffer {
          * only 10 characters long, and it would be clipped to (1, 10)
          * @param position? - A {Point} or point-compatible {Array}.
          */
-        clipPosition(position? : Point) : Point;
+        clipPosition(position?: Point): Point;
 
         /**
          * Save the buffer.
          */
-        save(options? : any) : void;
+        save(options?: any): void;
 
         /**
          * Save the buffer at a specific path.
          * @param filePath? - The path to save at.
          */
-        saveAs(filePath? : string, options? : any) : void;
+        saveAs(filePath?: string, options?: any): void;
 
         /**
          * Reload the buffer"s contents from disk.
          *
          * Sets the buffer"s content to the cached disk contents
          */
-        reload(clearHistory? : History) : void;
+        reload(clearHistory?: History): void;
 
         /**
          * Rereads the contents of the file, and stores them in the cache.
          * This field or method was marked private by atomdoc. Use with caution.
          */
-        updateCachedDiskContentsSync() : void;
+        updateCachedDiskContentsSync(): void;
 
         /**
          * Rereads the contents of the file, and stores them in the cache.
@@ -1912,68 +2245,68 @@ declare module TextBuffer {
          been updated.
 ```
          */
-        updateCachedDiskContents(flushCache? : boolean, callback? : any) : void;
+        updateCachedDiskContents(flushCache?: boolean, callback?: any): void;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        backUpFileContentsBeforeWriting() : any;
+        backUpFileContentsBeforeWriting(): any;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        removeBackupFileAfterWriting(backupFilePath? : string) : void;
+        removeBackupFileAfterWriting(backupFilePath?: string): void;
 
         /**
          * Private Utility Methods
          * This field or method was marked private by atomdoc. Use with caution.
          */
-        loadSync() : any;
+        loadSync(): any;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        load() : any;
+        load(): any;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        finishLoading() : any;
+        finishLoading(): any;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        destroy() : void;
+        destroy(): void;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        isAlive() : boolean;
+        isAlive(): boolean;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        isDestroyed() : boolean;
+        isDestroyed(): boolean;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        isRetained() : boolean;
+        isRetained(): boolean;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        retain() : any;
+        retain(): any;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        release() : any;
+        release(): any;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        subscribeToFile() : Pathwatcher.File;
+        subscribeToFile(): Pathwatcher.File;
 
         /**
          * Identifies if the buffer belongs to multiple editors.
@@ -1982,64 +2315,64 @@ declare module TextBuffer {
          * This field or method was marked private by atomdoc. Use with caution.
          * Returns a {Boolean}.
          */
-        hasMultipleEditors() : boolean;
+        hasMultipleEditors(): boolean;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        cancelStoppedChangingTimeout() : any;
+        cancelStoppedChangingTimeout(): any;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        scheduleModifiedEvents() : any;
+        scheduleModifiedEvents(): any;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        emitModifiedStatusChanged(modifiedStatus? : any) : void;
+        emitModifiedStatusChanged(modifiedStatus?: any): void;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        logLines(start? : any, end? : any) : string[];
+        logLines(start?: any, end?: any): string[];
 
         /**
          * Private History Delegate Methods
          * This field or method was marked private by atomdoc. Use with caution.
          */
-        invertChange(change? : boolean) : boolean;
+        invertChange(change?: boolean): boolean;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        serializeChange(change? : any) : any;
+        serializeChange(change?: any): any;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        deserializeChange(change? : any) : any;
+        deserializeChange(change?: any): any;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        serializeSnapshot(snapshot? : any) : any;
+        serializeSnapshot(snapshot?: any): any;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        deserializeSnapshot(snapshot? : any) : any;
+        deserializeSnapshot(snapshot?: any): any;
 
         /**
          * Private MarkerStore Delegate Methods
          * This field or method was marked private by atomdoc. Use with caution.
          */
-        markerCreated(marker? : Marker) : Marker;
+        markerCreated(marker?: Marker): Marker;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        markersUpdated() : Marker;
+        markersUpdated(): Marker;
 
     }
 
@@ -2047,6 +2380,6 @@ declare module TextBuffer {
 declare module "text-buffer" {
     const Range = TextBuffer.Range;
     const Point = TextBuffer.Point;
-    export {Range, Point};
+    export { Range, Point };
     export default TextBuffer.TextBuffer;
 }

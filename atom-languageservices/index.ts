@@ -19,6 +19,7 @@ export * from './IDelayer';
 export * from './IDocumentFinderService';
 export * from './IFormatService';
 export * from './IGetCodeActionsService';
+export * from './IHighlightService';
 export * from './IHoverService';
 export * from './IImplementationService';
 export * from './ILanguageProtocolClient';

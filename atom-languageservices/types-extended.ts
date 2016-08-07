@@ -15,6 +15,7 @@ export interface ServerCapabilities extends BaseServerCapabilities {
         runCodeActionProvider?: boolean;
         implementationProvider?: boolean;
         navigateProvider?: boolean;
+        highlightProvider?: boolean;
     }
 }
 
@@ -44,6 +45,30 @@ export interface CodeAction {
     identifier: string;
 }
 
+export enum HighlightClassification {
+    Name = 1,
+    Comment = 2,
+    String = 3,
+    Operator = 4,
+    Punctuation = 5,
+    Keyword = 6,
+    Number = 7,
+    Identifier = 8,
+    PreprocessorKeyword = 9,
+    ExcludedCode = 10
+}
+
+export interface PublishHighlightParams {
+    uri: string;
+    highlights: Highlight[];
+}
+
+export interface Highlight {
+    range: Range;
+    kind: string;
+    // projects: string[];
+}
+
 export type Implementation = Location | Location[];
 
 export interface NavigateParams extends TextDocumentPositionParams{
@@ -63,5 +88,6 @@ export namespace Methods {
         export const RunCodeActionRequest = '__extended/textDocument/runCodeAction'
         export const ImplementationRequest = '__extended/textDocument/implementation'
         export const NavigateRequest = '__extended/textDocument/navigate'
+        export const PublishHighlightNotification = '__extended/textDocument/publishHighlight'
     }
 }

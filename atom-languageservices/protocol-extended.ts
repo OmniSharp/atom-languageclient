@@ -3,8 +3,8 @@
  *  @copyright OmniSharp Team
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
-import { /* NotificationType, */ RequestType } from 'vscode-jsonrpc';
-import { CodeActionList, GetCodeActionsParams, Implementation, Methods, NavigateParams, Position, RunCodeActionParams, TextDocumentPositionParams, WorkspaceEdit } from './types-extended';
+import { NotificationType,  RequestType } from 'vscode-jsonrpc';
+import { CodeActionList, GetCodeActionsParams, Highlight, Implementation, Methods, NavigateParams, Position, PublishHighlightParams, RunCodeActionParams, TextDocumentPositionParams, WorkspaceEdit } from './types-extended';
 
 /**
  * A request to rename a symbol.
@@ -32,4 +32,12 @@ export namespace ImplementationRequest {
  */
 export namespace NavigateRequest {
     export const type: RequestType<NavigateParams, Position, void> = { get method() { return Methods.Extended.NavigateRequest; } };
+}
+
+/**
+ * Diagnostics notification are sent from the server to the client to signal
+ * results of validation runs.
+ */
+export namespace HighlightNotification {
+    export const type: NotificationType<PublishHighlightParams> = { get method() { return Methods.Extended.PublishHighlightNotification; } };
 }

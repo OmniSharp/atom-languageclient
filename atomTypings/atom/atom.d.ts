@@ -1652,7 +1652,7 @@ declare module Atom {
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        marker: Marker;
+        marker: TextBuffer.DisplayMarker;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
@@ -1678,7 +1678,7 @@ declare module Atom {
          * Instantiated by a {TextEditor}
          * This field or method was marked private by atomdoc. Use with caution.
          */
-        constructor({ editor, marker, id }: { editor?: any; marker?: Marker; id?: any });
+        constructor({ editor, marker, id }: { editor?: any; marker?: TextBuffer.DisplayMarker; id?: any });
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
@@ -1738,7 +1738,7 @@ declare module Atom {
 
         isAtEndOfLine(): number;
 
-        getMarker(): Marker;
+        getMarker(): TextBuffer.DisplayMarker;
 
         /**
          * Identifies if the cursor is surrounded by whitespace.
@@ -2037,6 +2037,7 @@ declare module Atom {
      */
     export class Decoration {
         public destroy(): void;
+        public onDidDestroy(callback: () => void);
     }
 
     /**
@@ -2290,7 +2291,7 @@ declare module Atom {
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        emitDidChange(eventProperties?: any, refreshMarkers?: Marker[]): void;
+        emitDidChange(eventProperties?: any, refreshMarkers?: TextBuffer.DisplayMarker[]): void;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
@@ -2784,7 +2785,7 @@ declare module Atom {
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        decorateMarker(marker?: Marker, decorationParams?: any): Marker;
+        decorateMarker(marker?: TextBuffer.DisplayMarker, decorationParams?: any): TextBuffer.DisplayMarker;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
@@ -2794,7 +2795,7 @@ declare module Atom {
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        decorationsForMarkerId(markerId?: Marker): any;
+        decorationsForMarkerId(markerId?: TextBuffer.DisplayMarker): any;
 
         /**
          * Retrieves a {Marker} based on its id.
@@ -2802,13 +2803,13 @@ declare module Atom {
          * id - A {Number} representing a marker id
          * This field or method was marked private by atomdoc. Use with caution.
          */
-        getMarker(id?: any): Marker;
+        getMarker(id?: any): TextBuffer.DisplayMarker;
 
         /**
          * Retrieves the active markers in the buffer.
          * This field or method was marked private by atomdoc. Use with caution.
          */
-        getMarkers(): Marker[];
+        getMarkers(): TextBuffer.DisplayMarker[];
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
@@ -2821,7 +2822,7 @@ declare module Atom {
          * TextBuffer.Range - The marker {TextBuffer.Range} (representing the distance between the head and tail)
          * options - Options to pass to the {Marker} constructor
          */
-        markScreenRange(args?: any): Marker;
+        markScreenRange(args?: any): TextBuffer.DisplayMarker;
 
         /**
          * Constructs a new marker at the given buffer TextBuffer.Range.
@@ -2829,7 +2830,7 @@ declare module Atom {
          * TextBuffer.Range - The marker {TextBuffer.Range} (representing the distance between the head and tail)
          * options - Options to pass to the {Marker} constructor
          */
-        markBufferRange(range?: TextBuffer.Range, options?: any): Marker;
+        markBufferRange(range?: TextBuffer.Range, options?: any): TextBuffer.DisplayMarker;
 
         /**
          * Constructs a new marker at the given screen position.
@@ -2837,7 +2838,7 @@ declare module Atom {
          * TextBuffer.Range - The marker {TextBuffer.Range} (representing the distance between the head and tail)
          * options - Options to pass to the {Marker} constructor
          */
-        markScreenPosition(screenPosition?: TextBuffer.Point | { row: number; column: number } | [number, number], options?: any): Marker;
+        markScreenPosition(screenPosition?: TextBuffer.Point | { row: number; column: number } | [number, number], options?: any): TextBuffer.DisplayMarker;
 
         /**
          * Constructs a new marker at the given buffer position.
@@ -2845,14 +2846,14 @@ declare module Atom {
          * TextBuffer.Range - The marker {TextBuffer.Range} (representing the distance between the head and tail)
          * options - Options to pass to the {Marker} constructor
          */
-        markBufferPosition(bufferPosition?: TextBuffer.Point | { row: number; column: number } | [number, number], options?: any): Marker;
+        markBufferPosition(bufferPosition?: TextBuffer.Point | { row: number; column: number } | [number, number], options?: any): TextBuffer.DisplayMarker;
 
         /**
          * Removes the marker with the given id.
          *
          * id - The {Number} of the ID to remove
          */
-        destroyMarker(id?: any): Marker;
+        destroyMarker(id?: any): TextBuffer.DisplayMarker;
 
         /**
          * Finds the first marker satisfying the given attributes
@@ -2860,7 +2861,7 @@ declare module Atom {
          * Refer to {DisplayBuffer::findMarkers} for details.
          * This field or method was marked private by atomdoc. Use with caution.
          */
-        findMarker(params?: any): Marker;
+        findMarker(params?: any): TextBuffer.DisplayMarker;
 
         /**
          * Find all markers satisfying a set of parameters.
@@ -2880,7 +2881,7 @@ declare module Atom {
          *   :containedInBufferRange - A {TextBuffer.Range} or TextBuffer.Range-compatible {Array}. Only
          *     returns markers contained within this TextBuffer.Range.
          */
-        findMarkers(params?: any): Marker[];
+        findMarkers(params?: any): TextBuffer.DisplayMarker[];
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
@@ -2890,12 +2891,12 @@ declare module Atom {
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        findFoldMarker(attributes?: any): Marker;
+        findFoldMarker(attributes?: any): TextBuffer.DisplayMarker;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        findFoldMarkers(attributes?: any): Marker[];
+        findFoldMarkers(attributes?: any): TextBuffer.DisplayMarker[];
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
@@ -2945,7 +2946,7 @@ declare module Atom {
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        handleBufferMarkerCreated(textBufferMarker?: Marker): void;
+        handleBufferMarkerCreated(textBufferMarker?: TextBuffer.DisplayMarker): void;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
@@ -2955,7 +2956,7 @@ declare module Atom {
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        foldForMarker(marker?: Marker): Marker;
+        foldForMarker(marker?: TextBuffer.DisplayMarker): TextBuffer.DisplayMarker;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
@@ -3019,12 +3020,12 @@ declare module Atom {
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        marker: Marker;
+        marker: TextBuffer.DisplayMarker;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        constructor(displayBuffer?: DisplayBuffer, marker?: Marker);
+        constructor(displayBuffer?: DisplayBuffer, marker?: TextBuffer.DisplayMarker);
 
         /**
          *
@@ -3552,7 +3553,7 @@ declare module Atom {
          * The public interface is Gutter::decorateMarker or TextEditor::decorateMarker.
          * This field or method was marked private by atomdoc. Use with caution.
          */
-        addGutterDecoration(gutter?: Gutter, marker?: Marker, options?: any): Decoration;
+        addGutterDecoration(gutter?: Gutter, marker?: TextBuffer.DisplayMarker, options?: any): Decoration;
 
     }
 
@@ -3603,7 +3604,7 @@ declare module Atom {
          * the marker"s state.
          * @param marker? - A {Marker} you want this decoration to follow.
          */
-        decorateMarker(marker?: Marker, options?: any): Marker;
+        decorateMarker(marker?: TextBuffer.DisplayMarker, options?: any): TextBuffer.DisplayMarker;
 
     }
 
@@ -4378,7 +4379,7 @@ declare module Atom {
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        bufferMarker: Marker;
+        bufferMarker: TextBuffer.DisplayMarker;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
@@ -4424,7 +4425,7 @@ declare module Atom {
          * Construction and Destruction
          * This field or method was marked private by atomdoc. Use with caution.
          */
-        constructor({ bufferMarker, displayBuffer }: { bufferMarker?: Marker; displayBuffer?: DisplayBuffer });
+        constructor({ bufferMarker, displayBuffer }: { bufferMarker?: TextBuffer.DisplayMarker; displayBuffer?: DisplayBuffer });
 
         /**
          * Destroys the marker, causing it to emit the "destroyed" event. Once
@@ -4443,7 +4444,7 @@ declare module Atom {
          * returned.
          * @param properties? - {Object} properties to associate with the new marker. The new marker"s properties are computed by extending this marker"s properties with `properties`.
          */
-        copy(properties?: Marker): Marker;
+        copy(properties?: TextBuffer.DisplayMarker): TextBuffer.DisplayMarker;
 
         /**
          * Invoke the given callback when the state of the marker changes.
@@ -4492,7 +4493,7 @@ declare module Atom {
          * @param other? - {Marker}
          * Returns a {Number}
          */
-        compare(other?: Marker): number;
+        compare(other?: TextBuffer.DisplayMarker): number;
 
         /**
          * Gets the buffer TextBuffer.Range of the display marker.
@@ -6989,7 +6990,7 @@ declare module Atom {
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        marker: Marker;
+        marker: TextBuffer.DisplayMarker;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
@@ -7009,7 +7010,7 @@ declare module Atom {
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        constructor({ cursor, marker, editor, id }: { cursor?: Cursor; marker?: Marker; editor?: any; id?: any });
+        constructor({ cursor, marker, editor, id }: { cursor?: Cursor; marker?: TextBuffer.DisplayMarker; editor?: any; id?: any });
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
@@ -7465,12 +7466,12 @@ declare module Atom {
          * Private Utilities
          * This field or method was marked private by atomdoc. Use with caution.
          */
-        markerDidChange(e?: any): Marker;
+        markerDidChange(e?: any): TextBuffer.DisplayMarker;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        markerDidDestroy(): Marker;
+        markerDidDestroy(): TextBuffer.DisplayMarker;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
@@ -9516,7 +9517,7 @@ declare module Atom {
          * Get the text in the given {TextBuffer.Range} in buffer coordinates.
          * @param TextBuffer.Range? - A {TextBuffer.Range} or TextBuffer.Range-compatible {Array}.
          */
-        getTextInBufferRange(range?: TextBuffer.Range): TextBuffer.Range;
+        getTextInBufferRange(range?: TextBuffer.Range): string;
 
         getLineCount(): number;
 
@@ -9936,7 +9937,7 @@ declare module Atom {
          * @param TextBuffer.Range? - The {TextBuffer.Range} to clip.
          * @param options? - See {::clipScreenPosition} `options`. Returns a {TextBuffer.Range}.
          */
-        clipScreenRange(range?: TextBuffer.Range, options?: TextBuffer.Range): TextBuffer.Range;
+        clipScreenRange(range: TextBuffer.Range, options?: TextBuffer.Range): TextBuffer.Range;
 
         /**
          * Adds a decoration that tracks a {Marker}. When the marker moves,
@@ -9967,7 +9968,38 @@ declare module Atom {
          * @param marker? - A {Marker} you want this decoration to follow.
          * @param decorationParams? - An {Object} representing the decoration e.g. `{type: "line-number", class: "linter-error"}`
          */
-        decorateMarker(marker?: Marker, decorationParams?: Object): Marker;
+        decorateMarker(marker: TextBuffer.DisplayMarker, decorationParams: DecorationParams): Atom.Decoration;
+
+
+
+        /*
+        # Public: Create a layer to contain a set of related markers.
+        #
+        # * `options` An object contaning the following keys:
+        #   * `maintainHistory` A {Boolean} indicating whether or not the state of
+        #     this layer should be restored on undo/redo operations. Defaults to
+        #     `false`.
+        #   * `persistent` A {Boolean} indicating whether or not this marker layer
+        #     should be serialized and deserialized along with the rest of the
+        #     buffer. Defaults to `false`. If `true`, the marker layer's id will be
+        #     maintained across the serialization boundary, allowing you to retrieve
+        #     it via {::getMarkerLayer}.
+        #
+        # Returns a {MarkerLayer}.
+        */
+        addMarkerLayer(options: { maintainHistory?: boolean; persistent?: boolean; }): DisplayMarkerLayer;
+
+        /*
+        # Public: Get a {MarkerLayer} by id.
+        #
+        # * `id` The id of the marker layer to retrieve.
+        #
+        # Returns a {MarkerLayer} or `undefined` if no layer exists with the given
+        # id.
+        */
+        getMarkerLayer(id: number): DisplayMarkerLayer;
+
+        decorateMarkerLayer(marker: TextBuffer.DisplayMarkerLayer | TextBuffer.DisplayMarkerLayer, decorationParams: DecorationParams): Atom.LayerDecoration;
 
         /**
          * Get all the decorations within a screen row TextBuffer.Range.
@@ -10022,7 +10054,7 @@ declare module Atom {
          * you mark a particular word, the marker will remain over that word even if
          * the word"s location in the buffer changes.
          */
-        markBufferRange(args?: any): Marker;
+        markBufferRange(range: TextBuffer.Range): TextBuffer.DisplayMarker;
 
         /**
          * Create a marker with the given TextBuffer.Range in screen coordinates. This
@@ -10030,17 +10062,17 @@ declare module Atom {
          * you mark a particular word, the marker will remain over that word even if
          * the word"s location in the buffer changes.
          */
-        markScreenRange(args?: any): Marker;
+        markScreenRange(range: TextBuffer.Range): TextBuffer.DisplayMarker;
 
         /**
          * Mark the given position in buffer coordinates.
          */
-        markBufferPosition(args?: any): Marker;
+        markBufferPosition(range: TextBuffer.Point): TextBuffer.DisplayMarker;
 
         /**
          * Mark the given position in screen coordinates.
          */
-        markScreenPosition(args?: any): Marker;
+        markScreenPosition(range: TextBuffer.Point): TextBuffer.DisplayMarker;
 
         /**
          * Find all {Marker}s that match the given properties.
@@ -10051,7 +10083,7 @@ declare module Atom {
          * with the TextBuffer.Range of the markers rather than their properties.
          * @param properties? - An {Object} containing properties that each returned marker must satisfy. Markers can be associated with custom properties, which are compared with basic equality. In addition, several reserved properties can be used to filter markers based on their current TextBuffer.Range:
          */
-        findMarkers(properties?: Object): Marker[];
+        findMarkers(properties?: Object): TextBuffer.DisplayMarker[];
 
         /**
          * Observe changes in the set of markers that intersect a particular
@@ -10064,12 +10096,12 @@ declare module Atom {
          * Get the {Marker} for the given marker id.
          * @param id? - {Number} id of the marker
          */
-        getMarker(id?: number): Marker;
+        getMarker(id?: number): TextBuffer.DisplayMarker;
 
         /**
          * Get all {Marker}s. Consider using {::findMarkers}
          */
-        getMarkers(): Marker[];
+        getMarkers(): TextBuffer.DisplayMarker[];
 
         /**
          * Get the number of markers in this editor"s buffer.
@@ -10080,7 +10112,7 @@ declare module Atom {
          * {Delegates to: DisplayBuffer.destroyMarker}
          * This field or method was marked private by atomdoc. Use with caution.
          */
-        destroyMarker(args?: any): Marker;
+        destroyMarker(args?: any): TextBuffer.DisplayMarker;
 
         /**
          * Get the position of the most recently added cursor in buffer
@@ -10269,7 +10301,7 @@ declare module Atom {
          * Add a cursor based on the given {Marker}.
          * This field or method was marked private by atomdoc. Use with caution.
          */
-        addCursor(marker?: Marker): Cursor;
+        addCursor(marker?: TextBuffer.DisplayMarker): Cursor;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
@@ -10560,7 +10592,7 @@ declare module Atom {
          * Select the TextBuffer.Range of the given marker if it is valid.
          * @param marker? - A {Marker}
          */
-        selectMarker(marker?: Marker): Marker;
+        selectMarker(marker?: TextBuffer.DisplayMarker): TextBuffer.DisplayMarker;
 
         /**
          * Get the most recently added {Selection}.
@@ -10663,7 +10695,7 @@ declare module Atom {
          * @param marker? - The {Marker} to highlight
          * @param options? - An {Object} that pertains to the {Selection} constructor.
          */
-        addSelection(marker?: Marker, options?: any): Selection;
+        addSelection(marker?: TextBuffer.DisplayMarker, options?: any): Selection;
 
         /**
          * Remove the given selection.
@@ -11202,7 +11234,7 @@ declare module Atom {
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        handleMarkerCreated(marker?: Marker): void;
+        handleMarkerCreated(marker?: TextBuffer.DisplayMarker): void;
 
         /**
          * Retrieves the greyed out placeholder of a mini editor.
@@ -11805,6 +11837,44 @@ declare module Atom {
 
     }
 
+    export interface ILineDecorationParams {
+        type: 'line';
+        class: string;
+        onlyHead?: boolean;
+        onlyEmpty?: boolean;
+        onlyNonEmpty?: boolean;
+    }
+    export interface ILineNumberDecorationParams {
+        type: 'line-number'
+        class: string;
+        onlyHead?: boolean;
+        onlyEmpty?: boolean;
+        onlyNonEmpty?: boolean;
+    }
+    export interface IHighlightDecorationParams {
+        type: 'highlight'
+        class: string;
+    }
+    export interface IOverlayDecorationParams {
+        type: 'overlay';
+        class?: string;
+        item: HTMLElement;
+        position?: 'head' | 'tail';
+    }
+    export interface IGutterDecorationParams {
+        type: 'gutter';
+        item: HTMLElement;
+        onlyEmpty?: boolean;
+        onlyNonEmpty?: boolean;
+    }
+    export interface IBlockDecorationParams {
+        type: 'block';
+        item: HTMLElement;
+        position?: 'before' | 'after';
+    }
+
+    export type DecorationParams = ILineDecorationParams | ILineNumberDecorationParams | IHighlightDecorationParams | IBlockDecorationParams | IOverlayDecorationParams | IGutterDecorationParams;
+
     /**
      * Represents a single unit of text as selected by a grammar.
      */
@@ -12054,7 +12124,7 @@ declare module Atom {
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
          */
-        markTokenizationComplete(): Marker;
+        markTokenizationComplete(): TextBuffer.DisplayMarker;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.
