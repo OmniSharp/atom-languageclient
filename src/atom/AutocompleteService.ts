@@ -12,17 +12,18 @@ import * as Fuse from 'fuse.js';
 import { Disposable } from 'ts-disposables';
 import { ProviderServiceBase } from './_ProviderServiceBase';
 import { className, packageName } from '../constants';
-import { AtomLanguageClientConfig } from '../AtomLanguageClientConfig';
+import { atomConfig } from '../decorators';
 
+@atomConfig({
+    default: true,
+    description: 'Adds support for integration with atoms autocomplete service'
+})
 export class AutocompleteService
     extends ProviderServiceBase<IAutocompleteProvider, Autocomplete.IRequest, Observable<Autocomplete.Suggestion[]>, Observable<Autocomplete.Suggestion[]>>
     implements IAutocompleteService {
     private _enabled: boolean;
-    constructor(packageConfig: AtomLanguageClientConfig) {
-        super(AutocompleteService, packageConfig, {
-            default: true,
-            description: 'Adds support for integration with atoms autocomplete service'
-        });
+    constructor() {
+        super();
     }
 
     public onEnabled() {

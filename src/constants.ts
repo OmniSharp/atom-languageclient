@@ -5,3 +5,4 @@
  */
 export const packageName: 'atom-languageclient' = 'atom-languageclient';
 export const className = packageName;
+export const atomConfig = 'languageclient:atomConfig';

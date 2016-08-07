@@ -5,12 +5,12 @@
  */
 import * as _ from 'lodash';
 import { Observable, Subscription } from 'rxjs';
-import { CommandType, Definition, IAtomNavigation, IDefinitionProvider, IDefinitionService, KeymapPlatform, KeymapType, Reference, navigationHasRange } from 'atom-languageservices';
+import { CommandType, Definition, IAtomNavigation, IDefinitionProvider, IDefinitionService, Reference, navigationHasRange } from 'atom-languageservices';
 import { alias, injectable } from 'atom-languageservices/decorators';
 import { readFile } from 'fs';
 import { ProviderServiceBase } from './_ProviderServiceBase';
+import { atomConfig } from '../decorators';
 import { AtomCommands } from './AtomCommands';
-import { AtomLanguageClientConfig } from '../AtomLanguageClientConfig';
 import { AtomNavigation } from './AtomNavigation';
 import { AtomTextEditorSource } from './AtomTextEditorSource';
 import { CommandsService } from './CommandsService';
@@ -20,6 +20,10 @@ type Location = IAtomNavigation.Location;
 const readFile$ = Observable.bindNodeCallback(readFile);
 @injectable
 @alias(IDefinitionService)
+@atomConfig({
+    default: true,
+    description: 'Adds support for navigate to definition or definitions'
+})
 export class DefinitionService
     extends ProviderServiceBase<IDefinitionProvider, Definition.IRequest, Observable<Location[]>, Observable<Location[]>>
     implements IDefinitionService {
@@ -28,11 +32,8 @@ export class DefinitionService
     private _atomCommands: AtomCommands;
     private _source: AtomTextEditorSource;
 
-    constructor(packageConfig: AtomLanguageClientConfig, navigation: AtomNavigation, commands: CommandsService, atomCommands: AtomCommands, source: AtomTextEditorSource) {
-        super(DefinitionService, packageConfig, {
-            default: true,
-            description: 'Adds support for navigate to definition or definitions'
-        });
+    constructor(navigation: AtomNavigation, commands: CommandsService, atomCommands: AtomCommands, source: AtomTextEditorSource) {
+        super();
         this._navigation = navigation;
         this._commands = commands;
         this._source = source;

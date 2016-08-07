@@ -14,6 +14,8 @@ import { AtomConfig } from './atom/AtomConfig';
 export class AtomLanguageClientConfig extends DisposableBase {
     private _atomConfig: AtomConfig;
     private _settings = new Map<string, IAtomConfig.Setting>();
+    private _services = new Map<string, IAtomConfig.Setting>();
+    private _configure = new Map<string, () => { onEnabled?(): IDisposable; }>();
     private _schema: { [index: string]: IAtomConfig.Setting; } = {};
 
     constructor(atomConfig: AtomConfig) {
@@ -34,30 +36,50 @@ export class AtomLanguageClientConfig extends DisposableBase {
         this._update();
     }
 
-    public addFeature(name: string, setting: IAtomConfig.Setting, feature: { onEnabled(): IDisposable; }) {
-        this.add(name, setting);
-
-        let disposable: IDisposable | null = null;
-        this._disposable.add(
-            this._atomConfig.observe<boolean>(name)
-                .subscribe(enabled => {
-                    if (enabled && !disposable) {
-                        disposable = feature.onEnabled();
-                    } else if (!enabled && disposable) {
-                        disposable.dispose();
-                        disposable = null;
-                    }
-                })
-        );
+    public addService(name: string, setting: IAtomConfig.Setting, service: () => { onEnabled?(): IDisposable; }) {
+        this._services.set(name, setting);
+        this._configure.set(`services.${name}`, service);
+        this._update();
     }
 
     public get schema() { return this._schema; }
 
     private _update = _.debounce(() => {
+        this._configure.forEach((value, name) => {
+            let disposable: IDisposable | null = null;
+            const feature = value();
+            if (feature.onEnabled) {
+                this._disposable.add(
+                    this._atomConfig.observe<boolean>(name)
+                        .subscribe(enabled => {
+                            if (enabled && !disposable) {
+                                disposable = feature.onEnabled!();
+                            } else if (!enabled && disposable) {
+                                disposable.dispose();
+                                disposable = null;
+                            }
+                        })
+                );
+            }
+        });
+        this._configure.clear();
+
         const properties: any = {};
         this._settings.forEach((setting, key) => {
             properties[key] = setting;
         });
+
+        const serviceProperties: any = {};
+        this._services.forEach((setting, key) => {
+            serviceProperties[key] = setting;
+        });
+
+        properties['services'] = {
+            type: 'object',
+            properties: serviceProperties,
+            title: 'Services',
+            description: 'Enable / Disable unwanted services'
+        };
         this._schema = properties;
         this._atomConfig.setSchema(packageName, {
             type: 'object',

@@ -9,21 +9,22 @@ import { IRunCodeActionProvider, IRunCodeActionService, RunCodeAction, Text } fr
 import { alias, injectable } from 'atom-languageservices/decorators';
 import { Disposable } from 'ts-disposables';
 import { ProviderServiceBase } from './_ProviderServiceBase';
+import { atomConfig } from '../decorators';
 import { AtomChanges } from './AtomChanges';
-import { AtomLanguageClientConfig } from '../AtomLanguageClientConfig';
 
 @injectable()
 @alias(IRunCodeActionService)
+@atomConfig({
+    default: true,
+    description: 'Adds support for running code actions from a list of actual code actions'
+})
 export class RunCodeActionService
     extends ProviderServiceBase<IRunCodeActionProvider, RunCodeAction.IRequest, Observable<Text.IWorkspaceChange[]>, Observable<Text.IWorkspaceChange[]>>
     implements IRunCodeActionService {
     private _changes: AtomChanges;
 
-    constructor(packageConfig: AtomLanguageClientConfig, changes: AtomChanges) {
-        super(RunCodeActionService, packageConfig, {
-            default: true,
-            description: 'Adds support for running code actions from a list of actual code actions'
-        });
+    constructor(changes: AtomChanges) {
+        super();
         this._changes = changes;
     }
 

@@ -9,8 +9,8 @@ import { CommandType, IAtomNavigation, IReferencesProvider, IReferencesService, 
 import { alias, injectable } from 'atom-languageservices/decorators';
 import { readFile } from 'fs';
 import { ProviderServiceBase } from './_ProviderServiceBase';
+import { atomConfig } from '../decorators';
 import { AtomCommands } from './AtomCommands';
-import { AtomLanguageClientConfig } from '../AtomLanguageClientConfig';
 import { AtomNavigation } from './AtomNavigation';
 import { AtomTextEditorSource } from './AtomTextEditorSource';
 import { CommandsService } from './CommandsService';
@@ -21,6 +21,10 @@ const readFile$ = Observable.bindNodeCallback(readFile);
 
 @injectable
 @alias(IReferencesService)
+@atomConfig({
+    default: true,
+    description: 'Adds support to find references.'
+})
 export class ReferencesService
     extends ProviderServiceBase<IReferencesProvider, Atom.TextEditor, Observable<Location[]>, Observable<Location[]>>
     implements IReferencesService {
@@ -29,18 +33,15 @@ export class ReferencesService
     private _atomCommands: AtomCommands;
     private _source: AtomTextEditorSource;
 
-    constructor(packageConfig: AtomLanguageClientConfig, navigation: AtomNavigation, commands: CommandsService, atomCommands: AtomCommands, source: AtomTextEditorSource) {
-        super(ReferencesService, packageConfig, {
-            default: true,
-            description: 'Adds support to find references.'
-        });
+    constructor(navigation: AtomNavigation, commands: CommandsService, atomCommands: AtomCommands, source: AtomTextEditorSource) {
+        super();
         this._navigation = navigation;
         this._commands = commands;
         this._source = source;
     }
 
     public onEnabled() {
-        return this._commands.add(CommandType.TextEditor, 'find-usages', 'shift-f12', () => this.open())
+        return this._commands.add(CommandType.TextEditor, 'find-usages', 'shift-f12', () => this.open());
     }
 
     protected createInvoke(callbacks: ((options: Atom.TextEditor) => Observable<Location[]>)[]) {

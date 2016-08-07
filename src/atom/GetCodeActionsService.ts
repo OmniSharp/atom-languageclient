@@ -8,8 +8,8 @@ import { Observable } from 'rxjs';
 import { CommandType, GetCodeActions, IGetCodeActionsProvider, IGetCodeActionsService } from 'atom-languageservices';
 import { alias, injectable } from 'atom-languageservices/decorators';
 import { ProviderServiceBase } from './_ProviderServiceBase';
+import { atomConfig } from '../decorators';
 import { AtomCommands } from './AtomCommands';
-import { AtomLanguageClientConfig } from '../AtomLanguageClientConfig';
 import { AtomTextEditorSource } from './AtomTextEditorSource';
 import { AtomViewFinder } from './AtomViewFinder';
 import { CodeActionView } from './views/CodeActionView';
@@ -18,6 +18,10 @@ import { RunCodeActionService } from './RunCodeActionService';
 
 @injectable()
 @alias(IGetCodeActionsService)
+@atomConfig({
+    default: true,
+    description: 'Adds support for code actions'
+})
 export class GetCodeActionsService
     extends ProviderServiceBase<IGetCodeActionsProvider, GetCodeActions.IRequest, Observable<GetCodeActions.IResponse[]>, Observable<GetCodeActions.IResponse[]>>
     implements IGetCodeActionsService {
@@ -28,11 +32,8 @@ export class GetCodeActionsService
     private _runCodeActionService: RunCodeActionService;
     private _view: CodeActionView;
 
-    constructor(packageConfig: AtomLanguageClientConfig, commands: CommandsService, atomCommands: AtomCommands, textEditorSource: AtomTextEditorSource, viewFinder: AtomViewFinder, runCodeActionService: RunCodeActionService) {
-        super(GetCodeActionsService, packageConfig, {
-            default: true,
-            description: 'Adds support for code actions'
-        });
+    constructor(commands: CommandsService, atomCommands: AtomCommands, textEditorSource: AtomTextEditorSource, viewFinder: AtomViewFinder, runCodeActionService: RunCodeActionService) {
+        super();
         this._commands = commands;
         this._atomCommands = atomCommands;
         this._textEditorSource = textEditorSource;

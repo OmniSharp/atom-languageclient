@@ -10,14 +10,18 @@ import { CommandType, Format, IFormatProvider, IFormatService, Text } from 'atom
 import { alias, injectable } from 'atom-languageservices/decorators';
 import { CompositeDisposable } from 'ts-disposables';
 import { ProviderServiceBase } from './_ProviderServiceBase';
+import { atomConfig } from '../decorators';
 import { AtomChanges } from './AtomChanges';
 import { AtomCommands } from './AtomCommands';
-import { AtomLanguageClientConfig } from '../AtomLanguageClientConfig';
 import { AtomTextEditorSource } from './AtomTextEditorSource';
 import { CommandsService } from './CommandsService';
 
 @injectable()
 @alias(IFormatService)
+@atomConfig({
+    default: true,
+    description: 'Adds support for formating documents'
+})
 export class FormatService
     extends ProviderServiceBase<IFormatProvider, Format.IRequest, Observable<Text.IFileChange[]>, Observable<Text.IFileChange[]>>
     implements IFormatService {
@@ -26,11 +30,8 @@ export class FormatService
     private _atomCommands: AtomCommands;
     private _source: AtomTextEditorSource;
 
-    public constructor(packageConfig: AtomLanguageClientConfig, changes: AtomChanges, commands: CommandsService, atomCommands: AtomCommands, source: AtomTextEditorSource) {
-        super(FormatService, packageConfig, {
-            default: true,
-            description: 'Adds support for formating documents'
-        });
+    public constructor(changes: AtomChanges, commands: CommandsService, atomCommands: AtomCommands, source: AtomTextEditorSource) {
+        super();
         this._changes = changes;
         this._commands = commands;
         this._source = source;

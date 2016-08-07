@@ -7,10 +7,9 @@ import * as _ from 'lodash';
 import { Observable, Subject } from 'rxjs';
 import { CommandType, Finder, IWorkspaceFinderProvider, IWorkspaceFinderService } from 'atom-languageservices';
 import { alias, injectable } from 'atom-languageservices/decorators';
-import { Disposable } from 'ts-disposables';
-import { FeatureServiceBase } from './_FeatureServiceBase';
+import { Disposable, DisposableBase } from 'ts-disposables';
+import { atomConfig } from '../decorators';
 import { AtomCommands } from './AtomCommands';
-import { AtomLanguageClientConfig } from '../AtomLanguageClientConfig';
 import { AtomNavigation } from './AtomNavigation';
 import { CommandsService } from './CommandsService';
 import { WorkspaceFinderView } from './views/WorkspaceFinderView';
@@ -19,7 +18,11 @@ const MAX_ITEMS = 100;
 
 @injectable
 @alias(IWorkspaceFinderService)
-export class WorkspaceFinderService extends FeatureServiceBase implements IWorkspaceFinderService {
+@atomConfig({
+    default: true,
+    description: 'Adds ability to find all symbols on a servers workspace'
+})
+export class WorkspaceFinderService extends DisposableBase implements IWorkspaceFinderService {
     private _navigation: AtomNavigation;
     private _commands: CommandsService;
     private _atomCommands: AtomCommands;
@@ -28,11 +31,8 @@ export class WorkspaceFinderService extends FeatureServiceBase implements IWorks
     private _providers = new Set<IWorkspaceFinderProvider>();
     private _results$: Observable<{ filter: string; results: Finder.IResponse[] }>;
 
-    constructor(packageConfig: AtomLanguageClientConfig, navigation: AtomNavigation, commands: CommandsService, atomCommands: AtomCommands) {
-        super(WorkspaceFinderService, packageConfig, {
-            default: true,
-            description: 'Adds ability to find all symbols on a servers workspace'
-        });
+    constructor(navigation: AtomNavigation, commands: CommandsService, atomCommands: AtomCommands) {
+        super();
         this._navigation = navigation;
         this._commands = commands;
         this._atomCommands = atomCommands;

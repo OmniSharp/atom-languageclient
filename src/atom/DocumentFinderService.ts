@@ -8,8 +8,8 @@ import { Observable } from 'rxjs';
 import { CommandType, Finder, IDocumentFinderProvider, IDocumentFinderService, KeymapPlatform, KeymapType } from 'atom-languageservices';
 import { alias, injectable } from 'atom-languageservices/decorators';
 import { ProviderServiceBase } from './_ProviderServiceBase';
+import { atomConfig } from '../decorators';
 import { AtomCommands } from './AtomCommands';
-import { AtomLanguageClientConfig } from '../AtomLanguageClientConfig';
 import { AtomNavigation } from './AtomNavigation';
 import { AtomTextEditorSource } from './AtomTextEditorSource';
 import { CommandsService } from './CommandsService';
@@ -17,6 +17,10 @@ import { DocumentFinderView } from './views/DocumentFinderView';
 
 @injectable
 @alias(IDocumentFinderService)
+@atomConfig({
+    default: true,
+    description: 'Adds support for showing document symbols'
+})
 export class DocumentFinderService
     extends ProviderServiceBase<IDocumentFinderProvider, Atom.TextEditor, Observable<Finder.IResponse[]>, Observable<Finder.IResponse[]>>
     implements IDocumentFinderService {
@@ -25,11 +29,8 @@ export class DocumentFinderService
     private _atomCommands: AtomCommands;
     private _source: AtomTextEditorSource;
 
-    constructor(packageConfig: AtomLanguageClientConfig, navigation: AtomNavigation, commands: CommandsService, atomCommands: AtomCommands, source: AtomTextEditorSource) {
-        super(DocumentFinderService, packageConfig, {
-            default: true,
-            description: 'Adds support for showing document symbols'
-        });
+    constructor(navigation: AtomNavigation, commands: CommandsService, atomCommands: AtomCommands, source: AtomTextEditorSource) {
+        super();
         this._navigation = navigation;
         this._commands = commands;
         this._atomCommands = atomCommands;

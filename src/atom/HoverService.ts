@@ -9,7 +9,7 @@ import { CommandType, Hover, IHoverProvider, IHoverService } from 'atom-language
 import { alias, injectable } from 'atom-languageservices/decorators';
 import { CompositeDisposable, IDisposable } from 'ts-disposables';
 import { ProviderServiceBase } from './_ProviderServiceBase';
-import { AtomLanguageClientConfig } from '../AtomLanguageClientConfig';
+import { atomConfig } from '../decorators';
 import { AtomTextEditorSource } from './AtomTextEditorSource';
 import { AtomViewFinder } from './AtomViewFinder';
 import { CommandsService } from './CommandsService';
@@ -17,6 +17,10 @@ import { HoverView, IHoverPosition } from './views/HoverView';
 
 @injectable()
 @alias(IHoverService)
+@atomConfig({
+    default: true,
+    description: 'Adds support for getting lookup info on hover / key press'
+})
 export class HoverService
     extends ProviderServiceBase<IHoverProvider, Hover.IRequest, Observable<Hover.IResponse>, Observable<Hover.IResponse[]>>
     implements IHoverService {
@@ -33,11 +37,8 @@ export class HoverService
     private _keydown: Observable<KeyboardEvent>;
     private _keydownSubscription: Subscription | undefined;
 
-    constructor(packageConfig: AtomLanguageClientConfig, commands: CommandsService, textEditorSource: AtomTextEditorSource, viewFinder: AtomViewFinder) {
-        super(HoverService, packageConfig, {
-            default: true,
-            description: 'Adds support for getting lookup info on hover / key press'
-        });
+    constructor(commands: CommandsService, textEditorSource: AtomTextEditorSource, viewFinder: AtomViewFinder) {
+        super();
         this._commands = commands;
         this._textEditorSource = textEditorSource;
         this._viewFinder = viewFinder;

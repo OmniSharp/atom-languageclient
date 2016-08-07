@@ -15,6 +15,8 @@ import { AggregateError } from 'aurelia-pal';
 import { exists, readdir } from 'fs';
 import { join } from 'path';
 import { DisposableBase } from 'ts-disposables';
+import { atomConfig } from '../constants';
+import { AtomLanguageClientConfig } from '../AtomLanguageClientConfig';
 
 const interfaceRegex = /^I((?:[A-Z^I]))/;
 const $readdir = Observable.bindNodeCallback(readdir);
@@ -31,9 +33,11 @@ export class Container extends DisposableBase implements IResolver {
     private _capabilities: ICapability[] = [];
     private _classNames = new Map<string, any>();
     private _interfaceSymbols = new Map<string, symbol>();
+    private _config: AtomLanguageClientConfig | undefined;
 
-    public constructor(container?: AureliaContainer) {
+    public constructor(config?: AtomLanguageClientConfig, container?: AureliaContainer) {
         super();
+        this._config = config;
         this._container = container || new AureliaContainer();
 
         this._disposable.add(() => {
@@ -47,7 +51,7 @@ export class Container extends DisposableBase implements IResolver {
 
     private static _child(container: Container) {
         const childAureliaContainer = container._container.createChild();
-        const childContainer = new Container(childAureliaContainer);
+        const childContainer = new Container(container._config, childAureliaContainer);
         childContainer._capabilities = container._capabilities;
         return childContainer;
     }
@@ -109,6 +113,15 @@ export class Container extends DisposableBase implements IResolver {
                 params: <any[]>(<any>fn).inject || <any>metadata.get(metadata.paramTypes, fn!)
             });
             return this;
+        }
+
+        if (this._config) {
+            const configData: { description: string; default: boolean; title: string; type: 'boolean'; name: string; } = <any>metadata.get(atomConfig, fn!);
+            if (configData) {
+                configData.title = configData.title.replace(/\sService$/, '');
+                configData.name = configData.name.replace(/Service$/, '');
+                this._config.addService(configData.name, configData, () => this.resolve(fn!));
+            }
         }
 
         const aliasKey = metadata.get(symbols.alias, fn!);

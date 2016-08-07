@@ -8,9 +8,9 @@ import { Observable } from 'rxjs';
 import { CommandType, IRenameProvider, IRenameService, Rename, Text } from 'atom-languageservices';
 import { alias, injectable } from 'atom-languageservices/decorators';
 import { ProviderServiceBase } from './_ProviderServiceBase';
+import { atomConfig } from '../decorators';
 import { AtomChanges } from './AtomChanges';
 import { AtomCommands } from './AtomCommands';
-import { AtomLanguageClientConfig } from '../AtomLanguageClientConfig';
 import { AtomNavigation } from './AtomNavigation';
 import { AtomTextEditorSource } from './AtomTextEditorSource';
 import { CommandsService } from './CommandsService';
@@ -19,6 +19,10 @@ import { WaitService } from './WaitService';
 
 @injectable
 @alias(IRenameService)
+@atomConfig({
+    default: true,
+    description: 'Adds support for renaming symbols'
+})
 export class RenameService
     extends ProviderServiceBase<IRenameProvider, Rename.IRequest, Observable<Text.IWorkspaceChange[]>, Observable<Text.IWorkspaceChange[]>>
     implements IRenameService {
@@ -29,11 +33,8 @@ export class RenameService
     private _source: AtomTextEditorSource;
     private _waitService: WaitService;
 
-    constructor(packageConfig: AtomLanguageClientConfig, changes: AtomChanges, navigation: AtomNavigation, commands: CommandsService, atomCommands: AtomCommands, source: AtomTextEditorSource, waitService: WaitService) {
-        super(RenameService, packageConfig, {
-            default: true,
-            description: 'Adds support for renaming symbols'
-        });
+    constructor(changes: AtomChanges, navigation: AtomNavigation, commands: CommandsService, atomCommands: AtomCommands, source: AtomTextEditorSource, waitService: WaitService) {
+        super();
         this._changes = changes;
         this._commands = commands;
         this._atomCommands = atomCommands;
