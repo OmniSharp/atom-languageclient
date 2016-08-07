@@ -36,7 +36,7 @@ export class DocumentFinderService
         this._source = source;
     }
 
-    protected onEnabled() {
+    public onEnabled() {
         return this._commands.add(CommandType.TextEditor, 'document-symbols', 'ctrl-shift-,', () => this.open());
     }
 

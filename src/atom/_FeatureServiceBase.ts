@@ -4,7 +4,7 @@
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
 import * as _ from 'lodash';
-import { Disposable, DisposableBase, IDisposable } from 'ts-disposables';
+import { DisposableBase, IDisposable } from 'ts-disposables';
 import { AtomLanguageClientConfig } from '../AtomLanguageClientConfig';
 
 export interface IFeatureService {
@@ -19,8 +19,8 @@ export abstract class FeatureServiceBase extends DisposableBase {
         const name = _.startCase(ctor.name);
         const setting = _.assign({ type: <'boolean'>'boolean', title: name }, descriptor);
 
-        packageConfig.add(name, setting);
+        packageConfig.addFeature(_.camelCase(ctor.name), setting, this);
     }
 
-    protected abstract onEnabled(): IDisposable;
+    public abstract onEnabled(): IDisposable;
 }

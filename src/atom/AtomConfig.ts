@@ -42,7 +42,7 @@ class PrefixAtomConfig extends DisposableBase implements IAtomConfig {
     }
 
     public setSchema(packageName: string, schema: IAtomConfig.IObjectSetting) {
-        (<any>atom.config).setSchema('omnisharp-atom', schema);
+        (<any>atom.config).setSchema(packageName, schema);
     }
 
     public for(packageName: string) {

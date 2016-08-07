@@ -34,6 +34,11 @@ export class AtomLanguageClientPackage implements IAtomPackage<AtomLanguageClien
     private _atomStatusBarService: StatusBarService;
     public activated: Promise<void>;
 
+    constructor() {
+        const atomConfig = new AtomConfig();
+        this._packageConfig = new AtomLanguageClientConfig(atomConfig);
+    }
+
     /* tslint:disable:no-any */
     public activate(settings: IAtomLanguageClientSettings) {
         this._container = new Container();
@@ -45,17 +50,11 @@ export class AtomLanguageClientPackage implements IAtomPackage<AtomLanguageClien
             resolveActivate = resolve;
         });
 
-        const atomConfig = new AtomConfig();
-        this._packageConfig = new AtomLanguageClientConfig(atomConfig);
-
         this._atomLanguageProvider = new LanguageProvider(this._container, activated);
         this._atomLanguageService = new LanguageService(this._container);
         this._atomAutocompleteProvider = new AutocompleteService(this._packageConfig);
         this._atomLinterProvider = new LinterService();
         this._atomStatusBarService = new StatusBarService();
-
-        this._container.registerInstance(AtomConfig, this._atomLanguageProvider);
-        this._container.registerAlias(AtomConfig, IAtomConfig);
 
         this._container.registerInstance(AtomLanguageClientConfig, this._packageConfig);
 
@@ -94,7 +93,6 @@ export class AtomLanguageClientPackage implements IAtomPackage<AtomLanguageClien
                 )
                 .then(() => {
                     this._container.registerInterfaceSymbols();
-                    this._packageConfig.update();
                 })
                 .then(() => resolveActivate());
 
@@ -180,6 +178,10 @@ export class AtomLanguageClientPackage implements IAtomPackage<AtomLanguageClien
     /* tslint:disable-next-line:function-name */
     public ['consume-status-bar'](service: StatusBar.Api) {
         this._atomStatusBarService.api = service;
+    }
+
+    public get config() {
+        return this._packageConfig.schema;
     }
 
     /* tslint:disable-next-line:no-any */

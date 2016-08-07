@@ -25,7 +25,7 @@ export class AutocompleteService
         });
     }
 
-    protected onEnabled() {
+    public onEnabled() {
         this._enabled = true;
         return Disposable.create(() => {
             this._enabled = false;

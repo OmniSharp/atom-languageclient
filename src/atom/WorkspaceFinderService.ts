@@ -46,7 +46,7 @@ export class WorkspaceFinderService extends FeatureServiceBase implements IWorks
         );
     }
 
-    protected onEnabled() {
+    public onEnabled() {
         return this._commands.add(CommandType.Workspace, `finder-workspace`, ['ctrl-,', 'alt-shift-t'], () => this.open());
     }
 

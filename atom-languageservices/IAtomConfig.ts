@@ -16,39 +16,41 @@ export interface IAtomConfig {
 }
 
 export namespace IAtomConfig {
-    export type Setting = IStringSetting | INumberSetting | IBooleanSetting | IArrayNumberSetting | IArrayStringSetting | IObjectSetting;
+    export type Setting =
+        IStringSetting | IStringEnumSetting | IStringArraySetting |
+        IIntegerSetting | IIntegerEnumSetting | IIntegerArraySetting |
+        INumberSetting | INumberEnumSetting | INumberArraySetting |
+        IBooleanSetting | IBooleanEnumSetting | IBooleanArraySetting |
+        IColorSetting | IColorEnumSetting | IColorArraySetting |
+        IObjectSetting;
 
     interface ISettingBase {
         title?: string;
         description?: string;
     }
 
-    export interface IStringSetting extends ISettingBase {
-        type: 'string';
-        default?: string;
-    }
-    export interface INumberSetting extends ISettingBase {
-        type: 'integer';
-        default?: number;
-        minimum?: number;
-        maximum?: number;
-    }
-    export interface IBooleanSetting extends ISettingBase {
-        type: 'boolean';
-        default?: boolean;
-    }
-    export interface IArrayStringSetting extends ISettingBase {
-        type: 'array';
-        items: { type: 'string'; };
-        default?: string[];
-    }
-    export interface IArrayNumberSetting extends ISettingBase {
-        type: 'array';
-        items: { type: 'number'; };
-        default?: number[];
-    }
-    export interface IObjectSetting extends ISettingBase {
-        type: 'object';
-        properties: { [index: string]: Setting; };
-    }
+    type EnumDefinition<T> = { value: T; description: string; }[];
+
+    export interface IObjectSetting extends ISettingBase { type: 'object'; properties: { [index: string]: Setting; }; }
+    export interface IArraySettingBase extends ISettingBase { type: 'array'; }
+
+    export interface IStringSetting extends ISettingBase { type: 'string'; default?: string; }
+    export interface IStringEnumSetting extends ISettingBase { type: 'string'; default?: string; enum: EnumDefinition<string>; }
+    export interface IStringArraySetting extends IArraySettingBase { items: { type: 'string'; }; default: string[]; }
+
+    export interface IIntegerSetting extends ISettingBase { type: 'integer'; default?: number; minimum?: number; maximum?: number; }
+    export interface IIntegerEnumSetting extends ISettingBase { type: 'integer'; default?: number; enum: EnumDefinition<string>; }
+    export interface IIntegerArraySetting extends IArraySettingBase { items: { type: 'integer'; minimum?: number; maximum?: number; }; default: number[]; }
+
+    export interface INumberSetting extends ISettingBase { type: 'number'; default?: number; minimum?: number; maximum?: number; }
+    export interface INumberEnumSetting extends ISettingBase { type: 'number'; default?: number; enum: EnumDefinition<string>; }
+    export interface INumberArraySetting extends IArraySettingBase { items: { type: 'integer'; minimum?: number; maximum?: number; }; default: number[]; }
+
+    export interface IBooleanSetting extends ISettingBase { type: 'boolean'; default?: boolean; }
+    export interface IBooleanEnumSetting extends ISettingBase { type: 'boolean'; default?: boolean; enum: EnumDefinition<string>; }
+    export interface IBooleanArraySetting extends IArraySettingBase { items: { type: 'boolean'; }; default: boolean[]; }
+
+    export interface IColorSetting extends ISettingBase { type: 'color'; default?: string; }
+    export interface IColorEnumSetting extends ISettingBase { type: 'color'; default?: string; enum: EnumDefinition<string>; }
+    export interface IColorArraySetting extends IArraySettingBase { items: { type: 'color'; }; default: string[]; }
 }

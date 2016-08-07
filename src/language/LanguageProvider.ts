@@ -109,7 +109,12 @@ export class LanguageProvider extends DisposableBase {
             cd.add(connection, client);
             return client.start().then(() => client);
         }).then(() => {
-            const disposables = container.resolveEach(_.filter(capabilities, c => c.isCompatible(client.capabilities)));
+            const disposables = container.resolveEach(
+                _(capabilities)
+                    .filter(c => c.isCompatible(client.capabilities))
+                    .map(x => x.ctor)
+                    .value()
+            );
             for (const item of disposables) {
                 if (item instanceof Error) {
                     console.error(item, item.innerError);

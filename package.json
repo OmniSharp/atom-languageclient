@@ -1,83 +1,84 @@
 {
-    "name": "atom-languageclient",
-    "version": "1.0.5",
-    "description": "",
-    "main": "index.js",
-    "scripts": {
-        "lint": "npm run lint-rules && tslint \"src/**/*.ts\" \"spec/**/*.ts\" \"atom-languageservices/*.ts\" -e \"**/*.d.ts\" -t verbose",
-        "lint-rules": "tsc -p rules/tsconfig.json",
-        "test": "npm run lint",
-        "tsc": "tsc",
-        "do-publish": "node scripts/publish.js",
-        "tsc:w": "tsc -w"
+  "name": "atom-languageclient",
+  "version": "1.0.5",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "lint": "npm run lint-rules && tslint \"src/**/*.ts\" \"spec/**/*.ts\" \"atom-languageservices/*.ts\" -e \"**/*.d.ts\" -t verbose",
+    "lint-rules": "tsc -p rules/tsconfig.json",
+    "test": "npm run lint",
+    "tsc": "tsc",
+    "do-publish": "node scripts/publish.js",
+    "tsc:w": "tsc -w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OmniSharp/atom-languageclient.git"
+  },
+  "author": "OmniSharp Team",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/OmniSharp/atom-languageclient/issues"
+  },
+  "homepage": "https://github.com/OmniSharp/atom-languageclient#readme",
+  "dependencies": {
+    "atom-languageservices": "~1.0.0",
+    "atom-package-deps": "^4.0.1",
+    "aurelia-dependency-injection": "^1.0.0",
+    "chokidar": "^1.6.0",
+    "file-url": "^1.1.0",
+    "fuse.js": "^2.3.0",
+    "lodash": "^4.14.0",
+    "reflect-metadata": "^0.1.3",
+    "rxjs": "^5.0.0-beta.10",
+    "semver": "^5.3.0",
+    "ts-disposables": "^2.1.0",
+    "vscode-jsonrpc": "^2.2.0",
+    "vscode-languageserver-types": "^1.0.1"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "codelyzer": "0.0.26",
+    "globby": "^6.0.0",
+    "mocha": "^2.5.3",
+    "rimraf": "^2.5.4",
+    "tslint": "^3.14.0",
+    "tslint-microsoft-contrib": "git://github.com/Microsoft/tslint-microsoft-contrib.git#releases",
+    "typescript": "^2.1.0-dev.20160731"
+  },
+  "atomTestRunner": "./spec/test-runner",
+  "package-deps": [
+    "linter"
+  ],
+  "providedServices": {
+    "atom-language-client": {
+      "description": "Provides access to the atom-language-client api",
+      "versions": {
+        "1.0.0": "provide-atom-language-client"
+      }
     },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/OmniSharp/atom-languageclient.git"
-    },
-    "author": "OmniSharp Team",
-    "license": "ISC",
-    "bugs": {
-        "url": "https://github.com/OmniSharp/atom-languageclient/issues"
-    },
-    "homepage": "https://github.com/OmniSharp/atom-languageclient#readme",
-    "dependencies": {
-        "atom-languageservices": "~1.0.0",
-        "aurelia-dependency-injection": "^1.0.0",
-        "chokidar": "^1.6.0",
-        "file-url": "^1.1.0",
-        "fuse.js": "^2.3.0",
-        "lodash": "^4.14.0",
-        "reflect-metadata": "^0.1.3",
-        "rxjs": "^5.0.0-beta.10",
-        "semver": "^5.3.0",
-        "ts-disposables": "^2.1.0",
-        "vscode-jsonrpc": "^2.2.0",
-        "vscode-languageserver-types": "^1.0.1"
-    },
-    "devDependencies": {
-        "chai": "^3.5.0",
-        "codelyzer": "0.0.26",
-        "globby": "^6.0.0",
-        "mocha": "^2.5.3",
-        "rimraf": "^2.5.4",
-        "tslint": "^3.14.0",
-        "tslint-microsoft-contrib": "git://github.com/Microsoft/tslint-microsoft-contrib.git#releases",
-        "typescript": "^2.1.0-dev.20160731"
-    },
-    "atomTestRunner": "./spec/test-runner",
-    "package-deps": [
-        "linter"
-    ],
-    "providedServices": {
-        "atom-language-client": {
-            "description": "Provides access to the atom-language-client api",
-            "versions": {
-                "1.0.0": "provide-atom-language-client"
-            }
-        },
-        "autocomplete.provider": {
-            "description": "A C# Roslyn powered autocomplete-plus provider.",
-            "versions": {
-                "2.0.0": "provide-atom-autocomplete"
-            }
-        }
-    },
-    "consumedServices": {
-        "atom-language": {
-            "versions": {
-                "1.0.0": "consume-atom-language"
-            }
-        },
-        "linter-indie": {
-            "versions": {
-                "1.0.0": "consume-atom-linter"
-            }
-        },
-        "status-bar": {
-            "versions": {
-                "^1.0.0": "consume-status-bar"
-            }
-        }
+    "autocomplete.provider": {
+      "description": "A C# Roslyn powered autocomplete-plus provider.",
+      "versions": {
+        "2.0.0": "provide-atom-autocomplete"
+      }
     }
+  },
+  "consumedServices": {
+    "atom-language": {
+      "versions": {
+        "1.0.0": "consume-atom-language"
+      }
+    },
+    "linter-indie": {
+      "versions": {
+        "1.0.0": "consume-atom-linter"
+      }
+    },
+    "status-bar": {
+      "versions": {
+        "^1.0.0": "consume-status-bar"
+      }
+    }
+  }
 }

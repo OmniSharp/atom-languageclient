@@ -42,7 +42,7 @@ export class RenameService
         this._waitService = waitService;
     }
 
-    protected onEnabled() {
+    public onEnabled() {
         return this._commands.add(CommandType.TextEditor, 'rename', 'f2', () => this.open());
     }
 

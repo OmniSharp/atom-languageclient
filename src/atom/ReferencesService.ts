@@ -39,7 +39,7 @@ export class ReferencesService
         this._source = source;
     }
 
-    protected onEnabled() {
+    public onEnabled() {
         return this._commands.add(CommandType.TextEditor, 'find-usages', 'shift-f12', () => this.open())
     }
 

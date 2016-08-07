@@ -15,10 +15,6 @@ export abstract class ProviderServiceBase<TProvider extends { request: (options:
     constructor(ctor: new <T extends ProviderServiceBase<TProvider, TRequest, TResponse, TAggregateResponse>>(...args: any[]) => T, packageConfig: AtomLanguageClientConfig, descriptor: IFeatureService) {
         super(ctor, packageConfig, descriptor);
 
-        const name = _.startCase(ctor.name);
-        const setting = _.assign({ type: <'boolean'>'boolean', title: name }, descriptor);
-
-        packageConfig.add(name, setting);
         this._disposable.add(
             Disposable.create(() => {
                 this._providers.forEach(x => x.dispose());

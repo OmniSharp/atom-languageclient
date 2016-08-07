@@ -43,7 +43,7 @@ export class FormatService
         );
     }
 
-    protected onEnabled() {
+    public onEnabled() {
         return new CompositeDisposable(
             this._commands.add(CommandType.TextEditor, `code-format`, 'ctrl-k ctrl-d', () => this.format(this._source.activeTextEditor)),
             this._atomCommands.add(CommandType.TextEditor, `format-document`, () => this.formatDocument(this._source.activeTextEditor)),

@@ -45,7 +45,7 @@ export class HoverService
         this._view = new HoverView();
     }
 
-    protected onEnabled() {
+    public onEnabled() {
         return new CompositeDisposable(
             this._commands.add(CommandType.TextEditor, `lookup`, 'f1', () => this.showOnCommand()),
             this._textEditorSource.observeActiveTextEditor

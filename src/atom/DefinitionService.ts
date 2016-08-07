@@ -39,7 +39,7 @@ export class DefinitionService
         this._atomCommands = atomCommands;
     }
 
-    protected onEnabled() {
+    public onEnabled() {
         return this._commands.add(CommandType.TextEditor, 'go-to-definition', 'f12', () => this.open());
     }
 

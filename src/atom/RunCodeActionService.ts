@@ -27,7 +27,7 @@ export class RunCodeActionService
         this._changes = changes;
     }
 
-    protected onEnabled() {
+    public onEnabled() {
         return Disposable.empty;
     }
 

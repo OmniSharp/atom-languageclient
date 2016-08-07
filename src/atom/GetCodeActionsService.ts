@@ -42,7 +42,7 @@ export class GetCodeActionsService
         // this._view = new CodeActionView(commands, viewFinder, editor);
     }
 
-    protected onEnabled() {
+    public onEnabled() {
         return this._commands.add(CommandType.TextEditor, `get-code-actions`, ['ctrl-.', 'alt-enter'], () => this.show());
     }
 
