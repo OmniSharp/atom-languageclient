@@ -48,19 +48,21 @@ export class AtomLanguageClientConfig extends DisposableBase {
         this._configure.forEach((value, name) => {
             let disposable: IDisposable | null = null;
             const feature = value();
-            if (feature.onEnabled) {
-                this._disposable.add(
-                    this._atomConfig.observe<boolean>(name)
-                        .subscribe(enabled => {
-                            if (enabled && !disposable) {
-                                disposable = feature.onEnabled!();
-                            } else if (!enabled && disposable) {
-                                disposable.dispose();
-                                disposable = null;
-                            }
-                        })
-                );
+            if (!feature.onEnabled) {
+                this._services.delete(name.split('.')[1]);
+                return;
             }
+            this._disposable.add(
+                this._atomConfig.observe<boolean>(name)
+                    .subscribe(enabled => {
+                        if (enabled && !disposable) {
+                            disposable = feature.onEnabled!();
+                        } else if (!enabled && disposable) {
+                            disposable.dispose();
+                            disposable = null;
+                        }
+                    })
+            );
         });
         this._configure.clear();
 
@@ -76,9 +78,7 @@ export class AtomLanguageClientConfig extends DisposableBase {
 
         properties['services'] = {
             type: 'object',
-            properties: serviceProperties,
-            title: 'Services',
-            description: 'Enable / Disable unwanted services'
+            properties: serviceProperties
         };
         this._schema = properties;
         this._atomConfig.setSchema(packageName, {

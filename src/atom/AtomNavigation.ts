@@ -12,7 +12,7 @@ export class AtomNavigation implements IAtomNavigation {
     public navigateTo(context: IAtomNavigation.Location) {
         if (navigationHasRange(context)) {
             return atom.workspace.open(context.filePath, { initialLine: context.range.end.row, initialColumn: context.range.end.column });
-        } else if (navigationHasLocation(location)) {
+        } else if (navigationHasLocation(context)) {
             /* tslint:disable-next-line:no-any */
             return atom.workspace.open(context.filePath, { initialLine: (<any>context).location.row, initialColumn: (<any>context).location.column });
         } else {

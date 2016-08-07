@@ -12,6 +12,7 @@ export abstract class ProviderServiceBase<TProvider extends { request: (options:
 
     constructor() {
         super();
+        this._computeInvoke();
         this._disposable.add(
             Disposable.create(() => {
                 this._providers.forEach(x => x.dispose());
