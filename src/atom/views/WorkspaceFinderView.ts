@@ -29,6 +29,8 @@ export class WorkspaceFinderView extends FilterSelectListView<Finder.IResponse> 
         this._panel = atom.workspace.addModalPanel({ item: this.root });
         this.focusFilterEditor();
         this.setMaxItems(50);
+
+        this._disposable.add(() => this._panel.destroy());
     }
 
     public get filterKeys() {
@@ -40,7 +42,6 @@ export class WorkspaceFinderView extends FilterSelectListView<Finder.IResponse> 
 
     public cancelled() {
         this._subscription.unsubscribe();
-        this._panel.destroy();
     }
 
     public confirmed(item: Finder.IResponse) {

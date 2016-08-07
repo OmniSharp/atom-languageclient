@@ -26,6 +26,8 @@ export class DocumentFinderView extends FilterSelectListView<Finder.IResponse> {
         this.storeFocusedElement();
         this._panel = atom.workspace.addModalPanel({ item: this.root });
         this.focusFilterEditor();
+
+        this._disposable.add(() => this._panel.destroy());
     }
 
     public get filterKeys() {
@@ -37,7 +39,6 @@ export class DocumentFinderView extends FilterSelectListView<Finder.IResponse> {
 
     public cancelled() {
         this._subscription.unsubscribe();
-        this._panel.destroy();
     }
 
     public confirmed(item: Finder.IResponse) {

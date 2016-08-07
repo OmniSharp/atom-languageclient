@@ -264,6 +264,10 @@ export abstract class SelectListView<T> extends View<HTMLDivElement> {
         if (item != null) {
             this.confirmed(item);
             this.dispose();
+            const filterEditorViewFocused = this.hasFocus(this._filterEditorView);
+            if (filterEditorViewFocused) {
+                this._restoreFocus();
+            }
         } else {
             this.cancel();
         }

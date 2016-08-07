@@ -38,6 +38,7 @@ export class ReferencesService
         this._navigation = navigation;
         this._commands = commands;
         this._source = source;
+        this._atomCommands = atomCommands;
     }
 
     public onEnabled() {

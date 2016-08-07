@@ -21,6 +21,8 @@ export class ReferenceView extends FilterSelectListView<Reference.IResponse> {
         this.storeFocusedElement();
         this._panel = atom.workspace.addModalPanel({ item: this.root });
         this.focusFilterEditor();
+
+        this._disposable.add(() => this._panel.destroy());
     }
 
     public get filterKeys() {
