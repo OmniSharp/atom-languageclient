@@ -58,24 +58,13 @@ class CodeLensProvider extends DisposableBase implements ICodeLensProvider {
 
         return this._client.sendRequest(CodeLensRequest.type, {
             textDocument: TextDocumentIdentifier.create(toUri(options.editor.getURI()))
-        }).mergeMap(results => {
-            return Observable.forkJoin(..._.map(results, _.bind(this._createResponse, this)));
+        }).map(results => {
+            return _.map(results, _.bind(this._createResponse, this));
         });
     }
 
     private _createResponse(context: TCodeLens) {
-        return this._resolve(context)
-            .map(({command, data, range}) => {
-                return { command, data, range: fromRange(range) };
-            });
-    }
-
-    private _resolve(context: TCodeLens) {
-        if (!this._doResolve) {
-            return Observable.of(context);
-        }
-
-        return this._client.sendRequest(CodeLensResolveRequest.type, context);
+        return new CodeLensResponse(context, (value: CodeLensResponse) => this.resolve(value));
     }
 
     public resolve(codeLens: CodeLens.IResponse) {
@@ -87,8 +76,33 @@ class CodeLensProvider extends DisposableBase implements ICodeLensProvider {
             command: codeLens.command,
             data: codeLens.data,
             range: toRange(codeLens.range)
-        }).map(({command, data, range}) => {
-            return { command, data, range: fromRange(range) };
+        }).map(result => {
+            codeLens.command = result.command;
+            codeLens.data = result.data;
+            return codeLens;
         });
+    }
+}
+
+class CodeLensResponse implements CodeLens.IResponse {
+    private _resolved = false;
+    private _resolve: (context: CodeLens.IResponse) => Observable<CodeLens.IResponse>;
+    constructor(context: TCodeLens, resolve: (context: CodeLens.IResponse) => Observable<CodeLens.IResponse>) {
+        this.command = context.command;
+        this.data = context.data;
+        this.range = fromRange(context.range);
+        this._resolve = resolve;
+    }
+
+    public command: CodeLens.ICommand | undefined;
+    public data: any;
+    public range: TextBuffer.Range;
+
+    public resolve(): Observable<CodeLens.IResponse> {
+        if (this._resolved) {
+            return Observable.of<CodeLens.IResponse>(this);
+        }
+        return this._resolve(this)
+            .do(() => { this._resolved = true; });
     }
 }

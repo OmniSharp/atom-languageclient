@@ -5,18 +5,21 @@
  */
 import * as _ from 'lodash';
 import { Observable, Observer, Subject } from 'rxjs';
-import { CodeLens, CommandType, IAtomNavigation, ICodeLensProvider, ICodeLensService, Reference, navigationHasRange } from 'atom-languageservices';
-import { alias, injectable } from 'atom-languageservices/decorators';
+import { Point } from 'atom';
+import { CodeLens, CommandType, IAtomNavigation, ICodeLensProvider, ICodeLensService, IReferencesService, Reference, navigationHasRange } from 'atom-languageservices';
+import { alias, inject, injectable } from 'atom-languageservices/decorators';
+import { Location as TLocation } from 'atom-languageservices/types';
 import { readFile } from 'fs';
 import { CompositeDisposable, Disposable, DisposableBase } from 'ts-disposables';
 import { ProviderServiceBase } from './_ProviderServiceBase';
+import { fromUri } from './../capabilities/utils/convert';
 import { atomConfig } from '../decorators';
 import { observeCallback } from '../helpers/index';
 import { AtomCommands } from './AtomCommands';
 import { AtomNavigation } from './AtomNavigation';
 import { AtomTextEditorSource } from './AtomTextEditorSource';
+import { AtomViewFinder } from './AtomViewFinder';
 import { CommandsService } from './CommandsService';
-import { ReferenceView } from './views/ReferenceView';
 type Location = IAtomNavigation.Location;
 
 @injectable
@@ -33,13 +36,24 @@ export class CodeLensService
     private _atomCommands: AtomCommands;
     private _source: AtomTextEditorSource;
     private _editors = new Set<EditorCodeLensService>();
+    private _viewFinder: AtomViewFinder;
+    private _referencesService: IReferencesService;
 
-    constructor(navigation: AtomNavigation, commands: CommandsService, atomCommands: AtomCommands, source: AtomTextEditorSource) {
+    constructor(
+        navigation: AtomNavigation,
+        commands: CommandsService,
+        atomCommands: AtomCommands,
+        source: AtomTextEditorSource,
+        viewFinder: AtomViewFinder,
+        @inject(IReferencesService) referencesService: IReferencesService
+    ) {
         super();
         this._navigation = navigation;
         this._commands = commands;
         this._source = source;
         this._atomCommands = atomCommands;
+        this._viewFinder = viewFinder;
+        this._referencesService = referencesService;
         this._configure();
 
         this._disposable.add(() => {
@@ -77,29 +91,51 @@ export class CodeLensService
     }, 1000);
 
     private _configureEditor(editor: Atom.TextEditor) {
-        const service = new EditorCodeLensService(editor, (editor: Atom.TextEditor) => this.invoke({ editor }));
+        const service = new EditorCodeLensService(editor, (editor: Atom.TextEditor) => this.invoke({ editor }), this._viewFinder, this._referencesService);
         this._editors.add(service);
     }
+}
+
+interface EditorCodeLensItem {
+    marker: TextBuffer.DisplayMarker;
+    codeLens: CodeLens.IResponse;
+    item: HTMLAnchorElement;
+    resolved: boolean;
 }
 
 class EditorCodeLensService extends DisposableBase {
     private _editor: Atom.TextEditor;
     private _request: (editor: Atom.TextEditor) => Observable<CodeLens.IResponse[]>;
-    private _markers: { marker: TextBuffer.DisplayMarker, item: HTMLDivElement; }[] = [];
+    private _lenses: EditorCodeLensItem[] = [];
     private _kick: Observer<void>;
+    private _viewFinder: AtomViewFinder;
+    private _referencesService: IReferencesService;
 
-    constructor(editor: Atom.TextEditor, request: (editor: Atom.TextEditor) => Observable<CodeLens.IResponse[]>) {
+    constructor(editor: Atom.TextEditor, request: (editor: Atom.TextEditor) => Observable<CodeLens.IResponse[]>, viewFinder: AtomViewFinder, referencesService: IReferencesService) {
         super();
         this._editor = editor;
         this._request = request;
+        this._viewFinder = viewFinder;
+        this._referencesService = referencesService;
         const kick = this._kick = new Subject<void>();
 
         this._disposable.add(
+            editor.onDidChangeScrollTop(_.throttle(() => {
+                const element: any = this._viewFinder.getView(this._editor);
+                const top = element.getFirstVisibleScreenRow();
+                const bottom = element.getLastVisibleScreenRow() - 2;
+
+                _.each(this._lenses, lens => {
+                    if (!lens.resolved) {
+                        this._resolveMarker(lens, [top, bottom]);
+                    }
+                });
+            }, 200, { leading: true, trailing: true })),
             editor.onDidDestroy(() => {
                 this.dispose();
             }),
             () => {
-                this._markers.forEach(({marker}) => {
+                this._lenses.forEach(({marker}) => {
                     marker.destroy();
                 });
             },
@@ -112,8 +148,14 @@ class EditorCodeLensService extends DisposableBase {
                 .switchMap(() => {
                     return this._request(editor);
                 })
-                .mergeMap(_.identity)
-                .subscribe(_.bind(this._setMarker, this))
+                .subscribe(results => {
+                    const element: any = this._viewFinder.getView(this._editor);
+                    const top = element.getFirstVisibleScreenRow();
+                    const bottom = element.getLastVisibleScreenRow() - 2;
+                    _.each(results, result => {
+                        this._setMarker(result, [top, bottom]);
+                    });
+                })
         );
     }
 
@@ -121,22 +163,49 @@ class EditorCodeLensService extends DisposableBase {
         this._kick.next(void 0);
     }
 
-    private _setMarker(codeLens: CodeLens.IResponse) {
-        let context = _.find(this._markers, x => x.marker.getBufferRange().isEqual(codeLens.range));
+    private _resolveMarker(lens: EditorCodeLensItem, [top, bottom]: [number, number]) {
+        if (lens.codeLens.range.start.row > top && lens.codeLens.range.start.row < bottom) {
+            lens.resolved = true;
+            lens.codeLens.resolve()
+                .subscribe(() => {
+                    lens.item.innerHTML = lens.codeLens.command!.title;
+                });
+        }
+    }
+
+    private _setMarker(codeLens: CodeLens.IResponse, [top, bottom]: [number, number]) {
+        let context = _.find(this._lenses, x => x.marker.getBufferRange().isEqual(codeLens.range));
         if (!context) {
             const marker = this._editor.markBufferRange(codeLens.range);
+            const indentation = this._editor.indentationForBufferRow(codeLens.range.start.row) * this._editor.getTabLength();
+            const width = this._editor.getDefaultCharWidth();
+            const item = document.createElement('a');
+            item.onclick = () => {
+                if (codeLens.command!.command === 'references') {
+                    const location: TLocation = codeLens.data.location;
+                    this._referencesService.open({
+                        editor: this._editor,
+                        position: new Point(location.range.start.line, location.range.start.character),
+                        filePath: this._editor.getURI()
+                    });
+                }
+            };
 
-            const item = document.createElement('div');
+            item.style.marginLeft = `${indentation * width}px`;
 
             this._editor.decorateMarker(marker, {
                 type: 'block',
                 position: 'before',
                 item
             });
-            context = { item, marker };
-            this._markers.push(context);
+            context = { item, codeLens, marker, resolved: false };
+            this._lenses.push(context);
+
+            if (codeLens.range.start.row > top && codeLens.range.start.row < bottom) {
+                this._resolveMarker(context, [top, bottom]);
+            }
         }
 
-        context.item.innerHTML = codeLens.command!.title;
+        context.item.innerHTML = 'Loading...';
     }
 }

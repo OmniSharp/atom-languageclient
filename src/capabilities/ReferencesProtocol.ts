@@ -5,7 +5,7 @@
  */
 import * as _ from 'lodash';
 import { Observable } from 'rxjs';
-import { ILanguageProtocolClient, IReferencesProvider, IReferencesService, ISyncExpression } from 'atom-languageservices';
+import { ILanguageProtocolClient, IReferencesProvider, IReferencesService, ISyncExpression, Reference } from 'atom-languageservices';
 import { capability, inject } from 'atom-languageservices/decorators';
 import { ReferencesRequest } from 'atom-languageservices/protocol';
 import { Position, ReferenceParams, TextDocumentIdentifier } from 'atom-languageservices/types';
@@ -45,21 +45,20 @@ class LanguageProtocolReferencesProvider extends DisposableBase implements IRefe
         this._syncExpression = syncExpression;
         }
 
-    public request(editor: Atom.TextEditor) {
-        if (!this._syncExpression.evaluate(editor)) {
+    public request(request: Reference.IRequest) {
+        if (!this._syncExpression.evaluate(request.editor)) {
             /* tslint:disable-next-line:no-any */
             return Observable.empty<any>();
         }
-
-        const marker = editor!.getCursorBufferPosition();
 
         const params: ReferenceParams = {
             context: {
                 includeDeclaration: true
             },
-            textDocument: TextDocumentIdentifier.create(toUri(editor!.getURI())),
-            position: Position.create(marker.row, marker.column)
+            textDocument: TextDocumentIdentifier.create(toUri(request.filePath)),
+            position: Position.create(request.position.row, request.position.column)
         };
+
         return this._client.sendRequest(ReferencesRequest.type, params)
             .map(response => {
                 return _.map(response, location => {

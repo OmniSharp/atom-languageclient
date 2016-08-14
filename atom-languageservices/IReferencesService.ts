@@ -11,13 +11,19 @@ import { IDisposable } from 'ts-disposables';
 export const IReferencesService = Symbol.for('IReferencesService');
 export interface IReferencesService {
     registerProvider(provider: IReferencesProvider): IDisposable;
+    open(request: Reference.IRequest): void;
 }
 
 export interface IReferencesProvider extends IDisposable {
-    request(editor: Atom.TextEditor): Observable<IAtomNavigation.Location[]>;
+    request(request: Reference.IRequest): Observable<IAtomNavigation.Location[]>;
 }
 
 export namespace Reference {
+    export interface IRequest {
+        editor: Atom.TextEditor;
+        filePath: string;
+        position: TextBuffer.Point;
+    }
     export interface IResponse {
         lines: string[];
         filePath: string;

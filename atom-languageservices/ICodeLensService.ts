@@ -22,6 +22,7 @@ export namespace CodeLens {
         range: TextBuffer.Range;
         data?: any;
         command?: ICommand;
+        resolve(): Observable<IResponse>;
     }
 
     export interface ICommand {

@@ -57,7 +57,7 @@ class LodashDebounceSubscriber<T> extends Subscriber<T> {
     }
 
     private _dispatchNext(value: T) {
-        if ((<any>this).closed || this.isUnsubscribed) {
+        if (this.closed) {
             return;
         }
         this.destination.next!(value);

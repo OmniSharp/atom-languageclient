@@ -251,8 +251,7 @@ class OverlayEditorHighlighter extends EditorHighlighter {
         item.style.fontSize = style.fontSize;
         item.style.marginTop = `-${style.lineHeight}`;
 
-        // const decoration = this._editor.decorateMarker(marker, { type: 'overlay', item, position: 'tail' });
-        const decoration = this._editor.decorateMarker(marker, { type: 'highlight', class: this.getClassForKind(highlight.kind).join(' ') });
+        const decoration = this._editor.decorateMarker(marker, { type: 'overlay', item, position: 'tail' });
 
         this._disposable.add(
             decoration.onDidDestroy(() => {

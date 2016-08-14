@@ -26,7 +26,7 @@ const readFile$ = Observable.bindNodeCallback(readFile);
     description: 'Adds support to find references.'
 })
 export class ReferencesService
-    extends ProviderServiceBase<IReferencesProvider, Atom.TextEditor, Observable<Location[]>, Observable<Location[]>>
+    extends ProviderServiceBase<IReferencesProvider, Reference.IRequest, Observable<Location[]>, Observable<Location[]>>
     implements IReferencesService {
     private _navigation: AtomNavigation;
     private _commands: CommandsService;
@@ -42,11 +42,18 @@ export class ReferencesService
     }
 
     public onEnabled() {
-        return this._commands.add(CommandType.TextEditor, 'find-usages', 'shift-f12', () => this.open());
+        return this._commands.add(CommandType.TextEditor, 'find-usages', 'shift-f12', () => {
+            const editor = this._source.activeTextEditor;
+            this.open({
+                editor: editor,
+                position: editor.getCursorScreenPosition(),
+                filePath: editor.getURI()
+            });
+        });
     }
 
-    protected createInvoke(callbacks: ((options: Atom.TextEditor) => Observable<Location[]>)[]) {
-        return ((options: Atom.TextEditor) => {
+    protected createInvoke(callbacks: ((context: Reference.IRequest) => Observable<Location[]>)[]) {
+        return ((options: Reference.IRequest) => {
             const requests = _.over(callbacks)(options);
             return Observable.from(requests)
                 .mergeMap(_.identity)
@@ -55,9 +62,9 @@ export class ReferencesService
         });
     }
 
-    public open() {
+    public open(options: Reference.IRequest) {
         let view: ReferenceView;
-        this.invoke(this._source.activeTextEditor)
+        this.invoke(options)
             .switchMap(
             results => {
                 const files = _(results)
