@@ -1,6 +1,6 @@
 {
   "name": "atom-languageservices",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Package that contains symbols and common services for creating language protocol powered language clients",
   "main": "index.js",
   "repository": {
