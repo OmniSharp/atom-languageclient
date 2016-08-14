@@ -44,3 +44,4 @@ typings/
 dist/atom-languageservices/
 dist/scripts/
 dist/spec/
+!/index.js
