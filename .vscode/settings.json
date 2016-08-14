@@ -5,7 +5,7 @@
         "**/.svn": true,
         "**/.DS_Store": true,
         "**/node_modules": true,
-        "**/*ypings*": true,
+        "**/typings*": true,
         "**/dist*": true,
         "*/**/*.js": {
             "when": "$(basename).ts"

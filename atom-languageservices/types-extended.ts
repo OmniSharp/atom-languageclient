@@ -60,10 +60,12 @@ export enum HighlightClassification {
 
 export interface PublishHighlightParams {
     uri: string;
-    highlights: Highlight[];
+    added: Highlight[];
+    removed: string[];
 }
 
 export interface Highlight {
+    id: string;
     range: Range;
     kind: string;
     // projects: string[];

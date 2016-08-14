@@ -167,8 +167,12 @@ export class HoverService
     }
 
     private _checkPosition(bufferPt: TextBuffer.Point) {
-        const curCharPixelPt = this._editor!.pixelPositionForBufferPosition([bufferPt.row, bufferPt.column]);
-        const nextCharPixelPt = this._editor!.pixelPositionForBufferPosition([bufferPt.row, bufferPt.column + 1]);
+        if (!this._editor) {
+            return false;
+        }
+
+        const curCharPixelPt = this._editor.pixelPositionForBufferPosition([bufferPt.row, bufferPt.column]);
+        const nextCharPixelPt = this._editor.pixelPositionForBufferPosition([bufferPt.row, bufferPt.column + 1]);
 
         if (curCharPixelPt.left >= nextCharPixelPt.left) {
             return false;

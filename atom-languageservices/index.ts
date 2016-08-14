@@ -13,6 +13,7 @@ export * from './IAtomNavigation';
 export * from './IAtomTextEditorSource';
 export * from './IAtomViewFinder';
 export * from './IAutoCompleteService';
+export * from './ICodeLensService';
 export * from './ICommandsService';
 export * from './IDefinitionService';
 export * from './IDelayer';

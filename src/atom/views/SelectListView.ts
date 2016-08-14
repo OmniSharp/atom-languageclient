@@ -69,7 +69,7 @@ export abstract class SelectListView<T> extends View<HTMLDivElement> {
             }),
             Observable.fromEvent(this._list, 'mousedown')
                 .subscribe((e: MouseEvent) => {
-                    if ((<HTMLElement>e.target).tagName === 'li') {
+                    if ((<HTMLElement>e.target).tagName.match(/li/i)) {
                         this._selectItem(<Element>e.target);
                         e.preventDefault();
                         return false;
@@ -78,7 +78,7 @@ export abstract class SelectListView<T> extends View<HTMLDivElement> {
                 }),
             Observable.fromEvent(this._list, 'mouseup')
                 .subscribe((e: MouseEvent) => {
-                    if ((<HTMLElement>e.target).tagName === 'li') {
+                    if ((<HTMLElement>e.target).tagName.match(/li/i)) {
                         if ((<HTMLElement>e.target).classList.contains('selected')) {
                             this._confirmSelection();
                         }
@@ -263,11 +263,11 @@ export abstract class SelectListView<T> extends View<HTMLDivElement> {
         const item = this.selected;
         if (item != null) {
             this.confirmed(item);
-            this.dispose();
             const filterEditorViewFocused = this.hasFocus(this._filterEditorView);
             if (filterEditorViewFocused) {
                 this._restoreFocus();
             }
+            this.dispose();
         } else {
             this.cancel();
         }

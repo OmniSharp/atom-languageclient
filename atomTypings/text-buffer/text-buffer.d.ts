@@ -1415,7 +1415,7 @@ declare module TextBuffer {
          * Returns `0` if this range is equivalent to the argument.
          * Returns `1` if this range starts after the argument or is contained by it.
          */
-        compare(other?: Range): -1 | 0 | 1;
+        compare(other?: Range): number;
 
         isEqual(other?: Range): boolean;
 

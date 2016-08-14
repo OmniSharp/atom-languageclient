@@ -33,19 +33,19 @@ export class HighlightProtocol extends DisposableBase {
         this._configure();
     }
 
-    private _setMessages(editor: Atom.TextEditor, highlights: Highlight.Item[]) {
-        this._highlighter.setHighlights(editor, highlights);
+    private _updateHighlights(editor: Atom.TextEditor, added: Highlight.Item[], removed: string[]) {
+        this._highlighter.updateHighlights(editor, added, removed);
     }
 
     private _configure() {
-        this._client.onNotification(HighlightNotification.type, _.bind(this._recieveDiagnostics, this));
+        this._client.onNotification(HighlightNotification.type, _.bind(this._recieveHighlights, this));
     }
 
-    private _recieveDiagnostics({uri, highlights}: PublishHighlightParams) {
+    private _recieveHighlights({uri, added, removed}: PublishHighlightParams) {
         uri = fromUri(uri) || uri;
         const editor = _.find(this._atomTextEditorSource.textEditors, x => x.getPath() === uri);
         if (editor) {
-            this._setMessages(editor, this._fromHighlights(uri, highlights));
+            this._updateHighlights(editor, this._fromHighlights(uri, added), removed);
         }
     }
 
@@ -55,6 +55,7 @@ export class HighlightProtocol extends DisposableBase {
 
     private _fromDiagnostic(path: string, highlight: HighlightItem): Highlight.Item {
         return {
+            id: highlight.id,
             range: fromRange(highlight.range),
             kind: highlight.kind
         };

@@ -34,7 +34,8 @@ class PrefixAtomConfig extends DisposableBase implements IAtomConfig {
             });
 
             return () => disposer.dispose();
-        }).publishReplay(1).refCount();
+        }).publishReplay(1).refCount()
+        .startWith({ keyPath: this._getPath(path), oldValue: <any>undefined, newValue: atom.config.get<T>(this._getPath(path)) });
     }
 
     public get<T>(path: string) {

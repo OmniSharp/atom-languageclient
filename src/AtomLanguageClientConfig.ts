@@ -14,6 +14,7 @@ import { AtomConfig } from './atom/AtomConfig';
 export class AtomLanguageClientConfig extends DisposableBase {
     private _atomConfig: AtomConfig;
     private _settings = new Map<string, IAtomConfig.Setting>();
+    private _sections = new Map<string, IAtomConfig.IObjectSetting>();
     private _services = new Map<string, IAtomConfig.Setting>();
     private _configure = new Map<string, () => { onEnabled?(): IDisposable; }>();
     private _schema: { [index: string]: IAtomConfig.Setting; } = {};
@@ -33,6 +34,14 @@ export class AtomLanguageClientConfig extends DisposableBase {
     public add(name: string, setting: IAtomConfig.Setting) {
         this._settings.set(name, setting);
 
+        this._update();
+    }
+
+    public addSection(name: string, setting: IAtomConfig.IObjectSetting) {
+        if (name === 'services') {
+            throw new Error();
+        }
+        this._sections.set(name, setting);
         this._update();
     }
 
@@ -74,6 +83,10 @@ export class AtomLanguageClientConfig extends DisposableBase {
         const serviceProperties: any = {};
         this._services.forEach((setting, key) => {
             serviceProperties[key] = setting;
+        });
+
+        this._sections.forEach((setting, key) => {
+            properties[key] = setting;
         });
 
         properties['services'] = {

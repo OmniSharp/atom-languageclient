@@ -114,7 +114,7 @@ export class LanguageProtocolClient extends DisposableBase implements ILanguageP
         const initParams: InitializeParams = {
             processId: process.pid,
             rootPath: this.rootPath,
-            capabilities: {},
+            capabilities: { highlightProvider: true },
             initializationOptions: this._options.initializationOptions
         };
         return this._connection.initialize(initParams)

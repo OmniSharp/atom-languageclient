@@ -27,12 +27,13 @@ export enum HighlightClassification {
 
 export namespace Highlight {
     export interface Item {
+        id: string;
         range: TextBuffer.Range;
         kind: string;
     }
 
     export interface Highlighter {
-        setHighlights(editor: Atom.TextEditor, messages: Item[]): void;
+        updateHighlights(editor: Atom.TextEditor, added: Item[], removed: string[]): void;
         dispose(): void;
     }
 }

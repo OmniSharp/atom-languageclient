@@ -78,7 +78,7 @@ export class AutocompleteService
         ]
     });
 
-    public getSuggestions(options: Autocomplete.IRequest): Observable<Autocomplete.Suggestion[]> | null {
+    public getSuggestions(options: Autocomplete.IRequest): Promise<Autocomplete.Suggestion[]> | null {
         if (!this.hasProviders) {
             return null;
         }
@@ -98,7 +98,8 @@ export class AutocompleteService
                     results = this._fuse.search<Autocomplete.Suggestion>(search);
                 }
                 return results;
-            });
+            })
+            .toPromise();
     }
 
     private _renderIcon(completionItem: Autocomplete.Suggestion) {
