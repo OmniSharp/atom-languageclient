@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 import { Hover, IHoverProvider, IHoverService, ILanguageProtocolClient, ISyncExpression } from 'atom-languageservices';
 import { capability, inject } from 'atom-languageservices/decorators';
 import { HoverRequest } from 'atom-languageservices/protocol';
-import { Hover as THover, MarkedString, Position, TextDocumentIdentifier } from 'atom-languageservices/types';
+import { Hover as THover, MarkedString, Position, TextDocumentIdentifier } from 'vscode-languageserver-types';
 import * as toUri from 'file-url';
 import { DisposableBase } from 'ts-disposables';
 

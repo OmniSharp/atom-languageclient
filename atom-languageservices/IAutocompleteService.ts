@@ -5,7 +5,7 @@
  */
 import { Observable } from 'rxjs';
 import { IDisposable } from 'ts-disposables';
-import { CompletionItem, CompletionItemKind, SymbolKind } from './types';
+import { CompletionItem, CompletionItemKind, SymbolKind } from 'vscode-languageserver-types';
 /* tslint:disable:variable-name no-any */
 
 /**

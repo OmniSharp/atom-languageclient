@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 import { GetCodeActions, IGetCodeActionsProvider, IGetCodeActionsService, ILanguageProtocolClient, ISyncExpression } from 'atom-languageservices';
 import { capability, inject } from 'atom-languageservices/decorators';
 import { GetCodeActionsRequest } from 'atom-languageservices/protocol-extended';
-import { TextDocumentIdentifier } from 'atom-languageservices/types-extended';
+import { TextDocumentIdentifier } from 'vscode-languageserver-types';
 import * as toUri from 'file-url';
 import { DisposableBase } from 'ts-disposables';
 import { fromWorkspaceEdit, toRange } from './utils/convert';

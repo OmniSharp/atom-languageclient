@@ -8,8 +8,9 @@ import { ReplaySubject } from 'rxjs';
 import { CloseAction, ErrorAction, ILanguageProtocolClient, ILanguageProtocolServerOptions, ILanguageProvider, ILanguageService, TransportKind } from 'atom-languageservices';
 import { join } from 'path';
 import { CompositeDisposable } from 'ts-disposables';
-import { Message } from 'vscode-jsonrpc';
+import { Message, NotificationType } from 'vscode-jsonrpc';
 import { AtomLanguageJsonSettings, IAtomLanguageJsonSettings } from './atom/AtomLanguageJsonSettings';
+import { SchemaAssociationNotification } from './server/server'
 
 export class AtomLanguageJsonPackage implements IAtomPackage<IAtomLanguageJsonSettings> {
     private _disposable: CompositeDisposable;
@@ -52,7 +53,8 @@ export class AtomLanguageJsonPackage implements IAtomPackage<IAtomLanguageJsonSe
         });
 
         if (this._client) {
-            this._client.sendNotification({ method: 'json/schemaAssociations' }, this._associations);
+            const notification = new NotificationType<Json.SchemaAssociations, any>('json/schemaAssociations');
+            this._client.sendNotification(notification, this._associations);
         }
     }
 
@@ -96,7 +98,7 @@ export class AtomLanguageJsonPackage implements IAtomPackage<IAtomLanguageJsonSe
             serverOptions,
             onConnected: (client) => {
                 this._client = client;
-                this._client.sendNotification({ method: 'json/schemaAssociations' }, this._associations);
+                this._client.sendNotification(SchemaAssociationNotification.type, this._associations);
             },
             dispose() { /* */ }
         };

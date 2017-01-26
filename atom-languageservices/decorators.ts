@@ -1,3 +1,4 @@
+import { ServerCapabilities } from './protocol';
 /**
  *  @license   MIT
  *  @copyright OmniSharp Team
@@ -6,7 +7,6 @@
 export { all, autoinject as injectable, /* factory, */ inject, lazy, newInstance, /* options, */ parent } from 'aurelia-dependency-injection';
 import { metadata } from 'aurelia-metadata';
 import * as symbols from './symbols';
-import { ServerCapabilities } from './types-extended';
 /* tslint:disable:no-any */
 
 /**

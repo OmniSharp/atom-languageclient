@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 import { CodeLens, ICodeLensProvider, ICodeLensService, ILanguageProtocolClient, ISyncExpression } from 'atom-languageservices';
 import { capability, inject } from 'atom-languageservices/decorators';
 import { CodeLensRequest, CodeLensResolveRequest } from 'atom-languageservices/protocol';
-import { CodeLens as TCodeLens, MarkedString, TextDocumentIdentifier } from 'atom-languageservices/types';
+import { CodeLens as TCodeLens, MarkedString, TextDocumentIdentifier } from 'vscode-languageserver-types';
 import * as toUri from 'file-url';
 import { DisposableBase } from 'ts-disposables';
 import { fromRange, toRange } from './utils/convert';

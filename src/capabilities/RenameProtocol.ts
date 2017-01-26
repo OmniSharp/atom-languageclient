@@ -1,16 +1,18 @@
+import { RenameParams } from '../../atom-languageservices/protocol';
 /**
  *  @license   MIT
  *  @copyright OmniSharp Team
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
 import { Observable } from 'rxjs';
+import * as _ from 'lodash';
 import { ILanguageProtocolClient, IRenameProvider, IRenameService, ISyncExpression, Rename, Text } from 'atom-languageservices';
 import { capability, inject } from 'atom-languageservices/decorators';
 import { RenameRequest } from 'atom-languageservices/protocol';
-import { RenameParams, TextDocumentIdentifier } from 'atom-languageservices/types';
+import { TextDocumentIdentifier } from 'vscode-languageserver-types';
 import * as toUri from 'file-url';
 import { DisposableBase } from 'ts-disposables';
-import { fromWorkspaceEdit, toPosition } from './utils/convert';
+import { fromTextEdits, fromWorkspaceEdit, toPosition } from './utils/convert';
 import { DocumentSyncProtocol } from './DocumentSyncProtocol';
 
 @capability((capabilities) => !!capabilities.renameProvider)

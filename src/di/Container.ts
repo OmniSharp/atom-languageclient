@@ -1,3 +1,4 @@
+import { ServerCapabilities } from '../../atom-languageservices/protocol';
 /**
  *  @license   MIT
  *  @copyright OmniSharp Team
@@ -8,7 +9,6 @@ import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 import { IResolver } from 'atom-languageservices';
 import * as symbols from 'atom-languageservices/symbols';
-import { ServerCapabilities } from 'atom-languageservices/types-extended';
 import { Container as AureliaContainer } from 'aurelia-dependency-injection';
 import { metadata } from 'aurelia-metadata';
 import { AggregateError } from 'aurelia-pal';
@@ -144,9 +144,13 @@ export class Container extends DisposableBase implements IResolver {
 
     public autoRegisterAll(fns: any[], key?: any) {
         if (key) {
-            _.each(fns, fn => this.autoRegister(fn, key));
+            _.each(fns, fn => {
+                this.autoRegister(fn, key);
+            });
         } else {
-            _.each(fns, fn => this.autoRegister(fn));
+            _.each(fns, fn => {
+                this.autoRegister(fn);
+            });
         }
         return this;
     }
@@ -223,7 +227,9 @@ export class Container extends DisposableBase implements IResolver {
             this.autoRegister(metadata.get(symbols.key, fn), fn);
         });
 
-        _.each(normalKeys, fn => this.autoRegister(fn));
+        _.each(normalKeys, fn => {
+            this.autoRegister(fn);
+        });
         return this;
     }
 }

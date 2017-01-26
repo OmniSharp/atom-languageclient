@@ -1,3 +1,4 @@
+import { TextDocumentPositionParams } from '../../atom-languageservices/protocol';
 /**
  *  @license   MIT
  *  @copyright OmniSharp Team
@@ -8,7 +9,7 @@ import { Observable } from 'rxjs';
 import { Definition, IDefinitionProvider, IDefinitionService, ILanguageProtocolClient, ISyncExpression } from 'atom-languageservices';
 import { capability, inject } from 'atom-languageservices/decorators';
 import { DefinitionRequest } from 'atom-languageservices/protocol';
-import { Position, TextDocumentIdentifier, TextDocumentPositionParams } from 'atom-languageservices/types';
+import { Position, TextDocumentIdentifier } from 'vscode-languageserver-types';
 import * as toUri from 'file-url';
 import { DisposableBase } from 'ts-disposables';
 import { fromRange, fromUri } from './utils/convert';

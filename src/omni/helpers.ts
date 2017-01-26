@@ -23,5 +23,5 @@ export function ensureEditor(observable: Observable<ILanguageClientTextEditor>) 
 export function cacheEditor(observable: Observable<ILanguageClientTextEditor>) {
     return observable
         .debounceTime(DEBOUNCE_TIMEOUT)
-        .cache(1);
+        .publishReplay(1).refCount();
 }

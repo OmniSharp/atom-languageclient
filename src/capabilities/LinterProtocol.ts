@@ -1,3 +1,4 @@
+import { PublishDiagnosticsParams } from '../../atom-languageservices/protocol';
 /**
  *  @license   MIT
  *  @copyright OmniSharp Team
@@ -7,7 +8,7 @@ import * as _ from 'lodash';
 import { ILanguageProtocolClient, ILinterService, Linter } from 'atom-languageservices';
 import { capability, inject } from 'atom-languageservices/decorators';
 import { PublishDiagnosticsNotification } from 'atom-languageservices/protocol';
-import { Diagnostic, DiagnosticSeverity, PublishDiagnosticsParams } from 'atom-languageservices/types';
+import { Diagnostic, DiagnosticSeverity } from 'vscode-languageserver-types';
 import { DisposableBase } from 'ts-disposables';
 import { fromRange, fromUri } from './utils/convert';
 

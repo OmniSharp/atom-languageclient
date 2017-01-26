@@ -1,3 +1,4 @@
+import { NavigateParams } from '../../atom-languageservices/types-extended';
 /**
  *  @license   MIT
  *  @copyright OmniSharp Team
@@ -7,7 +8,7 @@ import { Observable } from 'rxjs';
 import { ILanguageProtocolClient, INavigateProvider, INavigateService, ISyncExpression, Navigate } from 'atom-languageservices';
 import { capability, inject } from 'atom-languageservices/decorators';
 import { NavigateRequest } from 'atom-languageservices/protocol-extended';
-import { NavigateParams, Position, TextDocumentIdentifier  } from 'atom-languageservices/types-extended';
+import { Position, TextDocumentIdentifier  } from 'vscode-languageserver-types';
 import * as toUri from 'file-url';
 import { DisposableBase } from 'ts-disposables';
 import { fromPosition } from './utils/convert';

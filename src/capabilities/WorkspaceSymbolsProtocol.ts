@@ -8,7 +8,7 @@ import { Observable, Observer, Subject } from 'rxjs';
 import { Autocomplete, Finder, ILanguageProtocolClient, IWorkspaceFinderProvider, IWorkspaceFinderService } from 'atom-languageservices';
 import { capability, inject } from 'atom-languageservices/decorators';
 import { WorkspaceSymbolRequest } from 'atom-languageservices/protocol';
-import { SymbolInformation, SymbolKind } from 'atom-languageservices/types';
+import { SymbolInformation, SymbolKind } from 'vscode-languageserver-types';
 import { DisposableBase } from 'ts-disposables';
 import { packageName } from '../constants';
 import { fromPosition, fromUri } from './utils/convert';

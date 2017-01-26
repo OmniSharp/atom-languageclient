@@ -20,7 +20,7 @@ export interface IDocumentDelayer extends IDelayer { }
 export class Delayer<T> extends DisposableBase implements IDelayer {
     public defaultDelay: number = 100;
     private timeout: NodeJS.Timer | null;
-    private completionPromise: Promise<T> | null;
+    private completionPromise: Promise<void> | null;
     private onSuccess: (value?: void | Thenable<void>) => void;
     private tasks = new Map<Atom.TextEditor, () => void>();
 
@@ -29,7 +29,7 @@ export class Delayer<T> extends DisposableBase implements IDelayer {
         this._disposable.add(() => this.cancel());
     }
 
-    public trigger(editor: Atom.TextEditor, task: () => void, delay: number = this.defaultDelay): Promise<T> {
+    public trigger(editor: Atom.TextEditor, task: () => void, delay = this.defaultDelay): Promise<void> {
         if (this.tasks.has(editor)) {
             this.tasks.delete(editor);
         }
@@ -58,7 +58,7 @@ export class Delayer<T> extends DisposableBase implements IDelayer {
             );
         }
 
-        return this.completionPromise;
+        return this.completionPromise!;
     }
 
     private _execute() {

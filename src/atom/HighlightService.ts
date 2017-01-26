@@ -314,7 +314,7 @@ class OverlayEditorHighlighter extends EditorHighlighter {
         const editor = document.querySelector('atom-text-editor');
         const d = document.createElement('div');
         d.classList.add(...classes);
-        editor.appendChild(d);
+        editor!.appendChild(d);
         const style = window.getComputedStyle(d);
         this._colors.set(id, style.color!);
 
@@ -328,7 +328,7 @@ class OverlayEditorHighlighter extends EditorHighlighter {
                 padding-right: 1px;
                 box-sizing: content-box !important;
             }\n`;
-            this._style.firstChild.textContent += content;
+            this._style.firstChild!.textContent += content;
         }
 
         d.remove();
@@ -422,7 +422,7 @@ class HighlightEditorHighlighter extends EditorHighlighter {
         const editor = document.querySelector('atom-text-editor');
         const d = document.createElement('div');
         d.classList.add(...classes);
-        editor.appendChild(d);
+        editor!.appendChild(d);
         const style = window.getComputedStyle(d);
         this._colors.set(id, style.color!);
 
@@ -436,7 +436,7 @@ class HighlightEditorHighlighter extends EditorHighlighter {
                 padding-right: 1px;
                 box-sizing: content-box !important;
             }\n`;
-            this._style.firstChild.textContent += content;
+            this._style.firstChild!.textContent += content;
         }
 
         d.remove();

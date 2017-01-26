@@ -1,3 +1,4 @@
+import { CompletionOptions, TextDocumentPositionParams } from '../../atom-languageservices/protocol';
 /**
  *  @license   MIT
  *  @copyright OmniSharp Team
@@ -8,7 +9,7 @@ import { Observable } from 'rxjs';
 import { Autocomplete, IAutocompleteProvider, IAutocompleteService, ILanguageProtocolClient, ISyncExpression } from 'atom-languageservices';
 import { capability, inject } from 'atom-languageservices/decorators';
 import { CompletionRequest } from 'atom-languageservices/protocol';
-import { CompletionItem, CompletionList, CompletionOptions, Position, TextDocumentIdentifier, TextDocumentPositionParams } from 'atom-languageservices/types';
+import { CompletionItem, CompletionList, Position, TextDocumentIdentifier } from 'vscode-languageserver-types';
 import * as toUri from 'file-url';
 import { DisposableBase } from 'ts-disposables';
 import { packageName } from '../constants';

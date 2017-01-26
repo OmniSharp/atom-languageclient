@@ -30,7 +30,7 @@ export class HoverService
 
     private _editor: Atom.TextEditor | undefined;
     private _editorView: Atom.TextEditorPresenter | undefined;
-    private _editorShadow: Element | undefined;
+    private _editorShadow: Element | null;
     private _editorDisposable: IDisposable;
 
     private _view: HoverView;
@@ -77,7 +77,7 @@ export class HoverService
         } else {
             this._editor = undefined;
             this._editorView = undefined;
-            this._editorShadow = undefined;
+            this._editorShadow = null;
         }
     }
 

@@ -9,7 +9,7 @@
 /// <reference path="../text-buffer/text-buffer.d.ts" />
 /// <reference path="../first-mate/first-mate.d.ts" />
 /// <reference path="../atom-keymap/atom-keymap.d.ts" />
-/// <reference path="../../typings/modules/semver/index.d.ts" />
+/// <reference path="../../node_modules/@types/semver/index.d.ts" />
 declare module Atom {
     /**
      * Atom global for dealing with packages, themes, menus, and the window.

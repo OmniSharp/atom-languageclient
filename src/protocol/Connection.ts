@@ -1,3 +1,9 @@
+import {
+    InitializeParams,
+    InitializeResult,
+    LogMessageParams,
+    ShowMessageParams
+} from '../../atom-languageservices/protocol';
 /**
  *  @license   MIT
  *  @copyright OmniSharp Team
@@ -19,22 +25,16 @@ import {
     ShowMessageNotification,
     ShutdownRequest, TelemetryEventNotification
 } from 'atom-languageservices/protocol';
-import {
-    DidChangeConfigurationParams, DidChangeTextDocumentParams, DidChangeWatchedFilesParams,
-    DidCloseTextDocumentParams, DidOpenTextDocumentParams, DidSaveTextDocumentParams
-    , InitializeParams, InitializeResult, LogMessageParams
-    , PublishDiagnosticsParams, ShowMessageParams
-} from 'atom-languageservices/types';
 /* tslint:enable */
 /* tslint:disable:no-any */
 import { ChildProcess, spawn } from 'child_process';
 
 import {
-    CancellationToken, ClientMessageConnection, IPCMessageReader, IPCMessageWriter,
+    CancellationToken, IPCMessageReader, IPCMessageWriter,
     Message, MessageReader, MessageWriter, NotificationHandler,
     NotificationType, RequestHandler, RequestType,
-    Trace, Tracer,
-    createClientMessageConnection
+    Trace, Tracer, createMessageConnection, MessageConnection,
+    RequestType0, MessageType as RPCMessageType, RequestHandler0, GenericRequestHandler, NotificationType0, NotificationHandler0, GenericNotificationHandler
 } from 'vscode-jsonrpc';
 
 import { fork } from './utils/electron';
@@ -48,10 +48,28 @@ export interface IConnection {
 
     listen(): void;
 
-    sendRequest<P, R, E>(type: RequestType<P, R, E>, params: P, token: CancellationToken): Promise<R>;
-    sendNotification<P>(type: NotificationType<P>, params: P): void;
-    onNotification<P>(type: NotificationType<P>, handler: NotificationHandler<P>): void;
-    onRequest<P, R, E>(type: RequestType<P, R, E>, handler: RequestHandler<P, R, E>): void;
+    sendRequest<R, E, RO>(type: RequestType0<R, E, RO>, token?: CancellationToken): Thenable<R>;
+    sendRequest<P, R, E, RO>(type: RequestType<P, R, E, RO>, params: P, token?: CancellationToken): Thenable<R>;
+    sendRequest<R>(method: string, token?: CancellationToken): Thenable<R>;
+    sendRequest<R>(method: string, param: any, token?: CancellationToken): Thenable<R>;
+    sendRequest<R>(type: string | RPCMessageType, ...params: any[]): Thenable<R>;
+
+    onRequest<R, E, RO>(type: RequestType0<R, E, RO>, handler: RequestHandler0<R, E>): void;
+    onRequest<P, R, E, RO>(type: RequestType<P, R, E, RO>, handler: RequestHandler<P, R, E>): void;
+    onRequest<R, E>(method: string, handler: GenericRequestHandler<R, E>): void;
+    onRequest<R, E>(method: string | RPCMessageType, handler: GenericRequestHandler<R, E>): void;
+
+    sendNotification<RO>(type: NotificationType0<RO>): void;
+    sendNotification<P, RO>(type: NotificationType<P, RO>, params?: P): void;
+    sendNotification(method: string): void;
+    sendNotification(method: string, params: any): void;
+    sendNotification(method: string | RPCMessageType, params?: any): void;
+
+    onNotification<RO>(type: NotificationType0<RO>, handler: NotificationHandler0): void;
+    onNotification<P, RO>(type: NotificationType<P, RO>, handler: NotificationHandler<P>): void;
+    onNotification(method: string, handler: GenericNotificationHandler): void;
+    onNotification(method: string | RPCMessageType, handler: GenericNotificationHandler): void;
+
     trace(value: Trace, tracer: Tracer): void;
 
     settings: InitializeResult;
@@ -210,7 +228,7 @@ export class Connection implements IConnection {
         return Promise.reject<Connection>(new Error(`Unsupported server configuartion ` + JSON.stringify(server, null, 4)));
     }
 
-    private _connection: ClientMessageConnection;
+    private _connection: MessageConnection;
     private _process: ChildProcess;
 
     constructor(options: ConnectionOptions) {
@@ -229,7 +247,7 @@ export class Connection implements IConnection {
         }
 
         const logger = new ConsoleLogger();
-        const connection = createClientMessageConnection(input, output, logger);
+        const connection = createMessageConnection(input, output, logger);
         this._connection = connection;
         connection.onError((data) => { errorHandler(data[0], data[1], data[2]); });
         connection.onClose(closeHandler);
@@ -246,19 +264,40 @@ export class Connection implements IConnection {
         this._connection.listen();
     }
 
-    public sendRequest<P, R, E>(type: RequestType<P, R, E>, params: P, token: CancellationToken) {
+
+    public sendRequest<R, E, RO>(type: RequestType0<R, E, RO>, token?: CancellationToken): Thenable<R>;
+    public sendRequest<P, R, E, RO>(type: RequestType<P, R, E, RO>, params: P, token?: CancellationToken): Thenable<R>;
+    public sendRequest<R>(method: string, token?: CancellationToken): Thenable<R>;
+    public sendRequest<R>(method: string, param: any, token?: CancellationToken): Thenable<R>;
+    public sendRequest<R>(type: string | RPCMessageType, ...params: any[]): Thenable<R>;
+    public sendRequest<P, R, E>(type: any, params: P, token?: CancellationToken) {
         return this._connection.sendRequest(type, params, token);
     }
 
-    public sendNotification<P>(type: NotificationType<P>, params: P) {
+    public sendNotification<RO>(type: NotificationType0<RO>): void;
+    public sendNotification<P, RO>(type: NotificationType<P, RO>, params?: P): void;
+    public sendNotification(method: string): void;
+    public sendNotification(method: string, params: any): void;
+    public sendNotification(method: string | RPCMessageType, params?: any): void;
+    public sendNotification<P>(type: any, params?: P) {
         this._connection.sendNotification(type, params);
     }
 
-    public onNotification<P>(type: NotificationType<P>, handler: NotificationHandler<P>) {
+
+    public onNotification<RO>(type: NotificationType0<RO>, handler: NotificationHandler0): void;
+    public onNotification<P, RO>(type: NotificationType<P, RO>, handler: NotificationHandler<P>): void;
+    public onNotification(method: string, handler: GenericNotificationHandler): void;
+    public onNotification(method: string | RPCMessageType, handler: GenericNotificationHandler): void;
+    public onNotification<P>(type: any, handler: NotificationHandler<P>) {
         this._connection.onNotification(type, handler);
     }
 
-    public onRequest<P, R, E>(type: RequestType<P, R, E>, handler: RequestHandler<P, R, E>) {
+
+    public onRequest<R, E, RO>(type: RequestType0<R, E, RO>, handler: RequestHandler0<R, E>): void;
+    public onRequest<P, R, E, RO>(type: RequestType<P, R, E, RO>, handler: RequestHandler<P, R, E>): void;
+    public onRequest<R, E>(method: string, handler: GenericRequestHandler<R, E>): void;
+    public onRequest<R, E>(method: string | RPCMessageType, handler: GenericRequestHandler<R, E>): void;
+    public onRequest<P, R, E>(type: any, handler: RequestHandler<P, R, E>) {
         this._connection.onRequest(type, handler);
     }
 

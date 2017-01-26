@@ -1,3 +1,4 @@
+import { DocumentFormattingParams, DocumentRangeFormattingParams } from '../../atom-languageservices/protocol';
 /**
  *  @license   MIT
  *  @copyright OmniSharp Team
@@ -7,7 +8,7 @@ import { Observable } from 'rxjs';
 import { Format, IFormatProvider, IFormatService, ILanguageProtocolClient, ISyncExpression, Text } from 'atom-languageservices';
 import { capability, inject } from 'atom-languageservices/decorators';
 import { DocumentFormattingRequest, DocumentRangeFormattingRequest } from 'atom-languageservices/protocol';
-import { DocumentFormattingParams, DocumentRangeFormattingParams, TextDocumentIdentifier } from 'atom-languageservices/types';
+import { TextDocumentIdentifier } from 'vscode-languageserver-types';
 import * as toUri from 'file-url';
 import { DisposableBase } from 'ts-disposables';
 import { fromTextEdits, toRange } from './utils/convert';

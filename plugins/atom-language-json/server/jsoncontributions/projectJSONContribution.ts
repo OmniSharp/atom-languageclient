@@ -6,7 +6,7 @@
 import * as _ from 'lodash';
 import { XHRResponse, getErrorStatusDescription, xhr } from 'request-light';
 import { CompletionsCollector, JSONPath, JSONWorkerContribution } from 'vscode-json-languageservice';
-import { CompletionItem, CompletionItemKind, MarkedString } from 'atom-languageservices/types';
+import { CompletionItem, CompletionItemKind, MarkedString } from 'vscode-languageserver-types';
 
 const FEED_INDEX_URL = 'https://api.nuget.org/v3/index.json';
 const LIMIT = 30;
@@ -201,62 +201,67 @@ export class ProjectJSONContribution implements JSONWorkerContribution {
         if (this._isProjectJSONFile(resource) && (matches(location, ['dependencies', '*']) || matches(location, ['frameworks', '*', 'dependencies', '*']) || matches(location, ['frameworks', '*', 'frameworkAssemblies', '*']))) {
             let pack = <string>location[location.length - 1];
 
-            return this._getNugetService('SearchQueryService').then(service => {
-                let queryUrl = service + '?q=' + encodeURIComponent(pack) + '&take=' + 5;
-                return this.makeJSONRequest<any>(queryUrl).then(resultObj => {
-                    let htmlContent: MarkedString[] = [];
-                    htmlContent.push(pack);
-                    if (Array.isArray(resultObj.data)) {
-                        let results = <any[]>resultObj.data;
-                        for (let i = 0; i < results.length; i++) {
-                            let res = results[i];
-                            this._addCached(res.id, res.version, res.description);
-                            if (res.id === pack) {
-                                if (res.description) {
-                                    htmlContent.push({ language: 'string', value: res.description });
+            return this._getNugetService('SearchQueryService')
+                .then(service => {
+                    let queryUrl = service + '?q=' + encodeURIComponent(pack) + '&take=' + 5;
+                    return this.makeJSONRequest<any>(queryUrl)
+                        .then(resultObj => {
+                            let htmlContent: MarkedString[] = [];
+                            htmlContent.push(pack);
+                            if (Array.isArray(resultObj.data)) {
+                                let results = <any[]>resultObj.data;
+                                for (let i = 0; i < results.length; i++) {
+                                    let res = results[i];
+                                    this._addCached(res.id, res.version, res.description);
+                                    if (res.id === pack) {
+                                        if (res.description) {
+                                            htmlContent.push({ language: 'string', value: res.description });
+                                        }
+                                        if (res.version) {
+                                            htmlContent.push({ language: 'string', value: `Latest version: ${res.version}` });
+                                        }
+                                        break;
+                                    }
                                 }
-                                if (res.version) {
-                                    htmlContent.push({ language: 'string', value: `Latest version: ${res.version}` });
-                                }
-                                break;
                             }
-                        }
-                    }
-                    return htmlContent;
+                            return htmlContent;
+                        }, (error) => {
+                            return error;
+                        });
                 }, (error) => {
-                    return null;
+                    return error;
                 });
-            }, (error) => {
-                return null;
-            });
         }
         return null!;
     }
 
-    public resolveSuggestion(item: CompletionItem): Thenable<CompletionItem> {
+    public resolveSuggestion(item: CompletionItem): Thenable<CompletionItem | null> {
         if (item.data && _.startsWith(item.data, RESOLVE_ID)) {
             let pack = item.data.substring(RESOLVE_ID.length);
             if (this._completeWithCache(pack, item)) {
                 return Promise.resolve(item);
             }
-            return this._getNugetService('SearchQueryService').then(service => {
-                let queryUrl = service + '?q=' + encodeURIComponent(pack) + '&take=' + 10;
-                return this.makeJSONRequest<any>(queryUrl).then(resultObj => {
-                    let itemResolved = false;
-                    if (Array.isArray(resultObj.data)) {
-                        let results = <any[]>resultObj.data;
-                        for (let i = 0; i < results.length; i++) {
-                            let curr = results[i];
-                            this._addCached(curr.id, curr.version, curr.description);
-                            if (curr.id === pack) {
-                                this._completeWithCache(pack, item);
-                                itemResolved = true;
+            return this._getNugetService('SearchQueryService')
+                .then(service => {
+                    let queryUrl = service + '?q=' + encodeURIComponent(pack) + '&take=' + 10;
+                    var result = this.makeJSONRequest<any>(queryUrl)
+                        .then(resultObj => {
+                            let itemResolved = false;
+                            if (Array.isArray(resultObj.data)) {
+                                let results = <any[]>resultObj.data;
+                                for (let i = 0; i < results.length; i++) {
+                                    let curr = results[i];
+                                    this._addCached(curr.id, curr.version, curr.description);
+                                    if (curr.id === pack) {
+                                        this._completeWithCache(pack, item);
+                                        itemResolved = true;
+                                    }
+                                }
                             }
-                        }
-                    }
-                    return itemResolved ? item : null;
+                            return itemResolved ? item : <CompletionItem | null>null;
+                        });
+                    return <any>result;
                 });
-            });
         };
         return null!;
     }

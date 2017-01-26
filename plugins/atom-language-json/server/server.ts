@@ -4,6 +4,7 @@
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
 /* tslint:disable:no-for-in forin */
+import { SymbolInformation } from 'vscode-languageserver-types';
 import * as _ from 'lodash';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -17,8 +18,8 @@ import { getLanguageModelCache } from './languageModelCache';
 import { ProjectJSONContribution } from './jsoncontributions/projectJSONContribution';
 import URI from './utils/uri';
 
-namespace SchemaAssociationNotification {
-    export const type: NotificationType<Json.SchemaAssociations> = { get method() { return 'json/schemaAssociations'; } };
+export namespace SchemaAssociationNotification {
+    export const type = new NotificationType<Json.SchemaAssociations, void>('json/schemaAssociations');
 }
 
 // Create a connection for the server
@@ -38,7 +39,7 @@ documents.listen(connection);
 // in the passed params the rootPath of the workspace plus the client capabilites.
 let workspaceRoot: URI;
 connection.onInitialize((params: InitializeParams): InitializeResult => {
-    workspaceRoot = URI.parse(params.rootPath);
+    workspaceRoot = URI.parse(params.rootPath!);
     return {
         capabilities: {
             // Tell the client that the server works in FULL text document sync mode
@@ -175,7 +176,7 @@ function updateConfiguration() {
             () => { /* */ });
     }
 
-    connection.sendNotification({  method: "abc" }, languageSettings);
+    connection.sendNotification(new NotificationType("abc"), languageSettings);
 
     // Revalidate any open text documents
     documents.all().forEach(triggerValidation);
@@ -222,7 +223,7 @@ function validateTextDocument(textDocument: TextDocument): void {
     }
 
     const jsonDocument = getJSONDocument(textDocument);
-    languageService.doValidation(textDocument, jsonDocument).then(diagnostics => {
+    languageService.doValidation(textDocument, jsonDocument).then((diagnostics: any[]) => {
         // Send the computed diagnostics to VSCode.
         connection.sendDiagnostics({ uri: textDocument.uri, diagnostics });
     });

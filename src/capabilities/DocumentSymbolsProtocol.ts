@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 import { Autocomplete, Finder, IDocumentFinderProvider, IDocumentFinderService, ILanguageProtocolClient, ISyncExpression } from 'atom-languageservices';
 import { capability, inject } from 'atom-languageservices/decorators';
 import { DocumentSymbolRequest } from 'atom-languageservices/protocol';
-import { SymbolInformation, SymbolKind, TextDocumentIdentifier } from 'atom-languageservices/types';
+import { SymbolInformation, SymbolKind, TextDocumentIdentifier } from 'vscode-languageserver-types';
 import * as toUri from 'file-url';
 import { DisposableBase } from 'ts-disposables';
 import { packageName } from '../constants';

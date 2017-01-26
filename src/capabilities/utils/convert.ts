@@ -7,7 +7,7 @@
 import * as _ from 'lodash';
 import { Point, Range } from 'atom';
 import { Autocomplete, Linter, Text } from 'atom-languageservices';
-import { Position, Range as LsRange, TextDocumentIdentifier, TextEdit, WorkspaceEdit } from 'atom-languageservices/types';
+import { Position, Range as LsRange, TextDocumentIdentifier, TextEdit, WorkspaceEdit } from 'vscode-languageserver-types';
 import * as _toUri from 'file-url';
 import { uriToFilePath as fromUri } from './uriToFilePath';
 export { fromUri };
@@ -48,10 +48,10 @@ export function fromTextEdits(values: TextEdit[]): Text.IFileChange[] {
 }
 
 export function fromWorkspaceEdit(edit: WorkspaceEdit): Text.IWorkspaceChange[] {
-    return _.map(edit.changes, (edits, filePath) => {
+    return _.map(edit.changes, ({edits, textDocument}) => {
         return ({
             changes: fromTextEdits(edits),
-            filePath: fromUri(filePath)
+            filePath: fromUri(textDocument.uri)
         });
     });
 }

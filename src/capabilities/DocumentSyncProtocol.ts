@@ -1,3 +1,4 @@
+import { TextDocumentSyncKind } from '../../atom-languageservices/protocol';
 /**
  *  @license   MIT
  *  @copyright OmniSharp Team
@@ -6,7 +7,6 @@
 import * as _ from 'lodash';
 import { IAtomViewFinder, IDocumentDelayer, ILanguageProtocolClient, ISyncExpression, IWaitService } from 'atom-languageservices';
 import { capability, inject } from 'atom-languageservices/decorators';
-import { TextDocumentSyncKind } from 'atom-languageservices/types';
 import { DisposableBase } from 'ts-disposables';
 import { AtomTextEditorSource } from '../atom/AtomTextEditorSource';
 import { TextEditorSyncProtocol } from './TextEditorSyncProtocol';
@@ -38,8 +38,6 @@ export class DocumentSyncProtocol extends DisposableBase {
         this._waitService = waitService;
 
         this._configure();
-
-        this._disposable.add(() => this._editors.clear());
     }
 
     private _configure() {

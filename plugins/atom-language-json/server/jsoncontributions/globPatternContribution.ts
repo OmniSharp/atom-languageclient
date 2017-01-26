@@ -5,7 +5,7 @@
  */
 import * as _ from 'lodash';
 import { CompletionsCollector, JSONPath, JSONWorkerContribution } from 'vscode-json-languageservice';
-import { CompletionItem, CompletionItemKind, MarkedString } from 'atom-languageservices/types';
+import { CompletionItem, CompletionItemKind, MarkedString } from 'vscode-languageserver-types';
 
 const globProperties: CompletionItem[] = [
     { kind: CompletionItemKind.Value, label: 'Files by Extension', insertText: '"**/*.{{extension}}": true', documentation: 'Match all files of a specific file extension.' },

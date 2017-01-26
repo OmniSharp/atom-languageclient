@@ -6,16 +6,19 @@
  */
 
 /* tslint:disable */
-import { CodeActionContext, CodeActionParams, Location, Range, ServerCapabilities as BaseServerCapabilities, TextDocumentIdentifier, TextDocumentPositionParams } from './types';
-export * from './types';
+import { CodeActionContext, Location, Range, TextDocumentIdentifier } from 'vscode-languageserver-types';
+import { ServerCapabilities, TextDocumentPositionParams } from './protocol'
+export * from 'vscode-languageserver-types';
 
-export interface ServerCapabilities extends BaseServerCapabilities {
-    extended: {
-        getCodeActionsProvider?: boolean;
-        runCodeActionProvider?: boolean;
-        implementationProvider?: boolean;
-        navigateProvider?: boolean;
-        highlightProvider?: boolean;
+declare module './protocol' {
+    interface ServerCapabilities {
+        extended: {
+            getCodeActionsProvider?: boolean;
+            runCodeActionProvider?: boolean;
+            implementationProvider?: boolean;
+            navigateProvider?: boolean;
+            highlightProvider?: boolean;
+        }
     }
 }
 
@@ -73,7 +76,7 @@ export interface Highlight {
 
 export type Implementation = Location | Location[];
 
-export interface NavigateParams extends TextDocumentPositionParams{
+export interface NavigateParams extends TextDocumentPositionParams {
     direction: 'up' | 'down';
 }
 

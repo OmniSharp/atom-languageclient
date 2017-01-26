@@ -8,7 +8,7 @@ import { Observable, Observer, Subject } from 'rxjs';
 import { Point } from 'atom';
 import { CodeLens, CommandType, IAtomNavigation, ICodeLensProvider, ICodeLensService, IReferencesService, Reference, navigationHasRange } from 'atom-languageservices';
 import { alias, inject, injectable } from 'atom-languageservices/decorators';
-import { Location as TLocation } from 'atom-languageservices/types';
+import { Location as TLocation } from 'vscode-languageserver-types';
 import { readFile } from 'fs';
 import { CompositeDisposable, Disposable, DisposableBase } from 'ts-disposables';
 import { ProviderServiceBase } from './_ProviderServiceBase';

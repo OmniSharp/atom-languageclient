@@ -1,3 +1,4 @@
+import { TextDocumentSyncKind } from '../../atom-languageservices/protocol';
 /**
  *  @license   MIT
  *  @copyright OmniSharp Team
@@ -7,7 +8,6 @@ import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 import { IAtomViewFinder, IDocumentDelayer, ILanguageProtocolClient, ISyncExpression, IWaitService } from 'atom-languageservices';
 import { DidChangeTextDocumentNotification, DidCloseTextDocumentNotification, DidOpenTextDocumentNotification, DidSaveTextDocumentNotification } from 'atom-languageservices/protocol';
-import { DidCloseTextDocumentParams, DidOpenTextDocumentParams, DidSaveTextDocumentParams, TextDocumentSyncKind } from 'atom-languageservices/types';
 import { DisposableBase } from 'ts-disposables';
 import { className } from '../constants';
 import { getLanguageId, toRange, toTextDocumentIdentifier, toUri } from './utils/convert';
@@ -132,7 +132,7 @@ export class TextEditorSyncProtocol extends DisposableBase {
             view.classList.add(className);
         }
 
-        this._client.sendNotification<DidOpenTextDocumentParams>(DidOpenTextDocumentNotification.type, {
+        this._client.sendNotification(DidOpenTextDocumentNotification.type, {
             textDocument: {
                 uri: toUri(this._editor),
                 languageId: getLanguageId(this._editor),
@@ -148,7 +148,7 @@ export class TextEditorSyncProtocol extends DisposableBase {
             return;
         }
 
-        this._client.sendNotification<DidCloseTextDocumentParams>(DidCloseTextDocumentNotification.type, {
+        this._client.sendNotification(DidCloseTextDocumentNotification.type, {
             textDocument: toTextDocumentIdentifier(this._editor)
         });
     }
@@ -159,7 +159,7 @@ export class TextEditorSyncProtocol extends DisposableBase {
             return;
         }
 
-        this._client.sendNotification<DidSaveTextDocumentParams>(DidSaveTextDocumentNotification.type, {
+        this._client.sendNotification(DidSaveTextDocumentNotification.type, {
             textDocument: toTextDocumentIdentifier(this._editor)
         });
 

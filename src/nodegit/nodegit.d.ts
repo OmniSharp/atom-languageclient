@@ -1,15 +1,15 @@
 declare namespace nodegit {
-    declare enum SuccessOrFailure {
+    const enum SuccessOrFailure {
         SUCCESS = 0,
         FAIL = -1
     }
-    declare enum Attr_STATES {
+    const enum Attr_STATES {
         UNSPECIFIED_T = 0,
         TRUE_T = 1,
         FALSE_T = 2,
         VALUE_T = 3,
     }
-    declare enum Blame_FLAG {
+    const enum Blame_FLAG {
         NORMAL = 0,
         TRACK_COPIES_SAME_FILE = 1,
         TRACK_COPIES_SAME_COMMIT_MOVES = 2,
@@ -17,22 +17,22 @@ declare namespace nodegit {
         TRACK_COPIES_ANY_COMMIT_COPIES = 8,
         FIRST_PARENT = 16,
     }
-    declare enum Branch_BRANCH {
+    const enum Branch_BRANCH {
         LOCAL = 1,
         REMOTE = 2,
         ALL = 3,
     }
-    declare enum Cert_SSH {
+    const enum Cert_SSH {
         MD5 = 1,
         SHA1 = 2,
     }
-    declare enum Cert_TYPE {
+    const enum Cert_TYPE {
         NONE = 0,
         X509 = 1,
         HOSTKEY_LIBSSH2 = 2,
         STRARRAY = 3,
     }
-    declare enum Checkout_NOTIFY {
+    const enum Checkout_NOTIFY {
         NONE = 0,
         CONFLICT = 1,
         DIRTY = 2,
@@ -41,7 +41,7 @@ declare namespace nodegit {
         IGNORED = 16,
         ALL = 65535,
     }
-    declare enum Checkout_STRATEGY {
+    const enum Checkout_STRATEGY {
         NONE = 0,
         SAFE = 1,
         FORCE = 2,
@@ -65,13 +65,13 @@ declare namespace nodegit {
         UPDATE_SUBMODULES = 65536,
         UPDATE_SUBMODULES_IF_CHANGED = 131072,
     }
-    declare enum Clone_LOCAL {
+    const enum Clone_LOCAL {
         AUTO = 0,
         LOCAL = 1,
         NO_LOCAL = 2,
         NO_LINKS = 3,
     }
-    declare enum Config_LEVEL {
+    const enum Config_LEVEL {
         PROGRAMDATA = 1,
         SYSTEM = 2,
         XDG = 3,
@@ -80,7 +80,7 @@ declare namespace nodegit {
         APP = 6,
         HIGHEST_LEVEL = -1,
     }
-    declare enum Cred_TYPE {
+    const enum Cred_TYPE {
         USERPASS_PLAINTEXT = 1,
         SSH_KEY = 2,
         SSH_CUSTOM = 4,
@@ -89,7 +89,7 @@ declare namespace nodegit {
         USERNAME = 32,
         SSH_MEMORY = 64,
     }
-    declare enum Diff_DELTA {
+    const enum Diff_DELTA {
         UNMODIFIED = 0,
         ADDED = 1,
         DELETED = 2,
@@ -102,7 +102,7 @@ declare namespace nodegit {
         UNREADABLE = 9,
         CONFLICTED = 10,
     }
-    declare enum Diff_FIND {
+    const enum Diff_FIND {
         BY_CONFIG = 0,
         RENAMES = 1,
         RENAMES_FROM_REWRITES = 2,
@@ -120,24 +120,24 @@ declare namespace nodegit {
         BREAK_REWRITES_FOR_RENAMES_ONLY = 32768,
         REMOVE_UNMODIFIED = 65536,
     }
-    declare enum Diff_FLAG {
+    const enum Diff_FLAG {
         BINARY = 1,
         NOT_BINARY = 2,
         VALID_ID = 4,
         EXISTS = 8,
     }
-    declare enum Diff_FORMAT {
+    const enum Diff_FORMAT {
         PATCH = 1,
         PATCH_HEADER = 2,
         RAW = 3,
         NAME_ONLY = 4,
         NAME_STATUS = 5,
     }
-    declare enum Diff_FORMAT_EMAIL_FLAGS {
+    const enum Diff_FORMAT_EMAIL_FLAGS {
         FORMAT_EMAIL_NONE = 0,
         FORMAT_EMAIL_EXCLUDE_SUBJECT_PATCH_MARKER = 1,
     }
-    declare enum Diff_LINE {
+    const enum Diff_LINE {
         CONTEXT = 32,
         ADDITION = 43,
         DELETION = 45,
@@ -148,7 +148,7 @@ declare namespace nodegit {
         HUNK_HDR = 72,
         BINARY = 66,
     }
-    declare enum Diff_OPTION {
+    const enum Diff_OPTION {
         NORMAL = 0,
         REVERSE = 1,
         INCLUDE_IGNORED = 2,
@@ -179,35 +179,35 @@ declare namespace nodegit {
         MINIMAL = 536870912,
         SHOW_BINARY = 1073741824,
     }
-    declare enum Diff_STATS_FORMAT {
+    const enum Diff_STATS_FORMAT {
         STATS_NONE = 0,
         STATS_FULL = 1,
         STATS_SHORT = 2,
         STATS_NUMBER = 4,
         STATS_INCLUDE_SUMMARY = 8,
     }
-    declare enum DiffBinary_DIFF_BINARY {
+    const enum DiffBinary_DIFF_BINARY {
         NONE = 0,
         LITERAL = 1,
         DELTA = 2,
     }
-    declare enum Enums_CVAR {
+    const enum Enums_CVAR {
         FALSE = 0,
         TRUE = 1,
         INT32 = 2,
         STRING = 3,
     }
-    declare enum Enums_DIRECTION {
+    const enum Enums_DIRECTION {
         FETCH = 0,
         PUSH = 1,
     }
-    declare enum Enums_FEATURE {
+    const enum Enums_FEATURE {
         THREADS = 1,
         HTTPS = 2,
         SSH = 4,
         NSEC = 8,
     }
-    declare enum Enums_IDXENTRY_EXTENDED_FLAG {
+    const enum Enums_IDXENTRY_EXTENDED_FLAG {
         IDXENTRY_INTENT_TO_ADD = 8192,
         IDXENTRY_SKIP_WORKTREE = 16384,
         IDXENTRY_EXTENDED2 = 32768,
@@ -223,11 +223,11 @@ declare namespace nodegit {
         IDXENTRY_UNPACKED = 256,
         IDXENTRY_NEW_SKIP_WORKTREE = 512,
     }
-    declare enum Enums_INDXENTRY_FLAG {
+    const enum Enums_INDXENTRY_FLAG {
         IDXENTRY_EXTENDED = 16384,
         IDXENTRY_VALID = 32768,
     }
-    declare enum Error_CODE {
+    const enum Error_CODE {
         OK = 0,
         ERROR = -1,
         ENOTFOUND = -3,
@@ -255,7 +255,7 @@ declare namespace nodegit {
         PASSTHROUGH = -30,
         ITEROVER = -31,
     }
-    declare enum Error_ERROR {
+    const enum Error_ERROR {
         GITERR_NONE = 0,
         GITERR_NOMEMORY = 1,
         GITERR_OS = 2,
@@ -288,28 +288,28 @@ declare namespace nodegit {
         GITERR_REBASE = 29,
         GITERR_FILESYSTEM = 30,
     }
-    declare enum Fetch_PRUNE {
+    const enum Fetch_PRUNE {
         GIT_FETCH_PRUNE_UNSPECIFIED = 0,
         GIT_FETCH_PRUNE = 1,
         GIT_FETCH_NO_PRUNE = 2,
     }
-    declare enum Filter_FLAG {
+    const enum Filter_FLAG {
         DEFAULT = 0,
         ALLOW_UNSAFE = 1,
     }
-    declare enum Filter_MODE {
+    const enum Filter_MODE {
         TO_WORKTREE = 0,
         SMUDGE = 0,
         TO_ODB = 1,
         CLEAN = 1,
     }
-    declare enum Hashsig_OPTION {
+    const enum Hashsig_OPTION {
         NORMAL = 0,
         IGNORE_WHITESPACE = 1,
         SMART_WHITESPACE = 2,
         ALLOW_SMALL_FILES = 4,
     }
-    declare enum Libgit2_OPT {
+    const enum Libgit2_OPT {
         GET_MWINDOW_SIZE = 0,
         SET_MWINDOW_SIZE = 1,
         GET_MWINDOW_MAPPED_LIMIT = 2,
@@ -327,20 +327,20 @@ declare namespace nodegit {
         ENABLE_STRICT_OBJECT_CREATION = 14,
         SET_SSL_CIPHERS = 15,
     }
-    declare enum Merge_ANALYSIS {
+    const enum Merge_ANALYSIS {
         NONE = 0,
         NORMAL = 1,
         UP_TO_DATE = 2,
         FASTFORWARD = 4,
         UNBORN = 8,
     }
-    declare enum Merge_FILE_FAVOR {
+    const enum Merge_FILE_FAVOR {
         NORMAL = 0,
         OURS = 1,
         THEIRS = 2,
         UNION = 3,
     }
-    declare enum Merge_FILE_FLAG {
+    const enum Merge_FILE_FLAG {
         FILE_DEFAULT = 0,
         FILE_STYLE_MERGE = 1,
         FILE_STYLE_DIFF3 = 2,
@@ -351,30 +351,30 @@ declare namespace nodegit {
         FILE_DIFF_PATIENCE = 64,
         FILE_DIFF_MINIMAL = 128,
     }
-    declare enum Merge_FLAG {
+    const enum Merge_FLAG {
         FIND_RENAMES = 1,
         FAIL_ON_CONFLICT = 2,
         SKIP_REUC = 4,
         NO_RECURSIVE = 8,
     }
-    declare enum Merge_PREFERENCE {
+    const enum Merge_PREFERENCE {
         NONE = 0,
         NO_FASTFORWARD = 1,
         FASTFORWARD_ONLY = 2,
     }
-    declare enum Index_ADD_OPTION {
+    const enum Index_ADD_OPTION {
         ADD_DEFAULT = 0,
         ADD_FORCE = 1,
         ADD_DISABLE_PATHSPEC_MATCH = 2,
         ADD_CHECK_PATHSPEC = 4,
     }
-    declare enum Index_CAP {
+    const enum Index_CAP {
         IGNORE_CASE = 1,
         NO_FILEMODE = 2,
         NO_SYMLINKS = 4,
         FROM_OWNER = -1,
     }
-    declare enum Object_TYPE {
+    const enum Object_TYPE {
         ANY = -2,
         BAD = -1,
         EXT1 = 0,
@@ -386,16 +386,16 @@ declare namespace nodegit {
         OFS_DELTA = 6,
         REF_DELTA = 7,
     }
-    declare enum Odb_STREAM {
+    const enum Odb_STREAM {
         RDONLY = 2,
         WRONLY = 4,
         RW = 6,
     }
-    declare enum Packbuilder_STAGE {
+    const enum Packbuilder_STAGE {
         ADDING_OBJECTS = 0,
         DELTAFICATION = 1,
     }
-    declare enum Pathspec_FLAG {
+    const enum Pathspec_FLAG {
         DEFAULT = 0,
         IGNORE_CASE = 1,
         USE_CASE = 2,
@@ -404,12 +404,12 @@ declare namespace nodegit {
         FIND_FAILURES = 16,
         FAILURES_ONLY = 32,
     }
-    declare enum Proxy_PROXY {
+    const enum Proxy_PROXY {
         NONE = 0,
         AUTO = 1,
         SPECIFIED = 2,
     }
-    declare enum RebaseOperation_REBASE_OPERATION {
+    const enum RebaseOperation_REBASE_OPERATION {
         PICK = 0,
         REWORD = 1,
         EDIT = 2,
@@ -417,50 +417,50 @@ declare namespace nodegit {
         FIXUP = 4,
         EXEC = 5,
     }
-    declare enum Reset_TYPE {
+    const enum Reset_TYPE {
         SOFT = 1,
         MIXED = 2,
         HARD = 3,
     }
-    declare enum Reference_NORMALIZE {
+    const enum Reference_NORMALIZE {
         REF_FORMAT_NORMAL = 0,
         REF_FORMAT_ALLOW_ONELEVEL = 1,
         REF_FORMAT_REFSPEC_PATTERN = 2,
         REF_FORMAT_REFSPEC_SHORTHAND = 4,
     }
-    declare enum Reference_TYPE {
+    const enum Reference_TYPE {
         INVALID = 0,
         OID = 1,
         SYMBOLIC = 2,
         LISTALL = 3,
     }
-    declare enum Revparse_MODE {
+    const enum Revparse_MODE {
         SINGLE = 1,
         RANGE = 2,
         MERGE_BASE = 4,
     }
-    declare enum Revwalk_SORT {
+    const enum Revwalk_SORT {
         NONE = 0,
         TOPOLOGICAL = 1,
         TIME = 2,
         REVERSE = 4,
     }
-    declare enum Remote_AUTOTAG_OPTION {
+    const enum Remote_AUTOTAG_OPTION {
         DOWNLOAD_TAGS_UNSPECIFIED = 0,
         DOWNLOAD_TAGS_AUTO = 1,
         DOWNLOAD_TAGS_NONE = 2,
         DOWNLOAD_TAGS_ALL = 3,
     }
-    declare enum Remote_COMPLETION_TYPE {
+    const enum Remote_COMPLETION_TYPE {
         COMPLETION_DOWNLOAD = 0,
         COMPLETION_INDEXING = 1,
         COMPLETION_ERROR = 2,
     }
-    declare enum Stash_APPLY_FLAGS {
+    const enum Stash_APPLY_FLAGS {
         APPLY_DEFAULT = 0,
         APPLY_REINSTATE_INDEX = 1,
     }
-    declare enum Stash_APPLY_PROGRESS {
+    const enum Stash_APPLY_PROGRESS {
         NONE = 0,
         LOADING_STASH = 1,
         ANALYZE_INDEX = 2,
@@ -470,13 +470,13 @@ declare namespace nodegit {
         CHECKOUT_MODIFIED = 6,
         DONE = 7,
     }
-    declare enum Stash_FLAGS {
+    const enum Stash_FLAGS {
         DEFAULT = 0,
         KEEP_INDEX = 1,
         INCLUDE_UNTRACKED = 2,
         INCLUDE_IGNORED = 4,
     }
-    declare enum Status_OPT {
+    const enum Status_OPT {
         INCLUDE_UNTRACKED = 1,
         INCLUDE_IGNORED = 2,
         INCLUDE_UNMODIFIED = 4,
@@ -494,12 +494,12 @@ declare namespace nodegit {
         INCLUDE_UNREADABLE = 16384,
         INCLUDE_UNREADABLE_AS_UNTRACKED = 32768,
     }
-    declare enum Status_SHOW {
+    const enum Status_SHOW {
         INDEX_AND_WORKDIR = 0,
         INDEX_ONLY = 1,
         WORKDIR_ONLY = 2,
     }
-    declare enum Status_STATUS {
+    const enum Status_STATUS {
         CURRENT = 0,
         INDEX_NEW = 1,
         INDEX_MODIFIED = 2,
@@ -515,7 +515,7 @@ declare namespace nodegit {
         IGNORED = 16384,
         CONFLICTED = 32768,
     }
-    declare enum Repository_INIT_FLAG {
+    const enum Repository_INIT_FLAG {
         BARE = 1,
         NO_REINIT = 2,
         NO_DOTGIT_DIR = 4,
@@ -524,17 +524,17 @@ declare namespace nodegit {
         EXTERNAL_TEMPLATE = 32,
         RELATIVE_GITLINK = 64,
     }
-    declare enum Repository_INIT_MODE {
+    const enum Repository_INIT_MODE {
         INIT_SHARED_UMASK = 0,
         INIT_SHARED_GROUP = 1533,
         INIT_SHARED_ALL = 1535,
     }
-    declare enum Repository_OPEN_FLAG {
+    const enum Repository_OPEN_FLAG {
         OPEN_NO_SEARCH = 1,
         OPEN_CROSS_FS = 2,
         OPEN_BARE = 4,
     }
-    declare enum Repository_STATE {
+    const enum Repository_STATE {
         NONE = 0,
         MERGE = 1,
         REVERT = 2,
@@ -548,7 +548,7 @@ declare namespace nodegit {
         APPLY_MAILBOX = 10,
         APPLY_MAILBOX_OR_REBASE = 11,
     }
-    declare enum Trace_LEVEL {
+    const enum Trace_LEVEL {
         NONE = 0,
         FATAL = 1,
         ERROR = 2,
@@ -557,14 +557,14 @@ declare namespace nodegit {
         DEBUG = 5,
         TRACE = 6,
     }
-    declare enum Transport_FLAGS {
+    const enum Transport_FLAGS {
         NONE = 0,
     }
-    declare enum Tree_WALK_MODE {
+    const enum Tree_WALK_MODE {
         WALK_PRE = 0,
         WALK_POST = 1,
     }
-    declare enum TreeEntry_FILEMODE {
+    const enum TreeEntry_FILEMODE {
         UNREADABLE = 0,
         TREE = 16384,
         BLOB = 33188,
@@ -572,19 +572,19 @@ declare namespace nodegit {
         LINK = 40960,
         COMMIT = 57344,
     }
-    declare enum Submodule_IGNORE {
+    const enum Submodule_IGNORE {
         UNSPECIFIED = -1,
         NONE = 1,
         UNTRACKED = 2,
         DIRTY = 3,
         ALL = 4,
     }
-    declare enum Submodule_RECURSE {
+    const enum Submodule_RECURSE {
         NO = 0,
         YES = 1,
         ONDEMAND = 2,
     }
-    declare enum Submodule_STATUS {
+    const enum Submodule_STATUS {
         IN_HEAD = 1,
         IN_INDEX = 2,
         IN_CONFIG = 4,
@@ -600,7 +600,7 @@ declare namespace nodegit {
         WD_WD_MODIFIED = 4096,
         WD_UNTRACKED = 8192,
     }
-    declare enum Submodule_UPDATE {
+    const enum Submodule_UPDATE {
         CHECKOUT = 1,
         REBASE = 2,
         MERGE = 3,
@@ -608,7 +608,7 @@ declare namespace nodegit {
         DEFAULT = 0,
     }
 
-    declare class AnnotatedCommit {
+    class AnnotatedCommit {
         public static fromFetchhead(repo: Repository, branch_name: string, remote_url: string, id: Oid): Promise<AnnotatedCommit>;
         public static fromRef(repo: Repository, ref: Reference): Promise<AnnotatedCommit>;
         public static fromRevspec(repo: Repository, revspec: string): Promise<AnnotatedCommit>;
@@ -617,16 +617,16 @@ declare namespace nodegit {
         public id(): Oid;
     }
 
-    declare class Attr {
+    class Attr {
         public static addMacro(repo: Repository, name: string, values: string): number;
         public static cacheFlush(repo: Repository): void;
         public static get(repo: Repository, flags: number, path: string, name: string): Promise<string>;
         public static getMany(repo: Repository, flags: number, path: string, num_attr: number, names: string): any[];
         public static value(attr: string): number;
-        public static STATES: Attr_STATES;
+        public static STATES: typeof Attr_STATES;
     }
 
-    declare class Blame {
+    class Blame {
         public static file(repo: Repository, path: string, options: BlameOptions): void;
         public static initOptions(opts: BlameOptions, version: number): SuccessOrFailure;
         public buffer(buffer: string, buffer_len: number): Promise<Blame>;
@@ -634,10 +634,10 @@ declare namespace nodegit {
         public getHunkByIndex(index: number): BlameHunk | null;
         public getHunkByLine(lineno: number): BlameHunk | null;
         public getHunkCount(): number;
-        public static FLAG: Blame_FLAG;
+        public static FLAG: typeof Blame_FLAG;
     }
 
-    declare interface BlameHunk {
+    interface BlameHunk {
         finalCommitId: Oid;
         finalSignature: Signature;
         finalStartLineNumber: number;
@@ -648,7 +648,7 @@ declare namespace nodegit {
         origStartLineNumber: number;
     }
 
-    declare interface BlameOptions {
+    interface BlameOptions {
         flags: number;
         maxLine: number;
         minLine: number;
@@ -658,7 +658,7 @@ declare namespace nodegit {
         version: number;
     }
 
-    declare class Blob {
+    class Blob {
         public static createFromBuffer(repo: Repository, buffer: Buffer, len: number): Oid;
         public static createFromDisk(id: Oid, repo: Repository, path: string): number;
         public static createFromStream(repo: Repository, hintpath: string): Promise<Writestream>;
@@ -678,21 +678,21 @@ declare namespace nodegit {
         public toString(): string;
     }
 
-    declare class Branch {
+    class Branch {
         public static create(repo: Repository, branch_name: string, target: Commit, force: number): Promise<Reference>;
         public static createFromAnnotated(repository: Repository, branch_name: string, commit: AnnotatedCommit, force: number): Reference;
         public static delete(branch: Reference): number;
         public static isHead(branch: Reference): number;
-        public static iteratorNew(repo: Repository, list_flags: number): Promise<BranchIterator>;
-        public static lookup(repo: Repository, branch_name: string, branch_type: number): Promise<Reference>;
+        public static iteratorNew(repo: Repository, list_flags: Branch_BRANCH): Promise<BranchIterator>;
+        public static lookup(repo: Repository, branch_name: string, branch_type: Branch_BRANCH): Promise<Reference>;
         public static move(branch: Reference, new_branch_name: string, force: number): Promise<Reference>;
         public static name(ref: Reference): Promise<string>;
         public static setUpstream(branch: Reference, upstream_name: string): Promise<number>;
         public static upstream(branch: Reference): Promise<Reference>;
-        public static BRANCH: Branch_BRANCH;
+        public static BRANCH: typeof Branch_BRANCH;
     }
 
-    declare class Buf {
+    class Buf {
         public containsNul(): number;
         public free(): void;
         public grow(target_size: number): Buf;
@@ -700,35 +700,35 @@ declare namespace nodegit {
         public set(data: Buffer, datalen: number): Buf;
     }
 
-    declare interface Cert {
+    interface Cert {
         SSH: Cert_SSH;
         TYPE: Cert_TYPE;
         certType: number;
     }
 
-    declare interface CertHostkey {
+    interface CertHostkey {
         hashMd5: string;
         hashSha1: string;
         parent: Cert;
         type: number;
     }
 
-    declare interface CertX509 {
+    interface CertX509 {
         data: Buffer;
         len: number;
         parent: Cert;
     }
 
-    declare class Checkout {
+    class Checkout {
         public static head(repo: Repository, options: CheckoutOptions): void;
         public static index(repo: Repository, The: Index, options: CheckoutOptions): void;
         public static initOptions(opts: CheckoutOptions, version: number): SuccessOrFailure;
         public static tree(repo: Repository, treeish: Oid, Tree, Commit, Reference, options: CheckoutOptions): void;
-        public static NOTIFY: Checkout_NOTIFY;
-        public static STRATEGY: Checkout_STRATEGY;
+        public static NOTIFY: typeof Checkout_NOTIFY;
+        public static STRATEGY: typeof Checkout_STRATEGY;
     }
 
-    declare interface CheckoutOptions {
+    interface CheckoutOptions {
         ancestorLabel: string;
         baseline: Tree;
         baselineIndex: Index;
@@ -751,26 +751,26 @@ declare namespace nodegit {
         version: number;
     }
 
-    declare class Cherrypick {
+    class Cherrypick {
         public static cherrypick(repo: Repository, commit: Commit, options: CherrypickOptions): Promise<SuccessOrFailure>;
         public static commit(repo: Repository, cherrypick_commit: Commit, our_commit: Commit, mainline: int, merge_options: MergeOptions): Promise<SuccessOrFailure>;
         public static initOptions(opts: CherrypickOptions, version: number): SuccessOrFailure;
     }
 
-    declare interface CherrypickOptions {
+    interface CherrypickOptions {
         checkoutOpts: CheckoutOptions;
         mainline: number;
         mergeOpts: MergeOptions;
         version: number;
     }
 
-    declare class Clone {
+    class Clone {
         public static clone(url: string, local_path: string, options: CloneOptions): Promise<Repository>;
         public static initOptions(opts: CloneOptions, version: number): SuccessOrFailure;
-        public static LOCAL: Clone_LOCAL;
+        public static LOCAL: typeof Clone_LOCAL;
     }
 
-    declare interface CloneOptions {
+    interface CloneOptions {
         bare: number;
         checkoutBranch: string;
         checkoutOpts: CheckoutOptions;
@@ -781,7 +781,7 @@ declare namespace nodegit {
         version: number;
     }
 
-    declare class Config {
+    class Config {
         public static findProgramdata(): Promise<Buf>;
         public static openDefault(): Promise<Config>;
         public getStringBuf(name: string): Promise<Buf>;
@@ -790,10 +790,10 @@ declare namespace nodegit {
         public setMultivar(name: string, regexp: string, value: string): number;
         public setString(name: string, value: string): Promise<number>;
         public snapshot(): Promise<Config>;
-        public static LEVEL: Config_LEVEL;
+        public static LEVEL: typeof Config_LEVEL;
     }
 
-    declare interface ConfigEntry {
+    interface ConfigEntry {
         free: any;
         level: number;
         name: string;
@@ -801,7 +801,7 @@ declare namespace nodegit {
         value: string;
     }
 
-    declare class Commit {
+    class Commit {
         public static create(repo: Repository, update_ref: string, author: Signature, committer: Signature, message_encoding: string, message: string, tree: Tree, parent_count: number, parents: any[]): Promise<Oid>;
         public static createV(id: Oid, repo: Repository, update_ref: string, author: Signature, committer: Signature, message_encoding: string, message: string, tree: Tree, parent_count: number): number;
         public static createWithSignature(repo: Repository, commit_content: string, signature: string, signature_field: string): Promise<Oid>;
@@ -842,7 +842,7 @@ declare namespace nodegit {
         public treeId(): Oid;
     }
 
-    declare class ConvenientPatch {
+    class ConvenientPatch {
         public hunks(): Promise<Array<ConvenientHunk>>;
         public isAdded(): boolean;
         public isConflicted(): boolean;
@@ -862,7 +862,7 @@ declare namespace nodegit {
         public status(): number;
     }
 
-    declare class Cred {
+    class Cred {
         public static defaultNew(): Cred;
         public static sshKeyFromAgent(username: string): Cred;
         public static sshKeyMemoryNew(username: string, publickey: string, privatekey: string, passphrase: string): Promise<Cred>;
@@ -871,33 +871,33 @@ declare namespace nodegit {
         public static userpassPlaintextNew(username: string, password: string): Cred;
         public free(): void;
         public hasUsername(): number;
-        public static TYPE: Cred_TYPE;
+        public static TYPE: typeof Cred_TYPE;
     }
 
-    declare interface CredUsername {
+    interface CredUsername {
         parent: Cred;
         username: string;
     }
 
-    declare interface CredUserpassPayload {
+    interface CredUserpassPayload {
         password: string;
         username: string;
     }
 
-    declare interface CvarMap {
+    interface CvarMap {
         cvarType: number;
         mapValue: number;
         strMatch: string;
     }
 
-    declare interface DescribeFormatOptions {
+    interface DescribeFormatOptions {
         abbreviatedSize: number;
         alwaysUseLongFormat: number;
         dirtySuffix: string;
         version: number;
     }
 
-    declare interface DescribeOptions {
+    interface DescribeOptions {
         describeStrategy: number;
         maxCandidatesTags: number;
         onlyFollowFirstParent: number;
@@ -906,7 +906,7 @@ declare namespace nodegit {
         version: number;
     }
 
-    declare class Diff {
+    class Diff {
         public static blobToBuffer(old_blob: Blob, old_as_path: string, buffer: string, buffer_as_path: string, opts: DiffOptions, file_cb: Function, binary_cb: Function, hunk_cb: Function, line_cb: Function): void;
         public static indexToIndex(repo: Repository, old_index: Index, new_index: Index, opts: DiffOptions): Promise<Diff>;
         public static indexToWorkdir(repo: Repository, index: Index, opts: DiffOptions): Promise<Diff>;
@@ -920,30 +920,30 @@ declare namespace nodegit {
         public merge(from: Diff): Promise<number>;
         public numDeltas(): number;
         public patches(): Promise<Array<ConvenientPatch>>;
-        public static DELTA: Diff_DELTA;
-        public static FIND: Diff_FIND;
-        public static FLAG: Diff_FLAG;
-        public static FORMAT: Diff_FORMAT;
-        public static FORMAT_EMAIL_FLAGS: Diff_FORMAT_EMAIL_FLAGS;
-        public static LINE: Diff_LINE;
-        public static OPTION: Diff_OPTION;
-        public static STATS_FORMAT: Diff_STATS_FORMAT;
+        public static DELTA: typeof Diff_DELTA;
+        public static FIND: typeof Diff_FIND;
+        public static FLAG: typeof Diff_FLAG;
+        public static FORMAT: typeof Diff_FORMAT;
+        public static FORMAT_EMAIL_FLAGS: typeof Diff_FORMAT_EMAIL_FLAGS;
+        public static LINE: typeof Diff_LINE;
+        public static OPTION: typeof Diff_OPTION;
+        public static STATS_FORMAT: typeof Diff_STATS_FORMAT;
     }
 
-    declare interface DiffBinary {
+    interface DiffBinary {
         DIFF_BINARY: DiffBinary_DIFF_BINARY;
         newFile: DiffBinaryFile;
         oldFile: DiffBinaryFile;
     }
 
-    declare interface DiffBinaryFile {
+    interface DiffBinaryFile {
         data: string;
         datalen: number;
         inflatedlen: number;
         type: number;
     }
 
-    declare interface DiffDelta {
+    interface DiffDelta {
         flags: number;
         newFile: DiffFile;
         nfiles: number;
@@ -952,7 +952,7 @@ declare namespace nodegit {
         status: number;
     }
 
-    declare class DiffFile {
+    class DiffFile {
         public flags(): number;
         public id(): Oid;
         public mode(): number;
@@ -960,7 +960,7 @@ declare namespace nodegit {
         public size(): number;
     }
 
-    declare interface DiffFindOptions {
+    interface DiffFindOptions {
         breakRewriteThreshold: number;
         copyThreshold: number;
         flags: number;
@@ -970,7 +970,7 @@ declare namespace nodegit {
         version: number;
     }
 
-    declare interface DiffHunk {
+    interface DiffHunk {
         header: string;
         headerLen: number;
         newLines: number;
@@ -979,11 +979,11 @@ declare namespace nodegit {
         oldStart: number;
     }
 
-    declare class DiffLine {
+    class DiffLine {
         public content(): string;
     }
 
-    declare interface DiffOptions {
+    interface DiffOptions {
         contextLines: number;
         flags: number;
         idAbbrev: number;
@@ -999,13 +999,13 @@ declare namespace nodegit {
         version: number;
     }
 
-    declare interface DiffPerfdata {
+    interface DiffPerfdata {
         oidCalculations: number;
         statCalls: number;
         version: number;
     }
 
-    declare interface Enums {
+    interface Enums {
         CVAR: Enums_CVAR;
         DIRECTION: Enums_DIRECTION;
         FEATURE: Enums_FEATURE;
@@ -1013,19 +1013,19 @@ declare namespace nodegit {
         INDXENTRY_FLAG: Enums_INDXENTRY_FLAG;
     }
 
-    declare interface Error {
+    interface Error {
         CODE: Error_CODE;
         ERROR: Error_ERROR;
         klass: number;
         message: string;
     }
 
-    declare class Fetch {
+    class Fetch {
         public static initOptions(opts: FetchOptions, version: number): SuccessOrFailure;
-        public static PRUNE: Fetch_PRUNE;
+        public static PRUNE: typeof Fetch_PRUNE;
     }
 
-    declare interface FetchOptions {
+    interface FetchOptions {
         callbacks: RemoteCallbacks;
         customHeaders: Strarray;
         downloadTags: number;
@@ -1035,7 +1035,7 @@ declare namespace nodegit {
         version: number;
     }
 
-    declare class Filter {
+    class Filter {
         public static listContains(filters: FilterList, name: string): number;
         public static listNew(repo: Repository, mode: number, options: number): FilterList;
         public static listStreamBlob(filters: FilterList, blob: Blob, target: Writestream): number;
@@ -1044,36 +1044,36 @@ declare namespace nodegit {
         public static unregister(name: string): number;
         public lookup(name: string): Filter;
         public register(name: string, priority: number): number;
-        public static FLAG: Filter_FLAG;
-        public static MODE: Filter_MODE;
+        public static FLAG: typeof Filter_FLAG;
+        public static MODE: typeof Filter_MODE;
     }
 
-    declare class Giterr {
+    class Giterr {
         public static errClear(): void;
         public static errLast(): Error;
         public static errSetOom(): void;
         public static errSetString(error_class: number, string: string): void;
     }
 
-    declare class Graph {
+    class Graph {
         public static aheadBehind(repo: Repository, local: Oid, upstream: Oid): Promise<number>;
         public static descendantOf(repo: Repository, commit: Oid, ancestor: Oid): Promise<number>;
     }
 
-    declare class Hashsig {
+    class Hashsig {
         public static createFromFile(path: string, opts: number): Hashsig;
         public compare(b: Hashsig): number;
         public free(): void;
-        public static OPTION: Hashsig_OPTION;
+        public static OPTION: typeof Hashsig_OPTION;
     }
 
-    declare class Ignore {
+    class Ignore {
         public static addRule(repo: Repository, rules: string): number;
         public static clearInternalRules(repo: Repository): number;
         public static pathIsIgnored(repo: Repository, path: string): Promise<number>;
     }
 
-    declare interface IndexEntry {
+    interface IndexEntry {
         ctime: IndexTime;
         dev: number;
         fileSize: number;
@@ -1088,27 +1088,27 @@ declare namespace nodegit {
         uid: number;
     }
 
-    declare interface IndexTime {
+    interface IndexTime {
         nanoseconds: number;
         seconds: number;
     }
 
-    declare class Indexer {
+    class Indexer {
         public commit(stats: TransferProgress): number;
         public free(): void;
         public hash(): Oid;
     }
 
-    declare class Libgit2 {
+    class Libgit2 {
         public static features(): number;
         public static init(): number;
         public static opts(option: number): number;
         public static shutdown(): number;
         public static version(major: number, minor: number, rev: number): void;
-        public static OPT: Libgit2_OPT;
+        public static OPT: typeof Libgit2_OPT;
     }
 
-    declare class Merge {
+    class Merge {
         public static base(repo: Repository, one: Oid, two: Oid): Promise<Oid>;
         public static bases(repo: Repository, one: Oid, two: Oid): Promise<Oidarray>;
         public static commits(repo: Repository, ourCommit: Commit, theirCommit: Commit, options: MergeOptions): void;
@@ -1116,14 +1116,14 @@ declare namespace nodegit {
         public static initOptions(opts: MergeOptions, version: number): SuccessOrFailure;
         public static merge(repo: Repository, theirHead: AnnotatedCommit, mergeOpts: MergeOptions, checkoutOpts: CheckoutOptions): void;
         public static trees(repo: Repository, ancestor_tree: Tree, our_tree: Tree, their_tree: Tree, opts: MergeOptions): Promise<Index>;
-        public static ANALYSIS: Merge_ANALYSIS;
-        public static FILE_FAVOR: Merge_FILE_FAVOR;
-        public static FILE_FLAG: Merge_FILE_FLAG;
-        public static FLAG: Merge_FLAG;
-        public static PREFERENCE: Merge_PREFERENCE;
+        public static ANALYSIS: typeof Merge_ANALYSIS;
+        public static FILE_FAVOR: typeof Merge_FILE_FAVOR;
+        public static FILE_FLAG: typeof Merge_FILE_FLAG;
+        public static FLAG: typeof Merge_FLAG;
+        public static PREFERENCE: typeof Merge_PREFERENCE;
     }
 
-    declare class Index {
+    class Index {
         public static entryIsConflict(entry: IndexEntry): number;
         public static entryStage(entry: IndexEntry): number;
         public static open(index_path: string): Promise<Index>;
@@ -1156,11 +1156,11 @@ declare namespace nodegit {
         public write(): Promise<number>;
         public writeTree(): Promise<Oid>;
         public writeTreeTo(repo: Repository): Promise<Oid>;
-        public static ADD_OPTION: Index_ADD_OPTION;
-        public static CAP: Index_CAP;
+        public static ADD_OPTION: typeof Index_ADD_OPTION;
+        public static CAP: typeof Index_CAP;
     }
 
-    declare interface MergeFileInput {
+    interface MergeFileInput {
         mode: number;
         path: string;
         ptr: string;
@@ -1168,7 +1168,7 @@ declare namespace nodegit {
         version: number;
     }
 
-    declare interface MergeFileOptions {
+    interface MergeFileOptions {
         ancestorLabel: string;
         favor: number;
         flags: number;
@@ -1177,7 +1177,7 @@ declare namespace nodegit {
         version: number;
     }
 
-    declare interface MergeFileResult {
+    interface MergeFileResult {
         automergeable: number;
         len: number;
         mode: number;
@@ -1185,7 +1185,7 @@ declare namespace nodegit {
         ptr: string;
     }
 
-    declare interface MergeOptions {
+    interface MergeOptions {
         defaultDriver: string;
         fileFavor: number;
         fileFlags: number;
@@ -1196,7 +1196,7 @@ declare namespace nodegit {
         version: number;
     }
 
-    declare class Note {
+    class Note {
         public static create(repo: Repository, notes_ref: string, author: Signature, committer: Signature, oid: Oid, note: string, force: number): Promise<Oid>;
         public static foreach(repo: Repository, notes_ref: string, note_cb: NoteForeachCb, payload: Void): Promise<number>;
         public static iteratorNew(repo: Repository, notes_ref: string): Promise<NoteIterator>;
@@ -1210,41 +1210,41 @@ declare namespace nodegit {
         public message(): string;
     }
 
-    declare class Object {
-        public static lookup(repo: Repository, id: Oid, type: number): Object;
-        public static lookupPrefix(repo: Repository, id: Oid, len: number, type: number): Object;
-        public static size(type: number): number;
+    class Object {
+        public static lookup(repo: Repository, id: Oid, type: Object_TYPE): Object;
+        public static lookupPrefix(repo: Repository, id: Oid, len: number, type: Object_TYPE): Object;
+        public static size(type: Object_TYPE): number;
         public static string2type(str: string): number;
-        public static type2string(type: number): string;
-        public static typeisloose(type: number): number;
+        public static type2string(type: Object_TYPE): string;
+        public static typeisloose(type: Object_TYPE): number;
         public dup(): Object;
         public free(): void;
         public id(): Oid;
-        public lookupByPath(path: string, type: number): Object;
+        public lookupByPath(path: string, type: Object_TYPE): Object;
         public owner(): Repository;
-        public peel(target_type: number): Object;
+        public peel(target_type: Object_TYPE): Object;
         public shortId(): Buf;
-        public type(): number;
-        public static TYPE: Object_TYPE;
+        public type(): Object_TYPE;
+        public static TYPE: typeof Object_TYPE;
     }
 
-    declare class Odb {
+    class Odb {
         public static open(objects_dir: string): Promise<Odb>;
         public addDiskAlternate(path: string): number;
         public expandIds(ids: OdbExpandId, count: number): number;
         public free(): void;
         public read(id: Oid): Promise<OdbObject>;
         public write(data: Buffer, len: number, type: number): Promise<Oid>;
-        public static STREAM: Odb_STREAM;
+        public static STREAM: typeof Odb_STREAM;
     }
 
-    declare interface OdbExpandId {
+    interface OdbExpandId {
         id: Oid;
         length: number;
         type: number;
     }
 
-    declare class OdbObject {
+    class OdbObject {
         public data(): Buffer;
         public dup(): OdbObject;
         public free(): void;
@@ -1253,7 +1253,7 @@ declare namespace nodegit {
         public type(): number;
     }
 
-    declare class Oid {
+    class Oid {
         public static fromString(str: string): Oid;
         public cmp(b: Oid): number;
         public cpy(): Oid;
@@ -1265,15 +1265,15 @@ declare namespace nodegit {
         public tostrS(): string;
     }
 
-    declare class Oidarray {
+    class Oidarray {
         public free(): void;
     }
 
-    declare class Openssl {
+    class Openssl {
         public static setLocking(): number;
     }
 
-    declare class Packbuilder {
+    class Packbuilder {
         public static create(repo: Repository): Packbuilder;
         public free(): void;
         public hash(): Oid;
@@ -1285,10 +1285,10 @@ declare namespace nodegit {
         public objectCount(): number;
         public setThreads(n: number): number;
         public written(): number;
-        public static STAGE: Packbuilder_STAGE;
+        public static STAGE: typeof Packbuilder_STAGE;
     }
 
-    declare class Patch {
+    class Patch {
         public static convenientFromDiff(diff: Diff): Promise<Patch>;
         public static fromBlobAndBuffer(old_blob: Blob, old_as_path: string, buffer: string, buffer_len: number, buffer_as_path: string, opts: DiffOptions): Promise<Patch>;
         public static fromBlobs(old_blob: Blob, old_as_path: string, new_blob: Blob, new_as_path: string, opts: DiffOptions): Promise<Patch>;
@@ -1302,7 +1302,7 @@ declare namespace nodegit {
         public size(include_context: number, include_hunk_headers: number, include_file_headers: number): number;
     }
 
-    declare class Pathspec {
+    class Pathspec {
         public static create(pathspec: Strarray): Pathspec;
         public static matchListDiffEntry(m: PathspecMatchList, pos: number): DiffDelta;
         public static matchListEntry(m: PathspecMatchList, pos: number): string;
@@ -1315,15 +1315,15 @@ declare namespace nodegit {
         public matchTree(tree: Tree, flags: number): Promise<PathspecMatchList>;
         public matchWorkdir(repo: Repository, flags: number): Promise<PathspecMatchList>;
         public matchesPath(flags: number, path: string): number;
-        public static FLAG: Pathspec_FLAG;
+        public static FLAG: typeof Pathspec_FLAG;
     }
 
-    declare class Proxy {
+    class Proxy {
         public static initOptions(opts: ProxyOptions, version: number): number;
-        public static PROXY: Proxy_PROXY;
+        public static PROXY: typeof Proxy_PROXY;
     }
 
-    declare interface ProxyOptions {
+    interface ProxyOptions {
         certificateCheck: TransportCertificateCheckCb;
         credentials: CredAcquireCb;
         payload: Void;
@@ -1332,11 +1332,11 @@ declare namespace nodegit {
         version: number;
     }
 
-    declare class Push {
+    class Push {
         public static initOptions(opts: PushOptions, version: number): SuccessOrFailure;
     }
 
-    declare interface PushOptions {
+    interface PushOptions {
         callbacks: RemoteCallbacks;
         customHeaders: Strarray;
         pbParallelism: number;
@@ -1344,14 +1344,14 @@ declare namespace nodegit {
         version: number;
     }
 
-    declare interface PushUpdate {
+    interface PushUpdate {
         dst: Oid;
         dstRefname: string;
         src: Oid;
         srcRefname: string;
     }
 
-    declare class Rebase {
+    class Rebase {
         public static init(repo: Repository, branch: AnnotatedCommit, upstream: AnnotatedCommit, onto: AnnotatedCommit, opts: RebaseOptions): Promise<Rebase>;
         public static initOptions(opts: RebaseOptions, version: number): SuccessOrFailure;
         public static open(repo: Repository, opts: RebaseOptions): Promise<Rebase>;
@@ -1365,27 +1365,27 @@ declare namespace nodegit {
         public operationEntrycount(): number;
     }
 
-    declare interface RebaseOperation {
+    interface RebaseOperation {
         REBASE_OPERATION: RebaseOperation_REBASE_OPERATION;
         exec: string;
         id: Oid;
         type: number;
     }
 
-    declare interface RebaseOptions {
+    interface RebaseOptions {
         checkoutOptions: CheckoutOptions;
         quiet: number;
         rewriteNotesRef: string;
         version: number;
     }
 
-    declare class Refdb {
+    class Refdb {
         public static open(repo: Repository): Refdb;
         public compress(): number;
         public free(): void;
     }
 
-    declare class Reflog {
+    class Reflog {
         public static delete(repo: Repository, name: string): number;
         public static read(repo: Repository, name: string): Reflog;
         public static rename(repo: Repository, old_name: string, name: string): number;
@@ -1397,14 +1397,14 @@ declare namespace nodegit {
         public write(): number;
     }
 
-    declare class ReflogEntry {
+    class ReflogEntry {
         public committer(): Signature;
         public idNew(): Oid;
         public idOld(): Oid;
         public message(): string;
     }
 
-    declare class Refspec {
+    class Refspec {
         public direction(): number;
         public dst(): string;
         public dstMatches(refname: string): number;
@@ -1413,7 +1413,7 @@ declare namespace nodegit {
         public srcMatches(refname: string): number;
     }
 
-    declare interface RemoteCallbacks {
+    interface RemoteCallbacks {
         certificateCheck: TransportCertificateCheckCb;
         credentials: CredAcquireCb;
         payload: Void;
@@ -1422,7 +1422,7 @@ declare namespace nodegit {
         version: number;
     }
 
-    declare interface RepositoryInitOptions {
+    interface RepositoryInitOptions {
         description: string;
         flags: number;
         initialHead: string;
@@ -1433,19 +1433,19 @@ declare namespace nodegit {
         workdirPath: string;
     }
 
-    declare class Reset {
+    class Reset {
         public static default(repo: Repository, target: Object, pathspecs: Strarray): Promise<number>;
-        public static fromAnnotated(repo: Repository, commit: AnnotatedCommit, reset_type: number, checkout_opts: CheckoutOptions): number;
-        public static reset(repo: Repository, target: Object, reset_type: number, checkout_opts: CheckoutOptions): Promise<number>;
-        public static TYPE: Reset_TYPE;
+        public static fromAnnotated(repo: Repository, commit: AnnotatedCommit, reset_type: Reset_TYPE, checkout_opts: CheckoutOptions): number;
+        public static reset(repo: Repository, target: Object, reset_type: Reset_TYPE, checkout_opts: CheckoutOptions): Promise<number>;
+        public static TYPE: typeof Reset_TYPE;
     }
 
-    declare class Revert {
+    class Revert {
         public static commit(repo: Repository, revert_commit: Commit, our_commit: Commit, mainline: number, merge_options: MergeOptions): Promise<Index>;
         public static revert(repo: Repository, commit: Commit, given_opts: RevertOptions): Promise<SuccessOrFailure>;
     }
 
-    declare class Reference {
+    class Reference {
         public static create(repo: Repository, name: string, id: Oid, force: number, log_message: string): Reference;
         public static createMatching(repo: Repository, name: string, id: Oid, force: number, current_id: Oid, log_message: string): Reference;
         public static dwim(repo: Repository, id: string | Reference, callback: Function): Promise<Reference>;
@@ -1482,24 +1482,24 @@ declare namespace nodegit {
         public targetPeel(): Oid;
         public toString(): string;
         public type(): number;
-        public static NORMALIZE: Reference_NORMALIZE;
-        public static TYPE: Reference_TYPE;
+        public static NORMALIZE: typeof Reference_NORMALIZE;
+        public static TYPE: typeof Reference_TYPE;
     }
 
-    declare interface RevertOptions {
+    interface RevertOptions {
         checkoutOpts: CheckoutOptions;
         mainline: number;
         mergeOpts: MergeOptions;
         version: number;
     }
 
-    declare class Revparse {
+    class Revparse {
         public static ext(object_out: Object, reference_out: Reference, repo: Repository, spec: string): number;
         public static single(repo: Repository, spec: string): Promise<Object>;
-        public static MODE: Revparse_MODE;
+        public static MODE: typeof Revparse_MODE;
     }
 
-    declare class Revwalk {
+    class Revwalk {
         public static create(repo: Repository): Revwalk;
         public fastWalk(max_count: number): Promise<Revwalk>;
         public fileHistoryWalk(filePath: string, max_count: number): Promise<Array<historyEntry>>;
@@ -1520,10 +1520,10 @@ declare namespace nodegit {
         public simplifyFirstParent(): void;
         public sorting(sort: number): void;
         public walk(oid: Oid, callback: Function): Commit;
-        public static SORT: Revwalk_SORT;
+        public static SORT: typeof Revwalk_SORT;
     }
 
-    declare class Signature {
+    class Signature {
         public static create(name: string, email: string, time: number, offset: number): Signature | null;
         public static default(repo: Repository): Signature;
         public static now(name: string, email: string): Signature | null;
@@ -1532,7 +1532,7 @@ declare namespace nodegit {
         public toString(): string;
     }
 
-    declare class Remote {
+    class Remote {
         public static addFetch(repo: Repository, remote: string, refspec: string): number;
         public static addPush(repo: Repository, remote: string, refspec: string): number;
         public static create(repo: Repository, name: string, url: string): Promise<Remote>;
@@ -1570,23 +1570,23 @@ declare namespace nodegit {
         public updateTips(callbacks: RemoteCallbacks, update_fetchhead: number, download_tags: number, reflog_message: string): number;
         public upload(refspecs: Strarray, opts: PushOptions): number;
         public url(): string;
-        public static AUTOTAG_OPTION: Remote_AUTOTAG_OPTION;
-        public static COMPLETION_TYPE: Remote_COMPLETION_TYPE;
+        public static AUTOTAG_OPTION: typeof Remote_AUTOTAG_OPTION;
+        public static COMPLETION_TYPE: typeof Remote_COMPLETION_TYPE;
     }
 
-    declare class Stash {
+    class Stash {
         public static apply(repo: Repository, index: number, options: StashApplyOptions): Promise<number>;
         public static applyInitOptions(opts: StashApplyOptions, version: number): SuccessOrFailure;
         public static drop(repo: Repository, index: number): Promise<number>;
         public static foreach(repo: Repository, callback: StashCb, payload: Void): Promise<number>;
         public static pop(repo: Repository, index: number, options: StashApplyOptions): Promise<number>;
         public static save(repo: Repository, stasher: Signature, message: string, flags: number): Promise<Oid>;
-        public static APPLY_FLAGS: Stash_APPLY_FLAGS;
-        public static APPLY_PROGRESS: Stash_APPLY_PROGRESS;
-        public static FLAGS: Stash_FLAGS;
+        public static APPLY_FLAGS: typeof Stash_APPLY_FLAGS;
+        public static APPLY_PROGRESS: typeof Stash_APPLY_PROGRESS;
+        public static FLAGS: typeof Stash_FLAGS;
     }
 
-    declare interface StashApplyOptions {
+    interface StashApplyOptions {
         checkoutOptions: CheckoutOptions;
         flags: number;
         progressCb: StashApplyProgressCb;
@@ -1594,43 +1594,43 @@ declare namespace nodegit {
         version: number;
     }
 
-    declare class Status {
+    class Status {
         public static byIndex(statuslist: StatusList, idx: number): StatusEntry;
         public static file(repo: Repository, path: string): number;
         public static foreach(repo: Repository, callback: StatusCb, payload: Void): Promise<number>;
         public static foreachExt(repo: Repository, opts: StatusOptions, callback: StatusCb, payload: Void): Promise<number>;
         public static shouldIgnore(ignored: number, repo: Repository, path: string): number;
-        public static OPT: Status_OPT;
-        public static SHOW: Status_SHOW;
-        public static STATUS: Status_STATUS;
+        public static OPT: typeof Status_OPT;
+        public static SHOW: typeof Status_SHOW;
+        public static STATUS: typeof Status_STATUS;
     }
 
-    declare interface StatusEntry {
+    interface StatusEntry {
         headToIndex: DiffDelta;
         indexToWorkdir: DiffDelta;
         status: number;
     }
 
-    declare class StatusList {
+    class StatusList {
         public static create(repo: Repository, opts: StatusOptions): Promise<StatusList>;
         public entrycount(): number;
         public free(): void;
         public getPerfdata(): Promise<DiffPerfdata>;
     }
 
-    declare interface StatusOptions {
+    interface StatusOptions {
         flags: number;
         pathspec: Strarray;
         show: number;
         version: number;
     }
 
-    declare class Strarray {
+    class Strarray {
         public copy(src: Strarray): number;
         public free(): void;
     }
 
-    declare class Repository {
+    class Repository {
         public static discover(start_path: string, across_fs: number, ceiling_dirs: string): Promise<Buf>;
         public static init(path: string, is_bare: number): Promise<Repository>;
         public static initExt(repo_path: string, opts: RepositoryInitOptions): Promise<Repository>;
@@ -1714,20 +1714,20 @@ declare namespace nodegit {
         public stateCleanup(): number;
         public treeBuilder(tree: Tree): void;
         public workdir(): string;
-        public static INIT_FLAG: Repository_INIT_FLAG;
-        public static INIT_MODE: Repository_INIT_MODE;
-        public static OPEN_FLAG: Repository_OPEN_FLAG;
-        public static STATE: Repository_STATE;
+        public static INIT_FLAG: typeof Repository_INIT_FLAG;
+        public static INIT_MODE: typeof Repository_INIT_MODE;
+        public static OPEN_FLAG: typeof Repository_OPEN_FLAG;
+        public static STATE: typeof Repository_STATE;
     }
 
-    declare interface SubmoduleUpdateOptions {
+    interface SubmoduleUpdateOptions {
         checkoutOpts: CheckoutOptions;
         cloneCheckoutStrategy: number;
         fetchOpts: FetchOptions;
         version: number;
     }
 
-    declare class Tag {
+    class Tag {
         public static annotationCreate(repo: Repository, tag_name: string, target: Object, tagger: Signature, message: string): Promise<Oid>;
         public static create(repo: Repository, tag_name: string, target: Object, tagger: Signature, message: string, force: number): Promise<Oid>;
         public static createLightweight(repo: Repository, tag_name: string, target: Object, force: number): Promise<Oid>;
@@ -1749,16 +1749,16 @@ declare namespace nodegit {
         public targetType(): number;
     }
 
-    declare interface Time {
+    interface Time {
         offset: number;
         time: number;
     }
 
-    declare interface Trace {
+    interface Trace {
         LEVEL: Trace_LEVEL;
     }
 
-    declare interface TransferProgress {
+    interface TransferProgress {
         indexedDeltas: number;
         indexedObjects: number;
         localObjects: number;
@@ -1768,15 +1768,15 @@ declare namespace nodegit {
         totalObjects: number;
     }
 
-    declare class Transport {
+    class Transport {
         public static sshWithPaths(owner: Remote, payload: Void): Transport;
         public static unregister(prefix: string): number;
         public init(version: number): SuccessOrFailure;
         public smartCertificateCheck(cert: Cert, valid: number, hostname: string): number;
-        public static FLAGS: Transport_FLAGS;
+        public static FLAGS: typeof Transport_FLAGS;
     }
 
-    declare class Tree {
+    class Tree {
         public static entryCmp(e1: TreeEntry, e2: TreeEntry): number;
         public static entryDup(dest: TreeEntry, source: TreeEntry): number;
         public static lookup(repo: Repository, id: string | Oid, Tree, callback: Function): Promise<Tree>;
@@ -1798,10 +1798,10 @@ declare namespace nodegit {
         public owner(): Repository;
         public path(): string;
         public walk(blobsOnly?: boolean): EventEmitter;
-        public static WALK_MODE: Tree_WALK_MODE;
+        public static WALK_MODE: typeof Tree_WALK_MODE;
     }
 
-    declare class TreeEntry {
+    class TreeEntry {
         public filemode(): number;
         public filemodeRaw(): number;
         public free(): void;
@@ -1818,10 +1818,10 @@ declare namespace nodegit {
         public toObject(object_out: Object, repo: Repository): number;
         public toString(): void;
         public type(): number;
-        public static FILEMODE: TreeEntry_FILEMODE;
+        public static FILEMODE: typeof TreeEntry_FILEMODE;
     }
 
-    declare class Treebuilder {
+    class Treebuilder {
         public static create(repo: Repository, source: Tree): Promise<Treebuilder>;
         public clear(): void;
         public entrycount(): number;
@@ -1832,7 +1832,7 @@ declare namespace nodegit {
         public write(): Oid;
     }
 
-    declare class Submodule {
+    class Submodule {
         public static addSetup(repo: Repository, url: string, path: string, use_gitlink: number): Promise<Submodule>;
         public static foreach(repo: Repository, callback: SubmoduleCb, payload: Void): Promise<number>;
         public static lookup(repo: Repository, name: string): Promise<Submodule>;
@@ -1865,10 +1865,10 @@ declare namespace nodegit {
         public updateStrategy(): number;
         public url(): string;
         public wdId(): Oid;
-        public static IGNORE: Submodule_IGNORE;
-        public static RECURSE: Submodule_RECURSE;
-        public static STATUS: Submodule_STATUS;
-        public static UPDATE: Submodule_UPDATE;
+        public static IGNORE: typeof Submodule_IGNORE;
+        public static RECURSE: typeof Submodule_RECURSE;
+        public static STATUS: typeof Submodule_STATUS;
+        public static UPDATE: typeof Submodule_UPDATE;
     }
 }
 

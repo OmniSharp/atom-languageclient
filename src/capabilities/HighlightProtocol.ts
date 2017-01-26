@@ -1,3 +1,4 @@
+import { PublishHighlightParams } from '../../atom-languageservices/types-extended';
 /**
  *  @license   MIT
  *  @copyright OmniSharp Team
@@ -7,7 +8,6 @@ import * as _ from 'lodash';
 import { Highlight, IHighlightService, ILanguageProtocolClient } from 'atom-languageservices';
 import { capability, inject } from 'atom-languageservices/decorators';
 import { HighlightNotification } from 'atom-languageservices/protocol-extended';
-import { Highlight as HighlightItem, PublishHighlightParams } from 'atom-languageservices/types-extended';
 import { DisposableBase } from 'ts-disposables';
 import { fromRange, fromUri } from './utils/convert';
 import { AtomTextEditorSource } from '../atom/AtomTextEditorSource';

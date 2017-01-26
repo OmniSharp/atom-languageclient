@@ -41,8 +41,10 @@ export class AutocompleteService
         });
     }
 
-    private _reduceItems(results: Autocomplete.Suggestion[]) {
-        return _.map<Autocomplete.Suggestion[], Autocomplete.Suggestion>(results, item => {
+    private _reduceItems(results: Autocomplete.Suggestion[]): Autocomplete.Suggestion[] {
+        // TODO: This doesn't compile correctly...
+        // Needs to be debugged
+        return <Autocomplete.Suggestion[]>_.map(results, (item: any[]) => {
             if (item.length > 0) {
                 if (item[0].iconHTML) {
                     return item;

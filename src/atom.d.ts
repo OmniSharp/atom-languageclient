@@ -5,7 +5,7 @@ interface IAtomPackage<TSettings> {
     deactivate(): void;
 }
 
-declare type Thenable<T> = Promise<T>;
+// declare type Thenable<T> = Promise<T>;
 declare module 'file-url' {
     var method: (str: string) => string;
     export = method;

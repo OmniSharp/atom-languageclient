@@ -1,3 +1,10 @@
+import {
+    InitializeError,
+    InitializeParams,
+    InitializeResult,
+    MessageType,
+    ServerCapabilities
+} from '../../atom-languageservices/protocol';
 /**
  *  @license   MIT
  *  @copyright OmniSharp Team
@@ -8,10 +15,8 @@ import { Observable } from 'rxjs';
 import { ClientState, IDocumentDelayer, ILanguageProtocolClient, ILanguageProtocolClientOptions, IProjectProvider, ISyncExpression } from 'atom-languageservices';
 import { inject } from 'atom-languageservices/decorators';
 import { ShowMessageRequest } from 'atom-languageservices/protocol';
-import { InitializeError, InitializeParams, InitializeResult, MessageType } from 'atom-languageservices/types';
-import { ServerCapabilities } from 'atom-languageservices/types-extended';
 import { Disposable, DisposableBase } from 'ts-disposables';
-import { CancellationTokenSource, ErrorCodes, NotificationHandler, NotificationType, RequestHandler, RequestType, ResponseError } from 'vscode-jsonrpc';
+import { CancellationTokenSource, ErrorCodes, NotificationHandler, NotificationType, RequestHandler, RequestType, ResponseError, RequestType0, MessageType as RPCMessageType, GenericRequestHandler, NotificationType0, NotificationHandler0, RequestHandler0, GenericNotificationHandler } from 'vscode-jsonrpc';
 import { observePromise } from '../helpers/observePromise';
 import { IConnection } from './Connection';
 
@@ -114,7 +119,8 @@ export class LanguageProtocolClient extends DisposableBase implements ILanguageP
         const initParams: InitializeParams = {
             processId: process.pid,
             rootPath: this.rootPath,
-            capabilities: { highlightProvider: true },
+            rootUri: this.rootPath,
+            capabilities: <any>{ highlightProvider: true },
             initializationOptions: this._options.initializationOptions
         };
         return this._connection.initialize(initParams)
@@ -171,32 +177,53 @@ export class LanguageProtocolClient extends DisposableBase implements ILanguageP
         return this._state === ClientState.Running;
     }
 
-    public sendRequest<P, R, E>(type: RequestType<P, R, E>, params: P): Observable<R> {
+    public sendRequest<R, E, RO>(type: RequestType0<R, E, RO>): Observable<R>;
+    public sendRequest<P, R, E, RO>(type: RequestType<P, R, E, RO>, params: P): Observable<R>;
+    public sendRequest<R>(method: string): Observable<R>;
+    public sendRequest<R>(method: string, param: any): Observable<R>;
+    public sendRequest<R>(type: string | RPCMessageType, ...params: any[]): Observable<R>;
+    public sendRequest<P, R, E>(type: any, params?: P): Observable<R> {
         return this._doSendRequest<P, R>(this._connection, type, params);
     }
 
-    private _doSendRequest<P, R>(connection: IConnection, type: { method: string; }, params: P): Observable<R> {
+    private _doSendRequest<P, R>(connection: IConnection, type: { method: string; }, params?: P): Observable<R> {
         if (this._isConnectionActive) {
             this._documentDelayer.force();
-            return observePromise<R>((token) => connection.sendRequest(<any>type, params, token));
+            return observePromise<R>((token) => {
+                return connection.sendRequest<any, R, any, any>(<any>type, params, token);
+            });
             // return connection.sendRequest(<any>type, params, token);
         } else {
-            return Observable.throw<R>(new ResponseError(ErrorCodes.InternalError, 'Connection is closed.'));
+            return Observable.throw(new ResponseError(ErrorCodes.InternalError, 'Connection is closed.'));
         }
     }
 
-    public sendNotification<P>(type: NotificationType<P>, params?: P): void {
+    public sendNotification<RO>(type: NotificationType0<RO>): void;
+    public sendNotification<P, RO>(type: NotificationType<P, RO>, params?: P): void;
+    public sendNotification(method: string): void;
+    public sendNotification(method: string, params: any): void;
+    public sendNotification(method: string | RPCMessageType, params?: any): void;
+    public sendNotification<P>(type: any, params?: P): void {
         if (this._isConnectionActive) {
             // this._documentDelayer.force();
             this._connection.sendNotification(<any>type, params);
         }
     }
 
-    public onNotification<P>(type: NotificationType<P>, handler: NotificationHandler<P>): void {
+
+    public onNotification<RO>(type: NotificationType0<RO>, handler: NotificationHandler0): void;
+    public onNotification<P, RO>(type: NotificationType<P, RO>, handler: NotificationHandler<P>): void;
+    public onNotification(method: string, handler: GenericNotificationHandler): void;
+    public onNotification(method: string | RPCMessageType, handler: GenericNotificationHandler): void;
+    public onNotification<P>(type: any, handler: NotificationHandler<P>): void {
         this._connection.onNotification(<any>type, handler);
     }
 
-    public onRequest<P, R, E>(type: RequestType<P, R, E>, handler: RequestHandler<P, R, E>): void {
+    public onRequest<R, E, RO>(type: RequestType0<R, E, RO>, handler: RequestHandler0<R, E>): void;
+    public onRequest<P, R, E, RO>(type: RequestType<P, R, E, RO>, handler: RequestHandler<P, R, E>): void;
+    public onRequest<R, E>(method: string, handler: GenericRequestHandler<R, E>): void;
+    public onRequest<R, E>(method: string | RPCMessageType, handler: GenericRequestHandler<R, E>): void;
+    public onRequest<P, R, E>(type: any, handler: RequestHandler<P, R, E>): void {
         this._connection.onRequest(<any>type, handler);
     }
 

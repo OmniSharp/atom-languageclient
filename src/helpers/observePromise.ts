@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 import { CancellationToken, CancellationTokenSource } from 'vscode-jsonrpc';
 import { createObservable } from '../helpers/createObservable';
 
-export function observePromise<T>(method: (token: CancellationToken) => Promise<T>): Observable<T> {
+export function observePromise<T>(method: (token: CancellationToken) => Thenable<T>): Observable<T> {
     return createObservable<T>(observer => {
         const cts = new CancellationTokenSource();
         method(cts.token).then(_.flow(_.bind(observer.next, observer), _.bind(observer.complete, observer)), _.bind(observer.error, observer));

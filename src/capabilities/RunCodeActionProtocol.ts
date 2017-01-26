@@ -1,3 +1,4 @@
+import { RunCodeActionParams } from '../../atom-languageservices/types-extended';
 /**
  *  @license   MIT
  *  @copyright OmniSharp Team
@@ -7,7 +8,7 @@ import { Observable } from 'rxjs';
 import { ILanguageProtocolClient, IRunCodeActionProvider, IRunCodeActionService, ISyncExpression, RunCodeAction, Text } from 'atom-languageservices';
 import { capability, inject } from 'atom-languageservices/decorators';
 import { RunCodeActionRequest } from 'atom-languageservices/protocol-extended';
-import { RunCodeActionParams, TextDocumentIdentifier } from 'atom-languageservices/types-extended';
+import { TextDocumentIdentifier } from 'vscode-languageserver-types';
 import * as toUri from 'file-url';
 import { DisposableBase } from 'ts-disposables';
 import { fromWorkspaceEdit, toRange } from './utils/convert';
