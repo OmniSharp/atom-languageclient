@@ -1278,15 +1278,15 @@ declare module TextBuffer {
 
         compare(other?: Point): any;
 
-        isEqual(other?: boolean): boolean;
+        isEqual(other?: Point): boolean;
 
-        isLessThan(other?: boolean): boolean;
+        isLessThan(other?: Point): boolean;
 
-        isLessThanOrEqual(other?: boolean): boolean;
+        isLessThanOrEqual(other?: Point): boolean;
 
-        isGreaterThan(other?: boolean): boolean;
+        isGreaterThan(other?: Point): boolean;
 
-        isGreaterThanOrEqual(other?: boolean): boolean;
+        isGreaterThanOrEqual(other?: Point): boolean;
 
         /**
          * This field or method was not documented by atomdoc, assume it is private. Use with caution.

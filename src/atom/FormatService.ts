@@ -36,12 +36,6 @@ export class FormatService
         this._commands = commands;
         this._source = source;
         this._atomCommands = atomCommands;
-
-        this._disposable.add(
-            this._commands.add(CommandType.TextEditor, `code-format`, 'ctrl-k ctrl-d', () => this.format(source.activeTextEditor)),
-            this._atomCommands.add(CommandType.TextEditor, `format-document`, () => this.formatDocument(source.activeTextEditor)),
-            this._atomCommands.add(CommandType.TextEditor, `format-range`, () => this.formatRange(source.activeTextEditor))
-        );
     }
 
     public onEnabled() {
@@ -66,7 +60,7 @@ export class FormatService
         }
 
         const ranges = editor.getSelectedBufferRanges();
-        if (ranges.length) {
+        if (!_.every(ranges, x => x.start.isEqual(x.end))) {
             this._formatRange(editor, ranges);
             return;
         }

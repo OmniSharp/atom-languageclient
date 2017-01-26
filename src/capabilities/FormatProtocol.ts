@@ -64,8 +64,8 @@ class FormatRangeProvider extends DisposableBase implements IFormatProvider {
             range: toRange(options.range),
             options: {
                 // TODO...
-                insertSpaces: true,
-                tabSize: 4
+                insertSpaces: options.insertSpaces,
+                tabSize: options.tabSize
             }
         };
 
@@ -96,8 +96,8 @@ class FormatDocumentProvider extends DisposableBase implements IFormatProvider {
             textDocument: TextDocumentIdentifier.create(toUri(options.editor.getURI())),
             options: {
                 // TODO...
-                insertSpaces: true,
-                tabSize: 4
+                insertSpaces: options.insertSpaces,
+                tabSize: options.tabSize
             }
         };
 
