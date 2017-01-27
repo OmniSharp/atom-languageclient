@@ -14,7 +14,7 @@ const languageservices = resolve(root, 'atom-languageservices');
 process.env.PATH = `${resolve(root, 'node_modules', '.bin')};${process.env.PATH}`;
 
 process.chdir(root);
-execSync('tsc');
+execSync('npm run tsc');
 
 process.chdir(languageservices);
 execSync('npm install');

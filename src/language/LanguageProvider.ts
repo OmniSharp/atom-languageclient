@@ -69,7 +69,7 @@ export class LanguageProvider extends DisposableBase {
                 return this._createClient(provider, syncExpression);
             })
             .then(client => {
-                connections.add(client);
+                connections.add(<any>client);
             });
     }
 
@@ -117,7 +117,7 @@ export class LanguageProvider extends DisposableBase {
             );
             for (const item of disposables) {
                 if (item instanceof Error) {
-                    console.error(item, item.innerError);
+                    console.error(item, (<any>item).innerError);
                 } else if (item.dipose) {
                     cd.add(item);
                 }

@@ -74,8 +74,8 @@ export interface IConnection {
 
     settings: InitializeResult;
 
-    initialize(params: InitializeParams): Promise<InitializeResult>;
-    shutdown(): Promise<void>;
+    initialize(params: InitializeParams): PromiseLike<InitializeResult>;
+    shutdown(): PromiseLike<void>;
     exit(): void;
 
     onLogMessage(handle: NotificationHandler<LogMessageParams>): void;

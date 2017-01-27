@@ -1,10 +1,10 @@
-import { PublishHighlightParams } from '../../atom-languageservices/types-extended';
 /**
  *  @license   MIT
  *  @copyright OmniSharp Team
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
 import * as _ from 'lodash';
+import { Highlight as HighlightItem, PublishHighlightParams } from '../../atom-languageservices/types-extended';
 import { Highlight, IHighlightService, ILanguageProtocolClient } from 'atom-languageservices';
 import { capability, inject } from 'atom-languageservices/decorators';
 import { HighlightNotification } from 'atom-languageservices/protocol-extended';

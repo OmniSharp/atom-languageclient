@@ -115,7 +115,7 @@ export class LanguageProtocolClient extends DisposableBase implements ILanguageP
         return this._initialize();
     }
 
-    private _initialize(): Promise<InitializeResult> {
+    private _initialize(): PromiseLike<InitializeResult> {
         const initParams: InitializeParams = {
             processId: process.pid,
             rootPath: this.rootPath,
