@@ -4,9 +4,20 @@
  *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
  */
 import * as _ from 'lodash';
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+'use strict';
+
+import { MarkedString, CompletionItemKind, CompletionItem, InsertTextFormat } from 'vscode-languageserver';
+import Strings = require('../utils/strings');
 import { XHRResponse, getErrorStatusDescription, xhr } from 'request-light';
-import { CompletionsCollector, JSONPath, JSONWorkerContribution } from 'vscode-json-languageservice';
-import { CompletionItem, CompletionItemKind, MarkedString } from 'vscode-languageserver-types';
+import { JSONWorkerContribution, JSONPath, CompletionsCollector } from 'vscode-json-languageservice';
+
+import * as nls from 'vscode-nls';
+const localize = nls.loadMessageBundle();
+
 
 const FEED_INDEX_URL = 'https://api.nuget.org/v3/index.json';
 const LIMIT = 30;
@@ -15,10 +26,10 @@ const RESOLVE_ID = 'ProjectJSONContribution-';
 const CACHE_EXPIRY = 1000 * 60 * 5; // 5 minutes
 
 interface NugetServices {
-    'SearchQueryService'?: string;
-    'SearchAutocompleteService'?: string;
-    'PackageBaseAddress/3.0.0'?: string;
-    [key: string]: string | undefined;
+    'SearchQueryService': string;
+    'SearchAutocompleteService': string;
+    'PackageBaseAddress/3.0.0': string;
+    [key: string]: string;
 }
 
 export class ProjectJSONContribution implements JSONWorkerContribution {
@@ -27,36 +38,37 @@ export class ProjectJSONContribution implements JSONWorkerContribution {
     private cacheSize: number = 0;
     private nugetIndexPromise: Thenable<NugetServices>;
 
-    constructor() {
+    public constructor() {
     }
 
-    private _isProjectJSONFile(resource: string): boolean {
+    private isProjectJSONFile(resource: string): boolean {
         return _.endsWith(resource, '/project.json');
     }
 
-    private _completeWithCache(id: string, item: CompletionItem): boolean {
-        const entry = this.cachedProjects[id];
+    private completeWithCache(id: string, item: CompletionItem): boolean {
+        let entry = this.cachedProjects[id];
         if (entry) {
             if (new Date().getTime() - entry.time > CACHE_EXPIRY) {
                 delete this.cachedProjects[id];
                 this.cacheSize--;
                 return false;
             }
+            let insertTextValue = item.insertText;
             item.detail = entry.version;
             item.documentation = entry.description;
-            item.insertText = item.insertText!.replace(/\{\{\}\}/, '{{' + entry.version + '}}');
+            item.insertText = insertTextValue!.replace(/\$1/, '${1:' + entry.version + '}');
             return true;
         }
         return false;
     }
 
-    private _addCached(id: string, version: string, description: string) {
+    private addCached(id: string, version: string, description: string) {
         this.cachedProjects[id] = { version, description, time: new Date().getTime() };
         this.cacheSize++;
         if (this.cacheSize > 50) {
-            const currentTime = new Date().getTime();
+            let currentTime = new Date().getTime();
             for (let id in this.cachedProjects) {
-                const entry = this.cachedProjects[id];
+                let entry = this.cachedProjects[id];
                 if (currentTime - entry.time > CACHE_EXPIRY) {
                     delete this.cachedProjects[id];
                     this.cacheSize--;
@@ -65,10 +77,10 @@ export class ProjectJSONContribution implements JSONWorkerContribution {
         }
     }
 
-    private _getNugetIndex(): Thenable<NugetServices> {
+    private getNugetIndex(): Thenable<NugetServices> {
         if (!this.nugetIndexPromise) {
             this.nugetIndexPromise = this.makeJSONRequest<any>(FEED_INDEX_URL).then(indexContent => {
-                let services: NugetServices = {};
+                let services: Partial<NugetServices> = {};
                 if (indexContent && Array.isArray(indexContent.resources)) {
                     let resources = <any[]>indexContent.resources;
                     for (let i = resources.length - 1; i >= 0; i--) {
@@ -85,9 +97,9 @@ export class ProjectJSONContribution implements JSONWorkerContribution {
         return this.nugetIndexPromise;
     }
 
-    private _getNugetService(serviceType: string): Thenable<string> {
-        return this._getNugetIndex().then(services => {
-            const serviceURL = services[serviceType];
+    private getNugetService(serviceType: string): Thenable<string> {
+        return this.getNugetIndex().then(services => {
+            let serviceURL = services[serviceType];
             if (!serviceURL) {
                 return Promise.reject<string>(`NuGet index document is missing service ${serviceType}`);
             }
@@ -96,16 +108,16 @@ export class ProjectJSONContribution implements JSONWorkerContribution {
     }
 
     public collectDefaultCompletions(resource: string, result: CompletionsCollector): Thenable<any> {
-        if (this._isProjectJSONFile(resource)) {
-            const defaultValue = {
-                'version': '{{1.0.0-*}}',
+        if (this.isProjectJSONFile(resource)) {
+            let insertText = JSON.stringify({
+                'version': '${1:1.0.0-*}',
                 'dependencies': {},
                 'frameworks': {
-                    'dnx451': {},
-                    'dnxcore50': {}
+                    'net461': {},
+                    'netcoreapp1.0': {}
                 }
-            };
-            result.add({ kind: CompletionItemKind.Class, label: 'Default project.json', insertText: JSON.stringify(defaultValue, null, '\t'), documentation: '' });
+            }, null, '\t');
+            result.add({ kind: CompletionItemKind.Class, label: 'Default project.json', insertText/*, insertTextFormat: InsertTextFormat.Snippet*/, documentation: '' });
         }
         return null!;
     }
@@ -118,7 +130,7 @@ export class ProjectJSONContribution implements JSONWorkerContribution {
                 try {
                     return <T>JSON.parse(success.responseText);
                 } catch (e) {
-                    return Promise.reject<T>(`'{0} is not a valid JSON document', url`);
+                    return Promise.reject<T>(`${url} is not a valid JSON document`);
                 }
             }
             return Promise.reject<T>(`Request to ${url} failed: ${success.responseText}`);
@@ -128,9 +140,9 @@ export class ProjectJSONContribution implements JSONWorkerContribution {
     }
 
     public collectPropertyCompletions(resource: string, location: JSONPath, currentWord: string, addValue: boolean, isLast: boolean, result: CompletionsCollector): Thenable<any> {
-        if (this._isProjectJSONFile(resource) && (matches(location, ['dependencies']) || matches(location, ['frameworks', '*', 'dependencies']) || matches(location, ['frameworks', '*', 'frameworkAssemblies']))) {
+        if (this.isProjectJSONFile(resource) && (matches(location, ['dependencies']) || matches(location, ['frameworks', '*', 'dependencies']) || matches(location, ['frameworks', '*', 'frameworkAssemblies']))) {
 
-            return this._getNugetService('SearchAutocompleteService').then(service => {
+            return this.getNugetService('SearchAutocompleteService').then(service => {
                 let queryUrl: string;
                 if (currentWord.length > 0) {
                     queryUrl = service + '?q=' + encodeURIComponent(currentWord) + '&take=' + LIMIT;
@@ -144,13 +156,13 @@ export class ProjectJSONContribution implements JSONWorkerContribution {
                             let name = results[i];
                             let insertText = JSON.stringify(name);
                             if (addValue) {
-                                insertText += ': "{{}}"';
+                                insertText += ': "$1"';
                                 if (!isLast) {
                                     insertText += ',';
                                 }
                             }
-                            let item: CompletionItem = { kind: CompletionItemKind.Property, label: name, insertText: insertText };
-                            if (!this._completeWithCache(name, item)) {
+                            let item: CompletionItem = { kind: CompletionItemKind.Property, label: name, insertText: insertText, insertTextFormat: InsertTextFormat.Snippet, filterText: JSON.stringify(name) };
+                            if (!this.completeWithCache(name, item)) {
                                 item.data = RESOLVE_ID + name;
                             }
                             result.add(item);
@@ -170,8 +182,8 @@ export class ProjectJSONContribution implements JSONWorkerContribution {
     }
 
     public collectValueCompletions(resource: string, location: JSONPath, currentKey: string, result: CompletionsCollector): Thenable<any> {
-        if (this._isProjectJSONFile(resource) && (matches(location, ['dependencies']) || matches(location, ['frameworks', '*', 'dependencies']) || matches(location, ['frameworks', '*', 'frameworkAssemblies']))) {
-            return this._getNugetService('PackageBaseAddress/3.0.0').then(service => {
+        if (this.isProjectJSONFile(resource) && (matches(location, ['dependencies']) || matches(location, ['frameworks', '*', 'dependencies']) || matches(location, ['frameworks', '*', 'frameworkAssemblies']))) {
+            return this.getNugetService('PackageBaseAddress/3.0.0').then(service => {
                 let queryUrl = service + currentKey + '/index.json';
                 return this.makeJSONRequest<any>(queryUrl).then(obj => {
                     if (Array.isArray(obj.versions)) {
@@ -198,70 +210,65 @@ export class ProjectJSONContribution implements JSONWorkerContribution {
     }
 
     public getInfoContribution(resource: string, location: JSONPath): Thenable<MarkedString[]> {
-        if (this._isProjectJSONFile(resource) && (matches(location, ['dependencies', '*']) || matches(location, ['frameworks', '*', 'dependencies', '*']) || matches(location, ['frameworks', '*', 'frameworkAssemblies', '*']))) {
+        if (this.isProjectJSONFile(resource) && (matches(location, ['dependencies', '*']) || matches(location, ['frameworks', '*', 'dependencies', '*']) || matches(location, ['frameworks', '*', 'frameworkAssemblies', '*']))) {
             let pack = <string>location[location.length - 1];
 
-            return this._getNugetService('SearchQueryService')
-                .then(service => {
-                    let queryUrl = service + '?q=' + encodeURIComponent(pack) + '&take=' + 5;
-                    return this.makeJSONRequest<any>(queryUrl)
-                        .then(resultObj => {
-                            let htmlContent: MarkedString[] = [];
-                            htmlContent.push(pack);
-                            if (Array.isArray(resultObj.data)) {
-                                let results = <any[]>resultObj.data;
-                                for (let i = 0; i < results.length; i++) {
-                                    let res = results[i];
-                                    this._addCached(res.id, res.version, res.description);
-                                    if (res.id === pack) {
-                                        if (res.description) {
-                                            htmlContent.push({ language: 'string', value: res.description });
-                                        }
-                                        if (res.version) {
-                                            htmlContent.push({ language: 'string', value: `Latest version: ${res.version}` });
-                                        }
-                                        break;
-                                    }
+            return this.getNugetService('SearchQueryService').then(service => {
+                let queryUrl = service + '?q=' + encodeURIComponent(pack) + '&take=' + 5;
+                return this.makeJSONRequest<any>(queryUrl).then(resultObj => {
+                    let htmlContent: MarkedString[] = [];
+                    htmlContent.push(pack);
+                    if (Array.isArray(resultObj.data)) {
+                        let results = <any[]>resultObj.data;
+                        for (let i = 0; i < results.length; i++) {
+                            let res = results[i];
+                            this.addCached(res.id, res.version, res.description);
+                            if (res.id === pack) {
+                                if (res.description) {
+                                    htmlContent.push(MarkedString.fromPlainText(res.description));
                                 }
+                                if (res.version) {
+                                    htmlContent.push(MarkedString.fromPlainText(`Latest version: ${res.version}`));
+                                }
+                                break;
                             }
-                            return htmlContent;
-                        }, (error) => {
-                            return error;
-                        });
+                        }
+                    }
+                    return htmlContent;
                 }, (error) => {
-                    return error;
+                    return null;
                 });
+            }, (error) => {
+                return <any>null;
+            });
         }
         return null!;
     }
 
-    public resolveSuggestion(item: CompletionItem): Thenable<CompletionItem | null> {
+    public resolveSuggestion(item: CompletionItem): Thenable<CompletionItem> {
         if (item.data && _.startsWith(item.data, RESOLVE_ID)) {
             let pack = item.data.substring(RESOLVE_ID.length);
-            if (this._completeWithCache(pack, item)) {
+            if (this.completeWithCache(pack, item)) {
                 return Promise.resolve(item);
             }
-            return this._getNugetService('SearchQueryService')
-                .then(service => {
-                    let queryUrl = service + '?q=' + encodeURIComponent(pack) + '&take=' + 10;
-                    var result = this.makeJSONRequest<any>(queryUrl)
-                        .then(resultObj => {
-                            let itemResolved = false;
-                            if (Array.isArray(resultObj.data)) {
-                                let results = <any[]>resultObj.data;
-                                for (let i = 0; i < results.length; i++) {
-                                    let curr = results[i];
-                                    this._addCached(curr.id, curr.version, curr.description);
-                                    if (curr.id === pack) {
-                                        this._completeWithCache(pack, item);
-                                        itemResolved = true;
-                                    }
-                                }
+            return this.getNugetService('SearchQueryService').then(service => {
+                let queryUrl = service + '?q=' + encodeURIComponent(pack) + '&take=' + 10;
+                return this.makeJSONRequest<CompletionItem>(queryUrl).then(resultObj => {
+                    let itemResolved = false;
+                    if (Array.isArray(resultObj.data)) {
+                        let results = <any[]>resultObj.data;
+                        for (let i = 0; i < results.length; i++) {
+                            let curr = results[i];
+                            this.addCached(curr.id, curr.version, curr.description);
+                            if (curr.id === pack) {
+                                this.completeWithCache(pack, item);
+                                itemResolved = true;
                             }
-                            return itemResolved ? item : <CompletionItem | null>null;
-                        });
-                    return <any>result;
+                        }
+                    }
+                    return itemResolved ? item : null;
                 });
+            });
         };
         return null!;
     }

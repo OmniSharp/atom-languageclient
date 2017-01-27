@@ -1,8 +1,9 @@
-/**
- *  @license   MIT
- *  @copyright OmniSharp Team
- *  @summary   Adds support for https://github.com/Microsoft/language-server-protocol (and more!) to https://atom.io
- */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+'use strict';
+
 function _encode(ch: string): string {
     return '%' + ch.charCodeAt(0).toString(16).toUpperCase();
 }
@@ -107,7 +108,7 @@ export default class URI {
      */
     get fsPath() {
         if (!this._fsPath) {
-            let value: string;
+            var value: string;
             if (this._authority && this.scheme === 'file') {
                 // unc path: file://shares/c$/far/boo
                 value = `//${this._authority}${this._path}`;
@@ -128,8 +129,8 @@ export default class URI {
 
     // ---- modify to new -------------------------
 
-    public with(scheme: string | undefined, authority: string| undefined, path: string| undefined, query: string| undefined, fragment: string| undefined): URI {
-        const ret = new URI();
+    public with(scheme: string | undefined, authority: string | undefined, path: string | undefined, query: string | undefined, fragment: string | undefined): URI {
+        var ret = new URI();
         ret._scheme = scheme || this.scheme;
         ret._authority = authority || this.authority;
         ret._path = path || this.path;

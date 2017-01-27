@@ -183,14 +183,10 @@ export class LanguageProtocolClient extends DisposableBase implements ILanguageP
     public sendRequest<R>(method: string, param: any): Observable<R>;
     public sendRequest<R>(type: string | RPCMessageType, ...params: any[]): Observable<R>;
     public sendRequest<P, R, E>(type: any, params?: P): Observable<R> {
-        return this._doSendRequest<P, R>(this._connection, type, params);
-    }
-
-    private _doSendRequest<P, R>(connection: IConnection, type: { method: string; }, params?: P): Observable<R> {
         if (this._isConnectionActive) {
             this._documentDelayer.force();
             return observePromise<R>((token) => {
-                return connection.sendRequest<any, R, any, any>(<any>type, params, token);
+                return this._connection.sendRequest<any, R, any, any>(<any>type, params, token);
             });
             // return connection.sendRequest(<any>type, params, token);
         } else {
