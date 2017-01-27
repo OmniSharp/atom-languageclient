@@ -23,6 +23,8 @@ import { RequestType } from 'vscode-languageserver';
 import * as nls from 'vscode-nls';
 nls.config(process.env['VSCODE_NLS_CONFIG']);
 
+
+
 interface ISchemaAssociations {
     [pattern: string]: string[];
 }
@@ -131,6 +133,7 @@ interface JSONSchemaSettings {
 
 let jsonConfigurationSettings: JSONSchemaSettings[] | undefined = void 0;
 let schemaAssociations: ISchemaAssociations | undefined = void 0;
+let defaultAssociations: Json.SchemaAssociations | undefined = void 0;
 
 // The settings have changed. Is send on server activation as well.
 connection.onDidChangeConfiguration((change) => {
@@ -163,6 +166,17 @@ function updateConfiguration() {
             }
         }
     }
+    if (defaultAssociations) {
+        connection.console.log(JSON.stringify(defaultAssociations));
+        for (const pattern in defaultAssociations) {
+            const association = defaultAssociations[pattern];
+            if (Array.isArray(association)) {
+                association.forEach(uri => {
+                    languageSettings.schemas!.push({ uri, fileMatch: [pattern] });
+                });
+            }
+        }
+    }
     if (jsonConfigurationSettings) {
         jsonConfigurationSettings.forEach(schema => {
             let uri = schema.url;
@@ -182,6 +196,16 @@ function updateConfiguration() {
         });
     }
     languageService.configure(languageSettings);
+
+    if (!defaultAssociations) {
+        getDefaults().then(
+            associations => {
+                defaultAssociations = associations;
+                connection.console.log(JSON.stringify(defaultAssociations));
+                updateConfiguration();
+            },
+            () => { /* */ });
+    }
 
     // Revalidate any open text documents
     documents.all().forEach(triggerValidation);

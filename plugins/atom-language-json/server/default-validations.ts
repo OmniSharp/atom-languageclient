@@ -15,7 +15,7 @@ export function getDefaults() {
         url: 'http://schemastore.org/api/json/catalog.json'
     }).then(
         response => {
-            return JSON.parse(response.responseText);
+            return JSON.parse(response.responseText.trim());
         },
         (error: XHRResponse) => {
             return error.responseText || getErrorStatusDescription(error.status) || error.toString();
