@@ -23,19 +23,19 @@
   "dependencies": {
     "lodash": "^4.17.4",
     "request-light": "^0.2.0",
-    "rxjs": "^5.0.3",
+    "rxjs": "^5.1.0",
     "ts-disposables": "^2.2.3",
     "vscode-json-languageservice": "^1.1.9",
-    "vscode-jsonrpc": "^3.0.3",
-    "vscode-languageserver": "^3.0.3",
+    "vscode-jsonrpc": "^3.0.4",
+    "vscode-languageserver": "^3.0.4",
     "vscode-languageserver-types": "^3.0.3"
   },
   "devDependencies": {
     "chai": "^3.5.0",
-    "codelyzer": "0.0.25",
+    "codelyzer": "0.0.28",
     "globby": "^6.1.0",
     "mocha": "^3.2.0",
-    "tslint": "^4.4.1",
+    "tslint": "^4.4.2",
     "tslint-microsoft-contrib": "^4.0.0",
     "typescript": "^2.1.5"
   },
