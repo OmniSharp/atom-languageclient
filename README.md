@@ -7,9 +7,9 @@ An implementation of the https://github.com/Microsoft/language-server-protocol/b
 
 The Language Client does a few things to make development a little easier with atom.
 
-1) The `atom` global is not used in any code, it's always called through an injected service.  This allows for easier unit testing, without having to be running in the specific atom environment.
-2) Services work with atom, sometimes wrapping atom packages (such as Autocomplete or Linter).
-3) Capabilities work with the services to put all the pieces together.
+1. The `atom` global is not used in any code, it's always called through an injected service.  This allows for easier unit testing, without having to be running in the specific atom environment.
+2. Services work with atom, sometimes wrapping atom packages (such as Autocomplete or Linter).
+3. Capabilities work with the services to put all the pieces together.
 
 ## `atom-langaugeservices`
 This in an npm package that contains the interfaces and symbols for those interfaces, in order to get access to services exposed by the Atom Language Client.
