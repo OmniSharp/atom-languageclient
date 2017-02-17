@@ -1,5 +1,5 @@
 {
-  "name": "atom-language-json",
+  "name": "atom-language-csharp",
   "version": "1.0.0",
   "description": "",
   "main": "src/index.js",
